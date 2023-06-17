@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/fastlane/fastlane/issues/13762
+Number of Comments: 14

@@ -1,0 +1,235 @@
+ROOT +++$+++ SP10137 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-11-15T11:57:41Z +++$+++ Fix typo  +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP5384588 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-11-15T11:57:52Z +++$+++ 
+Thanks for your pull request. It looks like this may be your first contribution to a Google open source project (if not, look below for help). Before we can look at your pull request, you'll need to sign a Contributor License Agreement (CLA).
+
+:memo: **Please visit <https://cla.developers.google.com/> to sign.**
+
+Once you've signed (or fixed any issues), please reply here with `@googlebot I signed it!` and we'll verify it.
+
+----
+
+#### What to do if you already signed the CLA
+
+##### Individual signers
+
+*   It's possible we don't have your GitHub username or you're using a different email address on your commit. Check [your existing CLA data](https://cla.developers.google.com/clas) and verify that your [email is set on your git commits](https://help.github.com/articles/setting-your-email-in-git/).
+
+##### Corporate signers
+
+*   Your company has a Point of Contact who decides which employees are authorized to participate. Ask your POC to be added to the group of authorized contributors. If you don't know who your Point of Contact is, direct the Google project maintainer to [go/cla#troubleshoot](http://go/cla#troubleshoot) ([Public version](https://opensource.google/docs/cla/#troubleshoot)).
+*   The email used to register you as an authorized contributor must be the email used for the Git commit. Check [your existing CLA data](https://cla.developers.google.com/clas) and verify that your [email is set on your git commits](https://help.github.com/articles/setting-your-email-in-git/).
+*   The email used to register you as an authorized contributor must also be [attached to your GitHub account](https://github.com/settings/emails).
+		
+
+ℹ️ **Googlers: [Go here](https://goto.google.com/prinfo/https%3A%2F%2Fgithub.com%2Fgoogle%2Ftarpc%2Fpull%2F279) for more info**.
+
+<!-- need_sender_cla --> +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-11-15T12:00:12Z +++$+++ LOL, no way. You have to be nuts. My commit is PUBLIC DOMAIN, do with it as you please. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP2915777 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-11-15T17:05:19Z +++$+++ I unfortunately can't accept this without a signed CLA. I double checked to see if there's an exception for trivial commits; there isn't. I guess it's easier for the lawyers this way.
+
+I probably won't get to this myself today, so feel free to reopen if you change your mind. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-11-15T20:13:04Z +++$+++ Perhaps also ask the lawyers what happens if someone later goes and fixes
+that typo. That’s basically stealing my public domain idea, regardless of
+your CLA, and then claiming it isn’t because this wasn’t known to you.
+Whacky position to be in :)
+
+We need to say no to people who make this world unreasonable
+
+Software wants to be Free
+And you can make a stand or be a tool
+
+On Sat, Nov 16, 2019 at 2:05 Tim <notifications@github.com> wrote:
+
+> Closed #279 <https://github.com/google/tarpc/pull/279>.
+>
+> —
+> You are receiving this because you authored the thread.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/google/tarpc/pull/279?email_source=notifications&email_token=AAGCHBLJNYQ67TUTZKQZ2WDQT3JFFA5CNFSM4JNZ2EU2YY3PNVWWK3TUL52HS4DFWZEXG43VMVCXMZLOORHG65DJMZUWGYLUNFXW5KTDN5WW2ZLOORPWSZGOU4L4MBA#event-2803353092>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/AAGCHBNVDOA7R3L2O7CSCS3QT3JFFANCNFSM4JNZ2EUQ>
+> .
+>
+ +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP240364 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-11-15T20:18:21Z +++$+++ @krzysztofwos IANAL but the typo fix is too trivial to be protected in the court of law. And even if it wasn't it's always possible to simply rephrase the sentence.
+
+Regarding the rest of your comment, I do not think it is reasonable to put a man's livelihood in a perilous position just to make a point. One must learn to pick his fights, so to speak. :) +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-11-15T20:33:55Z +++$+++ Yes and I am fighting mine trying to live a life according to immutable
+belief in better tomorrow.
+
+One can live a life earning less than the fabled Google salary but dream of
+better internet where this sort of nonsense isn’t for a bunch of lawyers to
+decide
+
+A man’s effort to further the way to build software is our birthright
+
+It’s the direct exercise of LOGOS, the Divine Word, the ability that God
+himself bestowed on man: to transform chaos into order through an act of
+speech
+
+In the beginning there was the word and the word was with God and the word
+was God
+
+John:1, I believe
+
+Your CLA is preventing me from exercising my religious belief, a right
+enshrined in your Constitution
+
+The world is full of nonsense because nobody makes a stand
+
+On Sat, Nov 16, 2019 at 5:18 Artem Vorotnikov <notifications@github.com>
+wrote:
+
+> @krzysztofwos <https://github.com/krzysztofwos> IANAL but the typo fix is
+> too trivial to be protected in the court of law. And even if it wasn't it's
+> always possible to simply rephrase the sentence.
+>
+> Regarding the rest of your comment, I do not think it is reasonable to put
+> a man's livelihood in a perilous position just to make a point. One must
+> learn to pick his fights, so to speak. :)
+>
+> —
+> You are receiving this because you were mentioned.
+>
+>
+> Reply to this email directly, view it on GitHub
+> <https://github.com/google/tarpc/pull/279?email_source=notifications&email_token=AAGCHBP3VXRD2PABQE5C4BTQT37Y7A5CNFSM4JNZ2EU2YY3PNVWWK3TUL52HS4DFVREXG43VMVBW63LNMVXHJKTDN5WW2ZLOORPWSZGOEEGTBMQ#issuecomment-554512562>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/AAGCHBJTTRPYEEIENCIJHWLQT37Y7ANCNFSM4JNZ2EUQ>
+> .
+>
+ +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-11-15T20:39:25Z +++$+++ Someone should start a GoFundMe campaign to pay for a lawyer who will
+challenge Google all the way to the Supreme Court, LOL
+
+This is unquestionable example of furthering of knowledge offered freely in
+good faith
+
+This cannot be prohibited
+
+#Singularity
+
+On Sat, Nov 16, 2019 at 5:33 Krzysztof Woś <krzysztof.wos@gmail.com> wrote:
+
+> Yes and I am fighting mine trying to live a life according to immutable
+> belief in better tomorrow.
+>
+> One can live a life earning less than the fabled Google salary but dream
+> of better internet where this sort of nonsense isn’t for a bunch of lawyers
+> to decide
+>
+> A man’s effort to further the way to build software is our birthright
+>
+> It’s the direct exercise of LOGOS, the Divine Word, the ability that God
+> himself bestowed on man: to transform chaos into order through an act of
+> speech
+>
+> In the beginning there was the word and the word was with God and the word
+> was God
+>
+> John:1, I believe
+>
+> Your CLA is preventing me from exercising my religious belief, a right
+> enshrined in your Constitution
+>
+> The world is full of nonsense because nobody makes a stand
+>
+> On Sat, Nov 16, 2019 at 5:18 Artem Vorotnikov <notifications@github.com>
+> wrote:
+>
+>> @krzysztofwos <https://github.com/krzysztofwos> IANAL but the typo fix
+>> is too trivial to be protected in the court of law. And even if it wasn't
+>> it's always possible to simply rephrase the sentence.
+>>
+>> Regarding the rest of your comment, I do not think it is reasonable to
+>> put a man's livelihood in a perilous position just to make a point. One
+>> must learn to pick his fights, so to speak. :)
+>>
+>> —
+>> You are receiving this because you were mentioned.
+>>
+>>
+>> Reply to this email directly, view it on GitHub
+>> <https://github.com/google/tarpc/pull/279?email_source=notifications&email_token=AAGCHBP3VXRD2PABQE5C4BTQT37Y7A5CNFSM4JNZ2EU2YY3PNVWWK3TUL52HS4DFVREXG43VMVBW63LNMVXHJKTDN5WW2ZLOORPWSZGOEEGTBMQ#issuecomment-554512562>,
+>> or unsubscribe
+>> <https://github.com/notifications/unsubscribe-auth/AAGCHBJTTRPYEEIENCIJHWLQT37Y7ANCNFSM4JNZ2EUQ>
+>> .
+>>
+>
+ +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-11-15T20:47:00Z +++$+++ Sorry to drag you into this buddy
+
+I have OCD and I really want that typo fixed, now I know it’s there, it
+annoys me LOL.
+
+Here’s another argument, your CLA is against neurodiversity.
+
+Finally I think I have a human right to have my anguish relieved since it’s
+at no cost to the company at all.
+
+But your masters are trying to put a leash on me and to that I say, over my
+dead body!
+
+On Sat, Nov 16, 2019 at 5:39 Krzysztof Woś <krzysztof.wos@gmail.com> wrote:
+
+> Someone should start a GoFundMe campaign to pay for a lawyer who will
+> challenge Google all the way to the Supreme Court, LOL
+>
+> This is unquestionable example of furthering of knowledge offered freely
+> in good faith
+>
+> This cannot be prohibited
+>
+> #Singularity
+>
+> On Sat, Nov 16, 2019 at 5:33 Krzysztof Woś <krzysztof.wos@gmail.com>
+> wrote:
+>
+>> Yes and I am fighting mine trying to live a life according to immutable
+>> belief in better tomorrow.
+>>
+>> One can live a life earning less than the fabled Google salary but dream
+>> of better internet where this sort of nonsense isn’t for a bunch of lawyers
+>> to decide
+>>
+>> A man’s effort to further the way to build software is our birthright
+>>
+>> It’s the direct exercise of LOGOS, the Divine Word, the ability that God
+>> himself bestowed on man: to transform chaos into order through an act of
+>> speech
+>>
+>> In the beginning there was the word and the word was with God and the
+>> word was God
+>>
+>> John:1, I believe
+>>
+>> Your CLA is preventing me from exercising my religious belief, a right
+>> enshrined in your Constitution
+>>
+>> The world is full of nonsense because nobody makes a stand
+>>
+>> On Sat, Nov 16, 2019 at 5:18 Artem Vorotnikov <notifications@github.com>
+>> wrote:
+>>
+>>> @krzysztofwos <https://github.com/krzysztofwos> IANAL but the typo fix
+>>> is too trivial to be protected in the court of law. And even if it wasn't
+>>> it's always possible to simply rephrase the sentence.
+>>>
+>>> Regarding the rest of your comment, I do not think it is reasonable to
+>>> put a man's livelihood in a perilous position just to make a point. One
+>>> must learn to pick his fights, so to speak. :)
+>>>
+>>> —
+>>> You are receiving this because you were mentioned.
+>>>
+>>>
+>>> Reply to this email directly, view it on GitHub
+>>> <https://github.com/google/tarpc/pull/279?email_source=notifications&email_token=AAGCHBP3VXRD2PABQE5C4BTQT37Y7A5CNFSM4JNZ2EU2YY3PNVWWK3TUL52HS4DFVREXG43VMVBW63LNMVXHJKTDN5WW2ZLOORPWSZGOEEGTBMQ#issuecomment-554512562>,
+>>> or unsubscribe
+>>> <https://github.com/notifications/unsubscribe-auth/AAGCHBJTTRPYEEIENCIJHWLQT37Y7ANCNFSM4JNZ2EUQ>
+>>> .
+>>>
+>>
+ +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP240364 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-11-15T22:01:40Z +++$+++ I believe that this PR has run its course and it's time to move on. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP2915777 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-11-16T01:30:54Z +++$+++ I've fixed the typo; I'm sorry for any distress this experience has caused you. +++$+++ 0 +++$+++ 0

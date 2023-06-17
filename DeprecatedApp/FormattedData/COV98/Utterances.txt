@@ -1,0 +1,113 @@
+ROOT +++$+++ SP8150967 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-26T18:39:36Z +++$+++ We cannot reach the server to update your progress.  **Edited by @moT01:**
+## Anyone coming here with this issue should read through this, or specifically [go to this comment](https://github.com/freeCodeCamp/freeCodeCamp/issues/37571#issuecomment-547288864) and send an email.
+<hr>
+
+**Describe your problem and how to reproduce it:**
+
+I've been trying to submit several projects for a week and I get the subject message.
+
+**Add a Link to the page with the problem:**
+
+All pages
+
+**Tell us about your browser and operating system:**
+* Browser Name: 
+* Browser Version: 
+* Operating System: 
+
+Version 78.0.3904.70 (Official Build) (64-bit),
+![Capture](https://user-images.githubusercontent.com/8150967/67624427-6cc34080-f7fe-11e9-9ab0-4740b7619d30.JPG)
+ Windows 10
+
+**If possible, add a screenshot here (you can drag and drop, png, jpg, gif, etc. in this box):**
+ +++$+++ 1 +++$+++ 0
+COM0 +++$+++ SP3390120 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-26T21:58:24Z +++$+++ i had the same problem
+
+Browser: Firefox 68.2.0esr (64-bits) and chrome Version 78.0.3904.70  64 bits
+SO: Linux (Debian)
+
+![Captura de tela_2019-10-26_23-27-58](https://user-images.githubusercontent.com/3390120/67628683-72de0f00-f848-11e9-9280-e4b0f84f3400.png)
+ +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP34807532 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-10-27T13:17:33Z +++$+++ I haven't been able to reproduce the issue. Can both of you please check again? If the issue is still there, try checking your browser's proxy config and network settings in general +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP20648924 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-10-27T15:19:58Z +++$+++ Thanks for reporting this @macengr. It looks like this has been fixed and is waiting to be pushed to production. See https://github.com/freeCodeCamp/freeCodeCamp/issues/37381 for more info. We can close this since it has been resolved. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP8150967 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-10-27T17:04:28Z +++$+++ I'm not sure why you closed this because I am STILL unable to submit my projects. It's been over a week now. I've seen multiple people reporting this problem and it always ends the same way - oh, we fixed it, closed. It's not fixed until it works for the user. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP8150967 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-10-27T17:07:04Z +++$+++ Please see the comment I just left on 37571. It is most definitely NOT
+resolved.
+
+On Sun, Oct 27, 2019 at 11:28 AM Tom <notifications@github.com> wrote:
+
+> Thanks for reporting this @macengr <https://github.com/macengr>. It looks
+> like this has been fixed and is waiting to be pushed to production. See
+> #37381 <https://github.com/freeCodeCamp/freeCodeCamp/issues/37381> for
+> more info. We can close this since it has been resolved.
+>
+> —
+> You are receiving this because you were mentioned.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/freeCodeCamp/freeCodeCamp/issues/37571?email_source=notifications&email_token=AB6F7N6RCBNTSBL5NMCUYV3QQWXQBA5CNFSM4JFOL3JKYY3PNVWWK3TUL52HS4DFVREXG43VMVBW63LNMVXHJKTDN5WW2ZLOORPWSZGOECLAWZA#issuecomment-546704228>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/AB6F7N5ULVNFSUWTRGWRK3TQQWXQBANCNFSM4JFOL3JA>
+> .
+>
+ +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP20648924 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-10-27T18:45:29Z +++$+++ The reason this can be closed is because the issue has been fixed on our development environment. We don't need open issues for something that is fixed. I just verified that it is fixed locally. I'm not sure when the next time the code will be added to the live site will be; but once it is added, you will be able to submit your projects normally. Thanks.
+
+Edit: it actually seems to be working for me on production as well. Can you try one more time @macengr? +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP8150967 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-10-27T19:10:47Z +++$+++ No, still not working. My original data is the same (1st post). 3:09 PM EST 10/27/2019 +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP5313213 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-10-27T19:28:23Z +++$+++ @macengr I am reopening this issue, due to you still having the problem.  Are you using any browser extensions which could be blocking the requests? +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP8150967 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-10-27T19:36:31Z +++$+++ Not that I know of, at least, none that I wasn't using before this started. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP8150967 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-10-27T19:43:45Z +++$+++ I've made a recording for you:
+
+https://www.loom.com/share/b6d7ad6899d7481a979ada644a1a93a6
+ +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP20648924 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-10-27T20:39:24Z +++$+++ Sorry for closing this prematurely @macengr. I can't reproduce this with any browser on High Sierra. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP11634920 +++$+++ ROOT +++$+++ COM10 +++$+++ 2019-10-27T22:47:01Z +++$+++ I've been getting the same error message. Doesn't matter what browser I use, although at this point I can no longer log into my account (signed up w/Github acct). I'm still logged into a session on Opera. Browser is up to date. No extensions. macOS 10.1.14
+
+<img width="913" alt="Screen Shot 2019-10-27 at 6 41 09 PM" src="https://user-images.githubusercontent.com/11634920/67643084-8097a100-f8e9-11e9-805a-7c4acfe6e404.png"> +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP57095224 +++$+++ ROOT +++$+++ COM11 +++$+++ 2019-10-28T11:22:55Z +++$+++ I required a suggestion to solve [Yahoo 404 http](https://gmailtechnicalsupportnumbers.com/blog/fix-yahoo-mail-error-code-404/), I attempt all the steps known, and few more learned by internet if you have experience how to solve this please suggest the measures.       +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP11634920 +++$+++ ROOT +++$+++ COM12 +++$+++ 2019-10-28T15:10:48Z +++$+++ Now that my account has been merged #37457, the projects I submitted are showing up +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP23170565 +++$+++ ROOT +++$+++ COM13 +++$+++ 2019-10-28T15:15:28Z +++$+++ I am still experiencing the issue and I do not believe I have an account issue +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP15801806 +++$+++ ROOT +++$+++ COM14 +++$+++ 2019-10-28T16:12:07Z +++$+++ Is anyone that is experiencing this issue able to log in and edit their user account settings?  The reason I ask is that that specific message should only appear if the browser can't detect the internet or the fcc servers have not returned your user details.
+
+If not, then the problem is likely login issues, discussed further [here](https://github.com/freeCodeCamp/freeCodeCamp/issues/37457).
+
+If yes and you can change your settings, submit other challenges and everything, aside from project submission, seems to be working, then this is definitely something new. +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP23170565 +++$+++ ROOT +++$+++ COM15 +++$+++ 2019-10-28T16:13:49Z +++$+++ Ok, I am unable to update my account settings. I receive this error when I try: 
+![image](https://user-images.githubusercontent.com/23170565/67695962-5fcc5b80-f97c-11e9-804f-d0005d0c9a40.png)
+
+I will follow the issue mentioned above
+ +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP8150967 +++$+++ ROOT +++$+++ COM16 +++$+++ 2019-10-28T16:51:11Z +++$+++ I redceive the same error as Kelsie when I try to change my settings (e.g., switch to dark mode or submit an about message):
+
+https://www.loom.com/share/ccd4e968a1254a14a18ba53ed63d6027 +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP4591597 +++$+++ ROOT +++$+++ COM17 +++$+++ 2019-10-29T07:17:57Z +++$+++ Thank you for your patience.
+
+We suspect this issue could be caused by of duplicate accounts.
+
+If you could kindly send us an email support@freecodecamp.org with your username, we should be able to take a closer look and resolve this issue ASAP.
+ +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP3390120 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-10-29T12:00:44Z +++$+++ is not resolved +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP23170565 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-10-29T12:06:56Z +++$+++ After emailing support and having my duplicated accounts merged (for those following along, I had no idea that I had duplicated accounts - view issue #37457 for more info), I am able to submit my lessons and update my accounts settings. 
+
+One buggy thing which I included in an email to support is that when I click the freeCodeCamp logo, it appears to log me out. I press Sign In and I am able to see my curriculum again though.
+
+Thanks for the help with this issue. +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP34807532 +++$+++ ROOT +++$+++ COM20 +++$+++ 2019-10-29T12:21:44Z +++$+++ @nandumoura 
+
+> Thank you for your patience.
+> 
+> We suspect this issue could be caused by of duplicate accounts.
+> 
+> If you could kindly send us an email [support@freecodecamp.org](mailto:support@freecodecamp.org) with your username, we should be able to take a closer look and resolve this issue ASAP.
+
+ +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP4591597 +++$+++ ROOT +++$+++ COM21 +++$+++ 2019-10-30T08:20:56Z +++$+++ > After emailing support and having my duplicated accounts merged (for those following along, I had no idea that I had duplicated accounts - view issue #37457 for more info), I am able to submit my lessons and update my accounts settings.
+> 
+> One buggy thing which I included in an email to support is that when I click the freeCodeCamp logo, it appears to log me out. I press Sign In and I am able to see my curriculum again though.
+> 
+> Thanks for the help with this issue.
+
+Our landing page looks like the log out version of /learn at the moment. It is likely that you have been redirected to the landing page without getting logged out.
+
+if not could you please create a separate issue for that?  +++$+++ 1 +++$+++ 0
+COM23 +++$+++ SP6033246 +++$+++ ROOT +++$+++ COM22 +++$+++ 2019-11-01T09:05:33Z +++$+++ @ahmadabdolsaheb I sent an email to check if my account is duplicated.  +++$+++ 0 +++$+++ 0

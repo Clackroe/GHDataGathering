@@ -1,0 +1,131 @@
+ROOT +++$+++ SP44085 +++$+++ ROOT +++$+++ ROOT +++$+++ 2021-01-25T10:40:48Z +++$+++ [Prototype] [Do NOT Merge] Binary Metal Archive Prototype for iOS/Mac. This patch wires up Metal Binary Archives for Mac and iOS. Metal Binary Archives
+are used to cache pipeline state objects generated at runtime on the device and
+serialize them to disk when rendering is paused. In this prototype, the binary
+archives are serialized to disk when the application moves into the background.
+On the next launch of the application, the serialized representation of the
+archives is used for the creation of new pipeline state objects.
+
+Per the [details in the linked issue][1], I do not recommend we land this patch.
+This PR is just meant to be a record of the prototyping work done to evaluate
+Metal Binary Archives for Flutter.
+
+[1]: https://github.com/flutter/flutter/issues/60267#issuecomment-762786388
+
+## Observations
+
+Once patched in, the following observations can be made while running a Flutter application.
+
+* After first launch, the application caches directory should contain a `.metallib` file with the following format. `flutter_engine_<engine_version>_<skia_version>_<index>.metallib`. This was done so any changes to the Flutter engine or the Skia version would not run the risk of using invalid cached contents. The file ([example](https://github.com/flutter/engine/files/5865817/flutter_engine_08daa2c8962687253fbcbd812d08d70c34c86721_069e484cc3b9518f115312c065a6f9c843b0839a_0.metallib.zip)) seems to be a Mach-O binary. This is consistent with Apple's recommendation that the `lipo` tool be used to combine archives harvested from devices of different GPU families.
+* This file will get updated every time the application is backgrounded and will get reused when the application is launched.
+* To prevent any issues with threading (I could find no mention in the docs about the thread safety aspects of any of the APIs) only raster thread operations will using this archive.
+* One open question not answered in my linked comment was how much these archives would help for jank during subsequent application launches (as seeding the archive for first launch is a no-go). I tried to find determine this by making sure the cache was seeded and launching the application again. My hope was to see a reduction in the `GrMtlPipelineStateBuilder::finalize` trace in Observatory. This [did not materialize (trace is from a warmed up archive)](https://github.com/flutter/engine/files/5865862/warmed_cached_pipeline_state_extra_skia_traces.json.zip). This seems to be because the primary cause of jank in pipeline state setup is the construction of the Metal shader library (SKSL -> MSL -> MTLLibrary (AIR?)) and not the pipeline state object construction. An annotated version of one of the traces is as follows:
+![Screen Shot 2021-01-25 at 2 24 51 AM](https://user-images.githubusercontent.com/44085/105694897-5058fc80-5eb6-11eb-8440-5b6f973abe0a.png) +++$+++ 2 +++$+++ 0
+COM0 +++$+++ SP65097588 +++$+++ ROOT +++$+++ ROOT +++$+++ 2021-01-25T10:40:51Z +++$+++ It looks like this pull request may not have tests. Please make sure to add tests before merging. If you need an exemption to this rule, contact Hixie on the #hackers channel in [Chat](https://github.com/flutter/flutter/wiki/Chat).
+
+__Reviewers__: Read the [Tree Hygiene page](https://github.com/flutter/flutter/wiki/Tree-hygiene#how-to-review-code) and make sure this patch meets those guidelines before LGTMing. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP16635729 +++$+++ ROOT +++$+++ COM0 +++$+++ 2021-01-26T10:30:41Z +++$+++ Just curious, why isn't it possible to cache or even distribute the MSL version of the shaders instead of doing the translation fom SKLS to Msl at runtime? Or even precompile Msl?
+Did you have a look how https://github.com/kakashidinho/metalangle solves this? +++$+++ 7 +++$+++ 0
+COM2 +++$+++ SP75162557 +++$+++ ROOT +++$+++ COM1 +++$+++ 2021-01-28T15:29:01Z +++$+++ One more question regarding your statement @chinmaygarde, "This seems to be because the primary cause of jank in pipeline state setup is the construction of the Metal shader library (SKSL -> MSL -> MTLLibrary (AIR?)) and not the pipeline state object construction.", could we do something to speed up creation of Metal shader library? +++$+++ 2 +++$+++ 0
+COM3 +++$+++ SP8620741 +++$+++ ROOT +++$+++ COM2 +++$+++ 2021-02-03T17:54:00Z +++$+++ @chinmaygarde - what if we could get skia to use https://developer.apple.com/documentation/metal/mtldevice/1433391-newlibrarywithdata?language=occ instead? It seems like that should be faster... +++$+++ 3 +++$+++ 0
+COM4 +++$+++ SP16635729 +++$+++ ROOT +++$+++ COM3 +++$+++ 2021-02-03T22:22:58Z +++$+++ > @chinmaygarde - what if we could get skia to use https://developer.apple.com/documentation/metal/mtldevice/1433391-newlibrarywithdata?language=occ instead? It seems like that should be faster...
+
+That's what I meant above +++$+++ 2 +++$+++ 0
+COM5 +++$+++ SP23337273 +++$+++ ROOT +++$+++ COM4 +++$+++ 2021-02-09T17:25:04Z +++$+++ Unprofessional for Flutter team to have this issue for more than 1 year.
+It is just shows up the whole Google company style - quantity over quality. 
+Can't wait cross-platform solution from Apple. It will be just different, as always later than Google, but just perfectly usable.
+
+PLEASE PROVIDE SOLUTION to whole community ASAP or just put Flutter here https://killedbygoogle.com.  +++$+++ 5 +++$+++ 3
+COM6 +++$+++ SP16635729 +++$+++ ROOT +++$+++ COM5 +++$+++ 2021-02-09T17:54:47Z +++$+++ @KrillioSokolov may I remind you of the code of conduct of this repository which strongly encourages a kind behaviour?
+This isn't an issue that is so easy to fix. Always keep in mind that this is a full framework you get for free.
+And this issue would be way easier if Apple hadn't decided not to join all other Vendors in Vulkan but to develop Metal. +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP23337273 +++$+++ ROOT +++$+++ COM6 +++$+++ 2021-02-09T18:28:11Z +++$+++ @escamoteur, I am really sorry if I break any rules. I'm struggling about passive reaction of Flutter team. 
+
+Yes, you are right it's for free, except developers fee, right? We are paying commission in the Play Store, paying account fees and Google provides tools for making applications which will gain more money for Google. It's simple consumption chain. 
+
+For sure, me and many others developers feel deceived about this situation, because Flutter team PROMISED 60 fps animation! We all invest years of our lives in usage this technology, we spent our tech-reputation to push ours companies to take a risk and invest resources to achieve this technology. And what we have got from Flutter team? 
+
+Indifference for the whole year! They decide to expand to the web and desktop, instead of contributing theirs main features and take care of community. That's why I tell, that "quantity over quality"
+
+And you are really think that is the Apple's problem? If you decide to create cross-platform system you had better to being ready for changes from each contributed platforms, a specially from a such moody company as Apple. 
+ +++$+++ 3 +++$+++ 0
+COM8 +++$+++ SP5325112 +++$+++ ROOT +++$+++ COM7 +++$+++ 2021-02-09T19:40:21Z +++$+++ I'm grateful to the Flutter developers for their work on Flutter, and for making it available for free.
+
+A few points.
+
+- On the Flutter site, this issue is still not clearly shown. I spent a week of full time effort learning Flutter, only to find out about this issue hidden in the shader optimization article. I feel misled because everything I first saw on homepage etc, promised 60 FPS and native performance. I think its bordering on unethical to not make this problem clearly known to new developers.
+
+- This issue should be a higher priority than anything else, instead it still seems like its a P3 or lower. No one is even assigned to this issue yet?
+
+- There should be an ETA / timeline for a resolution.
+
+It looks like there's a solution available - running animations in the background to warm up the shader. We just need something around that to be made official. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP53796452 +++$+++ ROOT +++$+++ COM8 +++$+++ 2021-02-09T19:41:32Z +++$+++ Flutter team itself said that they considered the option to go with OpenGL and Metal, but they didn’t. They decided to go with Metal only. What I don’t understand is how did they not see this issue when they were testing? I don’t believe switching over to Metal was a 3 minute decision. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP53796452 +++$+++ ROOT +++$+++ COM9 +++$+++ 2021-02-09T19:48:41Z +++$+++ > I'm grateful to all the Flutter developers for their work on Flutter, and for making it available for free.
+> 
+> A few points.
+> 
+> * On the Flutter site, this issue is still not clearly shown. I spent a week of full time effort learning Flutter, only to find out about this issue hidden in the shader optimization article. I feel misled because everything I first saw on homepage etc, promised 60 FPS and native performance. I think its bordering on unethical to not make this problem clearly known to new developers.
+> * This issue should be a higher priority than anything else, instead it still seems like its a P3 or lower. No one is even assigned to this issue yet?
+> * There should be an ETA / timeline for a resolution.
+> 
+> It looks like there's a solution available - running animations in the background to warm up the shader. We just need something around that to be made official.
+
+To be honest. Flutter being free in this case makes it only worse. I wish it was paid so we would not get the “it’s free, whatever you get be happy” response. At least we would not get a 100 line code commit after 1 year on such a huge issue. +++$+++ 7 +++$+++ 0
+COM11 +++$+++ SP75162557 +++$+++ ROOT +++$+++ COM10 +++$+++ 2021-02-11T08:10:02Z +++$+++ @chinmaygarde do you have any comments on the idea to cache and distribute MSL? Also is this an issue where you will track further progress on this issue? Do you have some kind of document or could you create one in which you would describe the setup to tray to debug this so maybe somebody also could get involved and maybe we could get more ideas? And the final question is are you the only person that is working on this? +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP8620741 +++$+++ ROOT +++$+++ COM11 +++$+++ 2021-02-11T17:13:06Z +++$+++ Chinmay and I talked about this a bit offline.
+
+Caching the MSL has a few challenges:
+
+- Apple doesn't seem to provide a good way to fetch the binary archives from the device/application for caching.
+- It still has many disadvantages, such as not necessarily knowing when you'd need to do this, whether your cached shaders are still valid or not, whether you're missing an important one, etc.
+
+We're trying to come up with a more comprehensive solution for this - one that would clearly let developers know when their scene might be complex enough to result in lengthy shader compilation, and what options they have to mitigate that. +++$+++ 1 +++$+++ 0
+COM13 +++$+++ SP16635729 +++$+++ ROOT +++$+++ COM12 +++$+++ 2021-02-11T17:32:58Z +++$+++ @dnfield from my understanding the shaders we are talking of don't get there source dynamically or are they? So you wouldn't even need to cache them you could directly bundle the precompiled metal shaders. In contrary to OpenGL you always know that the metal API will be there. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP23337273 +++$+++ ROOT +++$+++ COM13 +++$+++ 2021-02-11T17:44:40Z +++$+++ Anyone else has opinion that cashing is just a crutch? Looks like, it is just attempt to run away from the problem and try to hide it. 
+
+Guys from Flutter team, you spend tone of time to learn algorithms, data structure, low level programming for get work in Google and for now is it actually that type of solution you wanna provide being hired by the one of the best company in the world? Crutch? 
+
+All application on flutter just lagging, even Google applications, everyone understand that cashing would probably decrease lagging, but not remove them all. When you solve this issue(instead of provide workaround) Flutter will be best SaaS decision in the world, even for iOS users! 
+
+ Believe in you guys. +++$+++ 0 +++$+++ 2
+COM15 +++$+++ SP16635729 +++$+++ ROOT +++$+++ COM14 +++$+++ 2021-02-11T17:48:56Z +++$+++ > 
+> 
+> Anyone else has opinion that cashing is just a crutch? Looks like, it is just attempt to run away from the problem and try to hide it.
+> 
+> Guys from Flutter team, you spend tone of time to learn algorithms, data structure, low level programming for working in Google and for now is it actually that type of solution you wanna provide in one of the hugest company in the world? Crutch? All application on flutter just lagging, even Google applications, everyone understand that cashing would probably decrease lagging, but not remove them all.
+
+I recommend diving a bit deeper in the world of shaders an crossplatform GPU programming before making such a statement. Shaders have to be compiled before you can use them the first time. There is no way around it. So caching the compiled shaders is the usual way you do this.  My guess is that iOS native Apps use shaders that are already loaded by the operating system. +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP23337273 +++$+++ ROOT +++$+++ COM15 +++$+++ 2021-02-11T17:55:34Z +++$+++ @escamoteur, hm...  Will increasing a duration of showing Launch Screen give enough time to launch engine and load shaders to use it? 
+ +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP16635729 +++$+++ ROOT +++$+++ COM16 +++$+++ 2021-02-11T17:59:32Z +++$+++ @KrillioSokolov from my understanding Flutter only creates the shaders when it needs them the first time, which makes sense because why create shaders for widgets you never use.
+My guess is if you create the widgets where you encounter the jank already behind your Startup screen, that could help, but I' not sure if shaders will be created if the widgets are hidden. +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP9597207 +++$+++ ROOT +++$+++ COM17 +++$+++ 2021-02-11T18:00:47Z +++$+++ > @escamoteur, hm... Will increasing a duration of showing Launch Screen give enough time to launch engine and load shaders to use it?
+
+The problem with this approach is you can't do it with a screen transition. I tried this even putting a hidden navigator behind the current screen with a stack and pushing/popping 3-5 times behind a loading screen, and it had no impact on the perceived jank after that. +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP8620741 +++$+++ ROOT +++$+++ COM18 +++$+++ 2021-02-11T18:02:42Z +++$+++ I think we're starting to get a bit off topic here.
+
+Very briefly, the need for shader compilation has to do with Flutter allowing you to dynamically create lots of different pixel configurations on the GPU. In theory, one could try to write a lot of that logic itself as a shader program, compile that "uber shader" once, and then never suffer from shader compilation jank during application run. In practice, that's extremely difficult to do correctly and may not even be possible to do performantly - shaders want to be small, well defined programs typically, and supporting everything that Flutter can do with such a program (on all the GPUs we have to support) is a very large problem space. Caching smaller programs can help, but it is not an ideal solution since different GPU/OS/driver versions can cause cache misses. This could be a problem even on iOS, where different phone/iPad models and iOS versions are in use. There are other design possibilities being considered as well.
+
+As I said, we're working to come up with an overall better solution for this, but it's not an easy problem to deal with. This is considered an important issue by the team. We welcome contributions here as well, whether it's a patch or design proposals/feedback. +++$+++ 1 +++$+++ 0
+COM20 +++$+++ SP16635729 +++$+++ ROOT +++$+++ COM19 +++$+++ 2021-02-11T18:02:58Z +++$+++ > 
+> 
+> > @escamoteur, hm... Will increasing a duration of showing Launch Screen give enough time to launch engine and load shaders to use it?
+> 
+> The problem with this approach is you can't do it with a screen transition. I tried this even putting a hidden navigator behind the current screen with a stack and pushing/popping 3-5 times behind a loading screen, and it had no impact on the perceived jank after that.
+
+Yeah, I was already fearing the the engine is too "smart" not to create any shader unless it really has to use it. +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP8620741 +++$+++ ROOT +++$+++ COM20 +++$+++ 2021-02-11T18:07:56Z +++$+++ @acoutts - I wonder if you'd have better luck with that solution by actually rasterizing frames from that animation to a pixel buffer. Putting it somewhere invisible may get optimized away. +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP9597207 +++$+++ ROOT +++$+++ COM21 +++$+++ 2021-02-11T18:08:47Z +++$+++ > @acoutts - I wonder if you'd have better luck with that solution by actually rasterizing frames from that animation to a pixel buffer. Putting it somewhere invisible may get optimized away.
+
+I'd love to give it a shot. Have any docs I can read up on for how to do this kind of thing? +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP8620741 +++$+++ ROOT +++$+++ COM22 +++$+++ 2021-02-11T18:09:08Z +++$+++ I'll also mention: sometimes the solution is just to do something less expensive. See for example https://github.com/flutter/flutter/pull/75670 - we found that using `drawRect` calls instead of a `LinearGradient` saves significant amount of time on initial rendering time. +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP8620741 +++$+++ ROOT +++$+++ COM23 +++$+++ 2021-02-11T21:34:03Z +++$+++ @acoutts - not really. I'd try to just experiment with rendering the widget into a repaint boundary and using https://api.flutter.dev/flutter/rendering/RenderRepaintBoundary/toImage.html to render it into a small image as part of a warmup routine, or https://api.flutter.dev/flutter/rendering/OffsetLayer/toImage.html if that makes more sense.
+
+You might also try just directly using the `SceneBuilder` API and using `Scene.toImage` depending on how you approach it. +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP75162557 +++$+++ ROOT +++$+++ COM24 +++$+++ 2021-02-11T21:53:49Z +++$+++ @dnfield If I understand you well we should try to convert our page ui(scene) into an image and than try to paint it inside Flutter default warmup routine (https://api.flutter.dev/flutter/painting/DefaultShaderWarmUp-class.html) am I correct in this assumption? Also for us the main issue is the the cupertino route page transition we have other animations but nothing is as important as the first few page transitions and they have issue with shader compilation, page transition shader is directly related with the content of this page, we should try to get the images of pages that user is going to see first and put them in warmup routine? Can you just confirm or deny my assumptions?   +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP8620741 +++$+++ ROOT +++$+++ COM25 +++$+++ 2021-02-11T21:55:00Z +++$+++ You don't want to save the image - you want to get Skia to create the shader(s) needed to create the image.
+
+I'm not necessarily recommending this approach, but I think it's one that might be worth experimenting with and see what we can get out of it. +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP8620741 +++$+++ ROOT +++$+++ COM26 +++$+++ 2021-02-11T21:55:38Z +++$+++ IOW, you want to try to capture relevant frame(s) from your actual widgets/transitions, and rasterize them so that the needed shader(s) get compiled up front. +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP75162557 +++$+++ ROOT +++$+++ COM27 +++$+++ 2021-02-11T22:00:52Z +++$+++ Does it make sense to put that widget in a stack below the content of login page, this way it is not going to be visible to the user, but is Fluttter going to send that widget to GPU to create shader since it is not visible(it is in stack below some other content)? +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP8620741 +++$+++ ROOT +++$+++ COM28 +++$+++ 2021-02-11T22:02:02Z +++$+++ I think you'd probably want to do this during a splash screen or at least during some other idle time in the app. Exactly when is hard to say. We'd want to see that such a method is workable too though  first :) +++$+++ 0 +++$+++ 0

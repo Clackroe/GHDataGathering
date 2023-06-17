@@ -1,0 +1,31 @@
+ROOT +++$+++ SP2741 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-08-21T23:48:12Z +++$+++ Replace use of whitelist with allowlist and blacklist with denylist Per https://twitter.com/dhh/status/1032050325513940992, I'd like for Rails to set a good example and tone by using better terminology when we can. An easy fix would be to replace our use of whitelist with allowlist and blacklist with denylist.
+
+We can even just use them as verbs directly, as we do with the former terms. So something is allowlisted or denylisted.
+
+I took a quick look and it seems like this change is mostly about docs. We only have one piece of the code that I could find on a search that uses the term whitelist with `enforce_raw_sql_whitelist`. Need to consider whether we need an alias and a deprecation for that. +++$+++ 61 +++$+++ 21
+COM0 +++$+++ SP14361073 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-08-22T00:57:07Z +++$+++ Good intentions, but I doubt there's any relation of the origin of the terms blacklist/whitelist to race. There are many idioms and phrases in the English language that make use of colours without any racial backstories.
+I haven't met any black person (myself included) who was ever offended by the use of "blacklist". Frankly, a good number find it patronising to make this kind of change. +++$+++ 39 +++$+++ 0
+COM1 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-08-22T01:11:49Z +++$+++ At least [one source from a search](https://www.etymonline.com/word/blacklist) suggests the word had its origins around union members.  +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP2741 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-08-22T01:15:48Z +++$+++ Regardless of origin, allow/deny are simply clearer terms that does not require tracing the history of black/white as representations of that meaning. We can simply use the meaning directly. +++$+++ 27 +++$+++ 5
+COM3 +++$+++ SP201135 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-08-22T01:26:22Z +++$+++ 1. [etymology is quite important](
+https://www.quora.com/Is-the-term-blacklist-racist?share=1). in the end, we might consider plain words „black“ and „white“ racist and enter the realms of newspeak which i figure you especially, @dhh, are familiar with.
+
+2. “allow/deny are simply clearer terms” — now that’s an actual, technically useful argument.
+
+3. can we please stop jumping onto political bandwagons? i am here for the sanity. +++$+++ 9 +++$+++ 0
+COM4 +++$+++ SP905505 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-08-22T01:33:59Z +++$+++ The terms **Blocklist** and **Clearlist** are sometimes used in place of Blacklist and Whitelist.
+ +++$+++ 1 +++$+++ 0
+COM5 +++$+++ SP19339870 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-08-22T02:23:21Z +++$+++ I'm gonna go ahead and get started on this... 😄  +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP396486 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-08-22T03:03:42Z +++$+++ One could also argue that in color theory, black is the absence of color (photons which make up the spectrum) and white is the accumulation of all colors. Thus a blacklist is a list which contains elements that are to be absent and a whitelist to be allowed... +++$+++ 0 +++$+++ 1
+COM7 +++$+++ SP526479 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-08-22T03:07:33Z +++$+++ I think this is a great idea, I have proposed internally at multiple companies I've worked at changing master/slave and blacklist/whitelist to leader/replica and allowlist/denylist, if only because in an industry with poor representation it feels incredibly overt to be standing in a room full of mostly white people using these terms outloud.
+
+It doesn't matter what the origin or intent of this was, or whether people can find a narrow lens through which to see it as not a problem.  Consider using these terms in a coding or systems interview with someone you have just met.
+
+I understand that some black people may not consider these terms offensive, but I would rather someone not want to work with me because they think I am too politically correct than because they think I am too insensitive and blind.
+
+@minaslater thanks for beating me to the first PR on this. :) 💯  +++$+++ 0 +++$+++ 4
+COM8 +++$+++ SP396486 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-08-22T12:21:31Z +++$+++ @bitmonk I respectfully disagree with your opinion that your (or my) future colleagues would impose that kind of cultural bias on words that exist in the [English](https://www.merriam-webster.com/dictionary/white%20list) [language](https://www.merriam-webster.com/dictionary/blacklist) as well as are well-defined [on](https://en.wikipedia.org/wiki/Whitelisting) [Wikipedia](https://en.wikipedia.org/wiki/Blacklist_(disambiguation)), of which `blacklist` has far more far reaching disciplines than just comp-sci. 
+
+That said and since I think this issue will garner overwhelming support in this community, I do support a compromise suggested by @rafaelfranca's review to replace the actual words with their definition or some other phrase that is more fluid than a single term. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP8125356 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-08-22T13:55:35Z +++$+++ I think the question here should be: is replacing `whitelist` and `blacklist` with `allowlist` and `denylist` a better option? If presented with the word `blacklist` and `denylist`, which is most likely self-explanatory as to the action to be performed? +++$+++ 1 +++$+++ 0
+COM10 +++$+++ SP47848 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-04-12T13:52:44Z +++$+++ A quick search and replace in the codebase shows that all entries for those words were already changed. I'll close this issue. +++$+++ 0 +++$+++ 0

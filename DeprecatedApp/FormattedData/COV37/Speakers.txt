@@ -1,0 +1,10 @@
+SP8958862 +++$+++ DartBot +++$+++ NONE (AUTHOR)
+SP2156198 +++$+++ kasperl +++$+++ NONE
+SP5449880 +++$+++ iposva-google +++$+++ CONTRIBUTOR
+SP1343914 +++$+++ sgjesse +++$+++ CONTRIBUTOR
+SP107247 +++$+++ mulander +++$+++ NONE
+SP5479 +++$+++ sethladd +++$+++ CONTRIBUTOR
+SP4905639 +++$+++ whesse +++$+++ MEMBER
+SP180825 +++$+++ pbgc +++$+++ NONE
+SP6665730 +++$+++ krytarowski +++$+++ NONE
+SP2311549 +++$+++ mezoni +++$+++ NONE

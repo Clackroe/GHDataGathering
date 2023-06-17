@@ -1,0 +1,37 @@
+ROOT +++$+++ SP1550003 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-03-16T16:11:10Z +++$+++ Add event to allow for rendering additional overlays on items in guis I have a tool which needs to have two durability bars. In order to draw the second one, I would have to ASM my own hook into `RenderItem`, or do some wonky rendering on the `GuiContainerEvent.DrawForeground` and `RenderGameOverlayEvent.Post` events. This prompted a PR for the hook instead. +++$+++ 1 +++$+++ 0
+COM0 +++$+++ SP11571300 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-03-16T16:11:18Z +++$+++ [![CLA assistant check](https://cla-assistant.io/pull/badge/signed)](https://cla-assistant.io/MinecraftForge/MinecraftForge?pullRequest=4803) <br/>All committers have signed the CLA. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP1485873 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-03-16T20:03:42Z +++$+++ Save your energy. Lex has rejected this again and again.
+
+Put your overlays as extra quads into your item model, he says. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP702211 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-03-16T20:46:55Z +++$+++ Threatening to coremods shit because you haven't spent 10 mins looking into other solutions is not the way to get things added to forge. +++$+++ 0 +++$+++ 1
+COM3 +++$+++ SP4176124 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-03-16T21:31:55Z +++$+++ It's pretty useless to complain about someone not looking without pointing them in the right direction. I have searched the issues of this repository without finding anything. There is literally no reason to assume or accuse that people haven't looked for something just because they didn't find the solution. It's excruciatingly abrasive and dickish and impedes fostering a community that actually wants to contribute to a project. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP1550003 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-03-16T21:37:40Z +++$+++ Going off on someone because you assume they haven't searched for other solutions makes you look like a dick. I asked around on several modding discords, looked at the source of several mods which implement such thing that I'm trying to and came to the conclusion that ASM is the only good way. I'm not threatening to coremod anything. The solutions I found were to coremod and I wanted to avoid that. **Which is why I made this PR.** +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP702211 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-03-16T22:09:35Z +++$+++ Documentation on everything is always a issue, this will never go away. However its a simple concept, you're trying to add one quad to your item when rendered in the inventory.
+We have MANY things related to extending the item model, So I would tell you to start looking at the IModel interface, as well as the renderItemAndEffectIntoGUI/renderItemOverlayIntoGUI which gathers the model and passes through a hadleState function which you can easily build the extra bar onto. 
+We also expose a model based font renderer so there's help with that. 
+Combined with the MANY MANY posts and arguments that we've had on this issue tracker and the forums about the point of the model system is to REMOVE direct GL access from the mods/items. Your solution is to add a new hook that encourages modders to break GL.
+All you wont is your model to have one extra textured quad. Why does this need to be/encourage direct GL access?
+I don't care if you consider my response dickish, your initial post was. And im getting tired of people posting under the same veiled threats every damn time. "Do this now or i'll hack it with a coremod!" You may not intend for your post to come across that way but it does.
+So some takeaways: Don't open your Prs with 'Im gunna ASM this if you dont add it' Which is what your post comes under. Don't go against the entire point of moving to a model system buy adding YetAnother place of calling direct GL code. If you find something that you THINK you can't do in Forge open a issue, or use the forums. Explore your options. State what options you have explored. And again DO NOT open your argument with do this or i'll asm it! +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP1485873 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-03-16T23:17:51Z +++$+++ [Edited to remove being a dick]
+
+Lex, you solution has 2 major drawbacks:
+
+1. It requires a a code-based model. The step from putting a png and a 3-line json model into the resources folder to coding a custom IModel is huge.
+2. The quads you add with your model are in model space. They will then be transformed using the Matrix4f derived from the json model. To add a quad that aligns to screen pixels, you need to apply those transforms in reverse and also know what the target coordinates (y!) are.
+
+Both of these tasks are not trivial. Using the BufferBuilder to throw a single colored quad onto the screen *is* trivial, especially as anyone who has ever made a GUI for any block knows how to do it. (and if they don't, the code in renderItemOverlayIntoGUI already does exactly that and can be copied very easily.)
+
+Now, is direct GL access the only way to do that? No, it isn't. I can think of dozens of ways to supply overlays that don't need GL calls but still are much simpler to use than baking models on-the-fly. Even a callback that asks for a texture path + u/v/w/h to overpaint over the item would fulfill 95% of all usescases. But the number 1 solution people will propose when they run into this problem is "do it like vanilla". And killing any discussion at that point will ensure that the same will happen again and again. +++$+++ 3 +++$+++ 0
+COM7 +++$+++ SP702211 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-03-16T23:47:15Z +++$+++ If you would like to readdress this as a series of prebuilt utilities to render extra bars or numbers over items in the inventory. Then we can readdress it as that.
+But moving things back 5 years by encouraging people to do even more direct GL access is not going to fly.
+Feel free to create a new issue or PR to discuss that avenue of things.
+
+As for the whole topic of ASM. Let me state this directly and for the record.
+It is, by definition, possible to do ANYTHING in a coremod.
+Stating that you can/are using a coremod in a PR serves literally NO purpose.
+It is NOTHING but a threat that gets tranted to "Do this or i'll hack shit with a coremod"
+I do not bed to threats.
+
+So, new guideline (I've instructed Mezz to make it official). Any mention of ASM or hints at using a coremod to do shit in your issue will result in the thread being locked, and potentially you being banned from the Forge repo.
+End of story, i'm sick of being threatened by people and coremods. +++$+++ 0 +++$+++ 0

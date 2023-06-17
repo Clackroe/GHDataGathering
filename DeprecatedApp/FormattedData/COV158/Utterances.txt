@@ -1,0 +1,56 @@
+ROOT +++$+++ SP3634745 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-05-30T22:52:04Z +++$+++ Deprecate DL4J Word2Vec for fastText? I've seen several people asking questions about w2v on chat, and there are many open issues, and I wonder whether you should deprecate w2v and point people in the direction of fastText.
+
+fastText has many benefits above w2v: subword correlations, generate vectors for new words, generate vectors for sentences, extremely fast implementation.
+
+Just seems pointless to continue supporting something that uses so much developer time. +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP12250879 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-05-30T22:53:28Z +++$+++ You're welcome to send us PR.
+
+Questions about w2v are usually not related to w2v itself, but memory and loaders related. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP3634745 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-05-30T22:56:22Z +++$+++ fastText produces word2vec style vector files, so it's more a documentation thing?
+
+Beyond that it's something that keeps coming to mind that I wanted to share, rather than go further submitting pull requests etc. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP12250879 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-05-30T23:00:05Z +++$+++ Sorry, what do you mean by "documentation thing"?
+
+How users are supposed to build their models, if they want specific model? They should be sent to facebook for generally the same skip-gram model called fastText? 
+
+How exactly "documentation thing" is supposed to generate vectors for unseen-before words, without actual implementation code?
+
+Sorry, i'm really not sure, what do you mean by "documentation thing" in this case. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP3634745 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-05-30T23:05:44Z +++$+++ fastText is a tool to create word vectors, but also sentence vectors, and many other things to do with word vectors.
+
+The point is I suggest it's better to let fastText handle word vector generation, and just remove that functionality from dl4j. Because fastText does it to a much higher level -- because they specialize in it.
+
+So the "documentation thing" is to deprecate the Word2Vec generation examples and code in DL4J, and say "see fastText [with link] for generation of word vectors". +++$+++ 1 +++$+++ 0
+COM4 +++$+++ SP12250879 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-05-30T23:08:12Z +++$+++ Good point. I hope one day Google will get the same idea, and deprecate Android. 
+
+Apple does it to a much higher level - because they specialize in it.  +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP3634745 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-05-30T23:13:50Z +++$+++ That analogy makes no sense.
+
+Here's a better analogy: fastText vectors are superior to w2v vectors in the same way Darknet is superior to VGG.
+
+(Android and iOS aren't comparable because they have different use cases.) +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP3634745 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-05-30T23:20:07Z +++$+++ @AlexDBlack Please look at this, because @raver119 is still angry I said C wasn't a good language.
+
+(Btw, C is a fine language, just not something I use much or personally gain much utility from.) +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP12250879 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-05-30T23:20:23Z +++$+++ In any way - it's not a way of solving problems. Differences should drive competition. With this logic everything out there can be deprecated: dl4j, keras, chainer, pytorch - we should just all use TF and be happy.
+ 
+Programming languages should be all deprecated too, in favor of C++. +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP12250879 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-05-30T23:21:30Z +++$+++ > Please look at this, because @raver119 is still angry I said C wasn't a good language.
+
+That's a bit of surprising statement. I don't even remember who you are. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP12250879 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-05-30T23:21:53Z +++$+++ P.s. sorry. Just too many people around. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP3634745 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-05-30T23:26:24Z +++$+++ @raver119 Things that are superceded *in their use case* should be deprecated.
+
+And of course you remember me. It's not a big deal.
+
+C and C++ are great. For their use case! Otherwise why wouldn't DL4J just use Java throughout?? Java doesn't give access to AVX for important matrix math... doesn't give access to many useful things. So Java is useless for that.
+
+But w2v is worse than fastText. That I won't change my mind about! +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP1144306 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-05-30T23:37:55Z +++$+++ Hey folks - I'm locking this. @tom-adsfund I agree with @raver119 - the proper solution would be for us to add support for fast text, not "deprecate" word2vec.  We can definitely add it. As of right now it would have to be a pull request though. We can maybe look adding support for adding that file format. I'll keep this issue open as the point stands. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP2360237 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-05-30T23:38:06Z +++$+++ @tom-adsfund 
+> @AlexDBlack Please look at this, because @raver119 is still angry I said C wasn't a good language.
+
+Keep it professional or I won't hesitate to ban you from interacting with this repository.
+
+Now, as for the question of FastText - that's an internal roadmap question and question of priorities. Deprecating W2V is a moot point until we have support for it. Even then, I don't see why we should deprecate something functional just because something better is around. +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP3328023 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-05-31T01:24:53Z +++$+++ @tom-adsfund FWIW, we can use fastText from Java and I would be happy to maintain them as part of the JavaCPP Presets, contributions welcome: https://github.com/bytedeco/javacpp-presets/issues/346 +++$+++ 0 +++$+++ 0

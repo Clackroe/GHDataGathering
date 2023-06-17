@@ -1,0 +1,35 @@
+ROOT +++$+++ SP11139560 +++$+++ ROOT +++$+++ ROOT +++$+++ 2021-01-03T09:17:49Z +++$+++ (removed) (removed) +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP8566911 +++$+++ ROOT +++$+++ ROOT +++$+++ 2021-01-03T09:27:24Z +++$+++ This PR (HEAD: 24b505660f7bdeb4e15270a920dc93d255a13b81) has been imported to Gerrit for code review.
+
+Please visit https://go-review.googlesource.com/c/go/+/281212 to see it.
+
+Tip: You can toggle comments from me using the `comments` slash command (e.g. `/comments off`)
+See the [Wiki page](https://golang.org/wiki/GerritBot) for more info +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP8566911 +++$+++ ROOT +++$+++ COM0 +++$+++ 2021-01-03T09:29:21Z +++$+++ Message from Go Bot:
+
+Patch Set 1:
+
+Congratulations on opening your first change. Thank you for your contribution!
+
+Next steps:
+A maintainer will review your change and provide feedback. See
+https://golang.org/doc/contribute.html#review for more info and tips to get your
+patch through code review.
+
+Most changes in the Go project go through a few rounds of revision. This can be
+surprising to people new to the project. The careful, iterative review process
+is our way of helping mentor contributors and ensuring that their contributions
+have a lasting impact.
+
+During May-July and Nov-Jan the Go project is in a code freeze, during which
+little code gets reviewed or merged. If a reviewer responds with a comment like
+R=go1.11 or adds a tag like "wait-release", it means that this CL will be
+reviewed as part of the next development cycle. See https://golang.org/s/release
+for more details.
+
+---
+Please don’t reply on this GitHub thread. Visit [golang.org/cl/281212](https://go-review.googlesource.com/c/go/+/281212#message-22d80d180abd44312803802d3e08e841097c6038).
+After addressing review feedback, remember to [publish your drafts](https://github.com/golang/go/wiki/GerritBot#i-left-a-reply-to-a-comment-in-gerrit-but-no-one-but-me-can-see-it)! +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP8566911 +++$+++ ROOT +++$+++ COM1 +++$+++ 2021-01-03T11:23:05Z +++$+++ This PR is being closed because [golang.org/cl/281212](https://go-review.googlesource.com/c/go/+/281212) has been abandoned.
+
+Sending an empty patch is not the most efficient way to complain about something and make a feature request; please open a github issue, that's exactly what the issue tracker is for. +++$+++ 0 +++$+++ 0

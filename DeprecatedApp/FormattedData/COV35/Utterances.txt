@@ -1,0 +1,15 @@
+ROOT +++$+++ SP289220 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-19T10:33:00Z +++$+++ Please don't remove the dark theme, because it will make it harder to read large block of code. The title pretty much says what needed to be said. Having a white background with different coloured text can make thing extremely hard to read and can do more harm to your eyes than having a black (or dark grey) background with different coloured text makes it far easier to read. +++$+++ 2 +++$+++ 2
+COM0 +++$+++ SP1931590 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-19T10:49:25Z +++$+++ @Danielx64 can you please explain what exactly you are concerned about. We don't have any plans to remove the dark theme. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP289220 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-12-19T10:51:40Z +++$+++ > 
+> 
+> @Danielx64 can you please explain what exactly you are concerned about. We don't have any plans to remove the dark theme.
+
+There's this issue (https://github.com/microsoft/vscode/issues/87341 ) asking for dark theme to be removed. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP5027115 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-12-19T10:52:57Z +++$+++ Is this even one more layer of trolling? +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP289220 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-12-19T10:54:06Z +++$+++ > 
+> 
+> Is this even one more layer of trolling?
+
+This issue, no, it was a big concern till @dbaeumer stated that they have no plans to remove the dark theme. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP33988779 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-12-19T13:02:54Z +++$+++ r/woooosh +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP1487073 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-12-19T19:00:45Z +++$+++ We are not removing the dark theme, sorry for the confusion. +++$+++ 0 +++$+++ 0

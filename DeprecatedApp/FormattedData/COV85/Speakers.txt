@@ -1,0 +1,5 @@
+SP22350 +++$+++ joaomoreno +++$+++ MEMBER (AUTHOR)
+SP9205389 +++$+++ chrmarti +++$+++ NONE
+SP6402946 +++$+++ philliphoff +++$+++ CONTRIBUTOR
+SP2372529 +++$+++ zifik +++$+++ NONE
+SP36966225 +++$+++ bwateratmsft +++$+++ CONTRIBUTOR

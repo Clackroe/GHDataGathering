@@ -1,0 +1,34 @@
+ROOT +++$+++ SP10137 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-05-20T17:32:15Z +++$+++ [Spec]  Name in use by a REAL open-source project This name is in use and should be changed imediately. Yes, I have seen the other issues. Yes, I am opening a new one because fuck you Microsoft.You are merely trying to cast a shadow on other, truly open source projects. 
+
+https://itsfoss.com/microsoft-maui-kde-row/?fbclid=IwAR3lO4SDxw3H01YsuKZ9G5D2zc1K-OOpjInCKnnY5GBpqiAdnhqfXJGG_EI +++$+++ 4 +++$+++ 17
+COM0 +++$+++ SP21316711 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-05-20T17:40:06Z +++$+++ It's also trademark infringement:
+
+https://euipo.europa.eu/eSearch/#details/trademarks/013410601 +++$+++ 3 +++$+++ 0
+COM1 +++$+++ SP471626 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-05-20T18:26:43Z +++$+++ Microsoft and the PMs here are already aware and are already looking into solutions. This "Issue" is just inflammatory and violates the code of conduct. There is an existing (open) issue that is much more civil and constructive.
+
+https://github.com/dotnet/maui/issues/41 and https://github.com/dotnet/maui/issues/58#issuecomment-631436935
+
+Above all else, be kind. +++$+++ 13 +++$+++ 0
+COM2 +++$+++ SP1867646 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-05-20T19:07:48Z +++$+++ This is why Linux products are the way they are, and why no one had ever heard of KDE MAUI until now -- you lot just argue about inane stuff instead of getting work done. +++$+++ 3 +++$+++ 1
+COM3 +++$+++ SP7824898 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-05-20T20:23:45Z +++$+++ In
+https://devblogs.microsoft.com/dotnet/introducing-net-multi-platform-app-ui/
+is written:
+
+    "that: .NET Multi-platform App UI, affectionately call .NET MAUI."
+Note:
+ 
+     "affectionatelly call..."
+and not:
+
+    "also call"
+
+For me, MAUI is not the REAL name of "product". +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP13384523 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-05-20T20:40:38Z +++$+++ > It's also trademark infringement:
+> 
+> https://euipo.europa.eu/eSearch/#details/trademarks/013410601
+
+Are you a lawyer? Maybe you should check with one before you potentially commit business libel. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP41873 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-05-20T21:00:01Z +++$+++ @Native-Coder your tone and style of commenting is violating our [Code of Conduct](https://dotnetfoundation.org/about/code-of-conduct). We have marked the problematic comments as abusive and blocked you for 7 days. If this behavior persists, we’re going to block you permanently.
+
+ +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP41873 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-05-20T21:00:14Z +++$+++ Duplicate of #34  +++$+++ 0 +++$+++ 0

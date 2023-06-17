@@ -1,0 +1,48 @@
+ROOT +++$+++ SP15650524 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-31T10:39:25Z +++$+++ Too tricky explanation of Win32 support Knowing MS style of "avoiding inconvenient facts", I want to see in description of WinUI **explicit declaration** what Windows versions will be supported.
+As everybody knows, Win10 fails in many aspects and TONS of people still sit in Win7x64. I want to know will WinUI work on Win7 and all necessary details if this "support" will be limited/tricky some way. +++$+++ 1 +++$+++ 7
+COM0 +++$+++ SP7389110 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-31T10:59:23Z +++$+++ WinUI is Windows 10 onwards.
+
+I think it will support the Creators Update (**15063**) onwards.  But it is possible that as a new version of Windows 10 comes out, the lowest supported version may be dropped.  So that would be roughly 3 years of previous versions supported with each release.
+
+As for the details of precise Win32 support - we will learn more during Ignite this coming week.
+
+Windows 7 goes out of support at the end of the year, so if you use Windows 7, you will need to upgrade. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP15650524 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-10-31T11:46:06Z +++$+++ @mdtauk : I do NOT need to upgrade, you miss the point. Avoiding Win10 is intentional, because I don't want my PC to have buggy, ugly, spying rubbish.
+
+Tech Q: What "exciting and unique" you have in Win10 that your GUI lib(!!!) cannot work on Win7? Obviously if your lib so "independed" from platform, there is no any problem to support it on Win7. Moreover: Win10 is FAR from be the dominating OS, at least 50% users have Win7. So your library intentionally abuse millions of Win7 users in favor of... what? Pathetic Win10? +++$+++ 0 +++$+++ 7
+COM2 +++$+++ SP7389110 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-10-31T11:50:18Z +++$+++ > @mdtauk : I do NOT need to upgrade, you miss the point. Avoiding Win10 is intentional, because I don't want my PC to have buggy, ugly, spying rubbish.
+> 
+> Tech Q: What "exciting and unique" you have in Win10 that your GUI lib(!!!) cannot work on Win7? Obviously if your lib so "independed" from platform, there is no any problem to support it on Win7. Moreover: Win10 is FAR from be the dominating OS, at least 50% users have Win7. So your library intentionally abuse millions of Win7 users in favor of... what? Pathetic Win10?
+
+The short answer is that WinUI relies on the underlying OS, even in it's decoupled state.  WinUI is the UI framework, and can be updated faster than the OS.
+
+As for your views about Windows 10, you are entitled to believe what you like, but Windows 7 is coming to an end, and if you do not wish to remain a Windows user, there is macOS and various forms of Linux, for you to choose from.
+
+I however suspect your comments are a little disingenuous, but I hope I have provided an accurate answer to your query. +++$+++ 3 +++$+++ 0
+COM3 +++$+++ SP5379488 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-10-31T11:59:38Z +++$+++ @WrongBit Review the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). 
+
+> Be respectful: We are a world-wide community of professionals, and we conduct ourselves professionally. Disagreement is no excuse for poor behavior and poor manners.
+
+This isn't some Reddit thread for you to vent. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP15650524 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-10-31T12:47:15Z +++$+++ @mdtauk : I don't know what exactly you count "disingenuous" - don't I look fair in my valuation of Win10?? Shortly, it's THE WORST system MS made (after Millenium). That's why I feel disappointed(angry) that you support Win10 and WITHOUT ANY REASON drop support for Win7.
+The fact I cannot call MS to support Win7 DO NOT means 3rd party products (like your) should drop support too. Actually only MS pushes users to Win10 by intentional "lack of support for 7", everybody else do. All my programs still work on Win7 and nobody complain "ah, we need those features from win10!".
+I say that to discover - do you intentionally cut Win7 from plans or you're really depended from something important in Win10 internals. Believe me, if you cut Win7, you'll fail like .NET Core does. +++$+++ 0 +++$+++ 3
+COM5 +++$+++ SP15650524 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-10-31T12:51:50Z +++$+++ @kmgallahan : Sorry, but speaking about "professionals" better TO BE professional. I have doubts you are, because you miss absolutely tech question, which I can cite AGAIN:
+
+> Tech Q: What "exciting and unique" you have in Win10 that your GUI lib(!!!) cannot work on Win7?
+
+And funny, but NOT A SINGLE ANSWER were given by... hm... "professionals". Maybe you will? +++$+++ 0 +++$+++ 2
+COM6 +++$+++ SP3163374 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-10-31T12:57:37Z +++$+++ > All my programs still work on Win7 and nobody complain "ah, we need those features from win10!".
+
+So, that's answer. You just do not need "features from win10" like WinUI.  +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP5379488 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-10-31T12:57:46Z +++$+++ @WrongBit I have no desire to provide a professional response based on your attitude. You really need to take a step back and consider how you present yourself publicly.  +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP7389110 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-10-31T14:36:55Z +++$+++ @WrongBit  WinUI has dependencies on APIs, code, and systems that were built for Windows 10, and require Windows 10 to function.
+
+WPF and WinForms frameworks are there and open which support Windows 7 for the time being.  These frameworks were supported when Windows 7 was being developed, and this is why support is being maintained, but WinUI is the WinRT/UWP core that was built for Windows 10, and in the future, will be open sourced  and updated at a faster cadence than the OS.
+
+If what you would like to ask for, in a polite and "professional" manner, is the back-porting of WinUI 3.0 to allow it to run on Windows 7, that is what you can do.
+
+However as Microsoft is soon to be ending it's support of Windows 7, you should probably expect that request to be turned down.  And in the next 5 years or so, Winforms, WPF, and other Microsoft software will also end support for Windows 7. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP20667023 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-10-31T16:14:26Z +++$+++ @WrongBit please refer to the [Code of Conduct](https://opensource.microsoft.com/codeofconduct/), specifically the Be Respectful section. This is not the right forum to complain about Windows 10 in general.
+
+It is true that Windows 7 is still in use. But it goes out of support soon and so WinUI won't support it either.  +++$+++ 0 +++$+++ 0

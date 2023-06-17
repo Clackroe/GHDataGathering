@@ -1,0 +1,299 @@
+ROOT +++$+++ SP2842459 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-12T19:30:24Z +++$+++ Disable Origin Policy CORS in Flutter web ## Use case
+
+While calling a web service on Flutter web it will not work because of CORS Policy
+
+## Proposal
+I saw a chrome window when I start debugging a Flutter web application
+I wonder if we could add a flag to disable the CORS policy
+like `Flutter run -d web --no-cors`
+
+`chromium-browser --disable-web-security --user-data-dir="[some directory here]"
+`
+https://stackoverflow.com/questions/3102819/disable-same-origin-policy-in-chrome
+ +++$+++ 49 +++$+++ 0
+COM0 +++$+++ SP8975114 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-12T20:41:16Z +++$+++ Disabling the CORS checks locally would lead to drastically different behavior between a debug and deployed application - you can't very well ask all users of your website to disable CORS locally. Adding this flag would be a mistake +++$+++ 2 +++$+++ 39
+COM1 +++$+++ SP2842459 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-12-13T06:47:07Z +++$+++ @jonahwilliams I wonder why web services work in Android debugging mode while there is no Internet permission in the Manifest file?
+<uses-permission android:name="android.permission.INTERNET"/>
+
+For sure the simple answer is easy debugging until adding the permission for the release version +++$+++ 3 +++$+++ 0
+COM2 +++$+++ SP2842459 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-12-13T06:51:26Z +++$+++ Internet Permission for Android is the same as CORS in Chrome
+Here is the PR for Android Permission that makes Internet works debug mode only
+
+`This is not an "injection" at build time, but rather a separate manifest for debug builds
+`
+Debug mode Internet permission PR
+**move INTERNET permission to debug/AndroidManifest.xml**
+https://github.com/flutter/flutter/pull/22139
+Profile mode Internet permission PR
+**Add a manifest for profile builds that enables INTERNET permission**
+https://github.com/flutter/flutter/pull/26450
+
+> Adding this flag would be a mistake
+
+It will be **optional** `-flag` only until the backend developer add whitelist for my local or in AWS config +++$+++ 9 +++$+++ 0
+COM3 +++$+++ SP8975114 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-12-13T08:03:22Z +++$+++ > Internet Permission for Android is the same as CORS in Chrome
+
+It is absolutely not the same thing +++$+++ 0 +++$+++ 2
+COM4 +++$+++ SP648505 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-12-15T17:15:35Z +++$+++ @amreniouinnovent flutter web working locally and remotely ? I am also facing this issue with flutter web but it works fine on Mobile 
+
+@jonahwilliams this is a bug in Flutter web ? +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP2842459 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-12-15T18:10:46Z +++$+++ @krunaldarji it is not a bug. it is security permission like when you call twitter from facebook then facebook is not allowed to call twitter.
+So backend developer should allow you to call his web service from your localhost.
+this security feature is for browsers only but not on mobile or postman. 
+ +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP52191652 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-12-16T06:09:16Z +++$+++ @jonahwilliams developers suggested using an extension or opening chrome with CORS disabled
+So I have 2 questions:
+
+1- Why the app is not launching as a new tab in the same browser? and is there any possibility I can change the default behavior? because the chrome instance which got launched doesn't have extensions like my default chrome.
+
+2-How could I configure the app to run on Firefox instead of chrome? +++$+++ 8 +++$+++ 0
+COM7 +++$+++ SP648505 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-12-20T19:47:44Z +++$+++ @amorenew But i hosted my website on Firebase also but still same problem any idea ? Or how to allow this api call from my localhost because i am using few microsoft sharepoint api's which i can't request Microsoft for modification.
+
+Pls help. +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP20713225 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-12-21T00:41:34Z +++$+++ You can start flutter web server on random port using command flutter run -d web-server, and then go to localhost:port in your browser or you could use release app using following guide https://flutter.dev/docs/deployment/web +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP648505 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-12-21T06:13:52Z +++$+++ @MOlechowski Thanks for your response but its giving below error: 
+Access to XMLHttpRequest at 'https://login.microsoftonline.com/2a1c1526-05d412fa/oauth2/v2.0/token' from origin 'http://localhost:49948' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP52191652 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-12-22T06:56:55Z +++$+++ @krunaldarji In AWS you could whitelist a specific port
+So I am sure Sharepoint has the same feature
+By the way, you can Add the whitelisted port for every run in the launch.json file
+```
+"configurations": 
+[{"name": "Flutter",
+"request": "launch",
+"type": "dart",
+"args": ["--web-port","8080"]
+}]
+
+```
+
+Sharepoint CORS https://techcommunity.microsoft.com/t5/SharePoint-Developer/SharePoint-Office-365-CORS-issue-REST-API-call-to-other/m-p/777557 +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP61649073 +++$+++ ROOT +++$+++ COM10 +++$+++ 2020-04-28T09:09:14Z +++$+++ Hi team
+I am facing this CORS policy issue from last 2 month, still not able to figure it out how to fix
+
+`Access to XMLHttpRequest at 'http://obuat-env.zuriwydraq.ap-south-1.elasticbeanstalk.com/api/v1/RegisterDevice' from origin 'http://35.154.115.156' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.`
+
+- I have hosted my flutter web app on AWS - Apache environment
+
+please if you any solution please help me. +++$+++ 2 +++$+++ 0
+COM12 +++$+++ SP2234271 +++$+++ ROOT +++$+++ COM11 +++$+++ 2020-05-15T16:43:54Z +++$+++ The solution: create a batch file (or whatever your platform calls the shell scripts) that calls Chrome with the appropriate command line:
+
+    "c:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-web-security --user-data-dir="a-temp-location" %*
+
+(Note the `%*` at the end, important!) Set up an environment variable named `CHROME_EXECUTABLE` to point to this file. Flutter will then use this file to start Chrome. +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP2842459 +++$+++ ROOT +++$+++ COM12 +++$+++ 2020-05-15T19:52:09Z +++$+++ @deakjahn 
+How flutter will use it? is it automatically?
+> Flutter will then use this file to start Chrome.
+
+ +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP2234271 +++$+++ ROOT +++$+++ COM13 +++$+++ 2020-05-15T22:10:52Z +++$+++ Yes. Flutter checks this env variable before it launches Chrome. If you try to start `flutter run -d chrome` on a system that doesn't have Chrome installed, Flutter will specifically ask you to either put it into the default location or to tell it where it is using `CHROME_EXECUTABLE` (this is actually how I learned of its existence :-) ). +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP32385936 +++$+++ ROOT +++$+++ COM14 +++$+++ 2020-05-16T16:36:13Z +++$+++ @deakjahn your [script solution](https://github.com/flutter/flutter/issues/46904#issuecomment-629363145) workes like a charm 👍  +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP10971123 +++$+++ ROOT +++$+++ COM15 +++$+++ 2020-05-20T05:36:28Z +++$+++ @deakjahn Thanks! I have adapted your [script solution](https://github.com/flutter/flutter/issues/46904#issuecomment-629363145) in Linux as described below and it works perfectly!
+
+Create a `google-chrome-unsafe.sh` with the following content:
+
+    #!/bin/sh
+    /usr/bin/google-chrome-stable --disable-web-security --user-data-dir="A-TEMP-LOCATION" $*
+
+It's better to create and use a dedicated folder in the home directory instead of `/tmp` for the temporary location, as Chrome will create some folders there to work properly.
+
+Then, make it executable with `chmod a+x google-chrome-unsafe.sh`
+
+The environment variable can be set in `~/.bashrc` or `~/.bash_aliases` (if included from `.bashrc`):
+`export CHROME_EXECUTABLE=/path/to/google-chrome-unsafe.sh` +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP33847544 +++$+++ ROOT +++$+++ COM16 +++$+++ 2020-05-26T05:37:55Z +++$+++ @deakjahn
+> Yes. Flutter checks this env variable before it launches Chrome. If you try to start `flutter run -d chrome` on a system that doesn't have Chrome installed, Flutter will specifically ask you to either put it into the default location or to tell it where it is using `CHROME_EXECUTABLE` (this is actually how I learned of its existence :-) ).
+
+Do I set the `User` or `System` environment variable to `CHROME_EXECUTABLE`? I tried both and running my web application with `flutter run -d chrome` still resulted in a CORS error. +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP2234271 +++$+++ ROOT +++$+++ COM17 +++$+++ 2020-05-26T07:06:19Z +++$+++ I have it in System but it shouldn't actually matter. The Flutter doctor display shows the value when it sees it, try that first. +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP18122922 +++$+++ ROOT +++$+++ COM18 +++$+++ 2020-05-29T09:53:54Z +++$+++ So disabling CORS in Chrome on my development machine will fix it, but once deployed release mode in production the user's wont face any CORS issue? +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP2234271 +++$+++ ROOT +++$+++ COM19 +++$+++ 2020-05-29T15:25:16Z +++$+++ They will, unless you setup your servers properly. This is something you can't skip. +++$+++ 0 +++$+++ 2
+COM21 +++$+++ SP20318973 +++$+++ ROOT +++$+++ COM20 +++$+++ 2020-05-29T17:38:52Z +++$+++ Would it help if we had "flutter -d web-server" accept additional headers, like:
+  ````--web-header "Access-Control-Allow-Origin: my-ip-here"````
+Edit: It appears more might be needed, but I'm inexperienced in this. The server currently sends out some other headers that would probably also need to be modified:
+```HTTP/1.1 200 OK
+date: Fri, 29 May 2020 18:09:01 GMT
+content-length: 1124
+x-frame-options: SAMEORIGIN
+content-type: text/html
+x-xss-protection: 1; mode=block
+x-content-type-options: nosniff
+server: dart:io with Shelf```
+ +++$+++ 1 +++$+++ 0
+COM22 +++$+++ SP20318973 +++$+++ ROOT +++$+++ COM21 +++$+++ 2020-05-29T21:51:41Z +++$+++ Why is this closed anyway?  Is there some solution I'm missing?
+I ended up setting up a reverse proxy script to modify traffic headers (the flutter host/port are hard-coded near the top of the script).
+(The script is from somewhere else on the web, but I modified it for py3.x and had to make some other changes to get it working.)
+You run this, it'll transparently transfer your traffic from port 9000, to 8989 where I have flutter running, removing the origin headers (and some other stuff the original script stripped), and adding in the access-control-allow-origin header.
+This worked for me, although I'm getting some infinite "font" declaration dropped errors now.  Script below that screenshot.
+![image](https://user-images.githubusercontent.com/20318973/83308738-50381e00-a1bc-11ea-8a17-6eede7106b5d.png)
+
+```
+#!/usr/bin/env python
+
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import argparse
+import os
+import random
+import sys
+import requests
+
+hostname = "0.0.0.0";
+hostport = "8989";
+
+def merge_two_dicts(x, y):
+    z = x.copy()   # start with x's keys and values
+    z.update(y)    # modifies z with y's keys and values & returns None
+    return z
+
+def set_header():
+    headers = {
+        'Meow': hostname
+    }
+    return headers
+
+class ProxyHTTPRequestHandler(BaseHTTPRequestHandler):
+    protocol_version = 'HTTP/1.0'
+    def do_HEAD(self):
+        self.do_GET(body=False)
+
+    def do_GET(self, body=True):
+        sent = False
+        try:
+
+            url = 'http://{}:{}{}'.format(hostname, hostport, self.path)
+            req_header = self.parse_headers()
+
+            print(req_header)
+            print(url)
+            resp = requests.get(url, headers=merge_two_dicts(req_header, set_header()), verify=False)
+            sent = True
+
+            self.send_response(resp.status_code)
+            self.send_resp_headers(resp)
+            if body:
+                self.wfile.write(resp.content)
+            return
+        finally:
+            self.finish()
+            if not sent:
+                self.send_error(404, 'error trying to proxy')
+
+    def do_POST(self, body=True):
+        sent = False
+        try:
+            url = 'http://{}:{}{}'.format(hostname, hostport, self.path)
+            content_len = int(self.headers.getheader('content-length', 0))
+            post_body = self.rfile.read(content_len)
+            req_header = self.parse_headers()
+
+            resp = requests.post(url, data=post_body, headers=merge_two_dicts(req_header, set_header()), verify=False)
+            sent = True
+
+            self.send_response(resp.status_code)
+            self.send_resp_headers(resp)
+            if body:
+                self.wfile.write(resp.content)
+            return
+        finally:
+            self.finish()
+            if not sent:
+                self.send_error(404, 'error trying to proxy')
+
+    def parse_headers(self):
+        req_header = {}
+        for line in self.headers:
+            line_parts = [o.strip() for o in line.split(':', 1)]
+            if len(line_parts) == 2:
+                req_header[line_parts[0]] = line_parts[1]
+        return req_header
+
+    def send_resp_headers(self, resp):
+        respheaders = resp.headers
+        print('Response Header')
+        for key in respheaders:
+            if key not in [
+                           'Content-Encoding',
+                           'Transfer-Encoding',
+                           'content-encoding',
+                           'transfer-encoding',
+                           'content-length',
+                           'Content-Length',
+                           'x-frame-options',
+                           'x-xss-protection',
+                           'x-content-type-options',
+                           ]:
+                print(key, respheaders[key])
+                self.send_header(key, respheaders[key])
+                # Response Header
+                # date Fri, 29 May 2020 18:35:40 GMT
+                # x-frame-options SAMEORIGIN
+                # content-type text/html
+                # x-xss-protection 1; mode=block
+                # x-content-type-options nosniff
+                # server dart:io with Shelf
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Content-Length', len(resp.content))
+        self.end_headers()
+
+
+def parse_args(argv=sys.argv[1:]):
+    parser = argparse.ArgumentParser(description='Proxy HTTP requests')
+    parser.add_argument('--port', dest='port', type=int, default=9000,
+                        help='serve HTTP requests on specified port (default: 9000)')
+    args = parser.parse_args(argv)
+    return args
+
+def main(argv=sys.argv[1:]):
+    args = parse_args(argv)
+    print('http server is starting on port {}...'.format(args.port))
+    server_address = ('0.0.0.0', args.port)
+    httpd = HTTPServer(server_address, ProxyHTTPRequestHandler)
+    print('http server is running as reverse proxy')
+    httpd.serve_forever()
+
+if __name__ == '__main__':
+    main()
+```
+ +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP373786 +++$+++ ROOT +++$+++ COM22 +++$+++ 2020-06-13T22:59:25Z +++$+++ I really wish there was a simple solution to this. It makes developing my Flutter app that interacts with a legacy web-server very difficult. The simplest option would be to give a way of enabling other domains for the debug webserver that AndroidStudio starts, or give me away to enable source-maps in the standalone flutter webserver. 
+
+I can proxy through a server, but then data errors result in incomprehensible errors because source maps never load.
+OR
+I can run directly out of Android Studio which gives me good errors, but then I can't test any network interactions. 
+
+The arguments about fooling people into having problems in production is about as valid as saying that debuggers shouldn't be supported because it is not how production works. Making development difficult WILL NOT increase Flutter Web usage. +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP65148275 +++$+++ ROOT +++$+++ COM23 +++$+++ 2020-06-17T14:36:42Z +++$+++ So basically no viable solution for this? +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP2234271 +++$+++ ROOT +++$+++ COM24 +++$+++ 2020-06-17T14:56:45Z +++$+++ A very simply batch file and it works. https://github.com/flutter/flutter/issues/46904#issuecomment-629363145 I've been using it since my first Flutter Web day and it's still perfect. :-) +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP65148275 +++$+++ ROOT +++$+++ COM25 +++$+++ 2020-06-17T18:55:20Z +++$+++ Hello @deakjahn  , This batch will be used on release version ?  If i did understand well no ? Because my problem is calling some webservice  who don't accept CORS. Calling those webservices from my release version. +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP2234271 +++$+++ ROOT +++$+++ COM26 +++$+++ 2020-06-17T19:08:53Z +++$+++ No, I thought you meant debugging, this is what the OP talked about. :-)
+
+In release mode, you need correct CORS settings. I don't think Flutter can do anything about this, this is a browser security limitation. No webapp can override the security features of the browser; if it could, that would make them completely useless.
+
+So there is actually a web service not under your control that doesn't have correct CORS settings? If it is so, how is anybody supposed to use it, quite independent from Flutter? +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP4605213 +++$+++ ROOT +++$+++ COM27 +++$+++ 2020-06-28T20:30:29Z +++$+++ > @deakjahn Thanks! I have adapted your [script solution](https://github.com/flutter/flutter/issues/46904#issuecomment-629363145) in Linux as described below and it works perfectly!
+> 
+> Create a `google-chrome-unsafe.sh` with the following content:
+> 
+> ```
+> #!/bin/sh
+> /usr/bin/google-chrome-stable --disable-web-security --user-data-dir="A-TEMP-LOCATION" $*
+> ```
+> 
+> It's better to create and use a dedicated folder in the home directory instead of `/tmp` for the temporary location, as Chrome will create some folders there to work properly.
+> 
+> Then, make it executable with `chmod a+x google-chrome-unsafe.sh`
+> 
+> The environment variable can be set in `~/.bashrc` or `~/.bash_aliases` (if included from `.bashrc`):
+> `export CHROME_EXECUTABLE=/path/to/google-chrome-unsafe.sh`
+
+This solution didn't work for me on macOS.
+
+I made the following script:
+```sh
+#!/bin/sh
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --disable-web-security --user-data-dir="a-temp-location" %*
+```
+
+And set the `CHROME_EXECUTABLE` variable correctly in my `.profile`.
+
+When I start my Flutter Web app in debug mode it will behave exactly as it was before. +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP2234271 +++$+++ ROOT +++$+++ COM28 +++$+++ 2020-06-28T22:20:13Z +++$+++ Did you leave `a-temp-location` verbatim? :-) +++$+++ 0 +++$+++ 0

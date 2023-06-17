@@ -1,0 +1,4 @@
+SP1143644 +++$+++ whytewolf +++$+++ CONTRIBUTOR (AUTHOR)
+SP732321 +++$+++ gtmanfred +++$+++ CONTRIBUTOR
+SP4682646 +++$+++ rhaig +++$+++ NONE
+SP328598 +++$+++ terminalmage +++$+++ COLLABORATOR

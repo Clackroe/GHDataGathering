@@ -1,0 +1,21 @@
+ROOT +++$+++ SP5104168 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-03-19T09:40:27Z +++$+++ This is the worst framework i have ever seen. This is the worst framework i have ever seen. +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP5104168 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-03-19T09:43:40Z +++$+++ I have real project with Angular, and the only thing i get while developing - is the hurting. Tons of hurt i get.
+You need to be a creator of Angular to make a real successful project with Angular, +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP5104168 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-03-19T09:46:21Z +++$+++ Yes, Angular is very good if you're developing something not complicated more than "Hello World" application. But when you deal with real big scale project - the hurt is the only thing you get. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP405837 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-03-19T09:47:26Z +++$+++ Your issue doesn't contain a single bit of useful information anybody could act on.
+At best the problem is that your expectations are wrong and you blame Angular instead of adjusting yourself,
+and the worse case is that you are just spreading spam.
+Angular works great for most. If it doesn't for you it's highly likely the problem is on your end.
+ +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP5104168 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-03-19T09:53:55Z +++$+++ @zoechi , your comment doesn't contain any information, that can help the situation, and from one side, i can understand you, but no one wants to get deep into it. just try to develop big project with angular and without. How many time would take both? Angular with consume at least 5x time more than if without Angular. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP5104168 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-03-19T09:55:26Z +++$+++ Angular - is the most perplexing. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP5104168 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-03-19T09:55:49Z +++$+++ Unnessesarily perplexed. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP405837 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-03-19T09:56:12Z +++$+++ There is no situation that needs help. 
+You need to stop acting like 3-year old.
+Grow up, get your sh*t together and stop spamming. +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP5104168 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-03-19T10:03:49Z +++$+++ @zoechi, don't cry, contributor, you are not blame that you are into that sh*t +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP5693835 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-03-19T10:06:27Z +++$+++ @gubenkovalik ... the reality is just opposite, it is the very suitable framework especially for real big projects. Just to guess, your problem is probably that you see it / try to use it by the same way as from jQuery point of view which is totally wrong way.
+
+> But when you deal with real big scale project - the hurt is the only thing you get. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP265378 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-03-19T10:08:10Z +++$+++ Hello, this is not the place to post this kind of message @gubenkovalik, I'm closing the topic. Please follow the [contributing](https://github.com/angular/angular/blob/master/CONTRIBUTING.md) guidelines if you want to post anything constructive. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP5104168 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-03-19T10:09:05Z +++$+++ Okay, close it, but still Angular remains to be better. Best wishes, contributors, im outtie... +++$+++ 0 +++$+++ 0

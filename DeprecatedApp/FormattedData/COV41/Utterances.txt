@@ -1,0 +1,129 @@
+ROOT +++$+++ SP1615643 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-06-08T15:11:40Z +++$+++ Provide python version mismatch solutions ### What does this PR do?
+
+Improves the error message when Python version mismatch detected by providing solutions.
+
+### What issues does this PR fix or reference?
+
+See below.
+
+### Previous Behavior (Python3 origin - Python2.7 target)
+
+```bash
+bash-4.4# salt-ssh -l quiet -i --out json --key-deploy --passwd admin123 container__wjQFc test.ping
+{
+    "container__wjQFc": {
+        "stdout": "ERROR: salt requires python 2.6 or newer on target hosts, must have same major version as origin host",                                                                                                                  
+        "stderr": "",
+        "retcode": 10
+    }
+}
+```
+
+### New Behavior (Python3 origin - Python2.7 target)
+
+```bash
+bash-4.4# salt-ssh -l quiet -i --out json --key-deploy --passwd admin123 container__wjQFc test.ping
+{
+    "container__wjQFc": {
+        "stdout": "ERROR: Depending on the Python version on the target, you need to install python2-salt on origin to add support for Python2.7 targets or install py26-compat-salt on origin to add support for Python2.6 targets or upgrade to Python==3.x on target",
+        "stderr": "",
+        "retcode": 10
+    }
+}
+```
+
+### Tests written?
+
+No
+
+### Commits signed with GPG?
+
+No
+
+Please review [Salt's Contributing Guide](https://docs.saltstack.com/en/latest/topics/development/contributing.html) for best practices.
+
+See GitHub's [page on GPG signing](https://help.github.com/articles/signing-commits-using-gpg/) for more information about signing commits with GPG.
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP111616 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-06-08T17:10:18Z +++$+++ @dincamihai There are a few lint errors here: https://jenkins.saltstack.com/job/PR/job/salt-pr-lint-n/22487/violations/file/salt/client/ssh/__init__.py/ +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP1073714 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-06-08T23:39:17Z +++$+++ @terminalmage I've forgot to change the last error message, which is "invalid Python". That just misleads people and they don't understand what is going on, hence the fix. Salt SSH still needs to have both library sets (dependencies) on the Master for the specific Python versions, so the `.tar.gz` is carrying over those in `py<major version>` subdirectories.
+
+@dincamihai NOTE: actually if you are running Salt on a Master from the specific version, you _do not_ need to install Salt again for the alternative version, as it is anyway works for both versions. This is just packaging convenience. But in fact you need only couple of version-specific libraries to be installed so they will be picked up by the `thin` creation procedure. That is, probably we should not say "install Salt for alternative Python X" (which implies you will get all the needed dependencies automatically), but "install Salt _dependencies_ only for the alternative Python X".
+
+@gtmanfred nope, this is only needed in Fluorine. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP1615643 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-06-11T09:16:58Z +++$+++ @cachedout i've fixed the lint errors but now, after rebase, it seems to have some unrelated lint errors in the tests.
+
+@terminalmage Bo and Daniel already provided an explanation. sorry, for not being clear enough about this in the description. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP1073714 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-06-11T10:22:26Z +++$+++ @dincamihai I would still minimise the text according to the example I showed above. As well as the "3.x" thing. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP1615643 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-06-11T11:26:33Z +++$+++ @isbm  having 3.x there means that it matches all the 3 subversions. if I remove the .x someone might think it would only apply to 3 and this would make it more confusing.
+
+Adding new line to the text is ignored and I'm not sure I should spend more time on this.
+
+Your example seems to remove some of the useful information and has this "on a Master" that I don't understand. Is that intended or should it be "on the Master"?
+I was using origin and target in order to avoid Master and Minion because none of these machines have salt-master or salt-minion running. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP1073714 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-06-11T11:37:24Z +++$+++ @dincamihai the "3.x" is the same as "3", as I see it. I also suggested to use integers as in the `version_info` instead of just strings. And so if we have some issue with the 3.8 (e.g.) one would just add a minor version key. Otherwise default should go. But "3.x" is more to me looks like a hack.
+
+The "origin" is something that might not be understood. Personally to me it is very odd terminology here. And you are running "SaltSSH" from the Master (or want-to-be-master). +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP1615643 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-06-11T11:47:32Z +++$+++ @isbm i'm checking first for major.minor, so if we add 3.8 it will go to that first. only if there is not major.minor it will match major.x. i think we are fine here. +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP1073714 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-06-11T11:57:16Z +++$+++ @dincamihai correct. So that means there **is something** that needs to be shown _instead of_ the default message. And if you have none of '8', then you will get the default one:
+
+```python
+msg = {
+    2: {
+        6: 'Too old',
+        7: 'Soon to be dead',
+        'default': 'Problem between the keyboard and the chair',
+    },
+    3: {
+        4: 'Many things are missing in this release',
+        6: 'Many things are incompatible with the previous release, ha-ha!',
+        8: 'Larry Wall was hired to design new Python language syntax',
+        'default': 'I like you begging, do it again',
+    }
+}
+
+import sys
+mj, mn = sys.version_info[:2]
+print(msg[mj].get(mn, msg[mj]['default']))
+```
+
+P.S. keep the code, replace the messages. :wink:  +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP1615643 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-06-11T12:03:23Z +++$+++ @isbm if there is no 3.8 specific message, 3.x would be shown. is this not enough? +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP1073714 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-06-11T12:07:36Z +++$+++ The code I exampled above does this. I am just not in favour of your structure that keeps strings that needs to be parsed instead of just direct map to versions. And your messages are too big and using foreign terminology for Salt-specific domain. And so therefore I would change that. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP1615643 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-06-11T12:09:34Z +++$+++ @isbm ok. thanks for the suggestion, but if the upstream is fine with my version (changes approved) please merge the PR. thanks! +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP1073714 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-06-11T12:11:17Z +++$+++ @terminalmage you like the proposed error messages and the structure? +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP1073714 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-06-11T13:39:49Z +++$+++ OK, as per speaking with @dincamihai it would be also an option to:
+
+- Add all the options into the documentation.
+- Add short minimally intrusive to the target machine option (i.e. update the SaltSSH side w/o touching the target)
+
+That said, CLI would return something like:
+```
+The "my-to-be-minion.greatdomain.com" machine is running Python 2.6 version.
+Please install Salt for 2.6 Python on the Salt SSH machine and set it up.
+```
+
+or:
+```
+The "my-to-be-minion.greatdomain.com" machine is running Python 2.7 version.
+Please install Salt for 2.7 Python on the Salt SSH machine.
+```
+
+So such info on the CLI would suggest what to do now, quickly and easiest way. And the following would go to the documentation (rephrased into more extended version):
+
+"Depending on the Python version on the target, you need to install Python2.7 compatible salt on origin to add support for Python2.7 targets or install Python2.6 compatible salt on origin to add support for Python2.6 targets or upgrade to Python==3.x on target"
+ +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP1615643 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-06-11T13:46:21Z +++$+++ One note:
+sometimes, when targeting 1000 machines, maybe 999 are ok but one has an old python. there are two options and we don't know what it is better for the user:
+ - update the origin machine (that works on 999 of the clients) or
+ - update the one client that doesn't work
+
+Other than that, this is open source, so I don't have any problem with adapting my PR to whatever is a better fit for saltstack/salt. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP1073714 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-06-11T13:50:23Z +++$+++ I would only say that "target" is that part between `salt` and the `command`... More here: https://docs.saltstack.com/en/latest/topics/targeting/ So calling it "target" and "origin" brings lots of confusion from this POV.  I would definitely keep it Master, especially if SaltSSH is "to execute salt commands and states over ssh without installing a salt-minion". Which implies "Master" at first place! +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP1615643 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-06-11T13:52:53Z +++$+++ @terminalmage i am not an expert in salt terminology. I just proposed what I thought it would be appropriate and so far saltstack did not disagree. sure, please propose better messages.
+the changes were already approved so why should i make more changes to the PR or invest more time into it? +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP1615643 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-06-11T13:56:03Z +++$+++ @terminalmage by the way https://cse.google.com/cse?cx=004624818632696854117:yfmprrbw3pk&q=target +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP1073714 +++$+++ ROOT +++$+++ COM16 +++$+++ 2018-06-11T13:57:58Z +++$+++ @dincamihai actually "approved" here means _everyone_ agrees, JFYI. And your google result is suggesting exactly what I mean. +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP1615643 +++$+++ ROOT +++$+++ COM17 +++$+++ 2018-06-11T14:06:03Z +++$+++ @isbm and @terminalmage I have tested my changes on different combinations.
+It would not make any sense to make additional changes and test the whole thing again with python2.6, 2.7 and 3 and combinations of them just because someone likes it more is some way. (i'm not talking here about the formulation of the messages, that is a valid change that is worth doing). but changing some structure to another structure just because... is not enough reason to redo the whole testing again. +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP1615643 +++$+++ ROOT +++$+++ COM18 +++$+++ 2018-06-11T14:18:31Z +++$+++ @isbm what about target in the context of rosters https://docs.saltstack.com/en/latest/topics/ssh/roster.html +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP328598 +++$+++ ROOT +++$+++ COM19 +++$+++ 2018-06-11T19:55:01Z +++$+++ I would have loved to work with you, but since you were not willing to accept any recommendations, I am closing this and we will do any remaining work in https://github.com/saltstack/salt/pull/48058. +++$+++ 0 +++$+++ 0

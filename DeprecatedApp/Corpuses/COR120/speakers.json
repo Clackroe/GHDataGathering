@@ -1,0 +1,26 @@
+{
+    "OtherCrashOverride": {
+        "id": "SP3499273",
+        "role": "NONE (AUTHOR)"
+    },
+    "ghost": {
+        "id": "SP10137",
+        "role": "NONE"
+    },
+    "omariom": {
+        "id": "SP1781701",
+        "role": "CONTRIBUTOR"
+    },
+    "linquize": {
+        "id": "SP791115",
+        "role": "CONTRIBUTOR"
+    },
+    "CrshOverride": {
+        "id": "SP791698",
+        "role": "NONE"
+    },
+    "terrajobst": {
+        "id": "SP5169960",
+        "role": "MEMBER"
+    }
+}

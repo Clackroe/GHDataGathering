@@ -1,0 +1,97 @@
+ROOT +++$+++ SP18389889 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-03-16T18:09:31Z +++$+++ Using include asynchronously with with_items <!---
+Verify first that your issue/request is not already reported on GitHub.
+Also test if the latest release, and master branch are affected too.
+-->
+
+##### ISSUE TYPE
+<!--- Pick one below and delete the rest: -->
+ - Feature Idea
+
+##### COMPONENT NAME
+<!--- Name of the module/plugin/task/feature -->
+i don't know
+
+##### ANSIBLE VERSION
+<!--- Paste verbatim output from “ansible --version” between quotes below -->
+```
+2.2.1.0
+```
+
+##### CONFIGURATION
+<!---
+Mention any settings you have changed/added/removed in ansible.cfg
+(or using the ANSIBLE_* environment variables).
+-->
+
+
+##### OS / ENVIRONMENT
+<!---
+Mention the OS you are running Ansible from, and the OS you are
+managing, or say “N/A” for anything that is not platform-specific.
+-->
+Ubuntu 14.0.4 amd64
+
+##### SUMMARY
+<!--- Explain the problem briefly -->
+
+##### STEPS TO REPRODUCE
+<!---
+For bugs, show exactly how to reproduce the problem, using a minimal test-case.
+For new features, show how the feature would be used.
+-->
+I want to play the task list asynchronously for several group vars.
+
+<!--- Paste example playbooks or commands between quotes below -->
+```yaml
+tasks:
+- include: sync.yml
+  async: 1000
+  poll: 0
+  with_items: "{{groups['groupname']}}"
+  loop_control:
+    loop_var: variable
+```
+
+<!--- You can also paste gist.github.com links for larger files -->
+
+##### EXPECTED RESULTS
+<!--- What did you expect to happen when running the steps above? -->
+The task list executed asynchronously.
+
+##### ACTUAL RESULTS
+<!--- What actually happened? If possible run with extra verbosity (-vvvv) -->
+The task list is executed in sequence for each variable.
+ +++$+++ 48 +++$+++ 0
+COM0 +++$+++ SP6112411 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-03-17T17:13:43Z +++$+++ If i'm correct async makes entire task and not each item asynchronous. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP836171 +++$+++ ROOT +++$+++ COM0 +++$+++ 2017-03-17T20:11:28Z +++$+++ include is not an actual module, its hardcoded into the engine and as such does not fork and cannot be async. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP6112411 +++$+++ ROOT +++$+++ COM1 +++$+++ 2017-03-17T22:39:13Z +++$+++ I think it would be good idea to raise warning/error when unsupported parameter is provided. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP836171 +++$+++ ROOT +++$+++ COM2 +++$+++ 2017-03-17T23:06:41Z +++$+++ it can be inherited, we are planning on an update to make this clearer 'import vs include' +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP13945870 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-01-03T07:34:59Z +++$+++ +1
+I think this feature is very interesting to speed up things a bit. :-)
+
+Also an warning/error message should be raised as mentioned before, it took some time debugging why the async has no effect on include statements. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP9572344 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-01-17T15:30:20Z +++$+++ +1
+
+in most cases - especially from  re-usability perspective - there is a sequence of tasks runs against an entity. Running those in parallel will be huge gain +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP4715835 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-04-04T09:28:09Z +++$+++ +1 +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP836171 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-04-04T13:30:42Z +++$+++ @lordkret i think you are making some assumptions that are not true:
+- async does not increase paralellization
+-  imports/includes work by adding new tasks/hosts to the iteration, they don't run on the spot, they are a 'addition to the queue'
+ - parallelization  is based on forks (and limited by serial)
+
+async is about waiting for a task inline or polling for it, if polling is 0 we don't wait for its results ... but these either get ignored or require a follow up task to do async_pol. This effectively 'ends the task' from the controller's point of view even if it is still running on the target, this is kind of a 'de facto' increase in parallel tasks, but not from the perspective of the controller. 
+
+If the task is about changing the controller loop of tasks .. this HAS to be a locking (serialized) task, so even making it async, would just mean we don't wait for the result but would be LOCKED waiting for the queue being updated before we can proceed. At best 'async' include means we fire up EACH included task in async (w/o increase in forks nor parallelization) and don't wait for results (poll: 0?)  which means we won't know if the tasks succeeded or not (unless you introduce async_pol which then gets back to a limited sync to get results). +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP7251577 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-07-11T15:23:05Z +++$+++ +1
+Looks very handy. I need it for my k8s tasks +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP3714737 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-05-21T15:03:55Z +++$+++ +1 most handy, esp. for intensive and time taking tasks (Eg: testing multiple Linux kernels in QEMU) +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP4284629 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-08-03T12:57:03Z +++$+++ +1 I have a perfect use case needs this feature where I need to provision X bare metal nodes for OCP and each of the them takes 45+ min to be fully up, there is no reason that I have to provision them individually in automation and wait 45 * X minutes to do next task. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP39340 +++$+++ ROOT +++$+++ COM10 +++$+++ 2020-08-03T14:31:40Z +++$+++ I've locked this to contributors for now. Adding +1 comments is too noisy. For future reference, add a reaction to the issue body, and don't comment. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP39340 +++$+++ ROOT +++$+++ COM11 +++$+++ 2021-08-20T15:41:53Z +++$+++ We've discussed this, and have agreed to not move forward with allowing this to work.  To effectively allow `async` on a `block` would only support a very narrow feature of fire and forget.  And any other use case, you would still have to put `register` on every task within, so you could reference the multiple `jid` values for the different tasks.  In which case, since you are touching every task anyway to get a useful action out of it, might as well just apply `async` to each task individually.
+
+As such, we're going to close this.
+
+If you have further questions please stop by IRC or the mailing list:
+
+   * IRC: #ansible on irc.libera.chat
+   * mailing list: https://groups.google.com/forum/#!forum/ansible-project  +++$+++ 0 +++$+++ 0

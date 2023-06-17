@@ -1,0 +1,77 @@
+ROOT +++$+++ SP24607961 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-05-06T18:23:50Z +++$+++ [WARNING]: Unable to parse /etc/ansible/hosts as an inventory source Hello Community,
+
+I'm very new to ansible.
+
+I'm currently running Ansible from Azure Cloud Shell.
+
+I have added a machine to the Hosts file. However, whenever I attempt to ping or connect to the machine I get the following errors:
+
+[WARNING]: Unable to parse /etc/ansible/hosts as an inventory source
+
+ [WARNING]: No inventory was parsed, only implicit localhost is available
+
+ [WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+
+Can someone let me know how to fix this problem please.
+
+Thanks
+
+Carlotn +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP6585283 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-05-06T18:31:32Z +++$+++ @cpatte7372 Greetings! Thanks for taking the time to open this issue. In order for the community to handle your issue effectively, we need a bit more information. 
+
+Here are the items we could not find in your description:
+- ansible version
+- component name
+
+Please set the description of this issue with this template:
+https://raw.githubusercontent.com/ansible/ansible/devel/.github/ISSUE_TEMPLATE.md
+
+[click here for bot help](https://github.com/ansible/ansibullbot/blob/master/ISSUE_HELP.md)
+<!--- boilerplate: issue_missing_data ---> +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP24607961 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-05-06T19:13:43Z +++$+++ @ansibot , thanks for reaching out. 
+
+See below:
+
+carlton@Azure:~$ ansible --version
+ansible 2.4.3.0
+  config file = /home/carlton/ansible.cfg
+  configured module search path = [u'/home/carlton/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+  ansible python module location = /opt/ansible/local/lib/python2.7/site-packages/ansible
+  executable location = /opt/ansible/bin/ansible
+  python version = 2.7.12 (default, Dec  4 2017, 14:50:18) [GCC 5.4.0 20160609]
+
+I'm not sure what you mean by 'Component Name'
+
+Just so you know, I'm open thread on stackoverflow, which I thought might fix the issue see 
+
+https://stackoverflow.com/questions/50202849/sudo-privileges-required-in-azure-cloud-shell-to-mkdir
+
+However, this was just a work around to fix the underlying issue as described in this thread.
+
+Thanks again, I hope you can help me fix this.
+
+Cheers +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP23135436 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-05-07T07:09:06Z +++$+++ I have the same problem  and  I install it by brew on Mac  +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP24607961 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-05-07T07:15:45Z +++$+++ @yokee99 , thanks for reaching out. I use a PC. Do you know the equivalent  to 'brew' in PC?
+
+Cheers +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP836171 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-05-07T14:44:04Z +++$+++ List Information
+================
+
+Hi!
+
+Thanks very much for your interest in Ansible.  It sincerely means a lot to us. 
+
+This appears to be a user question, and we'd like to direct these kinds of things to either the mailing list or the IRC channel.
+
+   * IRC: #ansible on irc.freenode.net   
+   * mailing list: https://groups.google.com/forum/#!forum/ansible-project
+
+If you can stop by there, we'd appreciate it.  This allows us to keep the issue tracker for bugs, pull requests, RFEs and the like.
+
+Thank you once again and we look forward to seeing you on the list or IRC.  Thanks! +++$+++ 0 +++$+++ 1
+COM5 +++$+++ SP31721343 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-06-18T06:18:56Z +++$+++ I have installed through Cygwin on windows 10. 
+
+Having same issue
+ +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP5067463 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-06-21T19:29:27Z +++$+++ @bcoca, while I fully understand your reasoning, this is detrimental to people learning how to use Ansible. Google groups are literally terrible. For example, there are 0 results for "Unable to parse /etc/ansible/hosts as an inventory source" when searching this in the group. However, Google finds multiple hits, and among the top ranking hits are these issue threads. Github issue tracker has a far superior interface because it's easy for winning solutions to be marked with reaction emojis. When a winning solution is found, the more people that it works for, the more emojis that solution will collect. This saves people a lot of time and reading, because I can skim an issue thread for the reaction emojis, I don't need to struggle to comprehend every commenter's broken english description of something that's probably not even relevant. Please reconsider. +++$+++ 0 +++$+++ 0

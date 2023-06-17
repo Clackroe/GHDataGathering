@@ -1,0 +1,104 @@
+ROOT +++$+++ SP5217568 +++$+++ ROOT +++$+++ ROOT +++$+++ 2016-11-08T15:24:00Z +++$+++ API Access to "Open Editors" I have a use case where I would like to be able to get a list of all the open editors (basically exactly what is shown here).  
+
+<img width="222" alt="loginstructions_ts_-_vs-apex-debug" src="https://cloud.githubusercontent.com/assets/5217568/20104763/68b379fa-a58c-11e6-8f48-185e5ae47060.png">
+
+I understand that Editors are disposed but I just need a list of filenames.
+
+Something like: `workspace.openDocuments:Array<TextDocument>` or even just `workspace.openFiles:Array<string>`.
+
+Long term, it might be nice to have API access to operate on this list (EG: sort open editors pane by last opened, name, etc).
+
+
+ +++$+++ 316 +++$+++ 0
+COM0 +++$+++ SP5217568 +++$+++ ROOT +++$+++ ROOT +++$+++ 2016-12-09T19:42:03Z +++$+++ Also, just wanted to add that this is blocking our vscode Salesforce IDE extension ([mavensmate](https://marketplace.visualstudio.com/items?itemName=DavidHelmer.mavensmate)) from reaching feature parity with Sublime and Atom (and thus increasing the risk of it being abandoned by users).  
+
+Background:  Salesforce requires that classes be compiled on their servers.  In order to refactor multiple classes, you must send a single compilation request with all classes.  Because compilation is slow, you typically only want to compile a subset of your project (IE only files related to a refactor).  
+
+The way existing salesforce IDE's handle this, is by allowing users to compile all open tabs.   +++$+++ 2 +++$+++ 0
+COM1 +++$+++ SP641685 +++$+++ ROOT +++$+++ COM0 +++$+++ 2017-02-28T15:36:54Z +++$+++ @ChuckJonas I don't know if this is still blocking you, but I've used a [hack here](https://github.com/eamodio/vscode-restore-editors/blob/master/src/documentManager.ts#L57) that might work for your depending on your use-case. You can see it in action in the [Restore Editors](https://marketplace.visualstudio.com/items?itemName=eamodio.restore-editors) extension. +++$+++ 11 +++$+++ 0
+COM2 +++$+++ SP5217568 +++$+++ ROOT +++$+++ COM1 +++$+++ 2017-02-28T22:11:30Z +++$+++ @eamodio ahhh very nice! Never would have thought to use the `workbench.action.nextEditor` cmd to loop through all the editors.
+
+Still seems like sort of a ridiculous hack for something that should obviously be accessible in the API. +++$+++ 12 +++$+++ 0
+COM3 +++$+++ SP641685 +++$+++ ROOT +++$+++ COM2 +++$+++ 2017-02-28T22:43:18Z +++$+++ @ChuckJonas totally agree, but it was the best I could figure out with the tools available ;) +++$+++ 1 +++$+++ 0
+COM4 +++$+++ SP1794099 +++$+++ ROOT +++$+++ COM3 +++$+++ 2017-03-24T11:00:47Z +++$+++ fyi @dbaeumer  +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP18694878 +++$+++ ROOT +++$+++ COM4 +++$+++ 2017-04-28T09:58:05Z +++$+++ Cheers @eamodio, using your work around for something I'm working on too! 
+
+Also noticed I had to copy the way you wait in between executing commands because sometimes the activeEditor wont be set yet? Is that a separate issue worth reporting do you think? +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP641685 +++$+++ ROOT +++$+++ COM5 +++$+++ 2017-04-28T16:58:48Z +++$+++ @lukebatchelor getting an active editor of `undefined` is to be expected at this point. It gets set to `undefined` if there are really no editors, but also if the focus switches to a non-editor window +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP18694878 +++$+++ ROOT +++$+++ COM6 +++$+++ 2017-04-28T22:46:31Z +++$+++ @eamodio, Im not getting undefined in these cases, but sometimes the same editor. 
+
+I assumed that was why have the 500ms pauses in your code? +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP641685 +++$+++ ROOT +++$+++ COM7 +++$+++ 2017-04-29T05:08:51Z +++$+++ @lukebatchelor sort of -- the timeout is because while the `workbench.action.nextEditor` will move to the next tab, if you have 2 non-text editors next to each other, the active editor becomes `undefined` when it switches to the first (and the active editor changed event will fire), but now when it switches to the next, it will still be `undefined`, but no event will fire, because it went from `undefined` to `undefined` -- so the timeout is a safety net for the event not firing +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP18694878 +++$+++ ROOT +++$+++ COM8 +++$+++ 2017-04-29T06:52:09Z +++$+++ Oh okay. Thats different to what i was getting. 
+
+I'll try again but i was executing closeActiveEditor then logging the active editors document uri and would sometimes be the same still, until i added the pause. Same with nexrEditor. 
+
+Weird. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP3218210 +++$+++ ROOT +++$+++ COM9 +++$+++ 2017-05-19T22:47:24Z +++$+++ This would be really nice to have! 
+
+I am working on an extension that takes **encrypted** files and **decrypts** them. The problem is I need the **encrypted file path** so that I can decrypt the file.
+
+vscode doesn't let you access the file uri of a binary file because the active editor is undefined.
+
+Alternatively it would be cool to allow the user to choose what encoding to display binary files. I would think the default would be UTF-8. +++$+++ 1 +++$+++ 0
+COM11 +++$+++ SP1794099 +++$+++ ROOT +++$+++ COM10 +++$+++ 2017-05-28T09:29:58Z +++$+++ #11247 is about making the tab-model not only readable but also writeable, e.g. open a background-tab which we must consider when implementing this +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP641685 +++$+++ ROOT +++$+++ COM11 +++$+++ 2017-09-08T19:10:04Z +++$+++ FYI there is some further conversion about this here: https://github.com/Microsoft/vscode/issues/26568#issuecomment-322384117
+
+@jrieken any thoughts on that? It doesn't address the need of an API for a lot of other use-cases, but it could provide a nice shortcut for a (decent?) set of scenarios. +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP376658 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-03-23T15:12:20Z +++$+++ Is there any progress or plan for this functionality? It feels really odd that there is still no way for an extension to be able to simply get a list of the currently opened files (even if they are not loaded). +++$+++ 16 +++$+++ 0
+COM14 +++$+++ SP1078012 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-04-03T13:45:12Z +++$+++ I'm hitting this too. I need to provide my language service with a list of "priority files" and I was sending what I believed to be:
+
+1. Visible documents
+2. Other open (non-visible) documents
+
+However I've discovered that my means for getting open (non-visible) documents (workspace.textDocuments) is flawed and contains documents that had their editors closed, but the documents are still "open" according to Code.
+
+This means I'm unable to write tests to ensure that my priority files are working correctly, as I have no way of telling which files a user actually has open (but not visible). +++$+++ 9 +++$+++ 0
+COM15 +++$+++ SP85374 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-06-27T12:16:43Z +++$+++ We need this for VSCodeVim as well. Our use case is explained here: https://github.com/Microsoft/vscode/issues/51001#issuecomment-397177893 +++$+++ 30 +++$+++ 0
+COM16 +++$+++ SP306633 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-07-06T10:28:19Z +++$+++ Is this planned any time soon? The vim issue is pretty annoying. +++$+++ 5 +++$+++ 0
+COM17 +++$+++ SP2950467 +++$+++ ROOT +++$+++ COM16 +++$+++ 2018-08-23T20:07:16Z +++$+++ @c10b10 Hopefully thumbs up attract more attention to this issue. For non-vim users, we cannot effectively edit the same file opened in two different editor groups (e.g. split one file vertically and view/edit different parts in each pane) +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP34585078 +++$+++ ROOT +++$+++ COM17 +++$+++ 2018-09-21T22:57:08Z +++$+++ +many. The API feels needlessly restrictive. What's the downside for MS to make this available for extension developers? I can't think of one.
+
+Much as I like vscode the API could really use some love. Not to sound unappreciative, but the quality of extensions has so much potential if only the API would open up a bit more. +++$+++ 6 +++$+++ 0
+COM19 +++$+++ SP6906559 +++$+++ ROOT +++$+++ COM18 +++$+++ 2018-10-24T21:42:29Z +++$+++ +1 ! Needed for a personal extension that keeps me from opening too many files :0 +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP376658 +++$+++ ROOT +++$+++ COM19 +++$+++ 2018-11-24T16:51:09Z +++$+++ @jrieken  Is there any update on this? The tab model issue (that I was pinning my hopes on) has been closed...
+
+This issue has been open for over 2 years?
+ +++$+++ 5 +++$+++ 0
+COM21 +++$+++ SP22951521 +++$+++ ROOT +++$+++ COM20 +++$+++ 2018-11-24T18:03:11Z +++$+++ As the [fifth highest voted open issue for the API](https://github.com/Microsoft/vscode/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc+label%3Aapi), I hope to see this in the VS Code Roadmap 2019 as the final release of 2018 wraps up in the few weeks. +++$+++ 7 +++$+++ 0
+COM22 +++$+++ SP43947786 +++$+++ ROOT +++$+++ COM21 +++$+++ 2018-12-04T09:05:30Z +++$+++ I've encountered a bunch of extensions that are broken or work poorly due to this specific issue. +++$+++ 2 +++$+++ 0
+COM23 +++$+++ SP18694878 +++$+++ ROOT +++$+++ COM22 +++$+++ 2018-12-04T10:33:32Z +++$+++ Haha. Funny you linked that, my comments above were for when I was making that add-on :P
+
+You'll be pleased to know that "close all saved" is actually built into VSCode now (thanks to @soneymathew) +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP22816934 +++$+++ ROOT +++$+++ COM23 +++$+++ 2019-03-05T22:06:11Z +++$+++ it'd be cool to be able to switch between tabs in your workspace on a branch switch. +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP8102322 +++$+++ ROOT +++$+++ COM24 +++$+++ 2019-03-06T09:04:21Z +++$+++ > 
+> 
+> it'd be cool to be able to switch between tabs in your workspace on a branch switch.
+
+This workflow any many others will be supported in the extension that I'm building for VS and VS Code - [http://contextkeeper.io](http://contextkeeper.io/?ref=DC8)
+
+I want to cover all aspects of "dev context" that is created when working at specific PR/task/feature/bug. There is often a need to switch to something else and there is no easy way to turn back and restore lost context. Moreover there will be a way to save and share your contexts with entire team because they will be saved as diffable files (aka mental snapshots). Ready to commit in git. Stay tuned! +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP11232111 +++$+++ ROOT +++$+++ COM25 +++$+++ 2019-03-06T13:00:32Z +++$+++ @PiotrKarczmarz 
+> extension that I'm building for VS and **VS Code**
+
+But how? How do you get the open editors when there's no API for it (hence this issue)? +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP8102322 +++$+++ ROOT +++$+++ COM26 +++$+++ 2019-03-07T10:24:01Z +++$+++ > 
+> 
+> @PiotrKarczmarz
+> 
+> > extension that I'm building for VS and **VS Code**
+> 
+> But how? How do you get the open editors when there's no API for it (hence this issue)?
+
+@noppa good question. When there is no official API it will be harder to implement but I believe possible. In the second comment @eamodio mentioned hack that his Restore Editors is using. When you will dig long enough sometimes you find a way.
+
+Visual Studio also doesn't have any explicit API for its internal engine that restores last opened windows and tabs. It has .suo file when it stores them but it's like black box. You could save or restore certain windows state but you have no control how it will be done at window/tab level. Because VS's last opened files engine has many flaws I wrote independent engine that ContextKeeper is using to position VS's windows and restore tabs. It works very well and allows a whole range of possibilities like opening the same mental snapshot when you switch from your desktop box to laptop without manual windows repositioning - it's detects current resolutions of connected monitors and prepare appropriate layout where all windows fit nicely to new environment. The ContextKeeper's engine allows to save mental snapshots to human-friendly diffable files so you could not only switch between different contexts easily but also track what was changed in them via git. Sharing contexts with a team opens another range of possibilities.
+
+Nothing above would be possible when I would give up and tried to use broken and limited ".suo" API. It took a lot of time but I found a way and created "alternative" API. +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP376658 +++$+++ ROOT +++$+++ COM27 +++$+++ 2019-03-07T11:07:50Z +++$+++ For vscode, it sounds like you'll end up hacking the application code rather than building an extension then, which is a shame. On your website it says you have a commit ready for git - I assume that's for Visual Studio and not vscode?
+ +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP8102322 +++$+++ ROOT +++$+++ COM28 +++$+++ 2019-03-07T13:38:36Z +++$+++ > 
+> 
+> For vscode, it ounds like you'll end up hacking the application code rather than building an extension then, which is a shame. On your website it says you have a commit ready for git - I assume that's for Visual Studio and not vscode?
+
+@Gruntfuggly ContextKeeper will be pure extension for both VS Code and VS. I know that are limitations. Some of them discussed in this thread but also others like no support for floating windows in VS Code  #10121 which were always supported in VS. Workaround will be to use grid layout #14909 when you will try to open context from VS in VS Code to simulate the same windows and tabs layout (yes, opening the same context in both VS and VS Code will be possible!). I want to deliver similar experience for both VS and VS Code but knowing the limitations.  +++$+++ 0 +++$+++ 0

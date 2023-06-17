@@ -1,0 +1,9 @@
+ROOT +++$+++ SP999994 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-19T13:41:26Z +++$+++ Coding productivity decreased since last build Coding productivity has decreased enormously since the removal of the Santa hat.
+
+Please make it your top priority to bring Santa hat back. +++$+++ 37 +++$+++ 1
+COM0 +++$+++ SP28792856 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-19T13:41:32Z +++$+++ (Experimental duplicate detection)
+Thanks for submitting this issue. Please also check if it is already covered by an existing one, like:
+- [Santa Hat Removal (#87318)](https://www.github.com/microsoft/vscode/issues/87318) <!-- score: 0.454 -->
+<!-- potential_duplicates_comment --> +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP55183700 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-12-19T13:43:37Z +++$+++ I also can't focus on my work since then, please let me be productive again +++$+++ 13 +++$+++ 0
+COM2 +++$+++ SP7052344 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-12-19T13:54:46Z +++$+++ :santa: will be back! +++$+++ 3 +++$+++ 1

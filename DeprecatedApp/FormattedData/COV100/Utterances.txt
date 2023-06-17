@@ -1,0 +1,99 @@
+ROOT +++$+++ SP11559216 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-09-03T14:32:42Z +++$+++ RFS (Responsive font size) implementation Fixes #23053
+
+- RFS is disabled by default and can be switched on with `$enable-responsive-font-sizes`
+- `font-size`-properties are switched to the `@include font-size()`-mixin. Stylelint prevents the usage of `font-size` property.
+- Basic documentation added + link to github repo for further documentation.
+- RFS is enabled to rescale font-sizes of titles on the docs page.
+
+Demo with RFS enabled available here (this is not the default behaviour, but would be the behaviour if `$enable-responsive-font-sizes` was `true`): https://project-rfs.github.io/
+
+TODO:
+
+- [x] Remove fusv false warning workaround
+- [x] Decide whether or not we're going to keep `$input-height-sm` and `$input-height-lg` > no
+- [x] Test if we should increase the minimum font size to 1.25rem > yes +++$+++ 23 +++$+++ 0
+COM0 +++$+++ SP11559216 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-09-03T14:42:33Z +++$+++ @mdo: what do you think about this? +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP98681 +++$+++ ROOT +++$+++ COM0 +++$+++ 2017-12-28T05:34:52Z +++$+++ Thanks for keeping this up to date. I'm slating this for sure for 4.1, but I'll see if we should put it into 4.0 depending on a few other things. +++$+++ 3 +++$+++ 0
+COM2 +++$+++ SP11559216 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-01-06T18:34:11Z +++$+++ Update:
+It's now possible to disable responsive font-sizes for page by adding the `.disable-responsive-font-size` class to the `body` or `html`. This class can also be added to other elements.
+
+Minimum font-size is also increased to `1rem`, which prevents the default text from scaling down. +++$+++ 1 +++$+++ 0
+COM3 +++$+++ SP4595477 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-01-15T19:14:14Z +++$+++ `$enable-hover-media-query` was not deprecated +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP11559216 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-01-15T19:36:34Z +++$+++ @wolfy1339: https://github.com/twbs/bootstrap/pull/25270/files#diff-d8ee409a461718bfb6240710c8c73382 +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP895831 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-01-23T02:04:12Z +++$+++ This is all voodoo to me, but one request: make sure that even if using `vh`/`vw` etc, that there's a component for font sizing tied to something else like `px`/`rem`/`em`. Otherwise (when a font size is purely related to viewport dimensions and nothing else) you kill the user's ability to (full page) zoom on desktop and change the size the text is rendered at (as yes, the viewport dimensions change, but the font size would then change proportionally in the opposite direction, meaning the apparent font size is never actually altered). +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP11559216 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-01-23T07:39:03Z +++$+++ @patrickhlauke, It's possible to add the `disable-responsive-font-size` class to achieve this:
+https://codepen.io/MartijnCuppens/pen/PEgNVM?editors=1100
+
+Also, the font size is never purely related to viewport. +++$+++ 1 +++$+++ 0
+COM7 +++$+++ SP11559216 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-08-04T16:53:35Z +++$+++ There are several ways to implement this depending on what should be the default value for `$rfs-class`.
+
+In the current implementation I've set `$rfs-class: "disable";`. This way, it's easy to disable responsive font sizes within the html by adding the `.disable-responsive-font-size` class. An example of this can be viewed here: https://codepen.io/MartijnCuppens/pen/PEgNVM?editors=1100 The class can also be added to the `html` or the `body` to disable responsive font sizes on the whole page. Downside of this implementation is that more css is generated (that's why I needed to increase the `maxSize` in `package.json`) and it increases specificity.
+
+Another approach is to use `$rfs-class: false;`. This is the most performant solution but the `.disable-responsive-font-size` class cannot be added to elements. It can of course still be changed in scss, but I can imagine some people load the Bootstrap css via a CDN may prefer their font-size doesn't change. A possible solution for this is to generate 2 css versions: one with and one without responsive font-sizes.
+
+ +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP2290081 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-08-22T05:26:46Z +++$+++ @MartijnCuppens, why not a `$enable-rfs: false;` (disabled by default) param like other in _variables.scss ? +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP11559216 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-08-24T20:56:03Z +++$+++ @vladimirmartsul, that might be a good idea. This wouldn't cause a lot of changes by default while developers can still easily enable responsive font sizes if they want to.  +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP11559216 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-08-28T19:31:50Z +++$+++ I discovered changing the padding of buttons and inputs from `em` to `rem` can cause issues when upgrading Bootstrap, working on a solution for that. 
+
+I'll try to implement RFS in a way that it wouldn't have any influence on the current Bootstrap at all when it's disabled. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP11559216 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-09-02T20:39:33Z +++$+++ I've now disabled the responsive font sizing by default so that the css files are exactly the same (apart from property order). 
+
+Responsive font sizing can be enabled with `$enable-responsive-font-sizes`. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP1832037 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-09-11T10:20:18Z +++$+++ Hi @MartijnCuppens, thanks for another great PR. I think that responsive font sizing is a killer feature to have.
+
+My worried is that what this feature asks contributors might outweigh its value. Once we merge it we'll be asking contributors to include `responsive-font-size` every time they define a base font size. This adds a new level of complexity that makes Bootstrap harder to maintain and develop.
+
+It'll be up to @mdo to decide if he wants this feature in Bootstrap or not. If we decide to add it I think we should either have a very strong linter or some kind of postCSS that automatically adds the artifact around the font size declarations.
+
+ +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP11559216 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-09-11T12:02:46Z +++$+++ @andresgalante, at this moment there's also a `border-radius` and a `transition` mixin for other properties.
+
+I've also added the `font-size` property to the `declaration-property-value-blacklist` which will trigger an error if the `font-size` property is instead of the mixin. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP349621 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-10-20T12:52:37Z +++$+++ @MartijnCuppens: can you rebase and squash the patches/rebase the branch? +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP11559216 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-10-20T15:37:19Z +++$+++ @XhmikosR, I'll have a look at it tomorrow +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP349621 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-10-21T11:16:55Z +++$+++ @MartijnCuppens: that's not a rebase/squash. I see this branch has too many conflicts and it'll be hard to do a proper rebase. +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP11559216 +++$+++ ROOT +++$+++ COM16 +++$+++ 2018-10-21T11:25:26Z +++$+++ Working on it 😉 +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP349621 +++$+++ ROOT +++$+++ COM17 +++$+++ 2018-10-21T12:49:43Z +++$+++ @mdo: pinging for the final review :D
+
+We still need to make the build pass, but the preview looks pretty good.
+
+Oh and like @MartijnCuppens mentioned we might want to have this off by default for 4.2, but we should mention it clearly in the release notes/blog post so that people can experiment with it. +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP11559216 +++$+++ ROOT +++$+++ COM18 +++$+++ 2018-10-21T14:30:46Z +++$+++ After a conversation I had with @XhmikosR on slack, I applied some changes:
+
+**Moved the mixin to a vendor folder.**
+There are some variables in `_rfs.scss` because the file is copied from the original project. We don't want to allow this in other Bootstrap scss files, so I moved this a vendor folder so it's clear it's a file included from another repo. I used the same approach for including vendor content as is used for mixins and utilities (one `scss/_vendor.scss` file which includes the vendor `scss`).
+
+Other changes:
+- use `abbr` tag
+- Update to v7.1.5 (caching of some function calls)
+ +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP349621 +++$+++ ROOT +++$+++ COM19 +++$+++ 2018-10-28T22:14:18Z +++$+++ @mdo: when you have some time please review this. It seems it works fine, it's disabled by default.
+
+The `fusv` workaround, we'll try to fix it soon and remove it from here. +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP11559216 +++$+++ ROOT +++$+++ COM20 +++$+++ 2018-11-07T22:04:08Z +++$+++ Current status: ~WIP~ Requested changes applied +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP349621 +++$+++ ROOT +++$+++ COM21 +++$+++ 2018-11-13T07:05:30Z +++$+++ @MartijnCuppens: this needs a rebase and squash into one patch. +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP11559216 +++$+++ ROOT +++$+++ COM22 +++$+++ 2018-11-13T07:35:43Z +++$+++ @XhmikosR, done. +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP11559216 +++$+++ ROOT +++$+++ COM23 +++$+++ 2018-12-18T07:14:41Z +++$+++ I'm going to make some changes upstream and sync the versions this week. I'm going to increase `$rfs-minimum-font-size` (which will be called `$rfs-base-font-size` in RFS v8) to `1.25rem` because this will not rescale the input fields by default. +++$+++ 2 +++$+++ 0
+COM25 +++$+++ SP11559216 +++$+++ ROOT +++$+++ COM24 +++$+++ 2018-12-31T13:59:58Z +++$+++ Time for some updates.
+- As suggested by @ysds, I've increased the `$rfs-base-font-size` to `1.25rem`. The result:
+  - Large inputs don't rescale by default
+  - It generates less css
+  - The displays rescale enough on smaller viewports, because I've also increased the `$rfs-factor`
+- Because of the changes to the form controls, the `$input-height-inner-sm` and `$input-height-inner-sm` became unneeded. I eventually dropped them because these are variables that are generated by other variables and not used anywhere else in the code, they were only used to calculate `$input-height-sm` & `$input-height-lg`.
+
+I did some changes upstream and made a branch for the next major version of RFS which is in sync with this PR: https://github.com/twbs/rfs/tree/v8. This branch has some automated testing, so that we'll not break anything if we're going to update things in the future.
+ +++$+++ 1 +++$+++ 0
+COM26 +++$+++ SP216426 +++$+++ ROOT +++$+++ COM25 +++$+++ 2019-01-02T03:13:27Z +++$+++ This is really slick. One of my pet peeves is that I always want fonts on my phone to be bigger, not smaller. I like the limits placed here on the sample site, they seem reasonable and I like that there's a variable for setting the minimum. Well done. +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP11559216 +++$+++ ROOT +++$+++ COM26 +++$+++ 2019-02-07T22:39:52Z +++$+++ Never thought I would merge this myself, thanks a lot Bootstrap community ❤️ +++$+++ 4 +++$+++ 0
+COM28 +++$+++ SP7368063 +++$+++ ROOT +++$+++ COM27 +++$+++ 2019-02-11T20:20:17Z +++$+++ Just updated to `4.3.0`. All of the font sizes are messed up.
+
+I use this custom `mixins` with the Bootstrap 4: https://www.smashingmagazine.com/2015/06/responsive-typography-with-sass-maps/
+
+I am confused because I add this `mixins` to as own which should not effect any updates from Bootstrap. All of updates below 4.3.0 are fine.
+
+When I inspect it, it looks like outputting the SASS.
+`font-size: (null: 3rem, 1.2, lg: 2.6rem, md-max: 1.6rem, xs-md: 1.5rem); ` +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP11559216 +++$+++ ROOT +++$+++ COM28 +++$+++ 2019-02-12T08:43:59Z +++$+++ Hi @weilinzung,
+
+Bootstrap now uses the `font-size` mixin from [RFS](https://github.com/twbs/rfs). It looks like you're passing a sass map to the mixin while you should just pass a font size to it. It doesn't work the same as the article you're referring to. +++$+++ 0 +++$+++ 0

@@ -1,0 +1,16 @@
+SP45689 +++$+++ crquan +++$+++ NONE (AUTHOR)
+SP1038121 +++$+++ lee-dohm +++$+++ CONTRIBUTOR
+SP1396 +++$+++ anaisbetts +++$+++ CONTRIBUTOR
+SP4525388 +++$+++ Zireael07 +++$+++ NONE
+SP1476 +++$+++ thedaniel +++$+++ CONTRIBUTOR
+SP8703631 +++$+++ qcq +++$+++ NONE
+SP3746519 +++$+++ texelate +++$+++ NONE
+SP614253 +++$+++ fenec +++$+++ NONE
+SP5822375 +++$+++ brndd +++$+++ NONE
+SP601899 +++$+++ johnlanz +++$+++ NONE
+SP1834185 +++$+++ mathieu-jobin +++$+++ NONE
+SP6344099 +++$+++ ShalokShalom +++$+++ NONE
+SP2766036 +++$+++ 50Wliu +++$+++ CONTRIBUTOR
+SP9884235 +++$+++ CallmeNezha +++$+++ NONE
+SP7585255 +++$+++ MichaelMacha +++$+++ NONE
+SP283811 +++$+++ vitobotta +++$+++ NONE

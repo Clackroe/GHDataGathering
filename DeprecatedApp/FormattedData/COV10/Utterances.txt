@@ -1,0 +1,29 @@
+ROOT +++$+++ SP5392141 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-07-10T13:17:17Z +++$+++ IPython doesn't follow the XDG base directory specification Currently IPython uses `~/.ipython` which just clutters people's home directories and makes things like backing up configuration files much more hassle than it should be. 
+
+This was last discussed more than five years ago and should be discussed again. Points made at that point in time frankly, don't really hold up. It is more consistent to follow platform specs, people learn where to look first. Secondly, for support reasons, you don't really have to ask what platform they're on, just mention the three paths in one sentence, it's actually rather easy.  +++$+++ 2 +++$+++ 0
+COM0 +++$+++ SP10088591 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-07-19T11:05:02Z +++$+++ For those looking for the previous discussion, it can be found [here](https://github.com/ipython/ipython/pull/4457). +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP335567 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-07-21T00:17:54Z +++$+++ I believe if you move your folders in XDG compliant places it should work, though updating all the code and documentation all over the internet, plus the code to do the right thing is a lot of work; and XDG spec IIRC did not completely match or was not clear for all the types of files that could be present. 
+
+There might be packages on PyPI that may help with ~/.config /User/.../Libraries/AppData. %appdata% depending on OS, and this will also likely need to touch all the jupyter ecosystem (ipykernel, jupyter_client, traitlets, etc, so I doubt there'll be an effort from core dev to push that forward.
+
+THough if you have issues when files _exists_ in XDG placed and not found I"ll be happy to get fixes in.  +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP5392141 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-07-21T00:58:26Z +++$+++ @Carreau 
+
+You're being a bit facetious. There's no need to update "all the code and documentation all over the internet", nobody has every done that and never will. Neither would the updating even be necessary, the official documentation should contain the location of the configuration file, that's it. The third silly thing is that you're acting like IPython doesn't have any changes that break some pieces of code or tutorials out there. All in all it makes your comment seem more like irrational stubbornness than actual concerns.
+
+Not to mention, if it's _that_ hard to change the folder, then that hardcoding seems like a massive code smell anyways and should be fixed anyways, and the choice to set the location of the folder should be up to the user. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP335567 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-07-21T01:43:18Z +++$+++ Hey, I was there for the first or changing default configuration directory, and all the issues it created; And I'm one of the person who has to deal both with public and private requests about the bits of documentation that users have tried on the internet and does not work because its inaccurate, either when it was written or because IPython changed, so yes I'm well aware of the consequences of changing. 
+
+And so yes the official documentation is one of the last place users looks for that information, and yes sometime they look at the latest docs for 5 years old IPython version.
+
+Yes `~/.ipython` is not optimal, and no it's not a code smell we removed all the complex logic because it was brittle and was super confusing, and because every time we were teaching software carpentry there was section with all the combinaisons of linux/mac/windows IPython version x.y.z
+
+So yes I was of your opinion 10 years ago, and no to this days I still don't know the 3 path on each of the platform, even on Mac which I'm using everyday and which now hides ~/Library in the finder.
+
+You can change the code location by setting environment variables, and I told you that if it was not working with configuration in xdg dir I would gladly accept patches for that so that you have  the choice. 
+
+Now if it's to criticize the code without proper understanding of the technical and social reason of why it is the way it is, and bring XDG zealotry into the mix, I'm even less likely to make an effort.
+
+PR still accepted but discussion closed.
+
+  +++$+++ 0 +++$+++ 0

@@ -1,0 +1,14 @@
+ROOT +++$+++ SP34998433 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-06-25T05:37:19Z +++$+++ website/docs: Please remove political banner. I think that the docs are for documenting golang. I do not think they are the place for political rhetoric. I do not open a Webster dictionary and see an ad asking for donations to a political party. I see definitions. Furthermore, it is illegal for foreigners to donate to political parties. AT LEAST remove the banner for people that are not in the US.
+
+The banner:
+![banner](https://user-images.githubusercontent.com/34998433/85660680-e0508100-b6f0-11ea-9587-dc42d3ed6b96.png)
+
+If this is not the right forum to discuss this issue, please direct me to it.
+
+ +++$+++ 5 +++$+++ 8
+COM0 +++$+++ SP3576549 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-06-25T14:00:39Z +++$+++ You should see https://groups.google.com/forum/#!topic/golang-nuts/YzN4LkMHs7k, where the same point was made. I don't think any new point is being made here, so I'm closing this issue as we only use the tracker for bugs. +++$+++ 1 +++$+++ 0
+COM1 +++$+++ SP34998433 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-06-26T00:18:24Z +++$+++ The thread you directed me to is locked. This banner is on my docs too. Docs that I wrote, that my organization relies on. Am I powerless here? +++$+++ 1 +++$+++ 0
+COM2 +++$+++ SP3194333 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-06-26T01:00:13Z +++$+++ That thread is locked because it got too contentious, as you can see by reading it.  Although it is locked, it has the answers to your questions. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP34998433 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-06-26T01:31:45Z +++$+++ Indeed. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP1696829 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-09-27T13:35:23Z +++$+++ No, it got locked because people disagree with your ignorant stance.  I am now learning RUST even though I absolutely loved golang strictly because of not just your ignorant stance of adding this banner but also because of your even more ignorant inability to have an adult conversation about it.  I will not participate in a dictatorship as you're too dumb on the matter to be my leader. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP3576549 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-09-27T13:56:12Z +++$+++ This is getting too heated, so I'm locking the thread for now. You can reply to that golang-nuts thread if you wish to voice your opinion. Thanks! +++$+++ 0 +++$+++ 0

@@ -1,0 +1,146 @@
+ROOT +++$+++ SP11097395 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-12-25T12:54:33Z +++$+++ Last jedi release (0.18.0) is incompatible with ipython (7.19 and 7.18 tested); reason - column arg was deprecated, and now removed <!-- This is the repository for IPython command line, if you can try to make sure this question/bug/feature belong here and not on one of the Jupyter repositories. 
+
+If it's a generic Python/Jupyter question, try other forums or discourse.jupyter.org.
+
+If you are unsure, it's ok to post here, though, there are few maintainer so you might not get a fast response. 
+
+Ability of maintainers to spend time and resources on project like IPython is heavily influenced by US politics, and the current government policies have been harmful to the IPython Maintainers and Community. 
+
+If you are on the fence on who to vote for or wether to vote, please cast your vote in for the democrat party in the US.
+-->
+Relevant traceback reads as follows: 
+```
+  File "../venv/lib/python3.8/site-packages/IPython/core/completer.py", line 2029, in _complete
+    completions = self._jedi_matches(
+  File "../venv/lib/python3.8/site-packages/IPython/core/completer.py", line 1373, in _jedi_matches
+    interpreter = jedi.Interpreter(
+  File "../venv/lib/python3.8/site-packages/jedi/api/__init__.py", line 725, in __init__
+    super().__init__(code, environment=environment,
+TypeError: __init__() got an unexpected keyword argument 'column'
+```
+
+sys info: 
+```
+{'commit_hash': '62779a198',
+ 'commit_source': 'installation',
+ 'default_encoding': 'utf-8',
+ 'ipython_path': '../venv/lib/python3.8/site-packages/IPython',
+ 'ipython_version': '7.18.0',
+ 'os_name': 'posix',
+ 'platform': 'Linux-4.15.0-128-generic-x86_64-with-glibc2.17',
+ 'sys_executable': '../venv/bin/python',
+ 'sys_platform': 'linux',
+ 'sys_version': '3.8.5 (default, Jul 20 2020, 19:50:14) \n[GCC 5.4.0 20160609]'}
+```
+same reported in jedi repo too +++$+++ 251 +++$+++ 0
+COM0 +++$+++ SP10265739 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-12-25T17:15:20Z +++$+++ https://github.com/ipython/ipython/commit/dcd9dc90aee7e4c5c52ce44c18e7518934790612
+
+The code has been already updated, but `7.19.0` did not include this. :( +++$+++ 17 +++$+++ 0
+COM1 +++$+++ SP748594 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-12-25T17:20:36Z +++$+++ As a temporary fix for anyone just trying to get things working again:
+
+```
+pip install jedi==0.17.2
+```
+
+----
+
+It would be really nice if you could quickly release a 7.19.1. (It's already fixed on master).
+
+Sorry for that. I did not realize that IPython with that fix was not released yet. I usually test IPython completions before doing a Jedi release, but not this time :/. It will probably also not happen in the future anymore, because I'm going to release Jedi 1.0 soon, so this is probably the last time for a long time that you have to deal with deprecations in Jedi.
+
+Still wish you a Merry Christmas! +++$+++ 239 +++$+++ 0
+COM2 +++$+++ SP748594 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-12-25T17:26:00Z +++$+++ By the way, a `7.19.1` release with the dependency `jedi<0.18.0` would also suffice. +++$+++ 13 +++$+++ 0
+COM3 +++$+++ SP1206342 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-12-27T04:33:25Z +++$+++ @davidhalter Thanks for your solution. it finally work. +++$+++ 1 +++$+++ 0
+COM4 +++$+++ SP2304703 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-12-27T14:53:49Z +++$+++ I had the same problem with ipython and thanks to the solution of @davidhalter , it works again. :+1:  +++$+++ 1 +++$+++ 0
+COM5 +++$+++ SP1468378 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-12-28T07:28:08Z +++$+++ Thank you for opening this issue.  Happy holiday! +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP25695763 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-12-28T23:57:08Z +++$+++ Posted a pr to pin the dependency as suggested: #12746 +++$+++ 3 +++$+++ 0
+COM7 +++$+++ SP6715707 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-12-29T02:25:19Z +++$+++ Thanks a lot. I thought my shell was broken. Every time when I tried to use tab completion in IPython it crashed. Glad I found a solution. +++$+++ 2 +++$+++ 0
+COM8 +++$+++ SP37798612 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-12-29T05:05:58Z +++$+++ Finally found a solution! thank you @davidhalter 🎉  +++$+++ 1 +++$+++ 0
+COM9 +++$+++ SP3178925 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-12-31T19:47:45Z +++$+++ When would the problem be fixed so that every Jedi version is compatible with ipython? +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP730137 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-12-31T23:52:55Z +++$+++ @tik9 Does installing from master work for you?
+
+    pip install git+https://github.com/ipython/ipython
+
+If so, whenever ipython releases a new version, it will be fixed for everyone. +++$+++ 5 +++$+++ 0
+COM11 +++$+++ SP3178925 +++$+++ ROOT +++$+++ COM10 +++$+++ 2021-01-01T11:07:25Z +++$+++ @NeilGirdhar , when doing
+`pip install git+https://github.com/ipython/ipython`
+
+It seems to work, I still have to update to the current Jedi. +++$+++ 3 +++$+++ 0
+COM12 +++$+++ SP104550 +++$+++ ROOT +++$+++ COM11 +++$+++ 2021-01-03T02:12:41Z +++$+++ Got this issue as well. Pinning `jedi==0.17.2` worked for me, thanks @davidhalter. +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP34534823 +++$+++ ROOT +++$+++ COM12 +++$+++ 2021-01-03T13:05:27Z +++$+++ > As a temporary fix for anyone just trying to get things working again:
+> 
+> ```
+> pip install jedi==0.17.2
+> ```
+> 
+> It would be really nice if you could quickly release a 7.19.1. (It's already fixed on master).
+> 
+> Sorry for that. I did not realize that IPython with that fix was not released yet. I usually test IPython completions before doing a Jedi release, but not this time :/. It will probably also not happen in the future anymore, because I'm going to release Jedi 1.0 soon, so this is probably the last time for a long time that you have to deal with deprecations in Jedi.
+> 
+> Still wish you a Merry Christmas!
+
+Thank you for your solution.
+I got the same issue and IPython worked after I installed Jedi +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP50895411 +++$+++ ROOT +++$+++ COM13 +++$+++ 2021-01-04T02:03:25Z +++$+++ installing 0.17.2 of jedi also worked for me.  Was chasing my tail trying to figure out why it wasn't working in a new virtual environment, glad to have found this!  Hope the fix is out soon.  Luckily this showed up as the top link in Google for me when searching "ipython init got an unexpected keyword argument 'column'". +++$+++ 2 +++$+++ 0
+COM15 +++$+++ SP54780737 +++$+++ ROOT +++$+++ COM14 +++$+++ 2021-01-04T15:30:44Z +++$+++ This works:
+```console
+$ pip install 'jedi<0.18'
+``` +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP32599041 +++$+++ ROOT +++$+++ COM15 +++$+++ 2021-01-04T15:54:29Z +++$+++ Thanks @bl-ue
+
+For reference, the autocomplete on my Jupyter notebook wasn't working and I was getting this same error on the terminal.
+
+And now it's working as expected after downgrading jedi to 0.17.2 by just executing the command @bl-ue mentioned. +++$+++ 1 +++$+++ 0
+COM17 +++$+++ SP19918901 +++$+++ ROOT +++$+++ COM16 +++$+++ 2021-01-05T13:10:27Z +++$+++ Confirmed that downgrading jedi to `0.17.2` fixed the issue for me as well. Thanks @davidhalter  +++$+++ 3 +++$+++ 0
+COM18 +++$+++ SP7643149 +++$+++ ROOT +++$+++ COM17 +++$+++ 2021-01-05T18:57:28Z +++$+++ Hi everyone, I've stumbled on this issue while creating docker images for myself.
+If I understand correctly from [this comment](https://github.com/ipython/ipython/issues/12740#issuecomment-751273086) the problem has already been solved on master, but so far no release including the fix has been issued.
+In order to better organize my own work, may I know when do you plan a new release? Somebody [here](https://github.com/ipython/ipython/issues/12740#issuecomment-751273584) was suggesting to quickly release 7.19.1, including this patch, is it still an option? +++$+++ 1 +++$+++ 0
+COM19 +++$+++ SP47916989 +++$+++ ROOT +++$+++ COM18 +++$+++ 2021-01-07T19:06:42Z +++$+++ > As a temporary fix for anyone just trying to get things working again:
+> 
+> ```
+> pip install jedi==0.17.2
+> ```
+> 
+> It would be really nice if you could quickly release a 7.19.1. (It's already fixed on master).
+> 
+> Sorry for that. I did not realize that IPython with that fix was not released yet. I usually test IPython completions before doing a Jedi release, but not this time :/. It will probably also not happen in the future anymore, because I'm going to release Jedi 1.0 soon, so this is probably the last time for a long time that you have to deal with deprecations in Jedi.
+> 
+> Still wish you a Merry Christmas!
+
+thanks a lot +++$+++ 4 +++$+++ 0
+COM20 +++$+++ SP6576768 +++$+++ ROOT +++$+++ COM19 +++$+++ 2021-01-09T16:45:50Z +++$+++ pip install -U jedi==0.17.2 parso==0.7.1 +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP50870910 +++$+++ ROOT +++$+++ COM20 +++$+++ 2021-01-11T09:12:16Z +++$+++ I wonder, when you have a dependency (jedi) that is in version 0.x.y (not reached major 1), if it is not wiser to pin the minor as >=0.17,<0.18. +++$+++ 2 +++$+++ 0
+COM22 +++$+++ SP25695763 +++$+++ ROOT +++$+++ COM21 +++$+++ 2021-01-11T17:39:25Z +++$+++ FYI https://github.com/ipython/ipython/pull/12751#issuecomment-758065462 +++$+++ 1 +++$+++ 0
+COM23 +++$+++ SP7075901 +++$+++ ROOT +++$+++ COM22 +++$+++ 2021-01-13T23:40:31Z +++$+++ > As a temporary fix for anyone just trying to get things working again:
+> 
+> ```
+> pip install jedi==0.17.2
+> ```
+> 
+> It would be really nice if you could quickly release a 7.19.1. (It's already fixed on master).
+> 
+> Sorry for that. I did not realize that IPython with that fix was not released yet. I usually test IPython completions before doing a Jedi release, but not this time :/. It will probably also not happen in the future anymore, because I'm going to release Jedi 1.0 soon, so this is probably the last time for a long time that you have to deal with deprecations in Jedi.
+> 
+> Still wish you a Merry Christmas!
+
+note: in anaconda, this has to be done in the same kernel you're using from within the jupyter notebook, not the one you're using the `jupyter notebook` command from!
+
+took me about 30 minutes to finally figure that one out once i found @davidhalter's pip install tip (i used `conda install jedi==0.17.2` instead of pip).
+
+thank you all! +++$+++ 7 +++$+++ 0
+COM24 +++$+++ SP15945736 +++$+++ ROOT +++$+++ COM23 +++$+++ 2021-01-15T17:24:05Z +++$+++ Can you explain what you mean by "same kernel ..." vs "using the jupyter notebook ..."   i.e.,  will conda install jedi==0.17.2 from the shell command line do the trick?  (it seems to) +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP25516935 +++$+++ ROOT +++$+++ COM24 +++$+++ 2021-01-16T22:26:28Z +++$+++ > Can you explain what you mean by "same kernel ..." vs "using the jupyter notebook ..." i.e., will conda install jedi==0.17.2 from the shell command line do the trick? (it seems to)
+
+You can run Jupyter in one env and use it with a kernel from another env. See for example [this SO question](https://stackoverflow.com/questions/53004311/how-to-add-conda-environment-to-jupyter-lab). Jedi version of the latter env matters. If you are not aware of this, you probably use one conda env for jupyter and kernel. +++$+++ 1 +++$+++ 0
+COM26 +++$+++ SP9634782 +++$+++ ROOT +++$+++ COM25 +++$+++ 2021-01-19T18:00:21Z +++$+++ The following works in ipython/jupyter.   I assume it gets jedi out of the way of the built-in completer.   Good enough for me until fix is released.
+
+%config Completer.use_jedi = False
+ +++$+++ 7 +++$+++ 2
+COM27 +++$+++ SP54780737 +++$+++ ROOT +++$+++ COM26 +++$+++ 2021-01-20T14:05:31Z +++$+++ It does work! 👍🏻 
+Nice find @dowenk! 😍  +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP748594 +++$+++ ROOT +++$+++ COM27 +++$+++ 2021-01-20T17:37:46Z +++$+++ Because people at this point probably don't scroll up to my comment (https://github.com/ipython/ipython/issues/12740#issuecomment-751273584), this is what you should do temporarily:
+
+```
+pip install jedi==0.17.2
+``` +++$+++ 16 +++$+++ 0
+COM29 +++$+++ SP54780737 +++$+++ ROOT +++$+++ COM28 +++$+++ 2021-01-23T21:39:34Z +++$+++ When is the team going to fix this? In just a month hundreds of users have encountered this issue. +++$+++ 2 +++$+++ 0

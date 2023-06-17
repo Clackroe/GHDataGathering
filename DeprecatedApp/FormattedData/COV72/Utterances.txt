@@ -1,0 +1,36 @@
+ROOT +++$+++ SP3955499 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-03-07T09:00:06Z +++$+++ Telemetry This project collects usage data and sends it to Microsoft. Please stop collecting MY data and remove telemetry from all your f**g Windows products. +++$+++ 24 +++$+++ 22
+COM0 +++$+++ SP531187 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-03-07T09:18:41Z +++$+++ See #80  +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP1898905 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-03-07T09:23:21Z +++$+++ @Petrouchka Be thankful. Microsoft uses the data to improve your calculating experience. :smile:  +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP2353413 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-03-07T09:42:43Z +++$+++ The Microsoft Store version does collect data, in this project it is disabled by default (per the read me):
+
+>Data / Telemetry
+> ...Telemetry is disabled in development builds by default, and can be enabled with the 
+> SEND_TELEMETRY build flag. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP38666396 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-03-07T09:50:42Z +++$+++ Just use Linux - simple as that ;) +++$+++ 8 +++$+++ 5
+COM4 +++$+++ SP3955499 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-03-07T09:56:28Z +++$+++ Yes, that's what I'm doing since 2000. Just hoping Microsoft will not put backdoor, telemetry, obfuscation and all its shit in all Github projects, like others did in SourceForge.
+Use https://about.gitlab.com, https://framagit.org... +++$+++ 4 +++$+++ 12
+COM5 +++$+++ SP695720 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-03-07T11:31:49Z +++$+++ > This project collects usage data and sends it to Microsoft. Please stop collecting MY data and remove telemetry from all your f**g Windows products.
+
+Just because a product is open-sourced doesn't mean you can go around making demands in this manner. Please try to keep your conversation to the point and polite, this benefits nobody. +++$+++ 23 +++$+++ 1
+COM6 +++$+++ SP3955499 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-03-07T11:43:47Z +++$+++ The subject isn't the Open Source. I don't respect people who want to collect my PRIVATE data with software. If you don't like my demand, delete it. If you want better software, delete all these malwares. +++$+++ 2 +++$+++ 8
+COM7 +++$+++ SP43905364 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-03-07T11:46:20Z +++$+++ _FSF wants to know your location_ +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP46117 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-03-07T11:49:22Z +++$+++ Why are you even here? +++$+++ 3 +++$+++ 1
+COM9 +++$+++ SP3955499 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-03-07T11:54:46Z +++$+++ > Why are you even here?
+
+Because everybody today is speaking on the Net about a Windows Calculator with telemetry inside. I didn't believe even that was possible and... yes. +++$+++ 1 +++$+++ 3
+COM10 +++$+++ SP1898905 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-03-07T12:08:53Z +++$+++ > Why are you even here?
+
+Big questions time :roll_eyes: 
+
+@wattengard Let's all be respectful. +++$+++ 2 +++$+++ 2
+COM11 +++$+++ SP46117 +++$+++ ROOT +++$+++ COM10 +++$+++ 2019-03-07T12:23:05Z +++$+++ How was I not respectful? I just asked a simple question. What isn't respectful is polluting the issue-catalog with useless rants, poorly hidden profanity and shouting. I am, however, done with this issue now. +++$+++ 4 +++$+++ 2
+COM12 +++$+++ SP7000616 +++$+++ ROOT +++$+++ COM11 +++$+++ 2019-03-07T14:53:48Z +++$+++ you guys are worried about what data the calculator is collecting? what about the rest of windows lol +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP5377261 +++$+++ ROOT +++$+++ COM12 +++$+++ 2019-03-07T14:54:43Z +++$+++ Take your foul mouthed trolling to Twitter. That's what it's there for. There are countless calculator apps. Find one that you are satisfied with and use it. This one is obviously for people with different concerns than you. They get to have their applications too. You are not Calculator King of the Internet. Grow up and move along. +++$+++ 1 +++$+++ 1
+COM14 +++$+++ SP47541839 +++$+++ ROOT +++$+++ COM13 +++$+++ 2019-03-07T15:02:23Z +++$+++ This is your friendly Microsoft Issue Bot. I've seen this issue come in and have gone to tell a human about it.
+<!--METADATA:418196403:{
+    "id":  20764000
+}--> +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP3955499 +++$+++ ROOT +++$+++ COM14 +++$+++ 2019-03-07T15:05:44Z +++$+++ Twitter collects and sells our data too. It's as bad as Microsoft.
+Use [Mastodon](https://joinmastodon.org/) instead.
+https://en.wikipedia.org/wiki/Fediverse +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP296848 +++$+++ ROOT +++$+++ COM15 +++$+++ 2019-03-07T15:44:31Z +++$+++ Our [Code of Conduct](https://github.com/Microsoft/calculator/blob/master/CODE_OF_CONDUCT.md) requires everyone to *be respectful* to each other, and we should do better than what's in this thread. If you have specific questions about our telemetry system for Calculator we can try to answer them separately. +++$+++ 1 +++$+++ 0

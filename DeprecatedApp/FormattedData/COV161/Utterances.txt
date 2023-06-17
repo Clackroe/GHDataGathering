@@ -1,0 +1,113 @@
+ROOT +++$+++ SP10271207 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-17T10:23:50Z +++$+++ no-git-push not working after 3.18.0 ```
+15:41:24 $ lerna publish prerelease --canary --exact --yes --no-git-tag-version --no-git-push --no-git-reset --no-changelog --dist-tag=pr-157 --preid=alpha-52b7893
+15:41:24 ERR! lerna Unknown arguments: git-push, gitPush
+15:41:24 error Command failed with exit code 1.
+```
+
+## Expected Behavior
+Prior to 3.18.0, this does not error out, and publishes without pushing to git.
+
+## Current Behavior
+Errors out as in above example
+
+## Steps to Reproduce (for bugs)
+
+<details><summary>lerna.json</summary><p>
+<!-- browsers demand the next line be empty -->
+
+```json
+{
+  "version": "independent",
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "conventionalCommits": true,
+  "registry": <enterprise artifactory url>,
+  "verifyAccess": false,
+  "verifyRegistry": false,
+}
+```
+</p></details>
+
+## Context
+I'm currently unable to publish alphas without locking to a lower version of lerna.
+
+## Your Environment
+Running on jenkins
+
+| Executable | Version |
+| ---: | :--- |
+| `lerna --version` | 3.18.1 |
+| `npm --version`  | 6.10.1 |
+| `yarn --version` | 1.15.2 |
+| `node --version` | 8.9.0 |
+
+| OS | Version |
+| --- | --- |
+| NAME | VERSION |
+<!-- For example:
+| Red Hat Enterprise Linux | 7 |
+-->
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP29962557 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-17T21:32:58Z +++$+++ Other options are also affected:
+
+> ERR! lerna Unknown arguments: git-reset, gitReset, verify-access, verifyAccess, npm-client, npmClient +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP5605 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-10-18T16:50:56Z +++$+++ @uncleramsay There is no `--no-git-push` option, it's called [`--no-push`](https://github.com/lerna/lerna/blob/master/commands/version/README.md#--no-push).
+
+@tkissing-work Which command elicited that error? +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP10271207 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-10-18T17:50:31Z +++$+++ That's very odd. Prior to 3.18.0 --no-git-push definitely works +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP29962557 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-10-18T17:52:46Z +++$+++ `lerna version --exact --force-publish --loglevel=verbose --no-git-reset --no-push --no-verify-access --npm-client=npm --yes --no-git-tag-version --preid=20191018175119.master.gitish-7d39735d40 prerelease`
+
+Works fine with 3.17.0, breaks with 3.18.0 and 3.18.1 +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP5084505 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-10-21T12:40:18Z +++$+++ Hey @evocateur thanks for the quick response, but this still feels like something is wrong. If @uncleramsay had the wrong command and it was working fine and then all they upgraded was to `3.18` wouldn't that same wrong command still work.
+
+Sure it would git push when he didn't want it to, but clearly it was working before. Unless, Lerna added some better error checking and this is an error that the command specified doesn't exist and it just didn't error out before, but that's probably still a break if bad commands worked before. 
+
+EDIT -
+
+Removing the `git` in `--no-git-push` fixed the above command, but I still think it might be worth having somewhere in the release notes that bad commands will now error out instead of just being ignored.  +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP5605 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-10-21T17:25:32Z +++$+++ @tkissing-work 
+* `--npm-client` only applies to `lerna bootstrap` and `lerna run`.
+* `--no-git-reset` and `--no-verify-access` only apply to `lerna publish`, not `lerna version`. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP5605 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-10-21T17:25:37Z +++$+++ @mlavina Yargs has been configured with [`.strict()`](https://github.com/yargs/yargs/blob/master/docs/api.md#strictenabledtrue) for [almost two years now](https://github.com/lerna/lerna/blob/0687939004910186a7f2d78373bca3701d84fa5a/src/cli.js#L41). It appears Yargs 14 fixes some bugs that were previously obscuring it. +++$+++ 1 +++$+++ 0
+COM7 +++$+++ SP29962557 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-10-21T21:08:11Z +++$+++ For every version prior to 3.18.x "only applies to" meant "is ignored otherwise". Now it means "breaks your build". That's not SemVer minor. I don't even care if that is directly in your code or was pulled in via a dependency bump. Minor versions of lerna should not break my build.
+ +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP5605 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-10-21T21:19:04Z +++$+++ Your build had silent errors before. I'd say that's much worse than a temporarily broken build. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP29962557 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-10-21T21:20:48Z +++$+++ my build updated the package.json files and a later `lerna publish` pushed them to npm. That's exactly what I expected it to do.  +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP29962557 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-10-21T21:27:42Z +++$+++ And SemVer doesn't care if breaking my build now is "better" than silent errors, it only cares about compatibility. lerna 3.18.x is not compatible to 3.17.x.
+If lerna does not want to do SemVer, than at the very least you should put a warning into your readme and possibly switch to version numbers that do not suggest SemVer, so consumers know not to let renovate auto-update this dependency. +++$+++ 0 +++$+++ 1
+COM11 +++$+++ SP5605 +++$+++ ROOT +++$+++ COM10 +++$+++ 2019-10-21T21:35:51Z +++$+++ I'm sorry my fuckups have caused you pain. Please stop berating me, now. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP5084505 +++$+++ ROOT +++$+++ COM11 +++$+++ 2019-10-21T22:14:37Z +++$+++ @tkissing-work while I agree in principle clearly this was not @evocateur fault but an underlying package.
+
+It's not fair to put the blame on him. And even if you do feel there is responsibility, you should not be so rude. 
+
+Relax, I get the frustration, but let's be civil. Let's not make the person who runs a massive open source project almost by himself job harder than it needs to be.  +++$+++ 2 +++$+++ 0
+COM13 +++$+++ SP29962557 +++$+++ ROOT +++$+++ COM12 +++$+++ 2019-10-22T19:56:42Z +++$+++ I was quite polite until I was asked to be thankful for my builds breaking without warning. Unintended breaking changes happen, but blaming it on the consumers is not an appropriate response.  +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP5605 +++$+++ ROOT +++$+++ COM13 +++$+++ 2019-10-25T22:06:59Z +++$+++ > [...] until I was asked to be thankful for my builds breaking without warning.
+
+When exactly did I say that, @tkissing-work?
+
+* If you're not using a lockfile, then the only one to blame for your builds breaking "without warning" is yourself.
+* If you _are_ using a lockfile, then it was an explicit change you made (upgrading `lerna`) that caused the breakage, not a dastardly plan on my part to cause you pain.
+
+The fact remains that the long-standing _intention_ of `lerna`'s argument parsing was to be strict, throwing errors when unrecognized options were passed. There was a bug in yargs 12 that silently perverted this intention, and yargs 14 fixed it. +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP29962557 +++$+++ ROOT +++$+++ COM14 +++$+++ 2019-10-29T16:49:12Z +++$+++ > Your build had silent errors before. I'd say that's much worse than a temporarily broken build.
+
+"I'd say that's much worse than" sounds like you did me a favor, but all I got was extra work.
+
+> If you are using a lockfile, then it was an explicit change you made (upgrading lerna) that caused the breakage
+
+The whole point of SemVer is that this "explicit change" can be made by a machine. The author of a library categorized upgrades into breaking and non-breaking. Software like renovate can then pick certain updates and apply them automatically based on this categorization.
+
+> If you're not using a lockfile, then the only one to blame for your builds breaking "without warning" is yourself.
+
+The condescending attitude aside, a lockfile alone does not help here. Updating lerna necessarily means my lockfile changes. My direct usage of yargs was "protected" by the lockfile, because the selector `yargs@^12.0.1` still gave me 12.0.5 at `node_modules/yargs/`. But without forced hoisting (and thus forced conflict resolutions) that has no impact on what is in `node_modules/lerna/node_modules/yargs/`
+
+> not a dastardly plan on my part to cause you pain
+
+I am not saying you planned this.
+Your update broke something for some consumers without being SemVer major. That is unfortunate, but it's a mistake that can happen. 
+However, your reaction to the mistake being brought to your intention is somewhere between condescending and hostile.
+You could have said "sorry, this was not intended, let me roll back and re-release as 4.0.0" and it would be fine.
+You could have said "sorry, I didn't consider that the yargs API practically becomes part of the lerna API, I will make sure that future SemVer major updates of yargs only happen in SemVer major updates of lerna"
+Instead you said that it's good that your mistake broke my build.
+ +++$+++ 0 +++$+++ 0

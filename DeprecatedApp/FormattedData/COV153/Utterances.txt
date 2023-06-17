@@ -1,0 +1,24 @@
+ROOT +++$+++ SP5914284 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-01-15T06:46:47Z +++$+++ [1.15.1] Add event for when a chat packet is about to be sent from the server to a client This event allows the monitoring, modification, and cancellation of chat packets before they get sent to the client.
+An example use case for this is in a server-side chat censorship mod - *I removed this link for a reason, do not repost it* was previously needed to ensure that all chat messages, whether sent by the player or sent by some other system which the player can control, were properly censored before being sent to the client. This event addresses that.
+I'm open to suggestions if anyone has any better names for anything I've added, or any other changes they'd like to be made to this event. +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP702211 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-01-15T07:33:17Z +++$+++ Don't hack things with coremods, this has never been needed. Netty allows you control of direct packets if you want to be that annoying and screw with the raw data.
+We also have a crapload of hook related to the chat system already so you can use any one of those. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP5914284 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-01-15T08:05:48Z +++$+++ Ok, so first of all, I wasn't aware that Netty allowed directly modifying the packets. Thank you for telling me about it, I'll look into that when I get the chance. Secondly, literally none of the hooks related to the chat system cover my mod's use case, where:
+* The mod does not have to be installed on the client
+* Users can individually choose to opt out of the chat censor using a command
+* The censor also censors messages sent by systems that the user can type input to, such as the names of claimed territories in Clans, Towny, Factions, etc, to help ensure there is no way around it
+
+I would not have put in the effort to make a coremod in the first place if any of the hooks were able to do this. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP702211 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-01-15T08:18:41Z +++$+++ There is both a ServerChatEvent and a ClientChatEvent, they should address the bulk of what you need.
+A 10 second look would of shown you that.
+And do not readd links in which I have removed, do it again and you'll be blocked.
+I have instructed you on two paths on how to achieve your goal now.
+
+Also this PR would never be accepted because we do not encourage people to directly screw with packets at the  raw level like this.
+IF it was to EVER be entertained it would have to be hooked in the correct places where the data is actually sent like ServerChatEvent is and have the proper context.
+If you're just going to hack around with low level packets, then just use netty and don't bother us when things break. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP5914284 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-01-15T08:32:04Z +++$+++ ServerChatEvent controls the message being sent to all players, not allowing me to exclude the players who have opted out of the censor. ClientChatEvent modifies the message before it gets sent from the client to the server, which is not what I want.
+I understand that it won't be accepted, I'm not contesting that. Again, I wasn't aware that Netty allowed messing with low level packets like this, and I intend to look into that as an alternative to using a coremod.
+Lastly, I wouldn't have edited that link back in if you had simply put _link removed_ or something along those lines in the first place. I don't appreciate you basically calling me an idiot in all caps when you didn't bother to even consider that maybe I had a good reason for doing it the way I did. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP702211 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-01-15T08:35:37Z +++$+++ Except, you don't have a good reason, if you would of worked with anyone in the community to figure things out before resorting to hacking things with a coremod then we would be having a different conversation.
+But for now, locking this as i'm done arguing, and you've been given all the information you need to NOT ASM hack things and still achieve what you want. +++$+++ 0 +++$+++ 0

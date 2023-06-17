@@ -1,0 +1,187 @@
+ROOT +++$+++ SP12021443 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-04-12T13:01:13Z +++$+++ Why Angular can be overcomplicated? ## I'm submitting a...
+<!-- Check one of the following options with "x" -->
+<pre><code>[ ] Regression (a behavior that used to work and stopped working in a new release)
+[ ] Bug report  <!-- Please search GitHub for a similar issue or PR before submitting -->
+[ ] Performance issue
+[ ] Feature request
+[ ] Documentation issue or request
+[ ] Support request
+[x] Other... Please describe:  message to the developers of Angular for feedback
+</code></pre>
+
+## Current behavior
+
+I have been working with Angular since 2013 (I started with AngularJS). I also write articles on habrahabr.ru and medium.com about Angular. So I have been collecting a lot of statistics and feedback from most people over those years.
+
+And what did I find out in 5 years of working with Angular?
+
+AngularJS was considered to be too high-level language and therefore everyone who already had experience with jQuery or other things that work as a simple JavaScript could quickly understand it. Angular 2+ has become too low-level and no longer resembles Java, and it feels like working with C++, when you have to do everything with your hands, keep track of everything and grasp on time things that seem to occasionally drift away. Angular 2+ can also be understood, but not immediately.
+
+1. You forgot to make an unsubscribe in the components when they are destroyed - you get a memory leak. 
+
+2. You work with large data streams in the application and did not find out how to optimize your application, and/or did not change components on OnPush – you get severe performance drop. 
+
+3. The customer changed the business requirement, he wants dynamic components, and a small bandle – say goodbye to the technological stack of Angular. Because it is unreal to do it by hand, when you do not even have the experience, especially while time is running out. Even the original ng-component-outlet did not work as it should, and to write your own solution you must have skills on a Senior level at least. I hope Angular Elements will save the day for us. 
+
+4. Junior developer included setInterval in the component and did not wrap the start outside the zone – again, performance decline for you. 
+
+5. In AngularJS there was such property at the directive, as setValidate (or something of that kind), I actively used it, everything was cool. When creating a custom validator, you need to ensure that you do not overwrite existing ones, for what? In doing so, you create more than one validator, and all at once. That is, you cannot simply add a validator if you already have required, for example: firstly, you specify the required validator, and then - your own. And still you have to keep in mind whether he is active, or maybe there is already a field filled. Currently there is no such thing and you have to create custom validator as a whole in a separate class with accessories, and even then you can’t be sure if you’re doing fine. 
+
+6. To create your custom ngModel, you have to rewrite a ton of code, a whole class with ControlValueAccesor and a stock full of methods. But even if you use your own banana-box attribute on the component, if you forgot to make emit from the component of the event, you will not even be warned about it.
+
+7. In Angular CLI, since 1.6.5 strange bugs began to appear and something fails all the time, making it necessary to restart the dev-server. When my project was written on pure Webpack and Angular, I had not experienced such problems before.
+
+8. If I want to use the web-worker platform, I have to do an eject, and on the whole Internet there is only a couple of articles on how to further run web-riches. 
+
+9. There are declarative and reactive forms. But when I'm working with one enormous entity, I have to do a lot of work to map fields in both the class and the template. Moreover, if I use declarative forms, I lose the advantage in future, where jet forms could do better. 
+
+10. Tests are painful. Angular is the only framework with Dependency Injection built-in, but it brings a lot of pain as well. All these mandatory dependencies for the DI component do not let you live happily while writing tests. Writing tests in Angular is as tedious as nowhere else. The component designer requires you to include everything at all. Even if you're not going to test it. 
+
+11. Routing is completely untyped; should I switch the module directories, not even the Webstorm IDEA or VSC will not help me in putting those paths correctly.
+
+Angular is overcomplicated. And at first sight in many cases this is not justified. There are not enough "convenient" things. Well, take the router, he has a directive for adding an active class. But why is there no such directive for checking the current route? Not the URL, but the very route. As it is made in UI-router, where you can check individually all the segments at the template level. This is a simple thing, I needed it in all projects, on the first and second Angular both. Without exception. When on one page you show one top hat, and other top hat on the other one. Same thing with background pictures. In general, the range of tasks for this thing is diverse and huge. The day before yesterday, I once again had to make up something with this. But I did it.
+
+Now let’s take a person who just wants to study Angular and tries to find out what is frequently asked on an interview, what should he study and in which way? And so, most of the beginning developers, they do not find a one-step solution, they start making their own solution, they see it over-complicated and they switch to Vue. Not because it's simpler, but because of the total number of complications and the lack of detail in Angular. Which, seems, is a framework for robots.
+
+At first it seemed that Angular was poorly designed. But in fact, no, it’s not.You get tired very quickly while using it, however, and there are no alternatives yet. Neither Vue nor React seem to suit me, and I do not want to write jQuery any more. Angular does not make it simpler for the developer, not for a single moment. From the very first line, you are doomed to seek solutions, something to redefine and make yourself comfortable with your “bare hands”.
+
+It's cool when you can do it, when there is such an opportunity, but not when you are forced to do this through all the work process. Modern front-end developers have to solve problems, not to engage in academic research, which framework is better or faster scaled in the first place. It is necessary for it to be easy and reliable. React is easy, but it is not reliable, Angular is reliable, but is not easy. Many people now see the balance in Vue, but it's not balanced as they see it. This is a hellish mixture of 80% React and 20% AngularJS. By reliability, I mean, first of all, the probability of code getting “smelly”, if you know what I mean. JSX itself is a shitty code, to be fair. Regarding React - statistics confirm that the amount of such poor-quality code is just off-scale.
+
+Continuous complaints. And all companies only seek Seniors, who can fix poor-written code.
+
+About the state of the application. Redux - this is also not a good implementation, I'm getting more and more convinced in this opinion. It actually tends more to the ideology of Angular, where you have to describe the elementary things like it’s some kind of multi-volume advanced research study. And it does not protect you against unforeseen changes, plus it forces its architecture upon you. It just appeared before Mobx and Dan Abramov speaks for it, and Dan’s opinion influences not very experienced programmers, which are a big group among the React developers
+
+## Expected behavior
+
+I want to know if there are any plans to reduce complexity and simplify the framework. To make it easier to start developing any projects on Angular at any level of preparation, so that the project can easily be increased, while being based on the technological stack of Angular.
+
+If we had something simple as StencilJS out of the box and could easily scale to full components and modules, I think many would be happy. I would like Angular to be more popular and inquired on all markets, not only more popular or better than AngularJS only.
+
+I like Angular and I want everything to be fine (pin medium [publish](https://medium.com/@splincode/why-is-angular-can-be-over-complicated-eda09933cb2a)). +++$+++ 25 +++$+++ 12
+COM0 +++$+++ SP7964429 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-04-12T13:59:20Z +++$+++ I read you... I am a Software Engineer, I am that senior level guy you speak of... I have cried out Angular pains in the past. Currently, I'm crying out about ng-content multiple projections. And I cant nor wont argue your individual points but I do come to bring my success to the table:
+
+It has proven well worth the pains of "extra" setup and the "extra" jumping through hoops (depending on how you look at it). In so many ways, you do have to change your approach, and your past knowledge may work against you. I'm so thankful that Angular took it's giant leaps and they make sense to me now and I wouldn't do REACT or any things else but Angular.
+
+I've now trained two people on Angular, who knew nothing of Angular before and also are Junior developers. It was and is sooooooooooooooo easy for me to stick them in Angular projects because they only have to concern themselves with the limited scope of just the small components they touch. Angular makes my life easier to work with other people, it does.
+
+So, sorry I don't have small debate points and I don't blame you for having your point of view. However, I do see much evidence that you are trying to crash through head first through Angular and I see it as you feel it should just work the way you want it to... You also want some Angular Elements to make things easier, and you want Angular to just be easier so maybe you'll have to figure less out........... MY OPINION: it's called computer science and this job takes GREAT amounts of attention to details and great amounts of learning. A lot of reading, a lot of separating symptoms from causes, and you cant just stay junior at it....... You either consume it all OR you will be "wingin' it" and fighting the current of how things actually work versus how you want them to work.
+
+That all said, I too have written "why does Angular suck now" entries BUT I have since edit every comment. I just about have to hold myself back from saying how much I love Angular now... You think of someone in your head that lent you a great deal of free knowledge and how humble it made you feel, and thats how I feel about Angular, they done right for all of us in the BIG choices they have made for us all.
+
+Good luck. Farewell. +++$+++ 15 +++$+++ 0
+COM1 +++$+++ SP905328 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-04-12T14:17:43Z +++$+++ I feel your points. They burn us, too. 
+
+My guess is, the angular team is very occupied with big topics (elements, ivy, bazel, documentation, ng-conf). The ivy renderer in particular targets some of the pain points you mentioned.
+
+We have two projects running in parallel, one angularjs and one angular5. And nobody here likes to touch the angularjs codebase. angular5 and the ecosystem around it is just wonderful (full template typecheck and linting, clean component interface, typescript by default, the template syntax and one way data flow). So we admire the work the team is doing with the framework. Also that there is always an upgrade path (and not a hard cut like angularjs=>angular2).
+
+My hope is that the team gets back to productive boosting features as soon as the dirty plumbing is done. And no need for another major rewrite (Router4? 😱) +++$+++ 6 +++$+++ 0
+COM2 +++$+++ SP12021443 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-04-12T14:25:25Z +++$+++ @AckerApple I like Angular. It is quite easy to understand when moving from project to project. 
+But the number of people who are new, who would like to learn it for some reason, is decreasing. 
+I popularize only Angular in Russia, but it becomes difficult every day. While other frameworks have the same number of functional functions, and the number of libraries is increasing every day. 
+
+In Russia, I wanted to work in a large company in Yandex, but they write only on React. I wanted to work in Vkontakte, there too on React.  Large companies are opposed to the use of Angular. My friends in mid-level companies, mostly one full-stack developers, and they say that the quicker to sketch the layouts and start using Vue, without going into and diving. 
+
+Especially many front-end developers in Russia do not understand the benefits of RxJS. Allegedly they only want to use Promise.  For example, in our company, a component library is already tied to Primeng, it is badly written (if you open source), people do not even write tests. And half the time you have to kill for cutting styles. But when it is no longer possible to cut styles and is strongly tied to a component, 
+even very difficult somehow without crutches to redefine the internal logic of the third-party component. 
+
+Overall, I like Angular, I really grew up as a programmer. However, I still feel like a weak expert, since Angular is huge. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP5693835 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-04-12T14:34:41Z +++$+++ It is necessary to say that the whole web environment is not the easy world, and it'll be harder, not easier in a year or two. If I look at some JS code which was written 5 or more years back it is hard to believe where we are today. Angular as is today, it's not the simplest tool for a standalone beginner because of abstractions and new concepts (especially on the edge it means that when you analyze any design then the best is to think that all is async as the real world is in fact) but it is the very easy and super efficient tool when such beginners have a good teacher.
+ +++$+++ 2 +++$+++ 0
+COM4 +++$+++ SP1850022 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-04-12T14:34:59Z +++$+++ @AckerApple i'm Software Engineer too and i like angular. 
+
+But now he wants to become a robot framework. It is good to use for academic purposes, like a barbell that helps build muscle. But in production with it is more difficult than with react or vue. It does not help to solve problems, it simply does what it does.
+
+I really hope that in the future it will be what the framework for an engineer should be - a tool in production, not a bar in the gym
+
+ +++$+++ 3 +++$+++ 0
+COM5 +++$+++ SP7964429 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-04-12T14:37:04Z +++$+++ @splincode 
+
+Your last comment mostly speaks to popularity.... And I'm sure you can agree NOT always the most popular packages on NPM are the best ones.
+
+I hear ya man... I choose Angular for my own sanity, not others. I will deal with the less jobs and packages, nor now. +++$+++ 1 +++$+++ 0
+COM6 +++$+++ SP7964429 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-04-12T14:41:33Z +++$+++ @AlexDaSoul you don't think Angular is for production?
+
+I got a Golf Cart, a 1978 Joker Poker pinball machine, a 2017 Wizard of Pinball machine, and a Baby PAC man pinball machine on the way THAT WERE ALLL paid for by Angular production code produced at the following companies:
+
+- http://www.tap2.care/
+- https://caringpeopleinc.com/
+- http://www.caringondemand.com/ +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP1850022 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-04-12T14:48:32Z +++$+++ @AckerApple 50/50. I'm writing production on Angular. Angular allows you not to write bad code. But almost always forces you to write a lot of low-level code, which takes away a monstrous amount of time +++$+++ 3 +++$+++ 0
+COM8 +++$+++ SP7964429 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-04-12T14:52:12Z +++$+++ Well said. Agreed. I'm just banging it out of the park here in South Florida in the Healthcare app industry.... Rocking Cordova back to life with "PWAs" cause web-apps got a bad taste so now we gotta call doing it right a PWA +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP12021443 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-04-12T14:59:21Z +++$+++ @AckerApple Yes, the Angular team makes a tool for developers. But I would like to pay attention to the little things, because of which it sometimes hurts. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP7964429 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-04-12T15:02:00Z +++$+++ AWWWWWWWWWwwwwwwww
+
+Alright I'm often full of sassy comments and I don't have troubles any more cause I mastering this shit!
+
+Here, try my code:
+- https://www.npmjs.com/package/angular-file
+- https://www.npmjs.com/package/ack-angular-webcam
+- https://www.npmjs.com/package/ack-angular-fx
+- https://www.npmjs.com/package/ack-angular
+
+Demos and docs at all... I love this Angular.... Sorry you're having such a tough time making the cash rain from Angular. I be milking the sucker ova her! +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP7964429 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-04-12T15:39:44Z +++$+++ When the title of this issue was grammatically incorrect, it was evidence of the sheer agitation you have with Angular. But your body comments were well typed and thought out.
+
+Angular makes me feel on a high like the Beck WoW song: https://www.youtube.com/watch?v=pyCkhPTU13w +++$+++ 1 +++$+++ 0
+COM12 +++$+++ SP165056 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-04-12T16:31:39Z +++$+++ @splincode Thanks so much for creating this issue. I don't have any concrete reactions to the above yet (there's a lot to unpack, and we're already working on some of it), but I want you to know that we are listening and thinking about these problems deeply. We care a lot, and we spend a lot of time reflecting on issues like this.
+
+We've shared several times our goals about making Angular simpler, but still helping developers build state of the art applications that are scalable (teams, code, etc), correct (you can understand what's going on under the hood), with a learning journey that adds complexity at the right times, etc. Thanks for sharing your hopes around these things. +++$+++ 6 +++$+++ 0
+COM13 +++$+++ SP12021443 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-04-12T16:44:55Z +++$+++ @StephenFluin Thank you, Stephen. I hope in the future Angular will become even better and easier to understand. However, first of all, I am grateful to Angular for making me grow as a developer. +++$+++ 3 +++$+++ 0
+COM14 +++$+++ SP12021443 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-04-12T17:35:41Z +++$+++ @StephenFluin How often do you collect feedback from community developers? +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP165056 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-04-12T17:37:07Z +++$+++ @splincode we talk to developers about Angular every day. But maybe I'm misunderstanding your question? +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP1850022 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-04-12T18:01:37Z +++$+++ @StephenFluin splincode says that in our daily work with Angular we solve about the same problems time after time. Almost always there is not enough definition of URL or rout name of at the level of the directive of the type routerLinkActive. Very often there is a lack of a setValidator and a removalValidator. Very much hampered by the need for DI all and everything in the tests. There is not enough opportunity to redefine. There is not enough opportunity to override the concrete method without defining the whole class. In general, all that is needed for daily work in production. This is cool, when we have the opportunity to redefine and adjust everything to our own needs, but not when you are forced to do this in almost every new task. +++$+++ 2 +++$+++ 0
+COM17 +++$+++ SP5693835 +++$+++ ROOT +++$+++ COM16 +++$+++ 2018-04-12T18:55:27Z +++$+++ @splincode ... a small notice ... what do you mean by ...
+> You can not inject the same pipe into two different modules. +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP5693835 +++$+++ ROOT +++$+++ COM17 +++$+++ 2018-04-12T20:38:16Z +++$+++ @splincode ... ah, thanks for your explanation. I have to say that this factor of modules architecture is absolutely fine for me and I don't feel it as limitation from any point of view. Maybe it is my personal feeling, maybe affected by my professional historical background.
+
+Here are some points as I see it:
+
+* You always have one shared module at least, usually more ... so it is a natural thing to place such a thing to a correct module. A simple app is just one module usually.
+* If it is something extra then it is a part of that custom eager or lazy loaded module.
+* There are exact rules ... and I think very simple in fact ... how modules architecture is structured. I never understand what are the reasons why some developers don't understand them.
+* Usually the similar discussion is about the topic ... one component / one module. The fact is that the simple module for just one component is only 5 simple lines of code ... possible to place into just one TS file. +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP12021443 +++$+++ ROOT +++$+++ COM18 +++$+++ 2018-04-13T05:50:24Z +++$+++ @mlc-mlapis I just want to say that I've seen a lot of projects where people come from React. They do not understand the modular architecture to the end, and all the components, pipes, services are shoved into the module or the shared module. And then on the way out we have a huge bundle. For example, I do not have such a feature as lazy components (maybe Angular Elements is it). +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP20740204 +++$+++ ROOT +++$+++ COM19 +++$+++ 2018-04-13T11:01:15Z +++$+++ Its complex? yeah.
+Impossible to learn? nope.
+Beginner friendly? Only if you invest some time reading/doing tutorials. +++$+++ 4 +++$+++ 0
+COM21 +++$+++ SP7964429 +++$+++ ROOT +++$+++ COM20 +++$+++ 2018-04-13T11:04:17Z +++$+++ Lazy loading in Angular is super dope. You can do by component or entire routes.
+
+@splincode, are you using some Angular that a crack dealer sold you? That or you’re not reading enough because several things you mention you can do and I’m doing it with ease. Don’t bother to ask how cause I feel this chat is compacted with complaining newbies that just need to read and learn how to do things outside React +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP4294962 +++$+++ ROOT +++$+++ COM21 +++$+++ 2018-04-13T19:01:16Z +++$+++ Learning takes time. Lots of time. That's all. Bye. +++$+++ 7 +++$+++ 0
+COM23 +++$+++ SP8366455 +++$+++ ROOT +++$+++ COM22 +++$+++ 2018-04-16T09:05:03Z +++$+++ Our team learned **ng** as well, the problem is two things for now:
+  1) router lazy loading doesn't work with relative path (problem leaves since angular 2 - wtf?);
+https://github.com/angular/angular/issues/17957
+  2) unstable **angular/cli** (every time something doesn't work since 1.6.x);
+
+P.S. documentation covers not a lot i'd say, if you want to learn angular, read material's code, it's more convenient than angular's documentation
+
+i just feel that **angular team doesn't care about users feedback at all** +++$+++ 2 +++$+++ 0
+COM24 +++$+++ SP7964429 +++$+++ ROOT +++$+++ COM23 +++$+++ 2018-04-16T11:55:49Z +++$+++ @djleonskennedy
+
+I didn’t graduate with my high school class. I had to take extra classes in the summer and even then i only graduated with a 2.1
+
+Y’all are making me feel like a scientist though!!!!!
+
+I learned Angular all on my own. No teacher. Y’all suck at learning. Angular team will put it more politely but nah me: Y’all are being out smarted by this D student.
+
+Make money money! Angular taking me places daily +++$+++ 1 +++$+++ 0
+COM25 +++$+++ SP12021443 +++$+++ ROOT +++$+++ COM24 +++$+++ 2018-04-16T12:03:09Z +++$+++ @AckerApple I just think he wanted to say that the project got out of control +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP7964429 +++$+++ ROOT +++$+++ COM25 +++$+++ 2018-04-16T12:11:37Z +++$+++ Noooooo. Lazy loading works, the cli works too great. I know they work, everyday I know it
+
+And the Angular team talks allllllllllll the time (it’s just scheduled)
+
+Not gonna argue with flat earthers nor am I gonna debate with y’all
+
+I’ll make the money. You write the complaints +++$+++ 2 +++$+++ 1
+COM27 +++$+++ SP12021443 +++$+++ ROOT +++$+++ COM26 +++$+++ 2018-04-16T12:16:52Z +++$+++ @AckerApple I do not argue, I'm fine, I just wanted to note the observed phenomena +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP7964429 +++$+++ ROOT +++$+++ COM27 +++$+++ 2018-04-16T12:40:36Z +++$+++ Electromagnetism is a phenomena
+
+I wouldn’t put complainers in that category.
+
+It’s just complaining cause this Angular works the way you say it don’t  +++$+++ 1 +++$+++ 0
+COM29 +++$+++ SP8366455 +++$+++ ROOT +++$+++ COM28 +++$+++ 2018-04-16T13:54:59Z +++$+++ @AckerApple
+
+You want to say that you cannot reproduce it ? https://github.com/angular/angular/issues/17957
+
+Don't say that it works man +++$+++ 0 +++$+++ 0

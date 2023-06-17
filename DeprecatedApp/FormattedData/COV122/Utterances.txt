@@ -1,0 +1,92 @@
+ROOT +++$+++ SP13785488 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-06-26T11:13:32Z +++$+++ Change #BlackLivesMatter notification to #AllLivesMatter on angular.io main page. Change #BlackLivesMatter to #AllLivesMatter +++$+++ 25 +++$+++ 13
+COM0 +++$+++ SP291462 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-06-26T13:09:06Z +++$+++ Nice, the only notable contribution you've ever made anywhere on Github is making sure everyone at Google knows you're a racist. +++$+++ 1 +++$+++ 8
+COM1 +++$+++ SP13785488 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-06-26T13:17:11Z +++$+++ Where you see racism in #AllLivesMatter ? 
+In my opinion #BlackLivesMatter is racist slogan against white people.
+Beside, why technology web page contains these things? It should contains angular related things only. +++$+++ 7 +++$+++ 2
+COM2 +++$+++ SP6319976 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-06-26T13:45:32Z +++$+++ Obviously nobody denies that all lives matter but this is not the point. Structural racism is a problem almost everywhere and people of color are affected whereas white people are not (or less).
+
+Just imagine a house burning and the fire department coming and trying to extinguish the fire. Would you try to convince the fire department to put water on the other houses? No, because the other houses don't seem to have a problem. But that's what the AllLivesMatter slogan is saying and that's what makes this slogan problematic.
+
+BlackLivesMatter is not meant to be a racist statement, except you see it like this. Supporting BlackLivesMatter is about drawing attention to social injustices. Think about that. +++$+++ 5 +++$+++ 0
+COM3 +++$+++ SP8366455 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-06-26T13:50:59Z +++$+++ @thecp seems like that's problem in USA only, we're respect all races in Ukraine for example, doesn't matter where are you from or etc.
+So you need fix it in you county, and do not force your problems to all world! +++$+++ 4 +++$+++ 0
+COM4 +++$+++ SP5693835 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-06-26T14:10:25Z +++$+++ Only a short notice. We all together should be also very careful about the tendency, when one or the other side wants to win, even at any price and on any conditions, just the believing: "We won in the end." We have one proverb: `Be careful not to spill the baby with the bath.` +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP13039652 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-06-26T15:56:59Z +++$+++ As I was told, caring about people is racist. Categorizing people by their skin color is the definition of racism, and that's what google is: racist. 
+
+Read this
+https://www.projectveritas.com/news/facebook-on-project-veritas-video-comments-made-are-not-consistent-with-our/
+
+That's everywhere ;)
+
+Edit:
+
+Anyway this issue will be closed without an answer since Google doesn't care about people but sticking to their narrative. Everyone here will be called a white supremacist antiblack antiasian antilgtbteq1324 and risking to be banned from the repo. 
+
+Welcome to 1984. +++$+++ 1 +++$+++ 1
+COM6 +++$+++ SP23387905 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-06-26T16:11:58Z +++$+++ Just noticed the #BlackLivesMatter banner on the home page for the first time...what a joke.
+
+Anyone have a list of other political movements endorsed by the Angular site?
+
+Nothing more cringey than tech framework sites posting about politics, even if you agree with the sentiment.
+Didn't one of the #BlackLivesMatter "leaders" call to take down statues of Jesus depicted as Caucasian, as this is a form of "racist propaganda"?
+
+Can we change the hashtag on the main page to #WhiteJesusIsHoldingYouBack ?
+
+You know what, the white "A" in the Angular logo is all of a sudden making me feel uncomfortable...maybe even a little oppressed. Hmm, could the Angular team be racists??? Maybe we should make a separate issue to change the color to black. +++$+++ 3 +++$+++ 2
+COM7 +++$+++ SP2096859 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-06-26T16:28:44Z +++$+++ > Where you see racism in #AllLivesMatter ?
+> In my opinion #BlackLivesMatter is racist slogan against white people.
+> Beside, why technology web page contains these things? It should contains angular related things only.
+
+Silence is violence. It's important for business to get behind social causes to advance past the sins of humanity of the past. There is clearly a systemic discrimination toward the black community in the west. Of course all lives matter, but for all lives to matter you need to include black lives — which clearly is not being represented equally  +++$+++ 3 +++$+++ 3
+COM8 +++$+++ SP7661457 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-06-26T16:36:58Z +++$+++ > Nice, the only notable contribution you've ever made anywhere on Github is making sure everyone at Google knows you're a racist.
+
+What's racist about it? Also don't shame others based on their skills and development experience. That's against the code of conduct.
+
+> BlackLivesMatter is not meant to be a racist statement, except you see it like this.
+
+"All lives matter" isn't racist either, yet [apparently saying that makes you a white supremacist](https://github.com/angular/angular/pull/37407#issuecomment-637864531) or something.
+
+> that's problem in USA only
+
+Precisely this. Angular/Google are just using the platform to promote their local political views on the matter. It reminds me of the day when gay marriage was legalized in the US and Stack Overflow celebrated it with a rainbow logo.  [This answer explained it nicely](https://meta.stackoverflow.com/a/298045/2131286):
+
+>The owners and operators of Stack Exchange and Stack Overflow have made it amply clear that while we as users and contributors are not permitted to use the site and our audience here to promote our political and social beliefs, they, as the owners may.
+
+With an unfortunate conclusion:
+
+> If you do not like this you should no longer contribute to Stack Exchange.
+
+Indeed, there's not much you can do about it. People can express their opinions but the mods are just gonna lock it away "cause y'all can't behave" and "the discussion is getting out of hand and is not productive anymore".
+
+> Anyone have a list of other political movements endorsed by the Angular site?
+
+From the top of my head, previously it's been determined that [blacklist and whitelist is racist](https://github.com/angular/angular/pull/28529). Funny how the first comment is being sarcastic about [the master branch](https://github.com/angular/angular/pull/28529#issuecomment-460658997) and that [is actually non-ironically happening now](https://www.zdnet.com/article/github-to-replace-master-with-alternative-term-to-avoid-slavery-references/), because apparently there exist people who hear "master" and immediately think about slavery. I guess I'll give up my Master's degree to show solidarity.
+
+[Also a man being smart is sexist towards women because why not.](https://github.com/angular/angular/issues/25643)
+
+Not really political, but I get the same vibe from [stating that simple things are simple offends beginners](https://github.com/angular/angular/issues/33209). +++$+++ 1 +++$+++ 0
+COM9 +++$+++ SP2096859 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-06-26T16:50:41Z +++$+++ > "All lives matter" isn't racist either, yet [apparently saying that makes you a white supremacist](https://github.com/angular/angular/pull/37407#issuecomment-637864531) or something.
+
+I agree with this, "All lives matter" isn't inherently racist and is a very true statement. In this context, it's undermining the BLM movement where special attention is warranted for the systemic discrimination over many many years. 
+
+ +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP7661457 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-06-26T17:07:50Z +++$+++ > > "All lives matter" isn't racist either, yet [apparently saying that makes you a white supremacist](https://github.com/angular/angular/pull/37407#issuecomment-637864531) or something.
+> 
+> I agree with this, "All lives matter" isn't inherently racist and is a very true statement. In this context, it's undermining the BLM movement where special attention is warranted for the systemic discrimination over many many years.
+
+The discussion is not about whether you should support a movement or not; it's about why is it on the front-page of a TypeScript platform for building web, mobile and desktop applications. Yes, black lives matter, white lives matter, Asian lives matter, Latino lives matter, gay lives matter, lesbian lives matter, vegan lives matter, stutterer lives matter, little people lives matter, disabled lives matter, left-handed people lives matter, colorblind lives matter. 
+
+The question is, why is it on the front-page of Angular and **what is the criteria** which determines what gets on the front page. **Who decides what's important enough?**
+
+The very fact that these discussions "produce heat" is an indication that people are divided on it. If everyone really agreed that the banner makes sense on the Angular's front page, there wouldn't be an issue about it and [the original PR](https://github.com/angular/angular/pull/37407) wouldn't have been locked immediately. If you're so sure that it's such a good idea, why do you have to act so quick about locking it so as not to give people a chance to give their opinion on the matter?
+
+Again, Angular team is not required to provide an answer. They can just lock this thread again with a generic "we care about everyone and we hear y'all, we'll talk it internally, we promise 🔒", and there's nothing anyone can do about it -- legally or otherwise. It's their framework and their repo; as long as they abide the GitHub rules, they're fine. Even if they don't, it's up to GitHub to punish them if they break it.
+
+But it just feels less and less a framework and more and more a political board. "Something happened in America that aligns with who Imma vote for soon? LETS POST IT NOW, QUICK" "[Highly voted issues from 2016?](https://github.com/angular/angular/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc) crickets [crickets](https://github.com/angular/angular/issues/15280#issuecomment-584121619) crickets" +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP455023 +++$+++ ROOT +++$+++ COM10 +++$+++ 2020-06-26T17:12:34Z +++$+++ Yes, we're on the same page that all lives matter. I read some thoughtful and reasonable responses in this thread, and I understand how everyone has their point of view. We're all part of a very diverse community, and having different opinions is understandable.
+
+I also don't see bad intentions in the thread, which is all encouraging. We're all aiming for racial equality, and that is how it is supposed to be.
+
+At the same time, I'm hoping for us all to provide solidarity to the black community. Again, all lives matter, but for this to be true, black lives should matter as well.
+
+I'll lock this thread now since the discussion is getting a little too heated. +++$+++ 0 +++$+++ 0

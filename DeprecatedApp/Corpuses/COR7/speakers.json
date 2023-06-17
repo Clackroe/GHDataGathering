@@ -1,0 +1,42 @@
+{
+    "arcanis": {
+        "id": "SP1037931",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "bnb": {
+        "id": "SP502396",
+        "role": "CONTRIBUTOR"
+    },
+    "mhdawson": {
+        "id": "SP9373002",
+        "role": "MEMBER"
+    },
+    "mmarchini": {
+        "id": "SP4048656",
+        "role": "CONTRIBUTOR"
+    },
+    "targos": {
+        "id": "SP2352663",
+        "role": "MEMBER"
+    },
+    "ert78gb": {
+        "id": "SP496775",
+        "role": "NONE"
+    },
+    "jasnell": {
+        "id": "SP439929",
+        "role": "MEMBER"
+    },
+    "jamiebuilds": {
+        "id": "SP952783",
+        "role": "CONTRIBUTOR"
+    },
+    "iarna": {
+        "id": "SP983798",
+        "role": "MEMBER"
+    },
+    "ljharb": {
+        "id": "SP45469",
+        "role": "MEMBER"
+    }
+}

@@ -1,0 +1,29 @@
+ROOT +++$+++ SP747641 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-05-01T16:22:20Z +++$+++ Adjust colors for "control" and "events" In Scratch 2.0 the colors for "control" and "events" are an orange-ish brown and an orange-ish yellow respectively. As part of our initial color explorations for Scratch 3.0 we strived to normalize the block category palettes between Scratch 2.0 and ScratchJr as well as resolve design issues with the "muddy" brown color that was being used for the "events" category. The result of this was to shift the "events" category to yellow and keep the "control" category with a similar orange to what it has today.
+
+An unfortunately side-effect of this change that we have observed is that users who are familiar with the Scratch 2.0 category colors sometimes mistakenly select the "control" category when they intend to select the "events" category. We have observed that this issue goes away after continuous use of Scratch 3.0 (it appears to be temporary / transitional), but nonetheless we should discuss if corrective action should be taken.
+
+### Scratch 2.0
+![image](https://user-images.githubusercontent.com/747641/39480947-cb4495aa-4d37-11e8-9b26-38514f37a6a8.png)
+
+### ScratchJr
+![image](https://user-images.githubusercontent.com/747641/39480978-e2b12d20-4d37-11e8-8bd6-58899c237b58.png)
+
+### Scratch 3.0 (Vertical Grammar)
+![image](https://user-images.githubusercontent.com/747641/39481623-189f23b8-4d3a-11e8-87ff-36bdc105a1e0.png)
+
+### Scratch 3.0 (Horizontal Grammar)
+![image](https://user-images.githubusercontent.com/747641/39481659-31f6e710-4d3a-11e8-812b-845b238b082a.png)
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP747641 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-05-01T16:26:44Z +++$+++ /cc @ntlrsk  +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP3409578 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-05-01T18:16:09Z +++$+++ ## Events and Control Color Swap
+
+### Blocks (Vertical & Horizontal)
+![r1_events-and-control-swap](https://user-images.githubusercontent.com/3409578/39486412-00801840-4d4a-11e8-9aae-e378f49a951b.png)
+
+### Blocks in Context
+![empty editor](https://user-images.githubusercontent.com/3409578/39486434-18aea9ae-4d4a-11e8-9a48-4b7a48f3c915.png)
+
+### Color Palette
+![r4_vertical-colors](https://user-images.githubusercontent.com/3409578/39486441-248d007c-4d4a-11e8-87e5-c2167c9750f9.png)
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP747641 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-05-31T12:58:47Z +++$+++ After further discussion we have decided to keep these color relationships as-is in an effort to unify colors / grammars across ScratchJr and Scratch. +++$+++ 0 +++$+++ 0

@@ -1,0 +1,191 @@
+ROOT +++$+++ SP27866311 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-06-16T06:44:05Z +++$+++ gatling stuck when project has other dependencies 
+[gatling-stuck.zip](https://github.com/gatling/gatling/files/2107919/gatling-stuck.zip)
+
+Basically when project includes 
+<dependency>
+            <groupId>io.kubernetes</groupId>
+            <artifactId>client-java</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+gatling does not start execution of scenario. Repro case is attached
+
+mvn  clean gatling:execute
+
+and gatling is stuck doing nothing, last message
+ 
+    14:34:15.070 [main] INFO  io.gatling.http.ahc.HttpEngine - Start warm up
+    
+    
+now comment out kubernetes client in pom.xml and all will be well  
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP849197 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-06-16T08:03:59Z +++$+++ You've messed up the "writers" option in gatling.conf.
+Works just fine for me. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP27866311 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-06-18T23:13:29Z +++$+++ Hmm @slandelle , do not you think that simply stating that I 'messed up "writers" ' without explaining why is rude?
+
+As far as I know I did not mess them, if I do not put writers in square braces and leave as in default config then Gattling would not even start with this exception:
+
+/src/test/resources/gatling.conf: 118: gatling.data.writers has type STRING rather than LIST
+
+java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at io.gatling.mojo.MainWithArgsInFile.runMain(MainWithArgsInFile.java:50)
+	at io.gatling.mojo.MainWithArgsInFile.main(MainWithArgsInFile.java:33)
+Caused by: com.typesafe.config.ConfigException$WrongType: gatling.conf @ file:/Users/kgignatyev/dev/reprocases/gatling-stuck/src/test/resources/gatling.conf: 118: gatling.data.writers has type STRING rather than LIST
+	at com.typesafe.config.impl.SimpleConfig.findKeyOrNull(SimpleConfig.java:159)
+	at com.typesafe.config.impl.SimpleConfig.findOrNull(SimpleConfig.java:170)
+	at com.typesafe.config.impl.SimpleConfig.findOrNull(SimpleConfig.java:176)
+	at com.typesafe.config.impl.SimpleConfig.findOrNull(SimpleConfig.java:176)
+	at com.typesafe.config.impl.SimpleConfig.find(SimpleConfig.java:184)
+	at com.typesafe.config.impl.SimpleConfig.find(SimpleConfig.java:189)
+	at com.typesafe.config.impl.SimpleConfig.getList(SimpleConfig.java:258)
+	at com.typesafe.config.impl.SimpleConfig.getHomogeneousUnwrappedList(SimpleConfig.java:329)
+	at com.typesafe.config.impl.SimpleConfig.getStringList(SimpleConfig.java:387)
+	at io.gatling.core.config.GatlingConfiguration$.mapToGatlingConfig(GatlingConfiguration.scala:215)
+	at io.gatling.core.config.GatlingConfiguration$.load(GatlingConfiguration.scala:98)
+	at io.gatling.app.Gatling$.start(Gatling.scala:54)
+	at io.gatling.app.Gatling$.fromArgs(Gatling.scala:45)
+	at io.gatling.app.Gatling$.main(Gatling.scala:37)
+	at io.gatling.app.Gatling.main(Gatling.scala)
+	... 6 more
+
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP849197 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-06-19T04:51:04Z +++$+++ > Hmm @slandelle , do not you think that simply stating that I 'messed up "writers" ' without explaining why is rude?
+
+No, I don't think spending some personal time investigating a problem you have with a software you got from me for free is "rude".
+
+I've pointed out your mistake and you are perfectly capable of spotting the difference between the original configuration that was working and you've commented out and the one you've changed and that don't.
+
+From the `gatling.conf` in the sample you've provided (L217):
+
+```
+    #writers = ["graphite", "console", "file"]
+    writers = ["console, file"]
+``` +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP27866311 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-06-19T05:10:55Z +++$+++ Too bad that you do not consider this rude, @slandelle . If you are not willing to spend your time it is your right.  I let Gatling community know that Gatling exhibits strange behavior in the presence of other libraries, and you @slandelle do not care.
+
+It is OK too, it just not helpful to make false statements like: 'works for me' and 'you messed up writers' because you did not bother to run the repro-case following very simple instructions.   +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP849197 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-06-19T05:58:57Z +++$+++ > It is OK too, it just not helpful to make false statements like: 'works for me' and 'you messed up writers' because you did not bother to run the repro-case following very simple instructions.
+
+If I state that your sample "works for me", it of course means that I did bother running it on my side and didn't get to reproduce the issue you're mentioning.
+
+>  I let Gatling community know that Gatling exhibits strange behavior in the presence of other libraries
+
+That's mostly likely an invalid statement, as:
+
+1) your sample works, at least on my side
+2) the library you're mentioning, `io.kubernetes:client-java`, is built on top of Square's okhttp and doesn't share any dependency with Gatling which is built on top of Netty.
+
+> and you @slandelle do not care.
+
+Let's agree that we disagree and that nothing good will come from this discussion.
+
+```
+MacBook-Pro-de-slandelle:gatling-stuck slandelle$ mvn clean gatling:execute
+[INFO] Scanning for projects...
+[WARNING] The project com.inspur.k8s.testing:gatling--testing:jar:1.0-SNAPSHOT uses prerequisites which is only intended for maven-plugin projects but not for non maven-plugin projects. For such purposes you should use the maven-enforcer-plugin. See https://maven.apache.org/enforcer/enforcer-rules/requireMavenVersion.html
+[INFO]
+[INFO] --------------< com.inspur.k8s.testing:gatling--testing >---------------
+[INFO] Building gatling--testing 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ gatling--testing ---
+[INFO] Deleting /Users/slandelle/Downloads/gatling-stuck/target
+[INFO]
+[INFO] --- gatling-maven-plugin:2.2.4:execute (default-cli) @ gatling--testing ---
+06:20:02.536 [main][WARN ][ZincCompiler.scala:141] i.g.c.ZincCompiler$ - Pruning sources from previous analysis, due to incompatible CompileSetup.
+06:20:07,571 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+06:20:07,571 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
+06:20:07,572 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [jar:file:/Users/slandelle/.m2/repository/io/kubernetes/client-java/1.0.0/client-java-1.0.0.jar!/logback.xml]
+06:20:07,572 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs multiple times on the classpath.
+06:20:07,572 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs at [jar:file:/Users/slandelle/.m2/repository/io/kubernetes/client-java/1.0.0/client-java-1.0.0.jar!/logback.xml]
+06:20:07,572 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs at [jar:file:/Users/slandelle/.m2/repository/io/gatling/gatling-maven-plugin/2.2.4/gatling-maven-plugin-2.2.4.jar!/logback.xml]
+06:20:07,586 |-INFO in ch.qos.logback.core.joran.spi.ConfigurationWatchList@61dc03ce - URL [jar:file:/Users/slandelle/.m2/repository/io/kubernetes/client-java/1.0.0/client-java-1.0.0.jar!/logback.xml] is not of type file
+06:20:07,636 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
+06:20:07,637 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+06:20:07,644 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [console]
+06:20:07,649 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+06:20:07,700 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to INFO
+06:20:07,700 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [console] to Logger[ROOT]
+06:20:07,700 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
+06:20:07,701 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@50f8360d - Registering current configuration as safe fallback point
+
+06:20:08.648 [GatlingSystem-akka.actor.default-dispatcher-2] INFO  akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+06:20:08.934 [GatlingSystem-akka.actor.default-dispatcher-3] INFO  i.g.c.stats.writer.LogFileDataWriter - Initializing
+06:20:08.934 [GatlingSystem-akka.actor.default-dispatcher-2] INFO  i.g.c.stats.writer.ConsoleDataWriter - Initializing
+06:20:08.941 [GatlingSystem-akka.actor.default-dispatcher-2] INFO  i.g.c.stats.writer.ConsoleDataWriter - Initialized
+06:20:08.953 [GatlingSystem-akka.actor.default-dispatcher-3] INFO  i.g.c.stats.writer.LogFileDataWriter - Initialized
+06:20:09.316 [main] INFO  io.gatling.http.ahc.HttpEngine - Start warm up
+06:20:09.697 [main] INFO  io.gatling.http.ahc.HttpEngine - Warm up done
+Simulation com.inspur.k8s.perf_tests.BasicSimulation started...
+06:20:09.906 [GatlingSystem-akka.actor.default-dispatcher-4] INFO  i.gatling.core.controller.Controller - InjectionStopped expectedCount=1
+06:20:10.054 [gatling-http-thread-1-2] INFO  io.gatling.core.action.Pause - Pausing for 7000ms (real=6988ms)
+
+================================================================================
+2018-06-19 06:20:13                                           5s elapsed
+---- Requests ------------------------------------------------------------------
+> Global                                                   (OK=2      KO=0     )
+> request_1                                                (OK=1      KO=0     )
+> request_1 Redirect 1                                     (OK=1      KO=0     )
+
+---- Scenario Name -------------------------------------------------------------
+[--------------------------------------------------------------------------]  0%
+          waiting: 0      / active: 1      / done:0
+================================================================================
+
+06:20:17.063 [GatlingSystem-akka.actor.default-dispatcher-5] INFO  i.gatling.core.controller.Controller - All users are stopped
+
+================================================================================
+2018-06-19 06:20:17                                           8s elapsed
+---- Requests ------------------------------------------------------------------
+> Global                                                   (OK=2      KO=0     )
+> request_1                                                (OK=1      KO=0     )
+> request_1 Redirect 1                                     (OK=1      KO=0     )
+
+---- Scenario Name -------------------------------------------------------------
+[##########################################################################]100%
+          waiting: 0      / active: 0      / done:1
+================================================================================
+
+06:20:17.073 [GatlingSystem-akka.actor.default-dispatcher-6] INFO  i.gatling.core.controller.Controller - StatsEngineStopped
+Simulation com.inspur.k8s.perf_tests.BasicSimulation completed in 7 seconds
+Parsing log file(s)...
+06:20:17.134 [main] INFO  i.gatling.charts.stats.LogFileReader - Collected ArrayBuffer(/Users/slandelle/Downloads/gatling-stuck/target/gatling/basicsimulation-1529382008914/simulation.log) from basicsimulation-1529382008914
+06:20:17.142 [main] INFO  i.gatling.charts.stats.LogFileReader - First pass
+06:20:17.151 [main] INFO  i.gatling.charts.stats.LogFileReader - First pass done: read 5 lines
+06:20:17.161 [main] INFO  i.gatling.charts.stats.LogFileReader - Second pass
+06:20:17.203 [main] INFO  i.gatling.charts.stats.LogFileReader - Second pass: read 5 lines
+Parsing log file(s) done
+Generating reports...
+
+================================================================================
+---- Global Information --------------------------------------------------------
+> request count                                          2 (OK=2      KO=0     )
+> min response time                                     50 (OK=50     KO=-     )
+> max response time                                     86 (OK=86     KO=-     )
+> mean response time                                    68 (OK=68     KO=-     )
+> std deviation                                         18 (OK=18     KO=-     )
+> response time 50th percentile                         68 (OK=68     KO=-     )
+> response time 75th percentile                         77 (OK=77     KO=-     )
+> response time 95th percentile                         84 (OK=84     KO=-     )
+> response time 99th percentile                         86 (OK=86     KO=-     )
+> mean requests/sec                                   0.25 (OK=0.25   KO=-     )
+---- Response Time Distribution ------------------------------------------------
+> t < 800 ms                                             2 (100%)
+> 800 ms < t < 1200 ms                                   0 (  0%)
+> t > 1200 ms                                            0 (  0%)
+> failed                                                 0 (  0%)
+================================================================================
+
+Reports generated in 0s.
+Please open the following file: /Users/slandelle/Downloads/gatling-stuck/target/gatling/basicsimulation-1529382008914/index.html
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 16.852 s
+[INFO] Finished at: 2018-06-19T06:20:17+02:00
+[INFO] ------------------------------------------------------------------------
+``` +++$+++ 0 +++$+++ 0

@@ -1,0 +1,19 @@
+ROOT +++$+++ SP30697011 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-19T14:16:47Z +++$+++ Santa hat removal Are you happy @Christian-Schiffer? Your behaviour offence a lot of people around the world.  
+I think you must apologize to these people and @egamma must do it too.
+
+**UPD#1:** Christmas, like Hanukkah, is a great time of the year. When people give each other a little love, warmth and kindness. Trying to be better than they were during the year. So why spoil this wonderful moment of world peace with unfounded accusations, old insults and other unpleasant things? I don’t understand, and you?
+
+Assign: 
+https://github.com/microsoft/vscode/issues/87268
+https://github.com/microsoft/vscode/issues/87386
+ +++$+++ 10 +++$+++ 0
+COM0 +++$+++ SP426097 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-19T14:23:54Z +++$+++ Assuming he wasn't just trolling: if one gets butthurt and triggered over an emoji or icon, then the internet is not really the place where one should hang around.
+Assuming he was trolling: troll successful, gg
+
+
+Pandering to icon haters seems to be high on Microsoft's list instead of handling actual bug fixes or feature requests. +++$+++ 4 +++$+++ 0
+COM1 +++$+++ SP34514239 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-12-19T14:30:26Z +++$+++ I'm also not happy that the santa hat was removed, completely ignoring the public opinion here on GH. +++$+++ 1 +++$+++ 0
+COM2 +++$+++ SP1487073 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-12-19T19:46:25Z +++$+++ Thanks for creating this issue. We think this issue is unactionable or unrelated to the goals of this project. Please follow our [issue reporting](https://aka.ms/vscodeissuereporting) guidelines.
+
+Happy Coding!
+ +++$+++ 0 +++$+++ 0

@@ -1,0 +1,30 @@
+{
+    "ghost": {
+        "id": "SP10137",
+        "role": "NONE (AUTHOR)"
+    },
+    "Joshua-Ashton": {
+        "id": "SP21316711",
+        "role": "NONE"
+    },
+    "ChaseFlorell": {
+        "id": "SP471626",
+        "role": "NONE"
+    },
+    "Hual": {
+        "id": "SP1867646",
+        "role": "NONE"
+    },
+    "andrewBezerra": {
+        "id": "SP7824898",
+        "role": "NONE"
+    },
+    "legistek": {
+        "id": "SP13384523",
+        "role": "CONTRIBUTOR"
+    },
+    "davidortinau": {
+        "id": "SP41873",
+        "role": "CONTRIBUTOR"
+    }
+}

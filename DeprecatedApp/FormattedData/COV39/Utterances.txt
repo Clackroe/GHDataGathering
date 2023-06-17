@@ -1,0 +1,457 @@
+ROOT +++$+++ SP12434847 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-06-03T18:25:47Z +++$+++ Unable to delete files on Fedora 28 (gvfs-trash is deprecated) <!--
+
+Have you read Atom's Code of Conduct? By filing an Issue, you are expected to comply with it, including treating everyone with respect: https://github.com/atom/atom/blob/master/CODE_OF_CONDUCT.md
+
+Do you want to ask a question? Are you looking for support? The Atom message board is the best place for getting support: https://discuss.atom.io
+
+-->
+
+### Prerequisites
+
+* [x] Put an X between the brackets on this line if you have done all of the following:
+    * Reproduced the problem in Safe Mode: https://flight-manual.atom.io/hacking-atom/sections/debugging/#using-safe-mode
+    * Followed all applicable steps in the debugging guide: https://flight-manual.atom.io/hacking-atom/sections/debugging/
+    * Checked the FAQs on the message board for common solutions: https://discuss.atom.io/c/faq
+    * Checked that your issue isn't already filed: https://github.com/issues?utf8=✓&q=is%3Aissue+user%3Aatom
+    * Checked that there is not already an Atom package that provides the described functionality: https://atom.io/packages
+
+### Description
+
+My issue is the same as in #15949 except it is not fixed. 
+
+I am unable to delete file (or directory). When trying, the following message appears: `Is gvfs-trash installed?`
+
+### Steps to Reproduce
+
+1. Try to delete any file or directory
+2. ???
+3. Profit
+
+**Expected behavior:** Deleting file should delete file
+
+**Actual behavior:** The file is not deleted
+
+**Reproduces how often:** Every time
+
+### Versions
+
+```
+Atom    : 1.27.1
+Electron: 1.7.15
+Chrome  : 58.0.3029.110
+Node    : 7.9.0
+```
+```
+apm  1.19.0
+npm  3.10.10
+node 6.9.5 x64
+atom 1.27.1
+python 2.7.15
+git 2.17.1
+```
+```
+OS: Fedora 28
+```
+
+### Additional Information
+```
+$ gvfs-trash
+This tool has been deprecated, use 'gio trash' instead.
+See 'gio help trash' for more info.
+```
+The `gio trash` is supposedly implemented since electron 1.7.2 and for some folks out there this problem was fixed with `Atom 1.25` (which included upgrade to `Electron 1.7.11`) but apparently I am on even newer Atom version, with even newer Electron and it still happens.
+
+### EDIT1
+#### More insight on the problem provided by @cutephoton:
+> @Devligue This is a legit bug. The _tldr answer_ is that `_g_file_trash` may not be supported. In order for `_g_file_trash` to succeed, the following conditions must be met:
+> 
+> * The file being moved to trash is on the same partition as your home folder
+>   **OR**
+> * A trash folder already exists or can be created at the mount point and,
+> * The trash folder is considered 'safe/secure' by verifying UID and restrictive permissions
+> 
+> **How this should probably be fixed...**
+> 
+> Atom does not have a fallback mechanism like offering the ability to permanently remove a file instead. This would address bring atom in line with gnome's graceful behaviour. The attached image show how Gnome Files (aka Nautilus) prompt the user to permanently delete the file (when trash not supported)
+> 
+> ![gnome's solution](https://user-images.githubusercontent.com/19512121/43511743-0dac32c0-952e-11e8-8af8-e0ef6cb916d0.png)
+> 
+> **Impact: Users with multiple disks and partitions**
+> 
+> Fedora/Redhat/etc: _Impacted_ due to default partition scheme that separates `/` and `/home` in to partitions. Files outside of the `/home` partition cannot be moved to trash.
+> 
+> Ubuntu: Less likely due to partition layout (`/home` is part of the `/` partition)
+> 
+> Conditions where users will be impacted:
+> 
+> * File systems with unix permissions:
+>   
+>   * _Impacted with workaround_ due to typical restrictive top-level directory permissions (root)
+> * FAT/non-unix file systems:
+>   
+>   * User Session Mount (i.e. `/run/media/$USER/disk-label`): _No Impact_
+>   * Fstab: _Impacted_ even with permissive umask. The default uid/gid is root. It will be unable to satisfy the requirements of a trash folder without additional options (uid/gid/umask).
+> * Network shared folders: _Unknown/Did not test._
+> 
+> **Notes/Testing the Root Cause**
+> 
+> Note: Though I am confident that my analysis is decent enough, much of the code I was referencing was unfamiliar/new to me.
+> 
+> Initially I encountered this issue when I put files in a certain location like the reporter above. I created a delete-me file test as suggested above in the relevant directory, `/opt/cupenv`. I ran the command `strace gio trash delete-me.txt`. A abridged version of the output is here:
+> 
+> ```
+> lstat("/opt/cupenv/delete-me.txt", {st_mode=S_IFREG|0664, st_size=6, ...}) = 0
+> ...
+> lstat("/.Trash-1000", 0x7ffde5ffb5b0)   = -1 ENOENT (No such file or directory)
+> mkdir("/.Trash-1000", 0700)             = -1 EACCES (Permission denied)
+> ```
+> That's unexpected. The API documentation for [g_file_trash](https://developer.gnome.org/gio/stable/GFile.html#g-file-trash) lacks some level of specificity.
+> 
+> > Sends file to the "Trashcan", if possible. This is similar to deleting it, but the user can recover it before emptying the trashcan. Not all file systems support trashing, so this call can return the G_IO_ERROR_NOT_SUPPORTED error.
+> 
+> One might assume (as I did): Given a path, if the user has permission to modify/delete the file, then GIO's g_file_trash API should succeed at removing the file in some manner. Perhaps, if trash functionality is not available, then there might be a fallback mechanism. In the case of `gio trash` I expected there to be a -f force option that would prioritize trash over permanently deleting the file. (`gio trash -f` only ignores files that don't exist)
+> 
+> Glib appears to implement GIO local file access using [glocalfile.c](https://github.com/GNOME/glib/blob/83a4cab12c2d00dbfe6013d071cff2da310109a4/gio/glocalfile.c#L1899). The trash algorithm looks like this:
+> 
+> * Is the path on the same partition as the user's home directory? If so, move the file to the home trash folder if possible and exit.
+> * Given the path, locate the mount point top level directory (denoted as `$topdir` in source)
+>   
+>   * In my case, `/opt/cupenv/delete_me.txt` -> `/` (the primary partition)
+>   * A more typical case: `/run/media/$USER/disk-label/a/b/c/d` would be `/run/media/$USER/disk-label`
+> * If `$topdir` is found, pick one of `$topdir/.Trash/$UID` or `$topdir/.Trash-UID` folder.
+>   
+>   * If `$topdir/.Trash-UID` and `$topdir/.Trash/$UID` exists: Validate proper UID and file permission (or fail)
+>   * Try to create folder `$topdir/.Trash-$UID`. Validate proper UID and file permission (or fail)
+> 
+> At the end of the function we find [`G_IO_ERROR_NOT_SUPPORTED` is returned](https://github.com/GNOME/glib/blob/83a4cab12c2d00dbfe6013d071cff2da310109a4/gio/glocalfile.c#L2059) when such a folder is not found and cannot be created.
+> 
+> ```
+> if (trashdir == NULL)
+> 	{
+> 	  g_free (topdir);
+>           g_set_io_error (error,
+>                           _("Unable to find or create trash directory for %s"),
+>                           file, G_IO_ERROR_NOT_SUPPORTED);
+> 	  return FALSE;
+> }
+> ```
+> I confirmed my understanding by creating a top level trash folder and using gio trash command.
+> 
+> ```
+> sudo mkdir /.Trash-1000
+> sudo chmod 0700 /.Trash-1000
+> sudo chown fosterb:fosterb /.Trash-1000
+> cd /opt/cupenv && echo hello > delete-me.txt; gio trash delete-me.txt
+> ```
+> Files located on the same partition as your home directory can always be moved to your user trash folder. On my operating system, the paths `/` and `/home` are separate partitions. I created a file `/home/tmp/x` where `tmp` and `x` are owned by my user. In this case, the files get moved to your `$HOME/.local/share/Trash` folder.
+> 
+> ```
+> lstat("/home/tmp/x", {st_mode=S_IFREG|0644, st_size=0, ...}) = 0
+> stat("/home/fosterb", {st_mode=S_IFDIR|0700, st_size=4096, ...}) = 0
+> access("/home", F_OK)                   = 0
+> ....
+> stat("/home/fosterb/.local/share", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+> access("/home/fosterb/.local/share/Trash", F_OK) = 0
+> stat("/home/fosterb/.local/share/Trash", {st_mode=S_IFDIR|0700, st_size=4096, ...}) = 0
+> mkdir("/home/fosterb/.local/share/Trash/info", 0700) = -1 EEXIST (File exists)
+> mkdir("/home/fosterb/.local/share/Trash/files", 0700) = -1 EEXIST (File exists)
+> openat(AT_FDCWD, "/home/fosterb/.local/share/Trash/info/x.trashinfo", O_RDONLY|O_CREAT|O_EXCL, 0666) = 7
+> ```
+> But when mounting disks (external or internal) using fstab or mount commands (as opposed to session-based mounting) issues can arise. I tested a FAT file system with umask=0000 and uid/gid set to root.
+> 
+> ```
+> lstat("/mnt/giotest", {st_mode=S_IFDIR|0777, st_size=8192, ...}) = 0
+> lstat("/mnt", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+> lstat("/mnt/giotest/.Trash", 0x7fffec5502c0) = -1 ENOENT (No such file or directory)
+> lstat("/mnt/giotest/.Trash-1000", 0x7fffec550230) = -1 ENOENT (No such file or directory)
+> mkdir("/mnt/giotest/.Trash-1000", 0700) = 0
+> lstat("/mnt/giotest/.Trash-1000", {st_mode=S_IFDIR|0777, st_size=8192, ...}) = 0
+> unlink("/mnt/giotest/.Trash-1000")      = -1 EISDIR (Is a directory)
+> rmdir("/mnt/giotest/.Trash-1000")       = 0
+> file:///mnt/giotest/x: Unable to find or create trash directory for /mnt/giotest/x
+> ```
+> You can see gio trash going through the motions. The operations succeeds but the command still reports an error.
+> 
+> ```
+> [fosterb@rose giotest]$ ls -lah
+> total 12K
+> drwxrwxrwx. 2 root root 8.0K Aug  1 00:36 .
+> drwxr-xr-x. 4 root root 4.0K Aug  1 00:30 ..
+> -rwxrwxrwx. 1 root root    0 Aug  1 01:23 x
+> ```
+> GLib/Gio will not write to a trash directory with incorrect permissions/ownership. (Security?) Without unix permissions, trash will always fail on these mount points. Modifying fstab to appear similar to options used during session mounts (UID/GID set to user vs root, umask is set appropriately). Conveniently the [source code](https://github.com/GNOME/glib/blob/83a4cab12c2d00dbfe6013d071cff2da310109a4/gio/glocalfile.c#L2046) has a comment that seems to strongly imply this is a known/expected.
+> 
+> ```
+> 		  /* Ensure that the created dir has the right uid etc.
+> 		     This might fail on e.g. a FAT dir */
+> ```
+> Most of this was unnecessary, but I figured I'd show my work.
+
+### EDIT2
+#### More insight, to not get confused as of the nature of the bug, and how to reproduce it (by @cutephoton as well):
+> Yes, as reported, the ELECTRON_TRASH environment variable is needed. This is the issue referenced #15949 bug. The issue reported here is not related to #15949. The error message related to gvfs-trash is a blunt tool (even access denied errors produce the same error message) so I understand why people are responding here.
+> 
+> The reporter clarifies one of the key symptoms here:
+> [#17452 (comment)](https://github.com/atom/atom/issues/17452#issuecomment-396407349)
+> 
+> And that led to my deep dive. My deep dive details the specific cases where trash becomes unavailable (i.e. when a trash folder cannot be safely created).
+> [#17452 (comment)](https://github.com/atom/atom/issues/17452#issuecomment-409518547)
+> 
+> **I just revalidated my findings and unsurprisingly gio trash still fails.**
+> 
+> Anyhow, I wanted to clarify this so it doesn't get lost when/if atom devs look in to this issue.
+
+
+ +++$+++ 5 +++$+++ 0
+COM0 +++$+++ SP734194 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-06-04T20:01:19Z +++$+++ Thanks for opening a new issue - is `gio` available on Fedora 28?   +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP12434847 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-06-04T20:06:35Z +++$+++ Yes, `gio` is available and installed by default +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP734194 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-06-05T02:12:33Z +++$+++ Hmmm, not sure why it's not working then - any difference if you specifically set an `ELECTRON_TRASH` environment variable to `gio` and then restart Atom? +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP12434847 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-06-05T22:31:29Z +++$+++ It changes nothing :thinking: 
+
+```
+$ gio --version
+2.56.1
+```
+
+```
+echo $ELECTRON_TRASH
+gio
+```
+ +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP734194 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-06-11T21:35:37Z +++$+++ And if you just use `gio trash` from the command line it works fine?  E.g.:
+
+```
+echo hello > delete-me.txt
+gio trash delete-me.txt
+```
+
+Also, are you getting the exact same error message you mentioned ("When trying, the following message appears: Is gvfs-trash installed?") after you set the `ELECTRON_TRASH` environment variable to `gio`?   +++$+++ 1 +++$+++ 0
+COM5 +++$+++ SP12434847 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-06-11T22:28:55Z +++$+++ The `echo hello > delete-me.txt; gio trash delete-me.txt` works just fine normally but crashes on the ntfs partition. As I see this, it is not an Atom bug, however the error message it kept returning me was quite misleading.
+
+I didn't solve the problem yet, but I am closing this since it is not related to Atom. Sorry for trouble! +++$+++ 1 +++$+++ 0
+COM6 +++$+++ SP2766036 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-06-12T01:13:03Z +++$+++ > however the error message it kept returning me was quite misleading.
+
+Yeah, that's the default error message.  Unfortunately, Electron's moveToTrash method doesn't say _why_ it failed, just that it did.  We've found that the most common reason is that `gvfs-trash` isn't installed, which is why we decided to include it in the error message. +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP19512121 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-08-01T09:48:16Z +++$+++ @Devligue This is a legit bug. The _tldr answer_ is that `_g_file_trash` may not be supported. In order for `_g_file_trash` to succeed, the following conditions must be met:
+
+- The file being moved to trash is on the same partition as your home folder
+**OR**
+- A trash folder already exists or can be created at the mount point and,
+- The trash folder is considered 'safe/secure' by verifying UID and restrictive permissions
+
+**How this should probably be fixed...**
+
+Atom does not have a fallback mechanism like offering the ability to permanently remove a file instead. This would address bring atom in line with gnome's graceful behaviour. The attached image show how  Gnome Files (aka Nautilus) prompt the user to permanently delete the file (when trash not supported)
+
+![gnome's solution](https://user-images.githubusercontent.com/19512121/43511743-0dac32c0-952e-11e8-8af8-e0ef6cb916d0.png)
+
+**Impact: Users with multiple disks and partitions**
+
+Fedora/Redhat/etc: _Impacted_ due to default partition scheme that separates `/` and `/home` in to partitions. Files outside of the `/home` partition cannot be moved to trash.
+
+Ubuntu: Less likely due to partition layout (`/home` is part of the `/` partition)
+
+Conditions where users will be impacted:
+- File systems with unix permissions:
+  - _Impacted with workaround_ due to typical restrictive top-level directory permissions (root)
+- FAT/non-unix file systems:
+  - User Session Mount (i.e. `/run/media/$USER/disk-label`): _No Impact_
+  - Fstab: _Impacted_ even with permissive umask. The default uid/gid is root. It will be unable to satisfy the requirements of a trash folder without additional options (uid/gid/umask).
+- Network shared folders: _Unknown/Did not test._
+
+**Notes/Testing the Root Cause**
+
+Note: Though I am confident that my analysis is decent enough, much of the code I was referencing was unfamiliar/new to me.
+
+Initially I encountered this issue when I put files in a certain location like the reporter above. I created a delete-me file test as suggested above in the relevant directory, `/opt/cupenv`. I ran the command  `strace gio trash delete-me.txt`. A abridged version of the output is here:
+
+```
+lstat("/opt/cupenv/delete-me.txt", {st_mode=S_IFREG|0664, st_size=6, ...}) = 0
+...
+lstat("/.Trash-1000", 0x7ffde5ffb5b0)   = -1 ENOENT (No such file or directory)
+mkdir("/.Trash-1000", 0700)             = -1 EACCES (Permission denied)
+```
+That's unexpected. The API documentation for [g_file_trash](https://developer.gnome.org/gio/stable/GFile.html#g-file-trash) lacks some level of specificity.
+
+> Sends file to the "Trashcan", if possible. This is similar to deleting it, but the user can recover it before emptying the trashcan. Not all file systems support trashing, so this call can return the G_IO_ERROR_NOT_SUPPORTED error. 
+
+One might assume (as I did): Given a path, if the user has permission to modify/delete the file, then GIO's g_file_trash API should succeed at removing the file in some manner. Perhaps, if trash functionality is not available, then there might be a fallback mechanism. In the case of `gio trash` I expected there to be a -f force option that would prioritize trash over permanently deleting the file. (`gio trash -f` only ignores files that don't exist)
+
+Glib appears to implement GIO local file access using [glocalfile.c](https://github.com/GNOME/glib/blob/83a4cab12c2d00dbfe6013d071cff2da310109a4/gio/glocalfile.c#L1899). The trash algorithm looks like this:
+
+- Is the path on the same partition as the user's home directory? If so, move the file to the home trash folder if possible and exit.
+- Given the path, locate the mount point top level directory (denoted as `$topdir` in source)
+  - In my case, `/opt/cupenv/delete_me.txt` -> `/` (the primary partition)
+  - A more typical case: `/run/media/$USER/disk-label/a/b/c/d` would be `/run/media/$USER/disk-label`
+- If `$topdir` is found, pick one of `$topdir/.Trash/$UID` or `$topdir/.Trash-UID` folder.
+  - If `$topdir/.Trash-UID` and `$topdir/.Trash/$UID` exists: Validate proper UID and file permission (or fail)
+  - Try to create folder `$topdir/.Trash-$UID`. Validate proper UID and file permission (or fail)
+
+At the end of the function we find [`G_IO_ERROR_NOT_SUPPORTED` is returned](https://github.com/GNOME/glib/blob/83a4cab12c2d00dbfe6013d071cff2da310109a4/gio/glocalfile.c#L2059) when such a folder is not found and cannot be created.
+
+```
+if (trashdir == NULL)
+	{
+	  g_free (topdir);
+          g_set_io_error (error,
+                          _("Unable to find or create trash directory for %s"),
+                          file, G_IO_ERROR_NOT_SUPPORTED);
+	  return FALSE;
+}
+```
+
+I confirmed my understanding by creating a top level trash folder and using gio trash command.
+
+```
+sudo mkdir /.Trash-1000
+sudo chmod 0700 /.Trash-1000
+sudo chown fosterb:fosterb /.Trash-1000
+cd /opt/cupenv && echo hello > delete-me.txt; gio trash delete-me.txt
+```
+Files located on the same partition as your home directory can always be moved to your user trash folder. On my operating system, the paths `/` and `/home` are separate partitions. I created a file `/home/tmp/x` where `tmp` and `x` are owned by my user. In this case, the files get moved to your `$HOME/.local/share/Trash` folder.
+
+```
+lstat("/home/tmp/x", {st_mode=S_IFREG|0644, st_size=0, ...}) = 0
+stat("/home/fosterb", {st_mode=S_IFDIR|0700, st_size=4096, ...}) = 0
+access("/home", F_OK)                   = 0
+....
+stat("/home/fosterb/.local/share", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+access("/home/fosterb/.local/share/Trash", F_OK) = 0
+stat("/home/fosterb/.local/share/Trash", {st_mode=S_IFDIR|0700, st_size=4096, ...}) = 0
+mkdir("/home/fosterb/.local/share/Trash/info", 0700) = -1 EEXIST (File exists)
+mkdir("/home/fosterb/.local/share/Trash/files", 0700) = -1 EEXIST (File exists)
+openat(AT_FDCWD, "/home/fosterb/.local/share/Trash/info/x.trashinfo", O_RDONLY|O_CREAT|O_EXCL, 0666) = 7
+```
+But when mounting disks (external or internal) using fstab or mount commands (as opposed to session-based mounting) issues can arise. I tested a FAT file system with umask=0000 and uid/gid set to root.
+
+```
+lstat("/mnt/giotest", {st_mode=S_IFDIR|0777, st_size=8192, ...}) = 0
+lstat("/mnt", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+lstat("/mnt/giotest/.Trash", 0x7fffec5502c0) = -1 ENOENT (No such file or directory)
+lstat("/mnt/giotest/.Trash-1000", 0x7fffec550230) = -1 ENOENT (No such file or directory)
+mkdir("/mnt/giotest/.Trash-1000", 0700) = 0
+lstat("/mnt/giotest/.Trash-1000", {st_mode=S_IFDIR|0777, st_size=8192, ...}) = 0
+unlink("/mnt/giotest/.Trash-1000")      = -1 EISDIR (Is a directory)
+rmdir("/mnt/giotest/.Trash-1000")       = 0
+file:///mnt/giotest/x: Unable to find or create trash directory for /mnt/giotest/x
+```
+
+You can see gio trash going through the motions. The operations succeeds but the command still reports an error.
+```
+[fosterb@rose giotest]$ ls -lah
+total 12K
+drwxrwxrwx. 2 root root 8.0K Aug  1 00:36 .
+drwxr-xr-x. 4 root root 4.0K Aug  1 00:30 ..
+-rwxrwxrwx. 1 root root    0 Aug  1 01:23 x
+```
+
+GLib/Gio will not write to a trash directory with incorrect permissions/ownership. (Security?) Without unix permissions, trash will always fail on these mount points. Modifying fstab to appear similar to options used during session mounts (UID/GID set to user vs root, umask is set appropriately). Conveniently the [source code](https://github.com/GNOME/glib/blob/83a4cab12c2d00dbfe6013d071cff2da310109a4/gio/glocalfile.c#L2046) has a comment that seems to strongly imply this is a known/expected.
+
+```
+		  /* Ensure that the created dir has the right uid etc.
+		     This might fail on e.g. a FAT dir */
+```
+Most of this was unnecessary, but I figured I'd show my work. +++$+++ 2 +++$+++ 0
+COM8 +++$+++ SP704477 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-10-31T22:49:15Z +++$+++ I got the same problem on feodra 29 on a fresh install can we reopen this bug ? +++$+++ 13 +++$+++ 0
+COM9 +++$+++ SP19512121 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-10-31T23:14:47Z +++$+++ @Devligue can reopen this +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP32965360 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-11-01T14:20:10Z +++$+++ This issue has been automatically closed because there has been no response to our request for more information from the original author. With only the information that is currently in the issue, we don't have enough information to take action. Please reach out if you have or find the answers we need so that we can investigate further.
+ +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP12434847 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-11-01T14:52:10Z +++$+++ I may have no additional information about the issue, but I am sure @cutephoton provided enough insight. There are also other people who have similar unsolved problems. I am reopening this. +++$+++ 10 +++$+++ 0
+COM12 +++$+++ SP704477 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-11-05T22:24:01Z +++$+++ I got no problem with the flatpak version by the way +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP19512121 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-11-06T00:54:29Z +++$+++ I reproduced on the latest version still. **shrug** I don't see how flatpak and rpm/deb would differ. It only fails when the preconditions listed above are met -- a partition where you don't have permission to create a trash folder under your user ID. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP704477 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-11-06T21:31:27Z +++$+++ With flatpak i got no error but it don't get delete sorry about this misinformation. I try to disable selinux it don't change. +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP19512121 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-11-06T21:48:03Z +++$+++ No. Not selinux. It has to do with how trash folders work. My rather verbose explanation gets in to the nitty gritty for where atom's behavior is deficient.  The short answer is that atom only asks to move files to trash and does not delete files. If a trash folder cannot be created (multiple causes all related to permissions) than it fails. Atom should inquire with user if they should permanently delete the files instead of failing.   +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP15878458 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-11-13T11:29:03Z +++$+++ As @yodatak also mentioned that Fedora 29 fresh install has this problem since `gvfs-trash` has finally after many deprecation notices been removed  and replaced with  `gio`. So as @rsese mentioned you need to set `ELECTRON_TRASH=gio` e.g. add it to your `~/.bash_profile`. 
+
+logout and login or `source ~/.bash_profile` and trashing will work
+
+or
+```
+echo 'export ELECTRON_TRASH=gio' >> $HOME/.bashrc
+source $HOME/.bashrc
+``` +++$+++ 14 +++$+++ 1
+COM17 +++$+++ SP19512121 +++$+++ ROOT +++$+++ COM16 +++$+++ 2018-11-13T12:54:30Z +++$+++ Gio operates the same way. I used the Gio command line to manually step through this... +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP17096799 +++$+++ ROOT +++$+++ COM17 +++$+++ 2018-12-06T12:06:34Z +++$+++ running fedora 29, i have installed atom from packages, since recently I faced the same error as described here.
+
+```
+sudo dnf list installed atom
+Paquets installés
+atom.x86_64                                                1.33.0-0.1                                                 @Atom
+```
+
+I think this bug deserves an action in order to improve the package installation, or the runtime, to detect gio/gvfs and make this work out of the box.
+
+This really is an ugly bug for the end user experience. +++$+++ 8 +++$+++ 0
+COM19 +++$+++ SP27968888 +++$+++ ROOT +++$+++ COM18 +++$+++ 2018-12-09T12:32:04Z +++$+++ Is there any workaround to delete files with Atom on Fedora 29? +++$+++ 1 +++$+++ 0
+COM20 +++$+++ SP1556109 +++$+++ ROOT +++$+++ COM19 +++$+++ 2018-12-12T08:32:45Z +++$+++ > So as @rsese mentioned you need to set `ELECTRON_TRASH=gio` e.g. add it to your `~/.bash_profile`.
+> 
+> logout and login or `source ~/.bash_profile` and trashing will work
+
+This is not working on fedora 29, even with gio installed and ELECTRON_TRASH variable set to gio. +++$+++ 1 +++$+++ 0
+COM21 +++$+++ SP19512121 +++$+++ ROOT +++$+++ COM20 +++$+++ 2018-12-12T14:03:28Z +++$+++ There are no workarounds. +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP681067 +++$+++ ROOT +++$+++ COM21 +++$+++ 2018-12-17T19:44:08Z +++$+++ > > So as @rsese mentioned you need to set `ELECTRON_TRASH=gio` e.g. add it to your `~/.bash_profile`.
+> > logout and login or `source ~/.bash_profile` and trashing will work
+> 
+> This is not working on fedora 29, even with gio installed and ELECTRON_TRASH variable set to gio.
+
+Works on my Fedora 29 -- had to restart terminal and restart atom from that terminal. +++$+++ 2 +++$+++ 0
+COM23 +++$+++ SP19512121 +++$+++ ROOT +++$+++ COM22 +++$+++ 2018-12-17T20:30:24Z +++$+++ That is a not a fix. There are preconditions as documented above to reproduce the bug. +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP8958906 +++$+++ ROOT +++$+++ COM23 +++$+++ 2018-12-28T08:30:30Z +++$+++ Would love for this to be fixed (on my Fedora 29 installed via the official RPM). +++$+++ 1 +++$+++ 0
+COM25 +++$+++ SP5628330 +++$+++ ROOT +++$+++ COM24 +++$+++ 2019-01-06T22:47:58Z +++$+++ This bug is also affecting me on a fresh install of Fedora 29 and Atom 1.33.1.
+
+If I try to delete a file within atom, I get the following error:
+![gvfs-gio-error](https://user-images.githubusercontent.com/5628330/50742193-8be3d980-11bc-11e9-9d98-8c307d563839.png)
+
+If I use gio on the command line:
+```
+$ gio trash /home/bauthier/Tools/ansible_local/roles/work_packages/files/test.txt
+$
+```
+no issue and it deletes as expected.
+
+My system partitions are broken up like so:
+```
+$ df -h
+Filesystem               Size  Used Avail Use% Mounted on
+devtmpfs                 7.8G     0  7.8G   0% /dev
+tmpfs                    7.8G  225M  7.6G   3% /dev/shm
+tmpfs                    7.8G  2.0M  7.8G   1% /run
+tmpfs                    7.8G     0  7.8G   0% /sys/fs/cgroup
+/dev/mapper/fedora-root   49G   11G   36G  24% /
+tmpfs                    7.8G  236K  7.8G   1% /tmp
+/dev/sda2                976M  160M  750M  18% /boot
+/dev/mapper/fedora-home  414G  892M  392G   1% /home
+/dev/sda1               1022M   21M 1002M   3% /boot/efi
+tmpfs                    1.6G  8.4M  1.6G   1% /run/user/1000
+```
+If I explicitly set an environment variable like this within my **~/.bashrc**:
+```
+export ELECTRON_TRASH=gio
+```
+it does delete within atom correctly.
+
+Having to set this environment variable is less than ideal. I read through cutephoton's research, testing, and analysis and I believe mine works because **/home** and **/** are on different mounts, but the same partition. Perhaps LVM versus standard partitions?
+
+Either way, I would imagine the handling of "gvfs" or "gio" would be done by atom and set correctly during start time of the application. I haven't read through the atom code so there may have been a reason to couple that functionality to "gvfs" rather than dynamically choosing a suitable trash program and application startup.
+ +++$+++ 5 +++$+++ 0
+COM26 +++$+++ SP704477 +++$+++ ROOT +++$+++ COM25 +++$+++ 2019-01-06T23:11:32Z +++$+++ https://github.com/electron/electron/issues/15011
+ +++$+++ 1 +++$+++ 0
+COM27 +++$+++ SP5287237 +++$+++ ROOT +++$+++ COM26 +++$+++ 2019-01-11T08:44:24Z +++$+++ same here with fedora 29 and atom 1.34.0
+
+that workaround has helped me https://github.com/atom/atom/issues/15949#issuecomment-434231263 +++$+++ 5 +++$+++ 0
+COM28 +++$+++ SP15796342 +++$+++ ROOT +++$+++ COM27 +++$+++ 2019-01-14T12:58:36Z +++$+++ same here with fedora 29 and atom 1.33.0x64
+`~$ lsb_release -a`
+```
+LSB Version:	:core-4.1-amd64:core-4.1-noarch
+Distributor ID:	Fedora
+Description:	Fedora release 29 (Twenty Nine)
+Release:	29
+Codename:	TwentyNine
+``` +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP9272498 +++$+++ ROOT +++$+++ COM28 +++$+++ 2019-01-27T22:23:37Z +++$+++ > @histamineblkr If I explicitly set an environment variable like this within my **~/.bashrc**:
+> 
+> ```
+> export ELECTRON_TRASH=gio
+> ```
+
+This did work for me, in Fedora 29.  +++$+++ 1 +++$+++ 0

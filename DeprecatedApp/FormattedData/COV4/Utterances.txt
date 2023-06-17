@@ -1,0 +1,326 @@
+ROOT +++$+++ SP9440903 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-10-17T20:09:30Z +++$+++ Comprehensive, Native Windows Support Now, before you tell me this is a lot of work: I know, and am working on it (and almost done). Ideally, I would like to have my changes merged here, so I have a few questions and concerns for my current port.
+
+# Questions
+
+**Should I target a specific C++ standard?**
+
+Currently, my code depends on a few C++11 features, which can be easily removed with a few macros. This makes the code less readable, however, if C++03 support is desired, I will gladly change my implementation to conform to an older standard.
+
+**How to handle Unicode filesystem support?**
+
+Currently, LevelDB uses `char`-based (narrow) strings for for all filesystem operations, which does not translate well for Windows systems (since narrow strings use the ANSI, or OEM legacy codepages, and not UTF-8, for backwards compatibility). This means paths using international characters, or emojis, are therefore not supported with a simple port, something I consider to be an undesirable solution for a modern library. All the current forks of levelDB do not solve this fundamental issue, leading me to create my own implementation. Possible solutions include:
+
+1. A narrow (UTF-8) API on *Nix, and a wide (UTF-16) API on Windows, using a typedef to determine the proper path type.
+2. Converting all narrow strings from UTF-8 to UTF-16 before calling WinAPI functions.
+3. Providing both a narrow (ANSI) and wide (UTF-16) API on Windows.
+
+The 2nd option, although the least amount of work, is the least amenable for me since the expected encoding for paths from levelDB would then conflict with the entirety of the WinAPI. The 3rd option, however, duplicates code to support both the narrow and wide WinAPI, which would increase the amount of work required to maintain levelDB. The first option is a happy median: it minimizes redundancy and is consistent with expectations about *Nix and Windows paths. I am, however, amenable to any suggestions the levelDB authors may have.
+
+**Intellectual Property**
+
+To emulate the behavior of `mmap` on Windows, I used a very lightweight library (<250 lines of code) from Steven Lee, [mman-win32](https://github.com/witwall/mman-win32). However, looking over your contributor license agreement, it seems that my port would not satisfy Google's CLA until I remove this code from my implementation. If this is the case, I could easily use the raw WinAPI functions rather than the emulated `mmap` in my Windows port. Please notify me if I should remove this code prior to submitting a pull request.
+
+# Other Changes
+
+**CMake Build System**
+
+I introduced a CMake build system, which retains most of the same logic as the existing Makefile. The existing Makefile has not been deprecated.
+
+**AppVeyor Continual Integration**
+
+To ensure builds do not break the Windows builds, I am planning to add an AppVeyor configuration, which allows continual integration on Windows using MSVC.
+
+# Summary
+
+If there is still interest for native Windows support, and the proposed changes are amenable to the levelDB authors, I would gladly submit a pull request. +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP8096977 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-10-17T20:29:55Z +++$+++ On Tue, Oct 17, 2017 at 1:09 PM, Alexander Huszagh <notifications@github.com
+> wrote:
+
+> Now, before you tell me this is a lot of work: I know, and am working on
+> it (and almost done). Ideally, I would like to have my changes merged here,
+> so I have a few questions and concerns for my current port.
+> Questions
+>
+> *Should I target a specific C++ standard?*
+>
+> Currently, my code depends on a few C++11 features, which can be easily
+> removed with a few macros. This makes the code less readable, however, if
+> C++03 support is desired, I will gladly change my implementation to conform
+> to an older standard.
+>
+
+We haven't made a decision w.r.t. this yet, so it will be easiest if it
+does not rely on on c++03 only.  Would it be a big problem to do so?
+
+
+> *How to handle Unicode filesystem support?*
+>
+> Currently, LevelDB uses char-based (narrow) strings for for all
+> filesystem operations, which does not translate well for Windows systems
+> (since narrow strings use the ANSI, or OEM legacy codepages, and not UTF-8,
+> for backwards compatibility). This means paths using international
+> characters, or emojis, are therefore not supported with a simple port,
+> something I consider to be an undesirable solution for a modern library.
+> All the current forks of levelDB do not solve this fundamental issue,
+> leading me to create my own implementation. Possible solutions include:
+>
+>    1. A narrow (UTF-8) API on *Nix, and a wide (UTF-16) API on Windows,
+>    using a typedef to determine the proper path type.
+>    2. Converting all narrow strings from UTF-8 to UTF-16 before calling
+>    WinAPI functions.
+>    3. Providing both a narrow (ANSI) and wide (UTF-16) API on Windows.
+>
+> The 2nd option, although the least amount of work, is the least amenable
+> for me since the API would then seemingly lies to users of levelDB, since
+> strings would have to be UTF-8 encoded rather than using the local code
+> page, in contrast with the entirety of the WinAPI. The 3rd option, however,
+> duplicates code to support both the narrow and wide WinAPI, which would
+> increase the amount of work required to maintain levelDB. The first option
+> is a happy median: it minimizes redundancy and is consistent with
+> expectations about *Nix and Windows paths. I am, however, amenable to any
+> suggestions the levelDB authors may have.
+>
+
+Here is what I suggest: make a separate Env implementation for Windows
+(instead of attempting to reuse env_posix.cc).  That Env implementation
+(like all other Env implementations), accepts char-based (narrow) strings,
+which are always utf8 encoded.  Inside this Env's implementation, it can
+convert back and forth between the utf8 strings that the rest of leveldb
+assumes, and whatever type is appropriate for windows APIs called in the
+implementation.
+
+If there is significant code in env_posix.cc you find yourself needing,
+consider refactoring that out into a separate .h/.cc (which are private to
+the leveldb implementation) so you can share the code in your Env
+implementation.
+
+> *Intellectual Property*
+>
+> To emulate the behavior of mmap on Windows, I used a very lightweight
+> library (<250 lines of code) from Steven Lee, mman-win32
+> <https://github.com/witwall/mman-win32>. However, looking over your
+> contributor license agreement, it seems that my port would not satisfy
+> Google's CLA until I remove this code from my implementation. If this is
+> the case, I could easily use the raw WinAPI functions rather than the
+> emulated mmap in my Windows port. Please notify me if I should remove
+> this code prior to submitting a pull request.
+>
+
+Yes, this should be removed.  In general, we have been throttling back mmap
+usage anyway (it helps a bit with microbenchmarks, but causes a bunch of
+portability problems).  So I suggest a good initial start will be to just
+use raw WinAPI functions.
+
+
+
+> Other Changes
+>
+> *CMake Build System*
+>
+> I introduced a CMake build system, which retains most of the same logic as
+> the existing Makefile. The existing Makefile has not been deprecated.
+>
+*AppVeyor Continual Integration*
+>
+> To ensure builds do not break the Windows builds, I am planning to add an
+> AppVeyor configuration, which allows continual integration on Windows using
+> MSVC.
+>
+
+This sounds very helpful.
+
+
+> Summary
+>
+> If there is still interest for native Windows support, and the proposed
+> changes are amenable to the levelDB authors, I would gladly submit a pull
+> request.
+>
+
+This sounds very useful to me.  I would like it if the changes were limited
+to the following:
+
+(a) A windows Env implementation as I mentioned above.
+(b) Build/portability changes.
+
+Is that feasible, or you are seeing the need to make widespread changes?
+
+
+—
+> You are receiving this because you are subscribed to this thread.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/google/leveldb/issues/519>, or mute the thread
+> <https://github.com/notifications/unsubscribe-auth/AHuM0W8xE_w2Az-r6NfZqQwYWM9ZBrNVks5stQmLgaJpZM4P8vz1>
+> .
+>
+ +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP11460 +++$+++ ROOT +++$+++ COM0 +++$+++ 2017-10-17T20:50:46Z +++$+++ Work on CMake support is already underway. Please use https://github.com/pwnall/leveldb/tree/cmake as a starting point, to avoid rework. Also, please use the Travis CI and AppVeyor configurations in https://github.com/google/snappy as a starting point for yours.
+
+In general, I recommend following the approach taken by Chromium's LevelDB integration. Chromium builds (and runs) on Windows, and does not require modifications to the rest of the LevelDB. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP9440903 +++$+++ ROOT +++$+++ COM1 +++$+++ 2017-10-17T21:04:15Z +++$+++ Thank you for the feedback. This would be very feasible to do @ghemawat, especially if we use UTF-8 paths and just convert them in the Windows environment. As for CMake support, I will use that as a starting point (thank you). I will remove the `mmap` compatibility and use the raw WinAPI calls. Due to my other work, I should be able to finish this later this week. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP9440903 +++$+++ ROOT +++$+++ COM2 +++$+++ 2017-10-20T23:18:34Z +++$+++ @ghemawat and @pwnall, a quick question: When I asked the C++11 features and limiting myself to C++03, did you mean limit the codebase to C++98 or C++11? I have a few situations where `std::chrono` is dramatically more convenient than other code, however, I can remove this (it's only for `NowMicros` and `SleepForMicroseconds`). Other than that, the port should not require any new features.
+
+Thank you and I am effectively done with my port, other than this minor question. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP11460 +++$+++ ROOT +++$+++ COM3 +++$+++ 2017-10-20T23:20:30Z +++$+++ We've recently decided that the next release will require C++11, so it's OK to use C++11. Sorry for the code churn on your end... this decision was not taken lightly. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP9440903 +++$+++ ROOT +++$+++ COM4 +++$+++ 2017-10-21T00:16:25Z +++$+++ @pwnall No worries, I understand that such fundamental choices do not lend themselves to casual decisions. Thank you for all the help. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP2226434 +++$+++ ROOT +++$+++ COM5 +++$+++ 2017-10-26T16:54:20Z +++$+++ Hi @Alexhuszagh,
+
+As a soon-to-be user of the leveldb Windows support (for Mesos), here are are my thoughts:
+
+> Should I target a specific C++ standard?
+
+For us, C++11 is fine, we already target this.
+
+> How to handle Unicode filesystem support?
+
+This is an annoying problem, I had to fix this for Mesos. I went with:
+
+> 2. Converting all narrow strings from UTF-8 to UTF-16 before calling WinAPI functions.
+
+It also leads into long path issues on Windows. I took an approach similar to the one CMake took for their Windows port, a `longpath` helper to translate all paths as they reach WinAPI functions from UTF-8 to UTF-16 with `\\?\` prepended if necessary. My helper is [here](https://github.com/apache/mesos/blob/master/3rdparty/stout/include/stout/internal/windows/longpath.hpp) (note that the max path is _not_ 255 despite documentation).
+
+I need to stress: native long path support is probably a must for most Windows projects nowadays. It's not terribly difficult to do, it's just _really annoying_.
+
+Also, for your comment:
+
+> is the least amenable for me since the expected encoding for paths from levelDB would then conflict with the entirety of the WinAPI
+
+I'm not sure I entirely agree, there is no data loss going from UTF-8 to UTF-16. Both encodings are _Unicode_, it's just an implementation difference. Plus, you can do the conversion [natively in C++11](https://github.com/apache/mesos/blob/f599839bb854c7aff3d610e49f7e5465d7fe9341/3rdparty/stout/include/stout/stringify.hpp#L57). Anyway, I've not had any problems on Windows having gone this route so far.
+
+Thanks for your work! I personally know the trouble it is 😉  +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP2226434 +++$+++ ROOT +++$+++ COM6 +++$+++ 2017-10-26T17:21:23Z +++$+++ Also:
+
+> I introduced a CMake build system
+
+Yay, a million times, yay! We'll pull it into Mesos with `ExternalProject_Add`. +++$+++ 1 +++$+++ 0
+COM8 +++$+++ SP9440903 +++$+++ ROOT +++$+++ COM7 +++$+++ 2017-10-30T22:30:06Z +++$+++ Hi @pwnall and @ghemawat, I've had a few issues I cannot currently debug. I will attempt to use the Boost-based "windows" branch as a reference-point in short order.
+
+Specifically, I've had 3 major issues:
+
+1. ~~`issue178_test` fails intermittently. ~10% of the time, it succeeds, without issue. 25% of the time, it produces a slightly lower number of keys than the 1.1m requires (almost always greater than 1.09m). The rest of the time, it produces the error `Assertion Failed: r->options.comparator->Compare(key, Slice(r->last_key)) > 0, file level-db\table\table_builder.cc, line 97`.~~
+
+2. ~~`db_test` fails intermittently (at about the same frequency) during the `random_read_counter_` section (from `env_->random_read_counter_.Reset();` to `ASSERT_LE(reads, N + 2*N/100);`~~
+
+3. ~~Most severely though, however, is the multi-threaded section seems to produce the `bad block type` error consistently, which would defeat the entire purpose of a multi-thread access.~~
+
+Otherwise, all the test cases and benchmarks work. Just a heads up for the major delay.
+
+(Items with ~~strikethrough~~ have been patched).
+
+EDIT: Everything has been patched. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP11460 +++$+++ ROOT +++$+++ COM8 +++$+++ 2017-10-30T22:46:48Z +++$+++ No worries about delays. Honestly, I'm backed up with other work for the next two of weeks, and the odds that I'll be able to look at this are very low. +++$+++ 1 +++$+++ 0
+COM10 +++$+++ SP9440903 +++$+++ ROOT +++$+++ COM9 +++$+++ 2017-11-07T10:16:57Z +++$+++ Everything has been patched, and I am adding extended file length support currently. @andschwa, for the extended file length support, since the `"\\?\"` prefix effectively removes all path parsing, do you know if there's anything else I need to consider other than:
+
+1. Relative paths (which cannot use the extended file length prefix).
+2. `/`, `.`, or `..` in paths (somewhat tricky, see below).
+
+For the `.` and `..` operators, manually parsing them is somewhat tricky, since directory symbolic links may be in play. The only time-tested strategy for this is to iterate over all roots, parent directories, check to see if the item is a directory symbolic link or junction, get the real path of the directory if it is a symlink or junction, and then continue from there. This is because `C:\leveldb\..\leveldb-1\README.md` does not actually point to `C:\leveldb-1\README.md` if `C:\leveldb` is a symlink or junction.
+
+This is very doable (and is relatively easy to implement), but it is fairly expensive since it requires filesystem calls. It requires a temporary vector to store each path component. Step-wise, the general approach is as follows:
+
+1. Check if the path is absolute (skip remaining steps otherwise).
+2. Replace all forward separators with backslashes.
+3. Recurse over each parent directory, from the root (drive letter, such as `C:`, or UNC root, such as `\\host-name\share-name`), to the (and excluding the) file (we don't care if the file is a symlink, since relative path components cannot follow it).
+4. If the directory basename is `.`, ignore the directory.
+5. If the directory basename is `..`, remove the preceding directory component.
+6. Otherwise, check if the directory is a symlink by calling `CreateFile` with the `FILE_FLAG_OPEN_REPARSE_POINT` and `FILE_FLAG_BACKUP_SEMANTICS` flags. If the handle is successfully created, it's a symlink, otherwise, it is not.
+7. If the directory is a symlink, read the proper path using `DeviceIoControl` with the `FSCTL_GET_REPARSE_POINT` code, and reset the vector using the absolute new path.
+
+I would be amenable to implementing this (I've done this before, as may be obvious due to the detail of my explanation on how to implement such functionality), but this may add a lot of expense for a feature that application developer should have to be aware of themselves (that is, leveldb will already support an extended length path, if provided by the end-user).
+
+Another major caveat is leveldb's filenames are short (the longest being the `MANIFEST-00000X` files, at 15 characters). Since the Windows [documentation](https://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx) clearly states the maximum directory length must be `MAX_PATH - 12`, even with the extended length path prefix, this seems like a lot of work for an added 3 characters.
+
+@pwnall, any thoughts? Should extended file length support be added, including with the caveats mentioned above? +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP2226434 +++$+++ ROOT +++$+++ COM10 +++$+++ 2017-11-08T23:27:54Z +++$+++ @Alexhuszagh I don't believe you missed anything.
+
+Re: bullet 6: I'm using this logic in Mesos:
+
+```
+  const DWORD access_flags = resolved_path_is_directory
+    ? (FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS)
+    : FILE_FLAG_OPEN_REPARSE_POINT;
+
+  const HANDLE handle = ::CreateFileW(
+      longpath(absolute_path).data(),
+      GENERIC_READ,     // Open the file for reading only.
+      FILE_SHARE_READ,  // Just reading this file, allow others to do the same.
+      nullptr,          // Ignored.
+      OPEN_EXISTING,    // Open existing symlink.
+      access_flags,     // Open symlink, not the file it points to.
+      nullptr);         // Ignored.
+```
+
+adding the `FILE_FLAG_BACKUP_SEMANTICS` flag only if its a directory. I also specifically use `OPEN_EXISTING`, though you probably got that.
+
+Re: point 7: I resolve the path using `GetFinalPathNameByHandleW` with the `FILE_NAME_NORMALIZED` flag, after using:
+
+```
+  const DWORD access_flags = resolved_path_is_directory
+    ? FILE_FLAG_BACKUP_SEMANTICS
+    : FILE_ATTRIBUTE_NORMAL;
+
+  const HANDLE handle = ::CreateFileW(
+      longpath(absolute_path).data(),
+      GENERIC_READ,     // Open the file for reading only.
+      FILE_SHARE_READ,  // Just reading this file, allow others to do the same.
+      nullptr,          // Ignored.
+      OPEN_EXISTING,    // Open existing file.
+      access_flags,     // Open file, not the symlink itself.
+      nullptr);         // Ignored.
+```
+
+to get a handle to the file/directory at the resolved path.
+
+Re:
+
+> but this may add a lot of expense for a feature that application developer should have to be aware of themselves (that is, leveldb will already support an extended length path, if provided by the end-user)
+
+I agree that just letting the end-user provide `\\?\C:\long\paths` without any extra handling from `leveldb` might be just fine, so long as _all_ the Windows APIs used are the Unicode versions (and specifically listed as supporting long paths; though this is most of them). +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP9440903 +++$+++ ROOT +++$+++ COM11 +++$+++ 2017-11-08T23:56:25Z +++$+++ @andschwa All the Window APIs are the Unicode versions. Currently, I use `FILE_FLAG_BACKUP_SEMANTICS` for files and directories, but that is easily changed. As for `GetFinalPathNameByHandleW`, unfortunately it somewhat raises a chicken/egg problem. +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP2226434 +++$+++ ROOT +++$+++ COM12 +++$+++ 2017-11-08T23:59:42Z +++$+++ If `FILE_FLAG_BACKUP_SEMANTICS` is working for both, don't let me tell you it's wrong! I was using `GetFinalPathNameByHandle` specifically for resolution of symlinks; I see where it wouldn't quite work for you here.
+
+> All the Window APIs are the Unicode versions.
+
+Perfecto. +++$+++ 1 +++$+++ 0
+COM14 +++$+++ SP11296510 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-05-01T07:29:02Z +++$+++ Hi, I wanted to ask how your work is going? It's been about six months since your last messages, but I do not see any result. I need to build a library under Windows and I do not know how. +++$+++ 3 +++$+++ 0
+COM15 +++$+++ SP38893989 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-05-02T06:20:25Z +++$+++ Hi how are you today  +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP35536724 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-05-02T11:24:50Z +++$+++ hi tôi bận quá và cũng chưa hiểu nội dung công việc tôi phải làm là gì ?
+tôi biết rất ít về công nghệ ! nếu tôi có thể làm gì đó có ích cho bạn thì
+bạn hãy hướng dẫn tôi !
+
+2018-05-01 14:29 GMT+07:00 jenokizm <notifications@github.com>:
+
+> Hi, I wanted to ask how your work is going? It's been about six months
+> since your last messages, but I do not see any result. I need to build a
+> library under Windows and I do not know how.
+>
+> —
+> You are receiving this because you are subscribed to this thread.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/google/leveldb/issues/519#issuecomment-385616180>, or mute
+> the thread
+> <https://github.com/notifications/unsubscribe-auth/Ah4_VGZLcEwyQHyJXLEB6fv3yS1ZVObzks5tuA7WgaJpZM4P8vz1>
+> .
+>
+ +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP9440903 +++$+++ ROOT +++$+++ COM16 +++$+++ 2018-05-03T16:10:31Z +++$+++ @jenokizm Sorry, I got extremely busy with work and have submitted a few PRs to this extent but it still needs work. My Windows development PC just arrived after breaking in March, so I should be able to finish this soon.
+
+If you would to use this branch, it currently works on Windows:
+https://github.com/Alexhuszagh/leveldb +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP11460 +++$+++ ROOT +++$+++ COM17 +++$+++ 2018-05-10T00:05:40Z +++$+++ I think the ball is currently in our court. I need to find time to reconcile the various Windows PRs we've received with what we think this should look like. +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP1634990 +++$+++ ROOT +++$+++ COM18 +++$+++ 2018-07-29T12:15:26Z +++$+++ Hi -- no pressure, but is there any ETA for when Windows support will land? Thanks! +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP11460 +++$+++ ROOT +++$+++ COM19 +++$+++ 2018-07-30T18:53:02Z +++$+++ We have no timeline for this, sorry. +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP207795 +++$+++ ROOT +++$+++ COM20 +++$+++ 2018-12-03T17:21:51Z +++$+++ @Alexhuszagh @pwnall can I take the code in the PR, rebase to fix the merge conflicts, then add commits with the suggestions from @ghemawat or that was already done by @cmumford in https://github.com/cmumford/leveldb/commit/a5888f680bea87cd14d665692cff223ea48c5f89 ? +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP11460 +++$+++ ROOT +++$+++ COM21 +++$+++ 2018-12-03T22:12:38Z +++$+++ @philix Thank you very much for the offer!
+
+We have a change for the internal codebase, which will get published after it lands. The code change is very far into the review process. At this point, I don't think there's anything that external contributors can help us with. +++$+++ 3 +++$+++ 0
+COM23 +++$+++ SP9440903 +++$+++ ROOT +++$+++ COM22 +++$+++ 2018-12-03T23:06:08Z +++$+++ If there's anything I can do, or anything others could do with my code to make Windows support land earlier, I'd be glad to help. In the meantime, I'm just glad Windows support seems to be approaching soon. Thanks. +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP207795 +++$+++ ROOT +++$+++ COM23 +++$+++ 2018-12-04T07:32:06Z +++$+++ @pwnall Great news. Thanks. +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP207795 +++$+++ ROOT +++$+++ COM24 +++$+++ 2019-02-25T19:21:56Z +++$+++ Hi, it's me again. I really need a Windows port to start experimenting with LevelDB.
+
+Is https://github.com/cmumford/leveldb/commit/a5888f680bea87cd14d665692cff223ea48c5f89 the best port so far?
+
+I just need to hack something together before the official port lands. +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP11460 +++$+++ ROOT +++$+++ COM25 +++$+++ 2019-02-26T01:34:41Z +++$+++ At this point, I'm fairly convinced that this topic won't benefit from external input until we land the Windows port. Locking so googlers can focus their limited time on landing the code.
+
+I expect that locked conversations are frustrating to external contributors, and I'm sorry for that. I'm doing this because the subtler request above hasn't been effective. +++$+++ 0 +++$+++ 0

@@ -1,0 +1,42 @@
+{
+    "MartinLion": {
+        "id": "SP9435135",
+        "role": "NONE (AUTHOR)"
+    },
+    "AlexanderFabisch": {
+        "id": "SP869592",
+        "role": "MEMBER"
+    },
+    "jnothman": {
+        "id": "SP78827",
+        "role": "MEMBER"
+    },
+    "MechCoder": {
+        "id": "SP1867024",
+        "role": "MEMBER"
+    },
+    "afzal": {
+        "id": "SP358737",
+        "role": "NONE"
+    },
+    "davidavdav": {
+        "id": "SP5497303",
+        "role": "NONE"
+    },
+    "raghavrv": {
+        "id": "SP9487348",
+        "role": "MEMBER"
+    },
+    "GaelVaroquaux": {
+        "id": "SP208217",
+        "role": "MEMBER"
+    },
+    "emmanuelle": {
+        "id": "SP263366",
+        "role": "CONTRIBUTOR"
+    },
+    "amueller": {
+        "id": "SP449558",
+        "role": "MEMBER"
+    }
+}

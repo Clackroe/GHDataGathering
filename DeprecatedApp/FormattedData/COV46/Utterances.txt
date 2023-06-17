@@ -1,0 +1,124 @@
+ROOT +++$+++ SP125664 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-03-12T15:34:02Z +++$+++ Twig syntax highlighting broken Hi,
+
+Jekyll syntax highlighting is broken with Twig. Consider the following code block containing a perfectly valid Twig syntax:
+
+```
+{% highlight twig %}
+{% raw %}
+{% set a = 'b' %}
+{% endraw %}
+{% endhighlight %}
+```
+
+It outputs the following HTML:
+
+```
+<code class="language-twig" data-lang="twig">
+    <span class="cp">{%</span> 
+    <span class="k">set</span> 
+    <span class="nv">a</span> 
+    <span class="err">=</span>
+    <span class="s1">'b'</span> 
+    <span class="cp">%}</span>
+</code>
+```
+
+Notice the **err** class attributed to the equal sign.
+
+## Steps to reproduce
+
+* Follow the official quick-start guide: https://jekyllrb.com/docs/quickstart/
+* Replace the content of the post created by the installation with this:
+
+```
+---
+layout: post
+title:  "Welcome to Jekyll!"
+categories: jekyll update
+---
+
+{% highlight twig %}
+{% raw %}
+{% set a = 'b' %}
+{% endraw %}
+{% endhighlight %}
+
+```
+
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP12479464 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-03-12T15:47:43Z +++$+++ How is the resulting output if you were to use triple-backticks instead?
+
+    ```twig
+    {% raw %}
+      {% set a = 'b' %}
+    {% endraw %}
+    ``` +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP125664 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-03-12T15:58:33Z +++$+++ @ashmaroli, same. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP12479464 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-03-12T16:01:19Z +++$+++ So you see the issue is not with Jekyll but rather with Rouge that `highlight` and the triple-backticks block uses to highlight code. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP125664 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-03-12T16:35:16Z +++$+++ No, the problem also happens with the `{% highlight %}` syntax. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP12479464 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-03-12T16:44:29Z +++$+++ Yes, that's because the `highlight` tag uses `Rouge` for syntax-highlighting by default
+https://github.com/jekyll/jekyll/blob/86d86258a8bc912c906776d8f2f9a58b3d376519/lib/jekyll/tags/highlight.rb#L38-L46
+
+If you want to use `pygments` instead of `rouge` as your site's highlighter, add the following to your `_config.yml`:
+```yml
+highlighter: pygments
+``` +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP251545 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-03-12T16:52:22Z +++$+++ This sounds like an issue with https://github.com/jneen/rouge rather than Jekyll. Jekyll has no knowledge of syntax of any language. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP125664 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-03-12T16:57:14Z +++$+++ @pathawks, why did you close this? It's not fixed and I'm not the one explicitely using Rouge. The maintainers of the project are using a dependency that is buggy, they should take care of this. What do you want me to do? I don't even know what Rouge is! +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP251545 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-03-12T17:37:54Z +++$+++ > What do you want me to do? I don't even know what Rouge is!
+
+I’ve provided a link to the repository so that you can open an issue there and explain the problem you are having.
+
+I do not know what “Twig” is, so it would not make sense for me to be the one to explain what needs changing in Rogue.
+
+There is nothing in Jekyll’s code that can be changed to fix this issue; the fix will have to come from Rogue.
+
+Here is a link to Rogue’s Twig lexar: https://github.com/jneen/rouge/blob/master/lib/rouge/lexers/twig.rb +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP125664 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-03-12T17:45:35Z +++$+++ > There is nothing in Jekyll’s code that can be changed to fix this issue; the fix will have to come from Rogue.
+
+That's not my point. You are the one using Rouge to implement a feature that you advertise explitely on your docs! That's your responsibility to take care of things that don't work as expected in the dependencies of your project. As a consumer of your product, I expect it to work as advertised:
+
+https://jekyllrb.com/docs/templates/#code-snippet-highlighting
+
+You are advertising syntax highlighting, you are supposed to deliver! And if you don't, you are supposed to take care of whatever is needed to have your product work as expected.
+
+
+ +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP12479464 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-03-12T18:01:54Z +++$+++ @ericmorand We're sorry that you're facing issues while using Jekyll.
+I agree that you as an end-user shouldn't concern yourself about bugs in dependencies.
+
+One of the maintainers will get in touch with the developers at Rouge and sort things out for you.
+ +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP125664 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-03-12T18:03:52Z +++$+++ @ashmaroli, thanks a lot. I already created an issue, maybe a maintainer could comment on it if the issue is not clear enough or if some things can be added:
+
+https://github.com/jneen/rouge/issues/881 +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-03-12T18:04:57Z +++$+++ @ericmorand Please take a step back and consider that this is an entirely volunteer-run project. We're not contractually obligated to work on every bug and answer every question, seeing as we simply don't have enough resources. So our apologies if some things take too long, or don't end up happening, but it's wrong to blame the maintainers for this. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP125664 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-03-12T18:18:17Z +++$+++ @oe, I totally understand that and i can relate: maintaining open source projects is very time-consuming. But I'm not having that discussion because I want to see that bug fixed immediately, to be honest this is a low priority bug even by my own standards. My point is that if, when a bug happens, maintainers blame a dependency, close the issue and ask for the reporter to open an issue elsewhere, that could go that way:
+
+Jekyll
+
+Oh, sorry this is a bug with Rouge, go open an issue there.
+
+ -> Rouge
+
+Oh, sorry this is a bug with Ruby, go open an issue there.
+
+-> Ruby
+
+Oh, sorry this is a bug with GCC, go open an issue there.
+
+...and so on. At one point, my issue will be invalid because I won't even know what and how to report the bug. Already, Rouge maintainers could totally close my issue as invalid because I'm giving a way to reproduce that imply Jekyll - it would be legitimate for them to say that it's a Jekyll bug or that they want a reproducible example using only Rouge. +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-03-12T18:23:12Z +++$+++ @ericmorand The way I see it, this issue could pop up in any software that uses Rouge, and is therefore not specific to Jekyll. I agree however that it could have been better communicated before it was closed, sorry about that. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP12479464 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-03-12T18:28:30Z +++$+++ @ericmorand I re-opened the issue to convey that we have not abandoned this report straight away..
+Do know that I've kept a tab on the issue-ticket at Rouge and will follow its proceedings as time permits.. +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP6166343 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-07-01T18:11:11Z +++$+++ 
+This issue has been automatically marked as stale because it has not been commented on for at least two months.
+
+The resources of the Jekyll team are limited, and so we are asking for your help.
+
+If this is a **bug** and you can still reproduce this error on the <code>3.3-stable</code> or <code>master</code> branch, please reply with all of the information you have about it in order to keep the issue open.
+
+If this is a **feature request**, please consider building it first as a plugin. Jekyll 3 introduced [hooks](http://jekyllrb.com/docs/plugins/#hooks) which provide convenient access points throughout the Jekyll build pipeline whereby most needs can be fulfilled. If this is something that cannot be built as a plugin, then please provide more information about why in order to keep this issue open.
+
+This issue will automatically be closed in two months if no further activity occurs. Thank you for all your contributions.
+ +++$+++ 0 +++$+++ 0

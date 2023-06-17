@@ -1,0 +1,291 @@
+ROOT +++$+++ SP11595208 +++$+++ ROOT +++$+++ ROOT +++$+++ 2016-05-23T15:05:43Z +++$+++ Server side WCF  Hi,
+
+I'd like to start a thread to have a dialog about server side WCF on .NET Core. For me the WCF stack is quite impressive, and support for server side WCF on .NET Core would be fantastic. Please feel free to add your opinions to the thread.
+
+Here is a list of some of the WCF features (that comes to my mind):
+- Throttling
+- Reliability
+- Ordered Messages
+- Bindings
+- Instance Management
+- Behaviors
+- Transactions
+- Security
+- Discovery
+- Metadata Exchange
+- Extensibility
+
+These features and more are for me very desirable, but some might be harder to support (e.g. WCF transactions relies on MS DTC (as fas as I know), but transactions enabled communication on a server side is a very important feature).
+
+I hope you're as excited as I am about WCF, and even more so for a server side WCF on .NET Core.
+ +++$+++ 131 +++$+++ 8
+COM0 +++$+++ SP6783301 +++$+++ ROOT +++$+++ ROOT +++$+++ 2016-05-25T10:53:57Z +++$+++ Hi,
+
+I too appreciate WCF, and use it a lot.
+For me the most important features are:
+- Security
+- Extensibllity
+- Behaviors
+- Bindings (Especially TCP.Net)
+- Metadata Exchange
+- Instance Management
+- Reliability
+
+I think this could really be a showstopper for .Net core, if it will not have WCF server side support.
+
+Guy
+ +++$+++ 21 +++$+++ 0
+COM1 +++$+++ SP5694495 +++$+++ ROOT +++$+++ COM0 +++$+++ 2016-05-25T11:33:08Z +++$+++ Helllo, 
+
+We also use WCF extensively in our applications. 
+To add to the lists above we also use:
+- queued services
+
+Menahem
+ +++$+++ 15 +++$+++ 0
+COM2 +++$+++ SP1839359 +++$+++ ROOT +++$+++ COM1 +++$+++ 2016-05-25T13:12:57Z +++$+++ WCF applications on Core would be a huge boon.
+
+The only thing I would explicitly like to add to the OP's features are all of the behavior types (not just the ones available in Service Fabric)
+- Operation Behaviors
+- Service Behaviors
+- Contract Behaviors
+- Endpoint Behaviors
+
+I distributed transactions are a prohibitive factor, they can be thrown out the window though.
+ +++$+++ 14 +++$+++ 0
+COM3 +++$+++ SP116135 +++$+++ ROOT +++$+++ COM2 +++$+++ 2016-05-25T14:33:40Z +++$+++ Service Bus binding of WCF is absolutely amazing for building push based reactive applications
+ +++$+++ 9 +++$+++ 0
+COM4 +++$+++ SP7327695 +++$+++ ROOT +++$+++ COM3 +++$+++ 2016-05-26T02:16:15Z +++$+++ I do consider a full WCF implementation to be a prerequisite for moving to .NET core. Without it, it will remain a variation of the .NET Framework that cannot be utilized behind the firewall of major enterprise applications that employ Service Orientation. The major features I rely on that haven't been mentioned are:
+- Net.TCP Binding
+- Net.Pipe Binding
+- Interception-based Pipeline
+- Context 
+- Headers
+- Contract-based Coding Model
+
+The two bindings are required to enable the efficiency of communication that Service Oriented systems require behind the firewall. 
+
+The interception is critical to allow architects to provide the necessary aspects of the system in a way that does not require the developers to do anything except code as they normally would. 
+
+Contexts and Headers are required to propagate information that is ubiquitous through the application’s stack from the client layer all the way down to the data layer and back up again without affecting the call contracts. Here, I’m thinking about identity information as a universal example. 
+
+The contract-based coding model is really necessary to avoid going back to the string-parsing voodoo that had us living in a type-uncertain, data-validity-in-question wild-west back when Microsoft thought passing hash tables to and from SOAP web services was a good idea. 
+ +++$+++ 15 +++$+++ 0
+COM5 +++$+++ SP11595208 +++$+++ ROOT +++$+++ COM4 +++$+++ 2016-05-28T02:43:50Z +++$+++ Thanks for input. The implementation of back-end systems needs a mature communication stack, such as WCF. As you pointed out in the thread, a .NET Core positioned on the client side is in my mind taking away the potential of what .NET Core can be.
+
+I'm sure we all can wire basic communication (TCP, HTTP, ...) and then get bogged down into details about message parsing, to get some implementation of back-end on .NET Core. I'll stick my neck out and  claim that WCF takes a lot of plumbing away from development (reduces waste and error prone code), letting us focus on business value. That is the reason why I enjoy WCF so much, and really would love to see support for server side WCF in .NET Core, rather sooner than later.
+ +++$+++ 10 +++$+++ 0
+COM6 +++$+++ SP17440086 +++$+++ ROOT +++$+++ COM5 +++$+++ 2016-06-01T00:05:42Z +++$+++ Thanks for all the feedback on WCF Server top features! Keep it coming!
+
+Providing WCF Server support for .NET Core is on the radar.
+
+As you know, our current POR is to provide the WCF client-side libraries in .NET Core to enable UWP/ ASP.NET Core/.NET Core applications to call .NET Framework based WCF Services.
+
+We are very interested to better understand your scenarios where WCF server side functionality is required.
+Is this blocking your adoption .NET Core? 
+Do you have active projects on .NET Core for WCF Server scenarios? (We would like to partner closely with you)
+Would you plan to port over your existing services or is this for needed new development? 
+ +++$+++ 6 +++$+++ 0
+COM7 +++$+++ SP1510891 +++$+++ ROOT +++$+++ COM6 +++$+++ 2016-06-01T07:00:07Z +++$+++ A specific business case I have is that we have an investment management system with several million lines of code for which the server side is currently hosted on premise on MS Windows Servers at about 200 insurance companies and banks world wide. We have about 100+ service types, of which in the largest installations there are 700 to 800 concurrent service instances at play. Our product is driving important parts of the core businesses.
+
+The expenditure on IT is huge for our customers. This is also the place where we are looking to make major improvements over the coming years. A part of that is to find alternative hosting environments. A favorable choice would be Windows Nano, or the .NET Core on Linux. For being able to adopt .NET Core (or Windows Nano) we are missing the WCF server side.
+
+Since we are very happy with WCF as a programming model, there is no incentive to rewrite our applications other than that WCF server side is unavailable in our future hosting environments. Particular features that we use is long. But to start .NET Core adoption are, these are the important ones:
+- Self-hosting using ServiceModel.ServiceHost
+- NetTcp (half-duplex)
+- Message inspectors for instrumentation and access to SOAP headers
+- Behaviours
+- OperationContext
+- Contract based programming model
+
+Yes. We would continue building WCF services also on .NET Core.
+ +++$+++ 18 +++$+++ 0
+COM8 +++$+++ SP11595208 +++$+++ ROOT +++$+++ COM7 +++$+++ 2016-06-01T18:53:39Z +++$+++ In my case it is needed for new solutions, where WCF services can be agnostic deployed (Windows, Linux, OSX, cloud) on .NET Core.
+ +++$+++ 1 +++$+++ 0
+COM9 +++$+++ SP2247805 +++$+++ ROOT +++$+++ COM8 +++$+++ 2016-06-02T06:38:35Z +++$+++ Over the past 6 years, in the solutions I have been involved in (in the .net area), we have always relied on WCF to handle the service layer (behind the firewall & intranet) of the solutions. Nothing out there gives us the same level of flexibility and support for different communication channels like WCF does.
+
+I have been holding back moving to .net core for production environments for the lack of WCF support specifically. Not supporting WCF server on .net core creates a need to rewrite a lot of infrastructure code; which will probably end up mimicking the WCF programming model anyway.
+
+The biggest solution I worked on was used by over 300 health care institutes, rewriting the server layers and functionalities is a big investment to say the least, not to mention high risk. 
+In fact, in that same solution we were looking at a way to unify the programming model between server and embeded devices (linux) for new products. Supporting WCF services on .net core (not just clients) could've been a really big help and cost saver as there would be no need to have 2 development teams; but in stead have a larger singularly focused team.
+ +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP1682707 +++$+++ ROOT +++$+++ COM9 +++$+++ 2016-06-02T20:32:52Z +++$+++ My scenario is pretty much similar to @olilanz's, except that my business case is Point of Sales. Like him, we have our application deployed to numerous stores world wide. We are also looking for alternate ways of hosting our application in order to reduce infrastructure costs. As @jan-johansson-mr said, agnostic deploying WCF services would be great and would give us a huge flexibility.
+
+WCF plays a major role in our application: it is based on a plug-in architecture where which plug-in is basically a WCF Service, so communication between plug-ins are actually WCF calls. Changing this aspect would mean have to rewrite/rethink a lot of infrastructure code.
+
+In our case, self hosting using instances of _ServiceHost_ and the Contract based programming model is crucial. Our plan is not only migrate existing services, but also create new services.
+ +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP3469909 +++$+++ ROOT +++$+++ COM10 +++$+++ 2016-06-07T15:21:12Z +++$+++ Hi,
+
+For us the most important features are:
+- Behaviors.
+- Bindings.
+- Transactions.
+- Headers.
+- Self-hosting.
+- Integration with WF.
+- Queued Services.
+- MEX.
+- Binary Serialization (intranet communications).
+- Callback operations.
+
+Responding to Erica:
+1) Yes, at least it is delaying.
+2) Yes, we are migrating our application that also uses WF.
+3)  For both scenarios.
+
+Thanks!
+ +++$+++ 2 +++$+++ 0
+COM12 +++$+++ SP19608705 +++$+++ ROOT +++$+++ COM11 +++$+++ 2016-06-09T14:11:05Z +++$+++ I have done a lot of projects that leverage the many aspects of WCF. Most of what I leverage in WCF (pretty much everything) is currently missing from .NET Core. Much of this missing capability  would require various 3rd party libraries (or extensive custom code) to fill in the gaps and it's just not worth that level of investment when WCF already works, brilliantly. WCF is, above all else, a great productivity enhancer for my teams.
+
+The biggest piece missing for me, currently, is the extensibility model that WCF provides. 
+Most of my projects leverage the capability to completely decouple cross-cutting concerns from my other components (which are light-weight WCF services). WCF provides a fantastic mechanism for doing this without the need of 3rd party Aspect Oriented Programming libraries. Developers don't know (or even care) and can focus solely on delivering the business value of the features they are concerned with.
+
+We also leverage many other aspects of WCF such as: 
+named pipes, transactional queuing programming model, enforcement (not encouragement) of interface-based design, security capabilities, process isolation, error masking, I could go on.
+
+Without WCF (or equivalent capabilities) in .NET core I would lose way too much productivity and cannot justify the switch. It would be great to have all of these powerful capabilities in a platform that can be used in any type of environment. Imagine, productivity of WCF plus cost-savings of cheaper hosting environments. That is a tremendous business value.
+
+Thanks for tracking this issue,
+Will
+ +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP7327695 +++$+++ ROOT +++$+++ COM12 +++$+++ 2016-06-09T14:27:37Z +++$+++ I agree with @websitewill as I am in that exact situation. I'd also like to point out that WCF in the full .NET Framework is done, finished, complete. If that spec were implemented to the letter in .NET Core I'd be very content and would be able to start transitioning projects. 
+
+Thanks,
+Kenny
+ +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP3711024 +++$+++ ROOT +++$+++ COM13 +++$+++ 2016-06-09T14:44:00Z +++$+++ I have to throw my support for WCF in .NET Core as well.
+
+My primary client is a fairly large, heterogeneous WAN with intermittent connectivity.
+
+I have dreamed for years of having WCF across their entire network so that I can finally (!) have reliable transactions and durable services spanning their various generations of Linux and Windows.
+
+The thought of bringing all of WCF's many capabilities (as enumerated in this thread) to my client's entire infrastructure would literally be a dream come true. We can spend the vast efforts we've previously put toward plumbing into the services that can streamline everything we do, and take us to the next level.
+
+Please, please make this happen.
+
+-Thomas
+ +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP707049 +++$+++ ROOT +++$+++ COM14 +++$+++ 2016-06-09T16:30:47Z +++$+++ Let me also mention the value of WCF in .NET core.
+
+WCF gives the best capabailities across all my services. (Perhaps we need a sexier name for it) but in general, I use and wish to continue to use:
+- **System.Transactions**
+- **Durable services**
+- **Named pipes**
+- **An extensibility model**
+- **Transactional Queuing**
+- **MEX framework (and MEX endpoint)**
+
+And when we can run these services on Linux (and eventually IOS), it allows the most solid framework
+
+Paul
+ +++$+++ 3 +++$+++ 0
+COM16 +++$+++ SP431456 +++$+++ ROOT +++$+++ COM15 +++$+++ 2016-06-09T17:57:17Z +++$+++ Having WCF on .Net core is not only desirable, it is essential. At it's current state WCF is THE most universal and mature framework to communicate between devices, and within devices using Named Pipes. Over the wire, it adheres to common standards allowing other platforms to communicate as well. But with WCF running in .Net core, the choice will be easy to make.
+ +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP9703490 +++$+++ ROOT +++$+++ COM16 +++$+++ 2016-06-09T18:23:32Z +++$+++ We have a strong need to run .NET/WCF on Linux, so please add this to the road map!  We have invested heavily in WCF over the past decade and would hate to give up all the WCF benefits others have listed so well just because this was passed over by .NET Core.  We use most features and benefit greatly from being able to customize/extend the framework to suit our needs, such as custom message broker support (alternatives to MSMQ).
+ +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP2063115 +++$+++ ROOT +++$+++ COM17 +++$+++ 2016-06-09T21:45:09Z +++$+++ Having WCF supported in .NET Core is a great idea and my list of key features are:
+
+Security 
+Behaviors
+Bindings 
+Instance Management
+Throttling
+Metadata Exchange.
+ +++$+++ 1 +++$+++ 0
+COM19 +++$+++ SP9979211 +++$+++ ROOT +++$+++ COM18 +++$+++ 2016-06-10T00:24:46Z +++$+++ Our team used WCF to build an entire SOA platform. Each service is hosted in it's own app domain that provides complete isolation for every service. This allowed us to monitor resources, per service, and unload a service and swap it out with the app hot. I know app domains are gone, but what could possibly replace wcf?
+
+Service Bus + Net Messaging Binding
+Net Pipe binding 
+strongly typed headers and contexts
+Behaviors and interception
+MEX
+
+you have a super reliable, and extendable set of tools. wcf provides the best tools for building enterprise applications. Without it, you simply end up rebuilding it.
+
+Bringing the power of wcf to other platforms would be huge.
+
+Linux + sql + wcf + service bus + .net core looks good to me.
+ +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP19608705 +++$+++ ROOT +++$+++ COM19 +++$+++ 2016-06-10T00:41:04Z +++$+++ I'm curious. From what I understand, Azure itself is written, in large part,  usIng WCF (or at least something that provides all the capabilities of WCF) behind the firewall. That being the case, why would it be excluded from .NET Core in the first place? 
+
+Seems odd to exclude such a powerful and foundational toolset.
+
+Sent from my iPhone
+
+> On Jun 9, 2016, at 8:24 PM, Billy notifications@github.com wrote:
+> 
+> Our team used WCF to build an entire SOA platform. Each service is hosted in it's own app domain that provides complete isolation for every service. This allowed us to monitor resources, per service, and unload a service and swap it out with the app hot. I know app domains are gone, but what could possibly replace wcf?
+> 
+> Service Bus + Net Messaging Binding
+> Net Pipe binding 
+> strongly typed headers and contexts
+> Behaviors and interception
+> MEX
+> 
+> you have a super reliable, and extendable set of tools. wcf provides the best tools for building enterprise applications. Without it, you simply end up rebuilding it.
+> 
+> Bringing the power of wcf to other platforms would be huge.
+> 
+> Linux + sql + wcf + service bus + .net core looks good to me.
+> 
+> —
+> You are receiving this because you were mentioned.
+> Reply to this email directly, view it on GitHub, or mute the thread.
+ +++$+++ 1 +++$+++ 0
+COM21 +++$+++ SP499068 +++$+++ ROOT +++$+++ COM20 +++$+++ 2016-06-10T07:59:59Z +++$+++ Another use case could be, using WCF on a gateway like device for example in home automation using linux based controllers with an ARM CPU and 512MB memory is not that uncommon. Being able to use .NET core on those types of devices and using WCF to allow creating a SOA like programming model, making use of named pipes and allowing to move around context and create reliable communication could create a whole other way of working than the current C daemons, dbus communicating way of doing things. 
+
+Using WCF could also than be used to for example let your app communicate with your WCF service in your house, for offline controlling. It would provide better integration with service bus allowing efficient communication to and from cloud based services.
+
+Bjorn 
+ +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP2539779 +++$+++ ROOT +++$+++ COM21 +++$+++ 2016-06-10T13:43:06Z +++$+++ We have quants writing server side code in Mono (they need cross platform) who were almost jumping up and down in glee with the introduction of .Net Core ... until I told them that it wouldn't support AppDomains, which they currently rely on heavily.
+
+The look on their faces was one of despair. I have showed them a viable alternative using WCF and named pipes (to give them the isolation they desire without compromising performance). They were even more interested when I showed them that they could then scale these services across machines and across platform (if WCF services were supported on Linux)
+
+So, this is blocking adoption of .NET Core in this scenario and we would be looking to port existing processes/services to .NET Core as well as developing new services using .NET Core.
+
+David
+ +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP3778219 +++$+++ ROOT +++$+++ COM22 +++$+++ 2016-06-10T15:28:15Z +++$+++ My company (one of the largest financial product company) has huge investment in Linux/Ubuntu. The windows infrastructure is relatively tiny but has tons of WCF services running for business critical applications. Running WCF on .NET Core running in Linux environment is a huge benefit in integrating with other (non-windows) services and platform consolidation point of view.
+ +++$+++ 1 +++$+++ 0
+COM24 +++$+++ SP3913124 +++$+++ ROOT +++$+++ COM23 +++$+++ 2016-06-10T16:09:56Z +++$+++ Thank you -- this is really great feedback and much appreciated.  We hear you and are collating this feedback as well as reaching out to other known WCF customers.  Especially useful are the specific features called out (e.g. queuing, transaction, etc.) because it allows us to prioritize and do targeted investigations.
+
+For the record, the "missing" features of the full .NET framework's WCF were not deliberately excluded from .NET Core WCF. Rather, the initial goal was to support all the existing Windows Store WCF API's on NET Core (which are all client-facing) before tackling other mission-critical features of WCF.  It might help to know that much of the work of porting WCF features involves re-implementing OS-level libraries that WCF depends on (e.g. socket layer, cryptography, etc.) to allow it to work cross-platform. So lighting up WCF features usually involves replacing OS-level libraries for each platform first.  It might help to think that the "W" in WCF is no longer a given in NET Core.
+
+This is one reason why it is so valuable to hear from you which features matter most, because it lets us investigate more deeply questions like "Which libraries are required to do feature X on Linux? OS X?, etc.".  Please keep those suggestions and specific scenarios coming!
+ +++$+++ 2 +++$+++ 0
+COM25 +++$+++ SP5660584 +++$+++ ROOT +++$+++ COM24 +++$+++ 2016-06-10T17:29:24Z +++$+++ 1.      Named pipes
+2.      System.Transactions
+3.      A transactional queuing programming model
+4.      Durable services
+5.       Extensibility model
+6.       MEX endpoint and MEX framework
+ +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP2966817 +++$+++ ROOT +++$+++ COM25 +++$+++ 2016-06-13T14:23:07Z +++$+++ +1 please provide a way for me to build on WCF and host on linux
+
+Having moved away from windows (an subsequently WCF) here are the things I miss the most and would love to have back.
+
+#1 bindings > named pipes in particular, then tcp
+#2 security > though i understand this will be difficult without a windows domain
+#3 extensibility model > I like a number of others out there have done a decent amount with this to make working with WCF easier for engineers in my teams
+ +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP15092667 +++$+++ ROOT +++$+++ COM26 +++$+++ 2016-06-13T20:46:33Z +++$+++ All the bindings
+Security
+extensibility
+Mex
+
+I just agree with whatever one else is saying.
+
+WCF is amazing
+
+Rework the config to leverage the new config system. Json config > xml
+ +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP1720082 +++$+++ ROOT +++$+++ COM27 +++$+++ 2016-06-14T18:37:32Z +++$+++ I do a lot of work on the IoT.  It would greatly facilitate creating cross platform systems if my lightweight WCF services could be hosted anywhere that .NET core could be hosted.  As you can imagine, in IoT (and other systems) discovery is important so MEX and an extensible model.  The ability to debug locally and to support named pipes between services is valuable.  Really, in a nut shell as much of the WCF stack as possible - tranactions, bindings, durability, interoperability with azure and cloud based services (which often requires proper security and metadata).
+ +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP1741260 +++$+++ ROOT +++$+++ COM28 +++$+++ 2016-06-15T10:59:11Z +++$+++ Messaging between services is important and when doing enterprise backends, REST is not going to work. It lacks too many things like others have mentioned. So certainly Transactions, Queues Messaging, Named Pipes, Extensibility should be supported by .Net Core
+
+So .NET Core has to provide those things in one way or another. If it is called WCF I don't care. Maybe it would be the opportunity to fix some of the weaknesses of WCF like the overy complicated configuration story and replace it with a convention based approach.
+
+Also you should/must support other Messaging frameworks beside MSMQ or Service Bus. In general support of AMQP would be nice, including the various messaging patterns.
+ +++$+++ 0 +++$+++ 0

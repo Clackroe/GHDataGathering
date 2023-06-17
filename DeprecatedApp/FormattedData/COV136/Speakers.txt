@@ -1,0 +1,9 @@
+SP43930 +++$+++ relrod +++$+++ MEMBER (AUTHOR)
+SP6585283 +++$+++ ansibot +++$+++ CONTRIBUTOR
+SP8999596 +++$+++ SophieDeBenedetto +++$+++ NONE
+SP481677 +++$+++ geerlingguy +++$+++ CONTRIBUTOR
+SP150177 +++$+++ zxiiro +++$+++ NONE
+SP39340 +++$+++ sivel +++$+++ MEMBER
+SP66925589 +++$+++ quhsi +++$+++ NONE
+SP10117960 +++$+++ mikerev +++$+++ NONE
+SP11413 +++$+++ DWSR +++$+++ NONE

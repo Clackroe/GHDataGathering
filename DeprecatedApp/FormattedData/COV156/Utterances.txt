@@ -1,0 +1,76 @@
+ROOT +++$+++ SP39730484 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-05-24T18:59:42Z +++$+++ Focus on Terminal View on mouse hover <!-- ⚠️⚠️ Do Not Delete This! feature_request_template ⚠️⚠️ -->
+<!-- Please read our Rules of Conduct: https://opensource.microsoft.com/codeofconduct/ -->
+<!-- Please search existing issues to avoid creating duplicates. -->
+
+I'm not sure if vscode already allows this or if it is already possible to focus on terminal view on mouse hover? And it would be nice to, **when you have multiple splitted terminals, you just change focus by hovering over them with the mouse.**
+
+[Tilix](https://github.com/gnunn1/tilix) terminal has this feature.
+
+Here are the settings for keybindings:
+
+``` 
+{
+  "key": "",
+  "command": "workbench.panel.terminal.focus"
+}
+
+{
+  "key": "",
+  "command": "workbench.action.terminal.focus"
+}
+
+```
+
+Can i add something like a "mouse-hover" instead of "key"? 
+
+ +++$+++ 22 +++$+++ 0
+COM0 +++$+++ SP62039782 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-11-05T02:26:04Z +++$+++ <!-- 6d457af9-96bd-47a8-a0e8-ecf120dfffc1 -->
+This feature request is now a candidate for our backlog. The community has 60 days to [upvote](https://github.com/microsoft/vscode/wiki/Issues-Triaging#up-voting-a-feature-request) the issue. If it receives 20 upvotes we will move it to our backlog. If not, we will close it. To learn more about how we handle feature requests, please see our [documentation](https://aka.ms/vscode-issue-lifecycle).
+
+Happy Coding! +++$+++ 2 +++$+++ 0
+COM1 +++$+++ SP62039782 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-11-21T02:27:45Z +++$+++ <!-- 9078ab2c-c9e0-7adb-d31b-1f23430222f4 -->
+:slightly_smiling_face: This feature request received a sufficient number of community upvotes and we moved it to our backlog. To learn more about how we handle feature requests, please see our [documentation](https://aka.ms/vscode-issue-lifecycle).
+
+Happy Coding! +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP2193314 +++$+++ ROOT +++$+++ COM1 +++$+++ 2021-02-02T15:05:46Z +++$+++ The bot mishaved, it took 9 months to reach 20 upvotes whereas it's meant to only allow 2 months. Sorry to disappoint but I'm going to close the issue as it didn't reach that bar fast enough. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP1131315 +++$+++ ROOT +++$+++ COM2 +++$+++ 2021-02-02T15:55:20Z +++$+++ @Tyriar Why do you think that it took 9 months? The announcement that 20 upvotes are needed was [made on Nov 5, 2020](https://github.com/microsoft/vscode/issues/98475#issuecomment-722085036) and less than three weeks later (on Nov 21, 2020) the [required number of upvotes was reached](https://github.com/microsoft/vscode/issues/98475#issuecomment-731493169). Or am I missing something? +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP39730484 +++$+++ ROOT +++$+++ COM3 +++$+++ 2021-02-02T22:30:01Z +++$+++ > The bot mishaved, it took 9 months to reach 20 upvotes whereas it's meant to only allow 2 months. Sorry to disappoint but I'm going to close the issue as it didn't reach that bar fast enough.
+
+
+
+Tyriar, we have reached the 20 upvotes well within the 2 months. I've been monitoring this close and there is also reddit to prove this.
+
+
+Pls re-check this  @Tyriar 
+
+ +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP2193314 +++$+++ ROOT +++$+++ COM4 +++$+++ 2021-02-02T22:37:01Z +++$+++ This actually duplicates https://github.com/microsoft/vscode/issues/44214, which was attempted and reverted in https://github.com/microsoft/vscode/pull/53963. We would only consider this as a workbench level feature, not just the terminal and it's closed as out of scope on that issue. Closing as duplicate. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP39730484 +++$+++ ROOT +++$+++ COM5 +++$+++ 2021-02-02T23:55:36Z +++$+++ > This actually duplicates #44214
+
+
+Sorry but the justification that the bot gave for closing [#44214](https://github.com/microsoft/vscode/issues/44214) , for me it's not clear and valid (no wonder that it received 17 downvotes). 
+
+> which was attempted and reverted in #53963
+
+
+On that attempt that @alexdima  tried and reverted, was focus on hover for the **EditorGroup** not for the **terminal**.
+
+Also, those references are from 2 years ago. Until now, what has been done taking into account this? Was there a change plan created for this or something? Because it looks like the community want this (not only from 2018, but also nowadays since my request received > 20 upvotes).
+
+Can you pls re-check this and reopen **or** provide a more clear and valid justification?
+
+
+If you need any help, pls tell me. 
+
+@Tyriar 
+
+ +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP2193314 +++$+++ ROOT +++$+++ COM6 +++$+++ 2021-02-03T12:55:24Z +++$+++ I get you care about this but it's already been considered in https://github.com/microsoft/vscode/issues/44214#issue-299400073:
+
+> Now that we can split editors and terminals I think it would be a good idea to have the ability to activate **editors/terminals** on mouse over.
+
+As the owner of the terminal component I reject the idea that this should be a terminal only feature, it should apply to the editors as well at the very least. The PR revealed some usability issues with the feature and it was marked as out of scope by someone intimately familiar with the editor.
+
+Realistically this would also not get prioritized for the team to work on so it would only come in via a PR, and we've already attempted and spent a bunch of time on it reviewing, testing and fixing in https://github.com/microsoft/vscode/pull/53963. It would also be a major feature in terms of work required to implement and maintain, but it would very rarely get used because it's an opt-in.
+
+The bot helps us manage issues and it messed up here by not applying the feature request label and starting the timer in May, if it did maybe it would have reached 20 upvotes in time but I also made a mistake by not closing it out as a duplicate of https://github.com/microsoft/vscode/issues/44214 to begin with. +++$+++ 0 +++$+++ 0

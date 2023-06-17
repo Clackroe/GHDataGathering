@@ -1,0 +1,74 @@
+ROOT +++$+++ SP11725952 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-19T09:00:30Z +++$+++ Snow Flake on vscode insiders and pushing death is very offensive to me The Snow Flake on vscode insiders and pushing it as a "cozy"/"wintery" thing is very offensive to me. I come from Norway and people who glorify snow is equivalent to the people who glorified hitler during WW2. The amount of deaths caused by winter is massive, not to mention the depression the season brings and you want to bring that into my work space as well? This is unacceptable, everytime I leave my house I see snow and I want to escape into Visual Studio Code and get some work done and what do I see? More snow... To me this is equally offensive as a swastika.
+
+This isn't just me either, think about the people who cannot even get snow, think about how you're making them feel, making them see what they cannot get, although personally I don't understand that. Snow is terrifying.
+
+Version: 1.42.0-insider (user setup)
+Commit: 26f5dfc
+Date: 2019-12-19T05:31:04.916Z
+Electron: 6.1.6
+Chrome: 76.0.3809.146
+Node.js: 12.4.0
+V8: 7.6.303.31-electron.0
+OS: Windows_NT x64 10.0.18362
+
+Steps to Reproduce:
+
+1. Install latest build of insiders.
+
+Does this issue occur when all extensions are disabled?: Yes
+
+Additional reading on the issue that most certainly needs to be considered.
+[https://thoughtcatalog.com/jim-goad/2015/12/death-by-snow-14-ways-that-winter-weather-can-kill-you/](https://thoughtcatalog.com/jim-goad/2015/12/death-by-snow-14-ways-that-winter-weather-can-kill-you/)
+[https://www.nrdc.org/stories/global-warming-101](https://www.nrdc.org/stories/global-warming-101)
+[https://www.recoveryranch.com/addiction-blog/snow-depression/](https://www.recoveryranch.com/addiction-blog/snow-depression/)
+
+ +++$+++ 100 +++$+++ 6
+COM0 +++$+++ SP1710528 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-19T09:10:39Z +++$+++ This is really offending for people that are suffering for global warming and desertfication areas. 
+Also is that a natural snow icon or a fake snow icon?
+Please think about how much water Is wasted to create artificial snow just for games:
+https://news.bloombergenvironment.com/environment-and-energy/fake-snow-for-china-olympics-needs-49-million-gallons-of-water +++$+++ 31 +++$+++ 1
+COM1 +++$+++ SP1556794 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-12-19T09:18:17Z +++$+++ Perhaps this is not the correct platform for trolling? +++$+++ 6 +++$+++ 58
+COM2 +++$+++ SP1710528 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-12-19T09:27:31Z +++$+++ @braindigitalis It Is not trolling Is that when MS applies too extreme "politically correct" reactions it Is healty if the community react with a little bit of satire. +++$+++ 31 +++$+++ 1
+COM3 +++$+++ SP1570693 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-12-19T09:28:38Z +++$+++ Also, seems, censoring everything just keep self "clean" +++$+++ 13 +++$+++ 1
+COM4 +++$+++ SP1710528 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-12-19T09:44:39Z +++$+++ We could make the snowflake toggable https://github.com/microsoft/vscode/issues/87333 :smile: +++$+++ 6 +++$+++ 1
+COM5 +++$+++ SP6270689 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-12-19T09:59:06Z +++$+++ > We could make the snowflake toggable #87333
+
+If it was possible to just turn the slowflake off, this whole debacle wouldn't happen :thinking:  +++$+++ 0 +++$+++ 1
+COM6 +++$+++ SP5352403 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-12-19T10:01:19Z +++$+++ It is really offending me because I am very snow sensitive and get hurt by snowflakes when it is snowing.
+
+If I see that on the VS code I feel physically hurt.
+
+So remove it immediately like you did the other thing. +++$+++ 0 +++$+++ 1
+COM7 +++$+++ SP58554773 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-12-19T10:07:59Z +++$+++ On the other hand snowflake is the best symbol for spineless corporations bowing down to any random activist complain. +++$+++ 22 +++$+++ 1
+COM8 +++$+++ SP1710528 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-12-19T10:09:15Z +++$+++ Also there was some recent effort to associate snowflake and Santa with its red hat to drug consumption so please don't talk about Its red hat and snow symbol in the same thread. :smile_cat: 
+https://www.vice.com/en_us/article/jgee9k/amazon-is-still-selling-festive-christmas-sweaters-showing-santa-doing-cocaine +++$+++ 7 +++$+++ 2
+COM9 +++$+++ SP7060605 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-12-19T10:52:50Z +++$+++ I am with you guys- the one **TROLL** that offended many, many people got his wish fulfilled. Only ONE person wanted this ridiculous change and you are just ignoring so many requests to bring back what was deleted. Shame on you, shame.  +++$+++ 20 +++$+++ 2
+COM10 +++$+++ SP1462701 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-12-19T11:27:43Z +++$+++ @daniel1302 Please stop offended me! You're not my dad, I can use everything I like / dislike! +++$+++ 5 +++$+++ 3
+COM11 +++$+++ SP7060605 +++$+++ ROOT +++$+++ COM10 +++$+++ 2019-12-19T11:33:00Z +++$+++ @daniel1302 Please stop offending other users. @Christian-Schiffer created enough havoc already. +++$+++ 5 +++$+++ 2
+COM12 +++$+++ SP921500 +++$+++ ROOT +++$+++ COM11 +++$+++ 2019-12-19T11:33:06Z +++$+++ @daniel1302 ok boomer +++$+++ 4 +++$+++ 2
+COM13 +++$+++ SP5352403 +++$+++ ROOT +++$+++ COM12 +++$+++ 2019-12-19T11:38:23Z +++$+++ So, interesting to see that this issue is actively watched but the only thing what happens, is that two posts were deleted instead of instapromptu removing the hurtful snowflake from the application, like the other thing.
+
+I'd be really  grateful if that the correct reaction will be delivered like the other one, snowflakes do hurt and sting in the eyes, I won't be able to sleep if I see all day this hurtful symbol of pain and climate oppression in my IDE.
+ +++$+++ 1 +++$+++ 1
+COM14 +++$+++ SP49909275 +++$+++ ROOT +++$+++ COM13 +++$+++ 2019-12-19T11:40:44Z +++$+++ Some guy in Microsoft HQ is sweating right now.
+
+Although this is 100% deserved. +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP1784781 +++$+++ ROOT +++$+++ COM14 +++$+++ 2019-12-19T11:41:36Z +++$+++ His name is **Christian**, that must be a troll account, too good to be true :D +++$+++ 0 +++$+++ 1
+COM16 +++$+++ SP5352403 +++$+++ ROOT +++$+++ COM15 +++$+++ 2019-12-19T11:42:48Z +++$+++ If you need further reference why snowflakes remind me of cold, pain and hurt see:
+https://www.aao.org/eye-health/diseases/photokeratitis-snow-blindness
+https://www.webmd.com/a-to-z-guides/news/20110120/snow-shoveling-injures-thousands-each-year#1
+ +++$+++ 1 +++$+++ 1
+COM17 +++$+++ SP30030 +++$+++ ROOT +++$+++ COM16 +++$+++ 2019-12-19T12:02:02Z +++$+++ I'm from New Zealand, and in the Southern Hemisphere, it's not cold, but hot during the holiday season. I suggest you geo-locate the user's position and prompt them for the icon of their choice, e.g. snow, ice, fire, sun shine. +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP9845024 +++$+++ ROOT +++$+++ COM17 +++$+++ 2019-12-19T12:18:49Z +++$+++ BTW. To original author of this storm - @Christian-Schiffer. I wonder if his name not offending him? 
+https://en.m.wikipedia.org/wiki/Christian_(given_name)
+Maybe he should change it... +++$+++ 7 +++$+++ 1
+COM19 +++$+++ SP762598 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-12-19T12:24:38Z +++$+++ Every Christian should be renamed immediately to eliminate possible offence. The name should be strictly prohibited for future use. +++$+++ 0 +++$+++ 1
+COM20 +++$+++ SP366002 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-12-19T12:28:27Z +++$+++ https://en.wikipedia.org/wiki/Snowflake_(slang) +++$+++ 7 +++$+++ 1
+COM21 +++$+++ SP11725952 +++$+++ ROOT +++$+++ COM20 +++$+++ 2019-12-19T12:52:37Z +++$+++ Can you people stick on topic? This is a serious discussion about the terror that is snow flakes and how it terrorises a lot of people everyday, even more now with the new VS Code update. +++$+++ 0 +++$+++ 1
+COM22 +++$+++ SP1817322 +++$+++ ROOT +++$+++ COM21 +++$+++ 2019-12-19T12:56:29Z +++$+++ I would also like to point out that snow(flake) is _white_ and is commonly used as a white supremacy symbol to oppress and marginalize whole ethnicities, which due to systemic geographic discrimination couldn't historically experience, first-hand, full range of weather phenomena. +++$+++ 0 +++$+++ 1
+COM23 +++$+++ SP695831 +++$+++ ROOT +++$+++ COM22 +++$+++ 2019-12-19T13:00:09Z +++$+++ Winter is one good buff against invaders in Russia. Praise the winter! Let it snow!
+
+Also I think climate calculations are wrong and new ice age is nearby. There will be more snow. Thank you global warming fighters, for helping to make even more snow! +++$+++ 0 +++$+++ 1
+COM24 +++$+++ SP1487073 +++$+++ ROOT +++$+++ COM23 +++$+++ 2019-12-19T19:02:45Z +++$+++ Thanks for creating this issue. We think this issue is unactionable or unrelated to the goals of this project. Please follow our [issue reporting](https://aka.ms/vscodeissuereporting) guidelines.
+
+Happy Coding! +++$+++ 0 +++$+++ 0

@@ -1,0 +1,19 @@
+ROOT +++$+++ SP4674940 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-07-14T17:01:02Z +++$+++ Security Fix Details in https://portal.msrc.microsoft.com/en-us/security-guidance/advisory/CVE-2020-1416 +++$+++ 2 +++$+++ 0
+COM0 +++$+++ SP17457252 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-07-14T18:21:45Z +++$+++ Just received update `1.47.1` linking to this issue, but it doesn't have details 😐  +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP4674940 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-07-14T18:22:40Z +++$+++ I updated the link. The MITRE copy is not yet updated. +++$+++ 5 +++$+++ 0
+COM2 +++$+++ SP1465785 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-07-14T22:14:30Z +++$+++ The link currently just goes to this milestone (https://github.com/microsoft/vscode/milestone/128), is that expected? +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP451903 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-07-14T22:26:39Z +++$+++ 
+
+
+> Details in https://portal.msrc.microsoft.com/en-us/security-guidance/advisory/CVE-2020-1416
+
+That page is currently empty, so is https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-1416
+
+However, if anyone is wondering, just google (_bing_?) the CVE number.
+ +++$+++ 1 +++$+++ 0
+COM4 +++$+++ SP146853 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-07-15T00:18:34Z +++$+++ The milestone page is "empty," but if you click "closed" you'll see it. Probably should tweak the link to show closed issues. +++$+++ 15 +++$+++ 0
+COM5 +++$+++ SP94169 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-07-15T16:40:19Z +++$+++ Is there a commit/PR we can see fixing this bug? It's not super helpful to know a CVE existed if we can't verify that it was fixed properly. +++$+++ 4 +++$+++ 0
+COM6 +++$+++ SP3889017 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-07-15T20:04:35Z +++$+++ @wwahammy It seems like the bug was [in the closed source `vscode‑distro` component](https://github.com/microsoft/vscode/wiki/Differences-between-the-repository-and-Visual-Studio-Code): https://github.com/microsoft/vscode/compare/1.47.0...1.47.1. +++$+++ 0 +++$+++ 1
+COM7 +++$+++ SP94169 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-07-15T20:26:55Z +++$+++ Ah, so there's some proprietary software that VSCode uses that apparently does something which can lead to a security hole. We don't know what it does or how risky it is to run. +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP514986 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-07-16T10:22:05Z +++$+++ This is the kind of coding quality we get when corporations prioritizes employee diversity over code quality  +++$+++ 0 +++$+++ 21
+COM9 +++$+++ SP146853 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-07-16T13:59:45Z +++$+++ A thumbs down isn't enough on this one. There's zero tolerance for backwater attitude @mahen23. Reporting. +++$+++ 8 +++$+++ 0

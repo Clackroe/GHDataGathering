@@ -1,0 +1,7 @@
+SP18248938 +++$+++ kpetrow +++$+++ NONE (AUTHOR)
+SP12612165 +++$+++ Mugen87 +++$+++ COLLABORATOR
+SP14173 +++$+++ arpu +++$+++ NONE
+SP3927951 +++$+++ sciecode +++$+++ COLLABORATOR
+SP242577 +++$+++ makc +++$+++ CONTRIBUTOR
+SP1000017 +++$+++ WestLangley +++$+++ COLLABORATOR
+SP97088 +++$+++ mrdoob +++$+++ OWNER

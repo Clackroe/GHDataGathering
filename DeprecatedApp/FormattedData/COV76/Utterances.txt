@@ -1,0 +1,212 @@
+ROOT +++$+++ SP5522890 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-03-07T00:44:41Z +++$+++ spurious CONDITIONAL_BARE_VARS warnings <!--- Verify first that your issue is not already reported on GitHub -->
+<!--- Also test if the latest release and devel branch are affected too -->
+<!--- Complete *all* sections as described, this form is processed automatically -->
+
+##### SUMMARY
+<!--- Explain the problem briefly below -->
+
+Suprrious Deprecation warning and regular (non-deprecation) warnings when using boolean vars.
+
+##### ISSUE TYPE
+- Bug Report
+
+##### COMPONENT NAME
+<!--- Write the short name of the module, plugin, task or feature below, use your best guess if unsure -->
+core
+
+##### ANSIBLE VERSION
+<!--- Paste verbatim output from "ansible --version" between quotes -->
+```paste below
+ansible 2.8.0.dev0
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = [u'/home/user/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+  ansible python module location = /home/user/ansible-ansible/lib/ansible
+  executable location = /home/user/ansible-ansible/bin/ansible
+  python version = 2.7.5 (default, Oct 30 2018, 23:45:53) [GCC 4.8.5 20150623 (Red Hat 4.8.5-36)]
+```
+
+##### CONFIGURATION
+<!--- Paste verbatim output from "ansible-config dump --only-changed" between quotes -->
+```paste below
+DEFAULT_STDOUT_CALLBACK(env: ANSIBLE_STDOUT_CALLBACK) = debug
+```
+
+##### OS / ENVIRONMENT
+<!--- Provide all relevant information below, e.g. target OS versions, network device firmware, etc. -->
+CentOS/RHEL 7, Fedora 29
+
+##### STEPS TO REPRODUCE
+<!--- Describe exactly how to reproduce the problem, using a minimal test-case -->
+
+<!--- Paste example playbooks or commands between quotes below -->
+```yaml
+---
+- hosts: localhost
+  gather_facts: no
+  vars:
+    mybare: true
+    myfalse: false
+    mycomplex: "{{ mybare or myfalse }}"
+  tasks:
+  - debug:
+      msg: bare
+    when: mybare
+  - debug:
+      msg: complex
+    when: mycomplex
+```
+
+<!--- HINT: You can paste gist.github.com links for larger files -->
+
+##### EXPECTED RESULTS
+<!--- Describe what you expected to happen when running the steps above -->
+
+Results on ansible 2.7:
+```
+PLAY [localhost] ****************************************************************************************************************************************************************************************************************************
+
+TASK [debug] ********************************************************************************************************************************************************************************************************************************
+ok: [localhost] => {}
+
+MSG:
+
+bare
+
+
+TASK [debug] ********************************************************************************************************************************************************************************************************************************
+ok: [localhost] => {}
+
+MSG:
+
+complex
+
+
+PLAY RECAP **********************************************************************************************************************************************************************************************************************************
+localhost                  : ok=2    changed=0    unreachable=0    failed=0
+```
+
+##### ACTUAL RESULTS
+<!--- Describe what actually happened. If possible run with extra verbosity (-vvvv) -->
+
+Results on devel/2.8
+<!--- Paste verbatim command output between quotes -->
+```paste below
+PLAY [localhost] ****************************************************************************************************************************************************************************************************************************
+
+TASK [debug] ********************************************************************************************************************************************************************************************************************************
+[DEPRECATION WARNING]: evaluating mybare as a bare variable, this behaviour will go away and you might need to add |bool to the expression in the future. Also see CONDITIONAL_BARE_VARS configuration toggle.. This feature will be removed
+ in version 2.12. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+ok: [localhost] => {}
+
+MSG:
+
+bare
+
+
+TASK [debug] ********************************************************************************************************************************************************************************************************************************
+[DEPRECATION WARNING]: evaluating mycomplex as a bare variable, this behaviour will go away and you might need to add |bool to the expression in the future. Also see CONDITIONAL_BARE_VARS configuration toggle.. This feature will be
+removed in version 2.12. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+ [WARNING]: conditional statements should not include jinja2 templating delimiters such as {{ }} or {% %}. Found: {{ mybare or myfalse }}
+
+ok: [localhost] => {}
+
+MSG:
+
+complex
+
+
+PLAY RECAP **********************************************************************************************************************************************************************************************************************************
+localhost                  : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+```
+ +++$+++ 3 +++$+++ 0
+COM0 +++$+++ SP3733047 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-03-07T15:07:47Z +++$+++ same here:
+```
+- name: Flag swap LV found (skip otherwise).
+  set_fact: swap_lv=yes
+  when: res.stdout == "vg-lv_swap"
+
+- name: Flag swap LV not found (skip otherwise).
+  set_fact: swap_lv=no
+  when: res.stdout != "vg-lv_swap"
+
+- block:
+  - ... (5 tasks omitted)
+  when: swap_lv|bool
+```
+(shown with silencing workaround, without this '|bool' each task in block shows that warning)
+
+```
+[DEPRECATION WARNING]: evaluating swap_lv as a bare variable, this behaviour will go away and you
+might need to add |bool to the expression in the future. Also see CONDITIONAL_BARE_VARS 
+configuration toggle.. This feature will be removed in version 2.12. Deprecation warnings can be 
+disabled by setting deprecation_warnings=False in ansible.cfg.
+``` +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP39340 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-03-07T15:19:35Z +++$+++ This is a purposeful warning for this situation.
+
+The behavior that it is warning about, relates to how a single bare variable is handled in conditionals.
+
+We have a piece of logic, that can perform unexpected actions that we are deprecating in 2.12.
+
+That logic would enable the following bad behavior:
+
+```
+- debug:
+    msg: "This should run with 'thing' is the string 'false'"
+  when: thing
+  vars:
+    thing: "false"
+```
+
+This task actually gets skipped, instead of run.  A string should be a truthy value, but is unwound in a way that makes it falsy.
+
+Instead of treating that as:
+
+```
+{% if thing %}True{% else %}False{% endif %}
+```
+
+It instead get's treated as:
+
+```
+{% if false %}True{% else %}False{% endif %}
+``` +++$+++ 1 +++$+++ 0
+COM2 +++$+++ SP5522890 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-03-07T15:35:57Z +++$+++ I assume my reproducer playbook will work identically as it does today (2.7) once the deprecation message is gone.  Can an option to be added to squash only this warning?  There is nothing wrong w/ the playbook I described above.
+
+The second warning in the "complex" task for certain seems like a recurrence of a bug that happened a few releases ago.
+
+Edit: it would be most useful to only show the warning for cases where a string is converted implicitly to a bool. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP39340 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-03-07T15:40:04Z +++$+++ It should work the same.  You can try to silence it by setting `CONDITIONAL_BARE_VARS` to `False` (https://docs.ansible.com/ansible/devel/reference_appendices/config.html#conditinal-bare-vars)
+
+There are issues aside from bool conversion as well.
+
+In the case of `thing: "foo"`, it would be changed to `{% if foo %}` which would give an undefined var error, if `foo` did not exist, or if it existed, it could also give an unexpected outcome. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP5522890 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-03-07T15:48:53Z +++$+++ So this feature is opt-in for now?  And if I opt-in, it will squash the warning? +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP39340 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-03-07T15:55:48Z +++$+++ It is opt-in, and if you opt-in, the warning will disappear.  Once 2.12 lands, the default will swap to `False`, the current default is `True` +++$+++ 1 +++$+++ 0
+COM6 +++$+++ SP19341644 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-05-23T11:12:49Z +++$+++ Does it really make sense to show the warning even if the variable in question is undoubtedly a boolean? There is no difference in this case (as far as I understand this). It doesn't make sense to pipe a boolean variable through the `|bool` filter.
+
+Also, I think the warning itself is misleading. It says `evaluating x as a bare variable, this 
+behaviour will go away`. This sounds like bare variables won't be supported at all in the future, but in reality they will just be interpreted differently in cases where the variable is of type String. +++$+++ 8 +++$+++ 0
+COM7 +++$+++ SP11949638 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-05-28T21:16:39Z +++$+++ Completely agree with @ChristianCiach -- shouldn't this warning be only issued when a bare **string** variable is used in a conditional?  That would be deserving of a warning. However, this deprecation warning also seems to be issued when a bare **boolean** variable is being used in a conditional. 
+
+Let's look at an example included in ansible's own documentation:  https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html#the-when-statement
+```
+vars:
+  epic: true
+tasks:
+    - shell: echo "This certainly is epic!"
+       when: epic
+```
+
+Why is this triggering the deprecation warning?   This warning will cause a tremendous amount of work for the ansible community... that is, tons of playbooks will need to be rewritten that have conditionals checking bare booleans.  (for example, adding the | bool filter to make the warning go away)  Wouldn't it make sense to only have the deprecation warning pop out when it's a naked string variable is being evaluated, and not have the warning for a naked boolean variable? +++$+++ 2 +++$+++ 0
+COM8 +++$+++ SP19341644 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-05-29T08:56:16Z +++$+++ It should also be mentioned that ansible-lint rule E602 explicitly encourages the use of bare-variable conditionals that trigger deprecation warnings now. https://docs.ansible.com/ansible-lint/rules/default_rules.html +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP5522890 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-05-29T10:40:40Z +++$+++ > It should also be mentioned that ansible-lint rule E602 explicitly encourages the use of bare-variable conditionals that trigger deprecation warnings now. https://docs.ansible.com/ansible-lint/rules/default_rules.html
+
+Nothing is really being deprecated for those using true booleans, only a default changed.  I agree that it should not be triggered in this case. You can squash these warnings by opting in to the new behavior, which is what everyone wanted anyway from the start. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP11949638 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-05-29T17:00:57Z +++$+++ Opting into the new/future behavior  (i.e. setting conditional_bare_variables to false in ansible.cfg) is only a resonable solution for an end user.  For those that write and maintain roles consumed by others, these spurious warnings create a horrible choice: they will either need to continuously tell all their users to ignore the copious warnings/reconfigure their ansible.cfg file, or, alternatively, make silly changes to the role to make the spurious warnings go away.    Most role maintainers will simply give in, and add a " | bool" filter, even though using the | bool filter on a boolean is just silly.   This is really a sad situation, and I'm really surprised to see Ansible miss so badly.  Ansible's own examples cause this spurious warning, yet there have been no changes to the examples!
+
+
+ +++$+++ 1 +++$+++ 0
+COM11 +++$+++ SP39340 +++$+++ ROOT +++$+++ COM10 +++$+++ 2019-05-30T15:53:26Z +++$+++ After a discussion in our recent IRC meeting (https://meetbot.fedoraproject.org/ansible-meeting/2019-05-30/ansible_public_core_irc_meeting.2019-05-30-15.01.log.html#l-116) we would entertain a PR that tries to further clarify the warning, or restrict it to a smaller subset of conditions.
+
+Accepting the PR would be dependent on the implications of the change and specific implementation, ensuring that we do not cause performance regressions or cause other problems. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP19572925 +++$+++ ROOT +++$+++ COM11 +++$+++ 2019-05-30T16:38:20Z +++$+++ I have opened a tentative solution [here](https://github.com/ansible/ansible/pull/57190) to restrict it to a smaller subset of warnings and would appreciate any feedback. +++$+++ 0 +++$+++ 0

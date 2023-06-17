@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/GoogleChrome/lighthouse/issues/11381
+Number of Comments: 6

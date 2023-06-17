@@ -1,0 +1,18 @@
+ROOT +++$+++ SP22155288 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-03-07T19:23:43Z +++$+++ curriculum not on 100% short story: curriculum not on 100%
+long story:
+""Basic HTML and HTML5"" is ""Not Passed"" because ""Use the value attribute with Radio Buttons and Checkboxes"" doesn't complete.
+ I complete it 3 times and it shows: ""Basic HTML and HTML5
+100% complete""
+
+but in the curriculum is not. +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP5313213 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-03-07T19:41:49Z +++$+++ @rocnogu I am not understanding what the problem is.  Can you explain how we can recreate the issue?
+
+Do you have screen shots you can share of the problem you are trying to describe? +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP22155288 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-03-07T23:19:08Z +++$+++ @RandellDawson   i finish the assignment but the system doesn't recognize it. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP5313213 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-03-07T23:46:52Z +++$+++ @rocnogu Please use [our forum](https://www.freecodecamp.org/forum) for debugging the code of your projects.  If the forum members determine there is nothing wrong with your code, you can request this issue to be reopened.  GitHub issues are meant for reporting bugs and not troubleshooting the code in your projects.
+
+Thank you for understanding. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP22155288 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-03-08T02:43:49Z +++$+++ how about you do it?
+it's literally your job.
+or you are here just to spam random stuff till people get pissed off and leave? +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP5313213 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-03-08T03:48:28Z +++$+++ I am a volunteer as most of Free Code Camp's contributors are. +++$+++ 0 +++$+++ 0

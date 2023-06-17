@@ -1,0 +1,34 @@
+{
+    "povsister": {
+        "id": "SP11040951",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "k8s-ci-robot": {
+        "id": "SP20407524",
+        "role": "CONTRIBUTOR"
+    },
+    "aojea": {
+        "id": "SP6450081",
+        "role": "MEMBER"
+    },
+    "dims": {
+        "id": "SP23304",
+        "role": "MEMBER"
+    },
+    "duyanghao": {
+        "id": "SP12867714",
+        "role": "NONE"
+    },
+    "fedebongio": {
+        "id": "SP3780986",
+        "role": "CONTRIBUTOR"
+    },
+    "liggitt": {
+        "id": "SP980082",
+        "role": "MEMBER"
+    },
+    "lavalamp": {
+        "id": "SP647318",
+        "role": "MEMBER"
+    }
+}

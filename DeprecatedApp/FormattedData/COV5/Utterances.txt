@@ -1,0 +1,63 @@
+ROOT +++$+++ SP10599498 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-03-13T18:20:29Z +++$+++ Why does WinAppDriver.exe require developer mode? I would like to use WinAppDriver on a computer that doesn't have developer mode turned on. Is there a technical limitation or reason why it requires developer mode? It starts up just fine even when developer mode isn't turned on with the message:
+
+> Developer mode is not enabled. Enable it through Settings and restart Windows Application Driver +++$+++ 4 +++$+++ 0
+COM0 +++$+++ SP13311299 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-06-09T11:33:42Z +++$+++ We have the same issue. Any reason for that? What is the requirement for that?
+
+We simply enable developer mode before running our tests by executing the following PowerShell bevor starting up WinAppDriver.exe:
+```reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /t REG_DWORD /f /v "AllowDevelopmentWithoutDevLicense" /d "1"```  +++$+++ 2 +++$+++ 0
+COM1 +++$+++ SP8437883 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-05-18T04:39:19Z +++$+++ We have the same issue in WinAppDriver !! Any solution for this thread @timotiusmargo  ? +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP6656040 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-05-22T22:56:11Z +++$+++ Hi,
+
+WinAppDriver's requirement on DeveloperMode is based on the premise that it is a developer tool. Enabling DeveloperMode requires Administrative access to the machine, and therefore enforces that the user has the right set of permissions to control the machine. +++$+++ 1 +++$+++ 8
+COM3 +++$+++ SP10599498 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-05-23T01:25:55Z +++$+++ Please remove this restriction. +++$+++ 22 +++$+++ 0
+COM4 +++$+++ SP1077735 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-06-06T05:20:18Z +++$+++ This is a blocker for using WiAppDriver in many corporates as developer mode can't be enabled for all developers. +++$+++ 3 +++$+++ 0
+COM5 +++$+++ SP6820539 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-07-05T11:37:02Z +++$+++ So this is just an artificially created annoyance. 
+Please remove it!
+
+> Hi,
+> 
+> WinAppDriver's requirement on DeveloperMode is based on the premise that it is a developer tool. Enabling DeveloperMode requires Administrative access to the machine, and therefore enforces that the user has the right set of permissions to control the machine.
+
+ +++$+++ 2 +++$+++ 0
+COM6 +++$+++ SP1077735 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-07-05T11:52:13Z +++$+++ Yes. Rightly said. It's an unwanted restriction.
+
+Thanks,
+
+Purusothaman Ramanujam
+
+On Fri, 5 Jul, 2019, 5:07 PM 4alexbo, <notifications@github.com> wrote:
+
+> So this is just an artificially created annoyance.
+> Please remove it!
+>
+> Hi,
+>
+> WinAppDriver's requirement on DeveloperMode is based on the premise that
+> it is a developer tool. Enabling DeveloperMode requires Administrative
+> access to the machine, and therefore enforces that the user has the right
+> set of permissions to control the machine.
+>
+> —
+> You are receiving this because you commented.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/microsoft/WinAppDriver/issues/165?email_source=notifications&email_token=AAIHDZ6SFG44LLALDU6C34LP54W6RA5CNFSM4DDORD6KYY3PNVWWK3TUL52HS4DFVREXG43VMVBW63LNMVXHJKTDN5WW2ZLOORPWSZGODZJJZBQ#issuecomment-508730502>,
+> or mute the thread
+> <https://github.com/notifications/unsubscribe-auth/AAIHDZ7Z7LDCXK5KJRC55PLP54W6RANCNFSM4DDORD6A>
+> .
+>
+ +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP1126062 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-07-30T10:11:01Z +++$+++ Thank you @marc-mueller
+> We have the same issue. Any reason for that? What is the requirement for that?
+> 
+> We simply enable developer mode before running our tests by executing the following PowerShell bevor starting up WinAppDriver.exe:
+> `reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /t REG_DWORD /f /v "AllowDevelopmentWithoutDevLicense" /d "1"`
+
+The above command worked for me. My company policy require Avecto Priviledges. So run the Powershell as Administrator or with Avecto defendpoint and add the reg add command above and you'll see that the dev mode is switched on. 
+
+![DevMode](https://user-images.githubusercontent.com/1126062/62121020-ae555580-b2ba-11e9-9f89-a246392e7f40.PNG)
+ +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP49918312 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-11-18T15:31:02Z +++$+++ This is a blocker for all automation as this is an unacceptable change in the environment in which we are performing QA. Users don't run in developer mode, so we aren't allowed to QA in it. It's as simple as that. +++$+++ 1 +++$+++ 0
+COM9 +++$+++ SP55091211 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-12-09T18:02:48Z +++$+++ For what it's worth I am using WinAppDriver in a production environment to do Robotic Process Automation (RPA) Validation of application availability.  Developer Mode has been identified by our security team as a no no.  It's a show stopper.  Why FORCE developer mode? +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP24926449 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-08-07T15:27:00Z +++$+++ This is really frustrating, Our IT Team doesn't want us to Enable developer mode, this restriction is not required. It would be better if they lift off this restriction.  +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP3118816 +++$+++ ROOT +++$+++ COM10 +++$+++ 2020-12-11T05:18:23Z +++$+++ This is stupid! Administrative permissions can be verified through other means, not by open a secure leak on the machine! +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP189190 +++$+++ ROOT +++$+++ COM11 +++$+++ 2020-12-11T05:20:49Z +++$+++ It’s a developer tool that _opens a listening port on your machine that allows anybody who connects without authentication to drive and screen scrape any application your account can access_. It’s a developer tool. +++$+++ 0 +++$+++ 0

@@ -1,0 +1,30 @@
+{
+    "bk2204": {
+        "id": "SP497054",
+        "role": "NONE (AUTHOR)"
+    },
+    "dmitshur": {
+        "id": "SP1924134",
+        "role": "CONTRIBUTOR"
+    },
+    "alexbrainman": {
+        "id": "SP9796621",
+        "role": "MEMBER"
+    },
+    "networkimprov": {
+        "id": "SP458838",
+        "role": "NONE"
+    },
+    "ianlancetaylor": {
+        "id": "SP3194333",
+        "role": "CONTRIBUTOR"
+    },
+    "rsc": {
+        "id": "SP104030",
+        "role": "CONTRIBUTOR"
+    },
+    "ericwj": {
+        "id": "SP9473119",
+        "role": "NONE"
+    }
+}

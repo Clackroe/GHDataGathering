@@ -1,0 +1,78 @@
+ROOT +++$+++ SP65908293 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-06-05T07:07:35Z +++$+++ Replace the refinery with the "ERCC" refinery in the standard game ## Issue Summary
+As it has become the standard in RAGL and proven its value, it might be a good idea to replace it everywhere for better balancing.
+
+What is ERCC? 
+ERCC provides more exits for harvesters (north exit) which makes harvesting from all sides more balanced. Furthermore, the outline of the refinery got changed to square to alleviate map-inconveniences. 
+
+TODO: 
+More detailed guide by widow about ERCC. +++$+++ 2 +++$+++ 0
+COM0 +++$+++ SP37534529 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-06-05T11:27:22Z +++$+++ It this has a footprint
+=+x
++=+
+x==
+
+while the current one has this
+\_X\_
+xxx
+X==
+\===
+
+it looks like
+![Screen Shot 2020-06-05 at 14 18 10](https://user-images.githubusercontent.com/37534529/83871007-ebd70a80-a737-11ea-9e09-6e61d8529322.png)
+
+while the OG looks like
+![Screen Shot 2020-06-05 at 14 24 34](https://user-images.githubusercontent.com/37534529/83871195-4f613800-a738-11ea-8ee9-de5d4111230b.png)
+
+
+ +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP37534529 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-06-05T11:28:06Z +++$+++ ERCC currently suffers from #18232 +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP167819 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-06-05T11:28:56Z +++$+++ Please also include screenshots that show how the harvester clips through solid walls and the roof for a fair comparison. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP37534529 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-06-05T11:35:07Z +++$+++ It works most of the time, but if you do these exact paths it clips
+
+![ERCC4](https://user-images.githubusercontent.com/37534529/83871616-08c00d80-a739-11ea-9668-d47c2d36851c.gif)
+![ERCC1](https://user-images.githubusercontent.com/37534529/83871625-0b226780-a739-11ea-8af6-99c820c4a31d.gif)
+![ERCC3](https://user-images.githubusercontent.com/37534529/83871628-0bbafe00-a739-11ea-9f66-a492a9b27f56.gif)
+![ERCC2](https://user-images.githubusercontent.com/37534529/83871630-0c539480-a739-11ea-853d-66bd42b7185b.gif)
+
+One of the problems is that the harvester art is bigger than once cell
+![Harv](https://user-images.githubusercontent.com/37534529/83871836-75d3a300-a739-11ea-93f7-94b332bd69a0.png)
+that also causes problems with the current ref
+![REF1](https://user-images.githubusercontent.com/37534529/83871862-88e67300-a739-11ea-9828-d546cd89e71d.png)
+![REF3](https://user-images.githubusercontent.com/37534529/83871884-94399e80-a739-11ea-9c23-dc0f8aef6a83.png)
+but these don't exist with ERCC
+ +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP1614714 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-06-05T11:43:10Z +++$+++ > pchote: it would be much better if it used a new design that was not a space-warping bodge of the original refinery
+> pchote: get rid of the overhang completely
+> pchote: it is never going to be accepted as a replacement for the original refinery, but if you want to be added as a distinct thing that could be optionally enabled then it needs to make sense as its own thing +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP167819 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-06-05T12:45:03Z +++$+++ One thing that I find the most offensive about this extended trainwreck of a discussion is that it basically boils down to a few competitive players, who already have access to ERCC via map-mods, insisting that everybody else is playing the game wrong and should have the option to use the classic refineries taken away from them. This is not cool, IMO. +++$+++ 1 +++$+++ 0
+COM6 +++$+++ SP1355810 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-06-05T13:15:31Z +++$+++ I can get behind what @pchote is saying. I think this already has a nice place in map-mods. And if ruleset-only mods are ever implemented then the ERCC (and other balance mods and tests) could be easily applied to any map.
+
+And even if the ERCC gets accepted to the core game then it should be optional and not the default.  +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP1614714 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-06-05T14:58:52Z +++$+++ The mutator thing should be mentioned here if it is raised as an issue somewhere. +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP7704140 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-06-05T15:03:52Z +++$+++ > The mutator thing should be mentioned here if it is raised as an issue somewhere.
+
+#13629 / #14325 / #9422 +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP37534529 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-06-05T16:38:43Z +++$+++ > One thing that I find the most offensive about this extended trainwreck of a discussion is that it basically boils down to a few competitive players, who already have access to ERCC via map-mods, insisting that everybody else is playing the game wrong and should have the option to use the classic refineries taken away from them. This is not cool, IMO.
+
+I understand that but it's missleading. Fact is that majority of above avarage skilled players prefer playing with ERCC refineries.  OpenRA supposted to improve gameplay of the originals, so players that who actually understand openra's gameplay are forced to play on a mod map doesn't give it a good look
+
+I'm not saying that ERCC has to be implemented in its current form, after all it was merelly an experiment to see if refineries could be fixed. I'm just saying that it's a very relevant issue that needs a solution +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP37534529 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-06-05T16:43:42Z +++$+++ Additionally the person responsible for ERCC is not interested in refining it further, so it falls on the shoulders of someone else +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP756669 +++$+++ ROOT +++$+++ COM10 +++$+++ 2020-06-05T20:12:12Z +++$+++ This could also be solved using `PlaceBuildingVariants` and inverted artwork. +++$+++ 2 +++$+++ 0
+COM12 +++$+++ SP37534529 +++$+++ ROOT +++$+++ COM11 +++$+++ 2020-06-06T12:05:31Z +++$+++ >  > ERCC currently suffers from #18232
+
+> I tested it and that problem doe snot (really) exist with ERCC @Punsho . The only thing I observed is that you have to click a bit "below" the husk which is probably due to the logical layout/overlay structure. But you can certainly recover husks from the ERCC refinery.
+
+There's more than one place where a harvester can die, i had a game where 2 harvesters were dead on a refinery. I was able to revive one by the method you just mentioned, but the other was completelly unclickable. This is how this bug was discovered +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP48881353 +++$+++ ROOT +++$+++ COM12 +++$+++ 2020-06-06T20:09:44Z +++$+++ This could be in the form of an tickbox at lobby, probably it would be default off. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP59416324 +++$+++ ROOT +++$+++ COM13 +++$+++ 2020-06-07T09:23:25Z +++$+++ > This could be in the form of an tickbox at lobby, probably it would be default off.
+
+That's doesn't scale well. A dropdown to choose mutators from would be better.
+ +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP167819 +++$+++ ROOT +++$+++ COM14 +++$+++ 2020-12-31T22:12:06Z +++$+++ I am officially drawing a line under this request. ERCC will never be merged upstream while I remain involved with OpenRA. At this point it has nothing to do with any of the in-game aspects, it is entirely about the behaviour of the people championing it.
+
+While most of the competitive RA community are good people, there is a rotten core of toxic entitlement that manifests as abuse and belittlement, often focused around ERCC, and usually focused personally against me. This behaviour has forever soured ERCC, and integrating it into the upstream RA mod now would validate that behaviour as an effective strategy for influencing OpenRA's development.
+
+Why now? Two recent incidents targeting me (from N/A in the community discord, and Longely/Widow in the competitive discord - the two main personalities behind ERCC) were incredibly offensive and belittling, and are the straw that has broken the camels back when added on top of many other generally toxic events this year. People in the competitive community were having fun meming about "us vs the devs" earlier this year, but at that time I was seriously considering quitting OpenRA completely due to how unhappy and embarrased the behaviour of some people in the community (and the general tolerance of that behaviour as acceptable by everybody else) was making me. Ultimately, I decided that I enjoy working on the project, and making things better for everybody else in the community. I *do not* enjoy interacting with the assholes, and intend to be increasingly blunt in dismissing their toxic behaviour. This is the first concrete action towards that.
+
+I can certainly appreciate the desire for solving directional map imbalance, to the point where I fully implemented the code for one solution (rotatable structures) and developed a working prototype for a second (allowing harvesters to dock from any direction, visually jumping docking point). I think there is scope for some ERCC alternative, but I suggest that the competitive community as a whole put some effort into solving its attitude problem before they try to revisit such ideas here. +++$+++ 0 +++$+++ 0

@@ -1,0 +1,608 @@
+ROOT +++$+++ SP13589599 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-08-14T16:16:38Z +++$+++ Consider JSX-like syntax inside dart code It would be great if aside from the current way of building widgets you could add JSX like capabilities. I mean add tiny syntactic sugar to enable XML like constructs inside dart code. It just makes code so much easier to read/develop/debug/maintain and also easier for powerful GUI builders to integrate with editable code.
+
+Looking for something like DSX:
+https://spark-heroku-dsx.herokuapp.com/index.html
+
+Carlos.
+
+---
+
+The current issue with DSX is about proper integration with Flutter tools as to provide a great developer experience with debugger, auto-complete, etc. working on .dsx files.
+
+Telling users that they can use DSX but can't use debugger or enjoy auto-complete is a non starter for me. If anybody wants to help, what I need is to figure out a way to add full preprocessing support (with source map) to Dart Tools and VS Code Dart plug in. Once the tools support that DSX or any other transpiling language (any language that is a superset of Dart but compiles everything down to Dart) would just work.
+
+If you can and would like to help, let me know.
+ +++$+++ 100 +++$+++ 59
+COM0 +++$+++ SP5479 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-08-14T16:30:25Z +++$+++ cc @lukechurch  +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP551196 +++$+++ ROOT +++$+++ COM0 +++$+++ 2017-08-15T20:43:01Z +++$+++ @cbazza Can you elaborate on why you want this? Maybe show an example of what it would look like compared to today? +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP13589599 +++$+++ ROOT +++$+++ COM1 +++$+++ 2017-08-15T21:25:06Z +++$+++ Ok, so the "Basic widgets" example on 'https://flutter.io/widgets-intro/#basic-widgets' would look like the following:
+```dart
+import 'package:flutter/material.dart';
+
+class MyAppBar extends StatelessWidget {
+  MyAppBar({this.title});
+
+  // Fields in a Widget subclass are always marked "final".
+
+  final Widget title;
+
+  @override
+  Widget build(BuildContext context) {
+    let style = {
+        height: 56.0, // in logical pixels
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        decoration: <BoxDecoration color={Colors.blue[500]}/>,
+    };
+  
+    return <Container style={style}>
+      <Row>
+        <IconButton
+            icon={<Icon name={Icons.menu}/>}
+            tooltip='Navigation menu'
+            onPressed={null}
+        />
+        <Expanded>
+           {title}
+	</Expanded>  
+        <IconButton
+            icon={<Icon name={Icons.search}/>}
+            tooltip='Search'
+            onPressed={null}
+        />
+      </Row>
+    </Container>;
+  }
+}
+
+class MyScaffold extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Material is a conceptual piece of paper on which the UI appears.
+    return <Material>
+      <Column>
+          <MyAppBar
+             title={<Text 
+               text='Example title'
+               style={Theme.of(context).primaryTextTheme.title},
+             />}
+          />
+          <Expanded>
+            <Center>
+              <Text text='Hello, world!'/>
+            </Center>
+          </Expanded>
+      </Column>
+    </Material>;
+  }
+}
+
+void main() {
+  runApp(<MaterialApp
+    title='My app'
+    home={<MyScaffold/>}
+  />);
+}
+```
+ +++$+++ 47 +++$+++ 45
+COM3 +++$+++ SP551196 +++$+++ ROOT +++$+++ COM2 +++$+++ 2017-08-15T21:35:48Z +++$+++ How about this syntax?:
+
+```dart
+import 'package:flutter/material.dart';
+
+class MyAppBar extends StatelessWidget {
+  MyAppBar({this.title});
+
+  // Fields in a Widget subclass are always marked "final".
+
+  final Widget title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 56.0, // in logical pixels
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      decoration: BoxDecoration(color: Colors.blue[500]),
+      child: Row(
+        children: <Widget>[
+          IconButton(
+            icon: Icon(Icons.menu),
+            tooltip: 'Navigation menu',
+            onPressed: null,
+          ),
+          Expanded(
+            child: title,
+          ),
+          IconButton(
+            icon: Icon(Icons.search),
+            tooltip: 'Search',
+            onPressed: null,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MyScaffold extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Material is a conceptual piece of paper on which the UI appears.
+    return Material(
+      child: Column(
+        children: <Widget>[
+          MyAppBar(
+            title: Text(
+              'Example title',
+              style: Theme.of(context).primaryTextTheme.title,
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: Text('Hello, world!'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    title: 'My app',
+    home: MyScaffold(),
+  ));
+}
+``` +++$+++ 42 +++$+++ 31
+COM4 +++$+++ SP13589599 +++$+++ ROOT +++$+++ COM3 +++$+++ 2017-08-15T21:44:30Z +++$+++ Huumm, a little improvement but not so good... 
+Here are the things that gets accomplished by using XML:
+(1) No more 'child' & 'children' stuff
+(2) easy for 3rd party tools to manipulate (parse, analyse and regenerate)
+(3) notice that the switching between markup and programming is easily detected. I mean inside XML you have '{}' to delimit code and in code you have '<Capital' to delimit markup. 
+Also separate all the 'style' things from the main structure.
+I know this is basically fully endorsing React's way but you are half way there anyways ;)
+ +++$+++ 24 +++$+++ 10
+COM5 +++$+++ SP5479 +++$+++ ROOT +++$+++ COM4 +++$+++ 2017-08-15T21:48:30Z +++$+++ cc @kasperl +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP551196 +++$+++ ROOT +++$+++ COM5 +++$+++ 2017-08-15T21:49:41Z +++$+++ > (1) No more 'child' & 'children' stuff
+
+I don't really understand why that's desireable. "child" and "children" aren't special. Consider ListTile for example. How would you do that one? Why are "icon" in IconButton, or "home" in MaterialApp, something you want to give a name for, but not "child" in Expanded? All three are just arbitrary arguments that happen to take Widget objects. There's nothing magical about "child" vs "home".
+
+
+> (2) easy for 3rd party tools to manipulate (parse, analyse and regenerate)
+
+You can parse, analyze, and regenerate Dart code. But I agree we should make that easier. Hopefully in the coming years the Dart team will provide better APIs for this.
+
+
+> (3) notice that the switching between markup and programming is easily detected.
+
+Why is that desireable? I mean, why would any of this count as "programming"? It's all just expressions.
+
+
+> I mean inside XML you have '{}' to delimit code and in code you have '<Capital' to delimit markup. 
+
+I don't really understand the distinction.
+
+
+> Also separate all the 'style' things from the main structure.
+
+You can do this today in Flutter if you really want to, just put the style in a variable like you did in the XML case. +++$+++ 11 +++$+++ 12
+COM7 +++$+++ SP13589599 +++$+++ ROOT +++$+++ COM6 +++$+++ 2017-08-15T22:02:18Z +++$+++ > I don't really understand why that's desireable. "child" and "children" aren't special. Consider ListTile for example. How would you do that one? Why are "icon" in IconButton, or "home" in MaterialApp, something you want to give a name for, but not "child" in Expanded? All three are just arbitrary arguments that happen to take Widget objects. There's nothing magical about "child" vs "home".
+
+Less boilerplate, you don't need to say it because it is inherited in the structure.
+
+> Why is that desireable? I mean, why would any of this count as "programming"? It's all just expressions.
+
+It's related to (2) because it makes life of toolmakers, specially GUI builders, much easier since they don't need to fully parse Dart; but it also makes reading the code easier. 
+
+> I don't really understand the distinction.
+
+The format of XML is very simple so when you see '{}' you know it is calculating an expression in dart. Same for the opposite, when reading dart code and you see '<Capital' (a less-than followed by a word that is capitalized. example \<Row>) you know that an object hierarchy is being created from XML markup.
+
+ +++$+++ 9 +++$+++ 0
+COM8 +++$+++ SP13589599 +++$+++ ROOT +++$+++ COM7 +++$+++ 2017-08-15T22:07:57Z +++$+++ Also in the final XML processor I would avoid passing objects to attributes of parents and instead create child tags as below:
+```dart
+this...
+          <MyAppBar>
+             <Title style={Theme.of(context).primaryTextTheme.title}>  
+                 Example title
+             </Title>
+          </MyAppBar>
+
+instead of this...
+          <MyAppBar
+             title={<Text 
+               text='Example title'
+               style={Theme.of(context).primaryTextTheme.title},
+             />}
+          />
+```  +++$+++ 15 +++$+++ 6
+COM9 +++$+++ SP551196 +++$+++ ROOT +++$+++ COM8 +++$+++ 2017-08-15T22:23:28Z +++$+++ > Less boilerplate, you don't need to say it because it is inherited in the structure.
+
+But why only for some of the properties? And how do you handle cases where there's two child slots, like ListItem? XML-ish syntax just doesn't seem to handle this very well.
+
+Also I'm not really sure it's less boilerplate.
+
+Compare:
+```xml
+   <Container style={style}>
+      <Row>
+        <IconButton
+            icon={<Icon name={Icons.menu}/>}
+            tooltip='Navigation menu'
+            onPressed={null}
+        />
+        <Expanded> {title} </Expanded>  
+      </Row>
+    </Container>
+```
+
+```dart
+   Container(style: style,
+      child: Row(
+        children: [
+          IconButton(
+            icon: Icon(Icons.menu),
+            tooltip: 'Navigation menu',
+            onPressed: null,
+          ),
+          Expanded(child: title),
+        ],
+      ),
+    )
+```
+
+It's not at all clear to me that the XML-ish syntax is cleaner or less boilerplatey. There's lots more punctuation, and some duplication of content (e.g. in the close tags). And you had to add some names, so sure, you lose "child", but you gain "name" on Icon.
+
+Also with XML how do you make it clear that Row can take zero, one, or more than one child, while Center has to have exactly one child? What would happen if someone did this?:
+
+```xml
+   <Center> <Test/> <Test/> </Center>
+```
+
+> It's related to (2) because it makes life of toolmakers, specially GUI builders, much easier since they don't need to fully parse Dart;
+
+They wouldn't need to fully parse Dart if we had a Dart parsing API either, though, right? I mean, you'd parse what you want to parse and leave the rest. Also I'm not sure it's actually easier to parse, since it's not actually XML; see below.
+
+> but it also makes reading the code easier. 
+
+I'm not at all convinced that the XMLy version here is easier to read. Once you've read a few build functions, you quickly get used to the nested constructor syntax.
+
+> The format of XML is very simple so when you see '{}' you know it is calculating an expression in dart.
+
+It's not actually XML, though, right? It's some variant of XML. Are there well-defined parsing rules for it? For example, is this valid?
+
+```xml
+  <Test name={describe("}")}>
+```
+
+How does it know that the first "}" isn't the end of the attribute expression, without parsing Dart?
+
+> Same for the opposite, when reading dart code and you see '<Capital' (a less-than followed by a word that is capitalized. example \<Row>) you know that an object hierarchy is being created from XML markup.
+
+You know this today when you see the `new` keyword too, right? Or indeed in the new-less markup proposal above when you see any capitalised word. Is this really a benefit of XML, or are you more familiar with XML than Dart?
+
+> Also in the final XML processor I would avoid passing objects to attributes of parents and instead create child tags as below:
+
+I really don't understand what you're proposing here. It's not well-formed XML at all as far as I can tell. Can you elaborate on exactly what the syntax you are proposing is and how it works? For example, the "Text" constructor seems to have disappeared; how does the processor know that <Title> creates a Text widget?
+
+
+Sorry if I sound defensive or aggressive. :-) This is a topic that's come up several times but I've never had someone willing to actually argue the case before so I'm finding this conversation very useful in teaching me what the reasoning behind the request is. Please don't take my argumentative tone as dismissive, I'm very interested in your input here. +++$+++ 24 +++$+++ 7
+COM10 +++$+++ SP13589599 +++$+++ ROOT +++$+++ COM9 +++$+++ 2017-08-16T17:34:19Z +++$+++ Look, you are mixing everything I say and this conversation is going nowhere. In legal terms you are "Badgering the witness".
+
+If you are really interested in learning why JSX is hot, just google for "react tutorial" and notice that for the past 2 years all articles on React use JSX. The original way of creating component hierarchies in React (which is equivalent to the current way in Flutter) is never mentioned again because JSX became the preferred method (best practice).
+
+https://facebook.github.io/react/tutorial/tutorial.html
+https://facebook.github.io/react-native/docs/flatlist.html
+
+Another interesting thing is that Typescript has adopted JSX also:
+https://www.typescriptlang.org/docs/handbook/jsx.html
+
+You failed to grasp that XML parsing (with some extra code to skip '{}' properly) is orders of magnitude simpler than fully parsing a programming language like Dart. That is a fact. You are assuming that tool builders will use Dart on their development, not the case, Intellij most likely is using Kotlin and Java on their IDEs that supports Dart (they are a special case because they specialize in language parsing; everybody else will struggle to fully parse Dart from another language).
+
+What I like about putting XML inside another language is that it provides a cognitive separation between the two because XML is very distinct from programming languages. Just scrolling through the source file you can easily see what is code and what is declarative markup. Can't accomplish that with dart code pretending to be markup. 
+
+Stop nit-picking things that are not fully specified. All your doubts have answered for it just learn more about how that was handled in JSX. I just don't have the time for this here.
+ +++$+++ 29 +++$+++ 12
+COM11 +++$+++ SP551196 +++$+++ ROOT +++$+++ COM10 +++$+++ 2017-08-16T19:10:29Z +++$+++ My apologies if I sound defensive or aggressive. This is a topic that's come up several times but I'd never had someone willing to actually argue the case before so I was finding this conversation very useful in teaching me what the reasoning behind the request was. Please don't take my argumentative tone as dismissive, I'm very interested in your input here.
+
+Please don't feel you have to reply. I'm commenting here so that there is transparency regarding the issues that we would have to resolve before we're able to make a decision or design one way or the other. This is basically just a Socratic dialogue. Your participation is welcome but certainly you should not feel that it is your responsibility to defend your proposal.
+
+----
+
+I've no doubt that JSX is "hot". In React, the non-JSX syntax is a lot worse than the alternative syntax proposed in this issue (the one that looks like our current code but without the "new" and "const" keywords). What I'm trying to understand is whether the same reasons that JSX is "hot" in React apply to Flutter.
+
+Regarding TypeScript doing JSX, In 2012 I was involved in efforts to specify [E4H](http://www.hixie.ch/specs/e4h/strawman), and even before that there was [E4X](https://en.wikipedia.org/wiki/ECMAScript_for_XML). Both efforts died. So it's important to me that we understand what exactly it is people like about JSX vs other syntaxes.
+
+Parsing XML isn't easy, parsing sort-of-XML-but-with-curly-braces-somehow is not easy either. Parsing sort-of-XML-but-with-curly-braces-somehow-that-is-embedded-in-another-language is even less easy. However, how easy that is to implement probably isn't a big deal because it's going to be implemented once or twice and then the library that does it will be reused. (I've been heavily involved in writing the specs for parsing HTML and been involved in similar work for XML, and I've implemented a parser for Dart, so I have a pretty good idea of how difficult parsing markup languages vs programming languages actually is.)
+
+> What I like about putting XML inside another language is that it provides a cognitive separation between the two because XML is very distinct from programming languages. Just scrolling through the source file you can easily see what is code and what is declarative markup. Can't accomplish that with dart code pretending to be markup.
+
+But why is it beneficial to be able to do that?
+
+It's pretty obvious when scrolling through Flutter apps where the build functions are (they're the giant nested expressions). What is it about "declarative markup" that is important to separate from "code"?
+
+> Stop nit-picking things that are not fully specified. All your doubts have answered for it just learn more about how that was handled in JSX. I just don't have the time for this here.
+
+As far as I can tell, JSX doesn't handle the things I was asking about. For example, React doesn't have the concept of child slots. The closest thing I could find is something they do by switching back to JS then back to JSX inside that, so you'd need to be able to parse both the programming language and the markup language. +++$+++ 14 +++$+++ 0
+COM12 +++$+++ SP13589599 +++$+++ ROOT +++$+++ COM11 +++$+++ 2017-08-17T14:34:08Z +++$+++ > What I'm trying to understand is whether the same reasons that JSX is "hot" in React apply to Flutter.
+
+Yes, the exact same thing applies here. The current way looks good to you because that's the only option you have. Give people a second option and the same will happen. 
+
+Whether E4X died or not is irrelevant because nothing lives forever. I have used ActionScript with E4X a lot and thought that Adobe did an excellent job there. In a way Flutter is just a newer version of Adobe Flash with Flex apps.
+
+> (I've been heavily involved in writing the specs for parsing HTML and been involved in similar work for XML, and I've implemented a parser for Dart, so I have a pretty good idea of how difficult parsing markup languages vs programming languages actually is.)
+
+Great so you know that parsing a markup language is trivial compared to parsing an imperative programming language.
+
+> But why is it beneficial to be able to do that?
+
+Code readability and simplicity which in turn drives a whole bunch of other benefits.
+
+> It's pretty obvious when scrolling through Flutter apps where the build functions are (they're the giant nested expressions). What is it about "declarative markup" that is important to separate from "code"?
+
+On your giant nested expressions can you easily see structure? can this structure be easily manipulated by other tools like GUI builders interchangebly ? I mean like Adobe Flex Builder use to do, drag and drop widgets around, wire them on UI and then switch to code view and just edit anything you want and then switch back to gui mode and continue to manipulate the widgets. You can't do that easily when the programmer goes inside your "giant nested expressions" and writes any valid dart code that doesn't follow the structure that the GUI editor is expecting. With a fixed XML structure that is not a problem.
+
+> As far as I can tell, JSX doesn't handle the things I was asking about. For example, React doesn't have the concept of child slots
+
+It handles it just fine, you just don't know how to do it. So going forward just put the example in question here and I will provide you with what I think the JSX version should be.
+ 
+```dart
+  new ListTile(
+    title: new Text('CineArts at the Empire',
+        style: new TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0)),
+    subtitle: new Text('85 W Portal Ave'),
+    leading: new Icon(
+      Icons.theaters,
+      color: Colors.blue[500],
+    ),
+  ),
+```
+```dart
+  <ListTile>
+    <title> 
+      <Text style={{fontWeight: FontWeight.w500, fontSize: 20.0}}>
+         CineArts at the Empire
+      </Text>
+    </title>
+    <subtitle>
+      <Text>85 W Portal Ave</Text>
+    </subtitle>
+    <leading>
+      <Icon data={Icons.theaters} color={Colors.blue[500]}/>
+    </leading>
+  </ListTile>,
+```
+
+It looks longer than the dart version but I could had placed everything in the same number of lines. Thing is an IDE/Editor can provide '+' & '-' to expand and collapse these XML nodes anyways.
+
+Make Flutter look familiar to React developers and you have a chance of attracting a bunch of new users to Flutter.
+
+ +++$+++ 17 +++$+++ 12
+COM13 +++$+++ SP551196 +++$+++ ROOT +++$+++ COM12 +++$+++ 2017-08-17T17:49:09Z +++$+++ > Whether E4X died or not is irrelevant because nothing lives forever.
+
+Whether it died isn't the issue, it's why it died. Did it die because it didn't provide a solution that people wanted? Did it die because of implementation issues? Did it die because of patent issues? Was it too early? Too late? I think it's important to learn lessons from past experiences. Why did E4X and E4H fail where JSX has succeeded?
+
+What I find interesting is that people who are new to Flutter often ask for two things: a markup language, and animated GIFs. Then three months in, they are still asking for animated GIFs, but not for a markup language. It could be that this is because the markup language isn't actually needed once you're used to writing build methods in Dart. It could be that they still want a markup language but have worked around the omission and so don't think to ask anymore. It's worth figuring out which because otherwise we risk spending effort on something that is the wrong choice (in either direction).
+
+> On your giant nested expressions can you easily see structure?
+
+Yes, at least as easily as with XML. Personally, I find XML to be very verbose and it obfuscates the structure. But I think this is more about what you're used to.
+
+(We're also experimenting with IDEs that put in [virtual "closing tag" comments](https://github.com/Dart-Code/Dart-Code/issues/383#issuecomment-321985929) for you so you can see the structure without having to actually write it.)
+
+> Great so you know that parsing a markup language is trivial compared to parsing an imperative programming language.
+
+My experience is that declarative vs imperative is not the distinction that matters when it comes to determining how easy a language is to parse. (For example, HTML is "declarative" but it may be among the most complicated languages to parse that I've ever dealt with.)
+
+> Code readability and simplicity which in turn drives a whole bunch of other benefits.
+
+If this is the main benefit then this is something we can test. We could take a mixture of engineers who are used to writing HTML, React, iOS code, Android code, Flutter, command-line apps, and so on, and present them each with various syntaxes, and ask them to describe what they think the resulting UI would look like. We can then measure which syntax gets the best results. @InMatrix is this something we could look at after the animation work wraps up, maybe?
+
+> can this structure be easily manipulated by other tools like GUI builders interchangebly ?
+
+Yes, in principle at least. It should be relatively straight-forward to mechanically convert Dart expressions to XML or JSON or whatever other structured language one might use. It's just a matter of converting the syntax, the actual information is the same. Personally I wouldn't convert it to a different syntax if I was making a GUI editor, I would just parse it into a data structure in memory straight from Dart.
+
+> You can't do that easily when the programmer goes inside your "giant nested expressions" and writes any valid dart code that doesn't follow the structure that the GUI editor is expecting. With a fixed XML structure that is not a problem.
+
+The thing is, you can put exactly the same "any valid dart code" in the XML structure as in the Dart expression. They are literally mechanically interchangeable. So I don't really see how using XML helps with this particularly. For example how would you turn this into XML?:
+
+```dart
+new ListView.builder(
+  padding: new EdgeInsets.all(8.0),
+  itemExtent: 20.0,
+  itemBuilder: (BuildContext context, int index) {
+    return new Text('entry $index');
+  },
+)
+```
+
+> It handles it just fine, you just don't know how to do it.
+
+I meant specifically JSX. I agree that your proposed syntax would be a perfectly valid way to approach the problem. +++$+++ 10 +++$+++ 0
+COM14 +++$+++ SP1377460 +++$+++ ROOT +++$+++ COM13 +++$+++ 2017-08-17T19:03:15Z +++$+++ I worked on Adobe's Flex SDK, which combined XML markup and ActionScript, for the last couple years that the product existed at Adobe.  I understand the appeal of markup for defining UIs however I can also remember some drawbacks:
+
+- Flex application visuals could be defined in terms of markup and code. As I remember it, code tended to dominate in large real-world apps.  Readability isn't necessarily a benefit for apps defined as a complex hybrids of markup and code.
+- The "Flex Builder" IDE had to support apps that were defined by  markup and code. This made the IDE difficult to build and maintain. Developers tended to view it as an ActionScript tool.
+- Evolving and maintaining the XML "compiler" was a significant burden that kept a team of engineers busy full-time.  Keeping the compiler and toolkit in lockstep slowed down the evolution of the overall sdk.
+
+It's been years and I can no longer recall all the details. However my overall impression is that defining UIs with a combination of markup and code is a mixed bag at best. +++$+++ 10 +++$+++ 0
+COM15 +++$+++ SP13589599 +++$+++ ROOT +++$+++ COM14 +++$+++ 2017-08-17T21:51:01Z +++$+++ > Whether it died isn't the issue, it's why it died. Did it die because it didn't provide a solution that people wanted? Did it die because of implementation issues? Did it die because of patent issues? Was it too early? Too late? I think it's important to learn lessons from past experiences. Why did E4X and E4H fail where JSX has succeeded?
+
+It died because E4X was only implemented in ActionScript which was only used inside Adobe Flash/Flex and Adobe killed the project. Instead Adobe changed direction towards open standards where there is no single source provider with possibility of lock-in and ecosystem implosion.
+
+> What I find interesting is that people who are new to Flutter often ask for two things: a markup language, and animated GIFs. Then three months in, they are still asking for animated GIFs, but not for a markup language. It could be that this is because the markup language isn't actually needed once you're used to writing build methods in Dart. It could be that they still want a markup language but have worked around the omission and so don't think to ask anymore. It's worth figuring out which because otherwise we risk spending effort on something that is the wrong choice (in either direction).
+
+Well, if I asked you for 2 things and you didn't do either in 3 months and there is an alternative to the first thing, I would also only ask you for what is totally impossible to do given your responsiveness and previous delivery performance.
+
+> (We're also experimenting with IDEs that put in virtual "closing tag" comments for you so you can see the structure without having to actually write it.)
+
+Kind of funny but it's like putting the XML closing tag that you mentioned before was too verbose.
+
+> If this is the main benefit then this is something we can test. We could take a mixture of engineers who are used to writing HTML, React, iOS code, Android code, Flutter, command-line apps, and so on, and present them each with various syntaxes, and ask them to describe what they think the resulting UI would look like. We can then measure which syntax gets the best results. @InMatrix is this something we could look at after the animation work wraps up, maybe?
+
+Sure you can do that go ahead, I am sure you will find out that "Once you do React(with JSX) you simply don't go back". Survey experienced React developers and ask them if they think JSX is bad and it should never had been done. Show your way and ask them if they want to replace JSX with what you have. Before you do that, close the doors and lock up the place because these developers are just going to grab their stuff and sprint for the closest exit.
+
+> The thing is, you can put exactly the same "any valid dart code" in the XML structure as in the Dart expression.
+
+Sure, but for the GUI builders that's just a block of bytes that doesn't need to be touched and can be easily skipped. Making it design/code interchangeability practically possible instead of in principle.
+
+```dart
+new ListView.builder(
+  padding: new EdgeInsets.all(8.0),
+  itemExtent: 20.0,
+  itemBuilder: (BuildContext context, int index) {
+    return new Text('entry $index');
+  },
+)
+``` 
+
+```dart
+let style = {
+  padding: new EdgeInsets.all(8.0),
+  itemExtent: 20.0
+};
+
+<ListView.builder style={style}>
+  {(context, index) => <Text> entry {index} </Text>}
+</ListView.builder>
+```
+ +++$+++ 7 +++$+++ 5
+COM16 +++$+++ SP13589599 +++$+++ ROOT +++$+++ COM15 +++$+++ 2017-08-17T21:54:38Z +++$+++ I used Adobe Flex Builder extensibly...
+
+> Developers tended to view it as an ActionScript tool.
+
+Yes, but I often switched from design view to code view and vice-versa.
+Starting a screen I would go to design view and use drag/drop to layout widgets and generate first static screen. Then I would add in code and some static data to fill in screen so I could show people something running that looked like production ready stuff. Productivity was incredible. As development progressed, I connected the front end to the back end and the amount of ActionScript code grew and yes it dominated the code overall but even at close to release time, I often used the design view to tweak the UI without having to dig into code. 
+
+> However my overall impression is that defining UIs with a combination of markup and code is a mixed bag at best.
+
+Not in today's world. Imperative languages have evolved in the philosophy of Python and are great for development. Declarative techniques with embedded markup (XML) became mainstream with the advent of React; and JSON became the preferred text based data format.
+ +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP551196 +++$+++ ROOT +++$+++ COM16 +++$+++ 2017-08-17T22:45:35Z +++$+++ > E4X was only implemented in ActionScript
+
+E4X was an ECMA standard. Mozilla shipped it for a while, but then removed it (a very unusual move for a browser vendor). Other browser vendors never wanted to implement it. (They've implemented other new ECMA features, though.) With E4H, the browser vendors were never interested in implementing it (though again, they've implemented plenty of other things I've helped invent).
+
+> Well, if I asked you for 2 things and you didn't do either in 3 months and there is an alternative to the first thing, I would also only ask you for what is totally impossible to do given your responsiveness and previous delivery performance.
+
+That's one possible theory. People tend to ask for many other things besides, though, and many of the things they ask for get implemented, and there are workarounds for animated GIFs too, so I'm not sure this fully explains the situation.
+
+> Kind of funny but it's like putting the XML closing tag that you mentioned before was too verbose.
+
+Indeed. This is an optional IDE feature, and one that you don't have to write into the code, which makes a big difference to whether the verbosity is an issue, though.
+
+
+> ...`ListView`...
+
+How would a GUI editor handle this markup? I don't really understand how to visualise the UI for this. +++$+++ 1 +++$+++ 0
+COM18 +++$+++ SP1326504 +++$+++ ROOT +++$+++ COM17 +++$+++ 2017-08-17T23:47:46Z +++$+++ This may be a counter argument to this request, and/or maybe some insight's to keep in mind if you want markup. I have strong feelings that adding markup creating some challenges with GWT I'd hate to see another API go through. 
+
+I've seen a couple other frameworks go through this transition regarding with UI building. Markup like this works great for tooling, in so far it's heavenly for the IDE developers. It's easier to separate the responsibilities of who does what. Although I think it can be done better. 
+
+GWT started out this way, building UI's with Java. Then came along UiBinder, where you could build the UI in xml markup, with a specification. Then the tooling, Eclipse Plugin, was able to generate UI's in xml markup. Android is doing it too, no need to belabor the point. So what I saw happen, markup works great for UI IDE developers. But really, markup is a huge huge investment in time and added complexity tooling to transition it to real program. And the tooling is always last to come. So in the mean time, while all that manifests into reality, there are two worlds. Two interesting ways of doing everything. One in the default language and one in markup. So I support GWT today. When I write documentation, I have to write it twice, once for Java and once for UiBinder XML Markup. So the real question, if you want to go down the markup road, I think the question should be asked, is the added complexity worth the journey! 
+
+JSX I think aims to solve other issues where you want to blend together what your doing with HTML and javascript. It really doesn't feel like the added complexity of markup specification suits the needs of writing UI with markup. Especially when you don't really have a document markup language as the target. At least not for the everyday user. 
+
+On a positive note. I like to work on tooling. So I can see a markup language being quite useful. It's much easier to write and modify AST when your using markup.
+
+But then again, if you have enough minds on the job, it doesn't really matter what you do. At the end of the day, if the developer can write his application faster with your api, your going to get traction. But at what cost to the engineering team. 
+
+I think the real question is, how can the UI be built faster. I think tooling could write the dart, skip any middle man markup. And my aim isn't really to say it's not worth it, but really count the cost's on all the fronts if the road is taken!
+
+
+ +++$+++ 13 +++$+++ 0
+COM19 +++$+++ SP13589599 +++$+++ ROOT +++$+++ COM18 +++$+++ 2017-08-18T17:12:38Z +++$+++ > E4X was an ECMA standard. Mozilla shipped it for a while, but then removed it (a very unusual move for a browser vendor). Other browser vendors never wanted to implement it.
+
+I would say only Adobe fully championed E4X and had a good following with developers. Browser vendors do add and remove stuff from their browsers all the time; didn't Google remove MathML support?
+
+> That's one possible theory. People tend to ask for many other things besides, though, and many of the things they ask for get implemented, and there are workarounds for animated GIFs too, so I'm not sure this fully explains the situation.
+
+**Here is the thing about React and JSX. Initially I completely dismissed it**, I was in love with Angular and doing massive work with Ember. I tried desperately to convince the team to go with Angular but that didn't go anywhere as others had their eyes on Aurelia. Someone pointed me to React, I read the docs and evaluated and simply said that there was nothing in there that Angular or others couldn't do it. Then last year I worked on a new project and had the chance to try something new so I gave React a try and **you really don't fully appreaciate what React brings to the table until you develop with it for awhile, then it becomes night and day against all other frameworks. It's a mixture of simplicity and expressiveness brought together by JSX.** 
+
+> How would a GUI editor handle this markup? I don't really understand how to visualise the UI for this.
+
+```dart
+let style = {
+  padding: new EdgeInsets.all(8.0),
+  itemExtent: 20.0
+};
+
+<ListView.builder style={style}>
+  {(context, index) => <Text> entry {index} </Text>}
+</ListView.builder>
+```
+
+I would represent the \<List.builder> as a rectangle and if its child/children where other widgets I would put rectangles for that inside it.
+Since the child in this case is a function, you can simply put a rectangle saying 'uneditable/code' to tell users that this widget is created from code or in this case easily deduce that the function is a shallow wrapper to the <Text> widget and simply present that; I mean a rectangle that says that the function is a shallow function wrapper and inside it the List item widget rectangle (\<Text> in this case).
+ +++$+++ 6 +++$+++ 7
+COM20 +++$+++ SP13589599 +++$+++ ROOT +++$+++ COM19 +++$+++ 2017-08-18T17:15:26Z +++$+++ > But really, markup is a huge huge investment in time and added complexity tooling to transition it to real program.
+
+All I am asking is to add these simple extensions on the Dart compiler so that if developers want to they can write using this XML structure. The old way would continue to work and the amount of work involved to do this is not huge at all. You can actually see how many lines of code it takes the babel.js compiler to do JSX and I am talking hundreds and not thousands of lines (I just checked it).
+
+> And the tooling is always last to come. So in the mean time, while all that manifests into reality, there's two worlds. Two interesting ways of doing everything. One in the default language and one in markup
+
+Sure but React has been like this and that is not an issue at all.
+
+> When I write documentation, I have to write it twice, once for Java and once for UiBinder XML Markup.
+
+Not in React because markup lives inside code.
+
+> is the added complexity worth the journey!
+
+Absolutely, it's like the argument of whether you should train your developers with the latest techniques and risk them leaving your company. The bigger risk is keeping them around untrained. So you must adopt the latest techniques out there or risk being left behind.
+
+React is leading the journey with the latest techniques to develop UI/UX. It has tremendous traction with developers. Your greatest risk is not meeting the React bar.
+
+> JSX I think aims to solve other issues where you want to blend together what your doing with HTML and javascript
+
+JSX is not just for HTML, React Native generates Views (like Flutter Widgets) from the XML markup.
+
+> I think the real question is, how can the UI be built faster.
+
+More like how UI/UX can be built better. Better meaning: faster, higher quality (code and UI/UX), smooth designer-developer interaction, etc.
+
+By the way, really nice job done on the developer tools; 'flutter doctor' was awesome !!!
+I am now cooking with gas and can be dangerously creative ;)
+
+ +++$+++ 5 +++$+++ 5
+COM21 +++$+++ SP348942 +++$+++ ROOT +++$+++ COM20 +++$+++ 2017-08-21T18:00:39Z +++$+++ I just wanted to respond to the readability question raised here, though I understand readability is only one of the many factors we need to consider. 
+
+>> Code readability and simplicity which in turn drives a whole bunch of other benefits.
+
+> If this is the main benefit then this is something we can test. We could take a mixture of engineers who are used to writing HTML, React, iOS code, Android code, Flutter, command-line apps, and so on, and present them each with various syntaxes, and ask them to describe what they think the resulting UI would look like. We can then measure which syntax gets the best results. @InMatrix is this something we could look at after the animation work wraps up, maybe?
+
+There are certainly ways to empirically study code readability, and we can have a more serious discussion when it's time for Q4 planning. To make such a study useful, we need to define what kinds of reading tasks are important to developers in the context of Flutter programming. In addition to reading a whole build method and picture what the resulting UI might be, readability also affects smaller tasks such as identifying the build method in a dart file, matching braces, reading inline comments, etc. 
+
+To support some of those more narrowly-scoped tasks, we can experiment with UI enhancements in the editor first, which is usually cheaper than introducing and maintaining a markup language. The closing label feature in VS code is one of such UI enhancements, and we should understand how well it solves the brace matching problem it sets out to address. There are plenty of other options in this space we haven't tried yet. For example, a different font or background color might be used to display the build method to help the developer mentally separate it from the rest of their code.
+
+Another thing that strikes me as important is how we can encourage people to not write giant build method and take advantage of the composition nature of the framework. If the build method is taller than the height of your screen, it's going to be hard to read regardless it's Dart or XML.  +++$+++ 1 +++$+++ 0
+COM22 +++$+++ SP13589599 +++$+++ ROOT +++$+++ COM21 +++$+++ 2017-08-21T19:36:17Z +++$+++ > Another thing that strikes me as important is how we can encourage people to not write giant build method and take advantage of the composition nature of the framework. If the build method is taller than the height of your screen, it's going to be hard to read regardless it's Dart or XML.
+
+It's not just the build method. It's all other methods that the build method calls to build the widget tree. Very common in React to use smaller methods to build sub-tree pieces and then call those into the larger tree. 
+
+Also in WebStorm with JSX, each XML node has +/- that can be used to expand/collapse node and children to make reading structures larger than the height of the screen easier.
+ +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP551196 +++$+++ ROOT +++$+++ COM22 +++$+++ 2017-08-21T20:55:52Z +++$+++ One thing we've found in Flutter is that big build methods are not great for performance, and we try to encourage people to break down their build methods into smaller reusable widgets. In particular, in Flutter having a build method that's built out of the results of other methods is somewhat of an antipattern that we'd rather discourage rather than make easier. (This is somewhat of a recent realisation so a lot of our examples and widgets don't do this well yet.) +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP13589599 +++$+++ ROOT +++$+++ COM23 +++$+++ 2017-08-21T21:59:47Z +++$+++ > we try to encourage people to break down their build methods into smaller reusable widgets.
+
+Does it really become a reusable widget or simply a wrapper/composite widget? I mean to be reusable you should have at least 2 usage instances. 
+
+The AppBar on https://flutter.io/catalog/samples/basic-app-bar/ is so unique that you can't really call it an reusable component; it's a wrapper/composite component and in these cases why not just use a local method to build that part of the UI? I guess if it did more things it would make sense to place it in a wrapper/composite component.
+
+> One thing we've found in Flutter is that big build methods are not great for performance
+
+Since you mentioned performance, having the animation loop drive the build method will cause performance problems for smooth animation. You don't want your build method called 60 times a second or more, specially considering that the build method is user code (for example, it could have a super long loop that takes forever and it would cause animations to skip). Being a Flutter beginner perhaps I got that wrong.
+ +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP551196 +++$+++ ROOT +++$+++ COM24 +++$+++ 2017-08-21T22:05:47Z +++$+++ > The AppBar on https://flutter.io/catalog/samples/basic-app-bar/ is so unique that you can't really call it an reusable component
+
+It's also relatively small, so that's ok.
+
+Regarding performance, this is somewhat off-topic for this issue so please file a new issue if you want to discuss it (or e-mail flutter-dev or post on stack overflow, whatever you prefer). +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP6463915 +++$+++ ROOT +++$+++ COM25 +++$+++ 2017-11-20T13:44:02Z +++$+++ https://github.com/Kotlin/anko/wiki/Anko-Layouts +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP180773 +++$+++ ROOT +++$+++ COM26 +++$+++ 2017-12-11T08:42:16Z +++$+++ It's crazy to see this issue getting buried. In my opinion it's going to be a make or break for Flutter to implement JSX-like syntax for composing widgets.
+
+I simply don't understand the target audience, many ios and android devs are moving to react native, it would seem to be the perfect opportunity to harvest market share.
+
+I encourage people involved to give react native a spin and see what we are talking about. +++$+++ 14 +++$+++ 6
+COM28 +++$+++ SP405837 +++$+++ ROOT +++$+++ COM27 +++$+++ 2017-12-11T09:59:54Z +++$+++ I don't miss JSX a bit in Flutter. This would only bloat the framework and tools for a few small gains here and there. +++$+++ 18 +++$+++ 5
+COM29 +++$+++ SP13589599 +++$+++ ROOT +++$+++ COM28 +++$+++ 2017-12-11T15:16:34Z +++$+++ @birkir I am 100% with you on this issue. Lack of JSX, which is a perfect fit for Flutter, makes Flutter look old and rusty, feels like 1990s technology. Actually it seems like everyone, in one way or another, is adopting JSX; the latest one being the popular Vue.js framework.
+  +++$+++ 10 +++$+++ 9

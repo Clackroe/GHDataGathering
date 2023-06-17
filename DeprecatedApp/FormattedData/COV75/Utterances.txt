@@ -1,0 +1,8 @@
+ROOT +++$+++ SP2799232 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-06-17T22:14:53Z +++$+++ In Which Jack Is Angry An experiment to see whether ANYONE on the SF team actually receives GitHub notifications. +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP10968331 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-06-17T23:03:49Z +++$+++ @jackbond Please try to be more constructive. Of course we do.  +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP2799232 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-06-17T23:06:24Z +++$+++ Oh, so you monitor them, but completely ignore them. Much better.
+
+Is it acceptable that two core Microsoft offerings DevOps and Service Fabric are currently out of sync? +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP10968331 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-06-17T23:17:52Z +++$+++ You are making toxic and unhelpful statements. Please refrain from doing so. Sarcasm and profanity will not help you get your issues resolved. 
+
+I have replied in your [main question](https://github.com/microsoft/service-fabric/issues/333). If you would like to engage in constructive discussion, go there. If you want to continue to make mean and unhelpful assumptions and remarks, go ahead, but then we can just close down this whole thread as well.  +++$+++ 0 +++$+++ 0

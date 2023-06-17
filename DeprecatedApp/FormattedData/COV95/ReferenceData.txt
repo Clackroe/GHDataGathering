@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/mrdoob/three.js/issues/17882
+Number of Comments: 31

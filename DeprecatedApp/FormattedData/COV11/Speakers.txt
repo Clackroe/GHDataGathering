@@ -1,0 +1,7 @@
+SP497054 +++$+++ bk2204 +++$+++ NONE (AUTHOR)
+SP1924134 +++$+++ dmitshur +++$+++ CONTRIBUTOR
+SP9796621 +++$+++ alexbrainman +++$+++ MEMBER
+SP458838 +++$+++ networkimprov +++$+++ NONE
+SP3194333 +++$+++ ianlancetaylor +++$+++ CONTRIBUTOR
+SP104030 +++$+++ rsc +++$+++ CONTRIBUTOR
+SP9473119 +++$+++ ericwj +++$+++ NONE

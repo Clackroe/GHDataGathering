@@ -1,0 +1,156 @@
+ROOT +++$+++ SP3196399 +++$+++ ROOT +++$+++ ROOT +++$+++ 2015-11-09T17:41:26Z +++$+++ OpenCL support I understand TensorFlow only supports CUDA. What would need to be done to add in OpenCL support?
+ +++$+++ 754 +++$+++ 0
+COM0 +++$+++ SP1548848 +++$+++ ROOT +++$+++ ROOT +++$+++ 2015-11-09T18:21:24Z +++$+++ It's strange that Google ditched open OpenCL for proprietary CUDA.
+![im-just-saying](https://cloud.githubusercontent.com/assets/1548848/11042379/c2cf01c6-873c-11e5-8216-a00474c8e717.jpg)
+ +++$+++ 503 +++$+++ 8
+COM1 +++$+++ SP1794715 +++$+++ ROOT +++$+++ COM0 +++$+++ 2015-11-09T18:24:40Z +++$+++ At the very least, the [Eigen](http://eigen.tuxfamily.org) library would have to support OpenCL.
+ +++$+++ 23 +++$+++ 0
+COM2 +++$+++ SP1710528 +++$+++ ROOT +++$+++ COM1 +++$+++ 2015-11-09T20:54:37Z +++$+++ :+1:
+ +++$+++ 61 +++$+++ 1
+COM3 +++$+++ SP2211002 +++$+++ ROOT +++$+++ COM2 +++$+++ 2015-11-10T02:52:59Z +++$+++ :+1: 
+ +++$+++ 2 +++$+++ 2
+COM4 +++$+++ SP15474222 +++$+++ ROOT +++$+++ COM3 +++$+++ 2015-11-10T23:53:16Z +++$+++ :+1:
+ +++$+++ 0 +++$+++ 2
+COM5 +++$+++ SP2438 +++$+++ ROOT +++$+++ COM4 +++$+++ 2015-11-11T05:01:46Z +++$+++ thumbs up and all that.
+ +++$+++ 9 +++$+++ 1
+COM6 +++$+++ SP87486 +++$+++ ROOT +++$+++ COM5 +++$+++ 2015-11-11T07:45:42Z +++$+++ I will be interested in expanding Tensor Flow with OpenCL. As we have already released OpenCL caffe. https://github.com/amd/OpenCL-caffe.  Hopefully it can get integrated in light way? Is anyone interested in working together on this?
+ +++$+++ 109 +++$+++ 0
+COM7 +++$+++ SP1710528 +++$+++ ROOT +++$+++ COM6 +++$+++ 2015-11-11T07:50:27Z +++$+++ @gujunli Nice to see AMD here. /cc @naibaf7 @lunochod
+ +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP1548848 +++$+++ ROOT +++$+++ COM7 +++$+++ 2015-11-11T08:20:57Z +++$+++ would be great.
+ +++$+++ 0 +++$+++ 1
+COM9 +++$+++ SP6840238 +++$+++ ROOT +++$+++ COM8 +++$+++ 2015-11-11T19:31:06Z +++$+++ :+1:
+ +++$+++ 0 +++$+++ 1
+COM10 +++$+++ SP1710528 +++$+++ ROOT +++$+++ COM9 +++$+++ 2015-11-15T15:00:05Z +++$+++ /cc @lukeiwanski for Eigen/OpenCL/SYCL
+ +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP15871819 +++$+++ ROOT +++$+++ COM10 +++$+++ 2015-11-16T13:40:01Z +++$+++ @gujunli Certainly would be interested in contributing. Please let me know when you plan to start. 
+ +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP8373795 +++$+++ ROOT +++$+++ COM11 +++$+++ 2015-11-25T11:05:13Z +++$+++ Hi all, 
+
+Here at Codeplay we are looking into Eigen's tensor running on GPU using SYCL (a modern C++ layer on top of OpenCL). From what we have gathered so far, GPU tensor design is very closely coupled with CUDA and it will require interface changes for another programming model and particularly a SYCL and OpenCL 1.2 version. 
+
+If anyone is interested in digging deeper / helping out, we are most certainly interested in contributing.
+
+Thanks,
+Luke
+ +++$+++ 6 +++$+++ 0
+COM13 +++$+++ SP1710528 +++$+++ ROOT +++$+++ COM12 +++$+++ 2015-11-25T11:19:50Z +++$+++ @lukeiwanski Thank you for the feedback. I think that @benoitsteiner worked at the tensor extension part of eigen.
+ +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP2720260 +++$+++ ROOT +++$+++ COM13 +++$+++ 2015-12-06T12:05:33Z +++$+++ :+1: I can help code some OpenCL/SYCL if someone makes a plan, divides work into tasks etc. I recommend using Boost.Compute as a wrapper for OpenCL (it makes running kernels, testing, templating easier).
+ +++$+++ 6 +++$+++ 0
+COM15 +++$+++ SP446367 +++$+++ ROOT +++$+++ COM14 +++$+++ 2015-12-07T16:43:05Z +++$+++ +1
+ +++$+++ 1 +++$+++ 1
+COM16 +++$+++ SP7809 +++$+++ ROOT +++$+++ COM15 +++$+++ 2015-12-07T20:36:54Z +++$+++ :+1: 
+ +++$+++ 0 +++$+++ 1
+COM17 +++$+++ SP8373795 +++$+++ ROOT +++$+++ COM16 +++$+++ 2015-12-08T18:19:13Z +++$+++ Hi all,
+
+Just to keep you posted, we are still investigating how we can change the Eigen interface to better fit the SYCL/OpenCL 1.2 programming model. 
+Once we come up with a reasonable approach that targets heterogeneous programming models ( not only OpenCL / SYCL )  we will create a proposal. 
+
+Thanks,
+Luke
+ +++$+++ 13 +++$+++ 0
+COM18 +++$+++ SP87486 +++$+++ ROOT +++$+++ COM17 +++$+++ 2015-12-08T19:30:09Z +++$+++ Pls keep me update. I developed opencl-caffe for AMD. I am also looking at
+tensor flow.
+
+Thanks.
+Junlu
+On Dec 8, 2015 10:19 AM, "Luke Iwanski" notifications@github.com wrote:
+
+> Hi all,
+> 
+> Just to keep you posted, we are still investigating how we can change the
+> Eigen interface to better fit the SYCL/OpenCL 1.2 programming model.
+> Once we come up with a reasonable approach we will create a proposal.
+> 
+> Thanks,
+> Luke
+> 
+> —
+> Reply to this email directly or view it on GitHub
+> https://github.com/tensorflow/tensorflow/issues/22#issuecomment-162967662
+> .
+ +++$+++ 13 +++$+++ 0
+COM19 +++$+++ SP1710528 +++$+++ ROOT +++$+++ COM18 +++$+++ 2015-12-09T08:41:10Z +++$+++ /cc @ptillet @gongzg Is there any interest in this by Intel? I really hope that we don't fragment OPENCL here like in Caffe where we have an AMD fork, Intel unmerged PRs, another semi-unofficial AMD PR, and a long staging user PR (plus two old abandoned Opencl efforts). If somebody is interested in the history can take a look at https://github.com/BVLC/caffe/pull/2610 comments.
+ +++$+++ 5 +++$+++ 0
+COM20 +++$+++ SP782918 +++$+++ ROOT +++$+++ COM19 +++$+++ 2015-12-17T09:57:28Z +++$+++ @bhack We do have interest in this. Thanks for letting me know. If there is a proposal for Eigen's OpenCL/SYCL implementation, we will see what we can do from Intel side.
+ +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP309379 +++$+++ ROOT +++$+++ COM20 +++$+++ 2015-12-23T14:57:34Z +++$+++ :+1: 
+ +++$+++ 1 +++$+++ 2
+COM22 +++$+++ SP1710528 +++$+++ ROOT +++$+++ COM21 +++$+++ 2016-01-01T19:36:35Z +++$+++ An interesting initiative at https://github.com/ptillet/isaac also if here we rely on Eigen tensor extension.
+ +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP4943582 +++$+++ ROOT +++$+++ COM22 +++$+++ 2016-01-19T15:42:59Z +++$+++ I also would like to contribute. @benoitsteiner can you organize it?
+ +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP1710528 +++$+++ ROOT +++$+++ COM23 +++$+++ 2016-01-19T15:50:17Z +++$+++ This was included in the Roadmap but also tagged as contribution so a direction/bootstrap could be really useful.
+ +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP87486 +++$+++ ROOT +++$+++ COM24 +++$+++ 2016-01-19T16:50:52Z +++$+++ I can contribute to organize it. who is responsible for OpenCL support in
+Tensor flow now?
+
+Thanks a lot.
+Junli
+
+On Tue, Jan 19, 2016 at 7:50 AM, bhack notifications@github.com wrote:
+
+> This was included in the Roadmap but also tagged as contribution so a
+> direction/bootstrap could be really useful.
+> 
+> —
+> Reply to this email directly or view it on GitHub
+> https://github.com/tensorflow/tensorflow/issues/22#issuecomment-172894538
+> .
+
+## 
+
+---
+
+Junli Gu--谷俊丽
+Coordinated Science Lab
+University of Illinois at Urbana-Champaign
+
+---
+ +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP4943582 +++$+++ ROOT +++$+++ COM25 +++$+++ 2016-01-19T19:42:37Z +++$+++ I just assumed Benoit because he self assigned the feature, but I think you've got it Junli! Maybe start with an email or forum thread of interested parties?
+ +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP577277 +++$+++ ROOT +++$+++ COM26 +++$+++ 2016-01-19T19:46:14Z +++$+++ @benoitsteiner knows more about interested parties that may not have shown
+up in this thread (or this issue). I'd wait for him to coordinate to make
+sure we avoid duplicating work.
+
+On Tue, Jan 19, 2016 at 11:42 AM Dan McLaughlin notifications@github.com
+wrote:
+
+> I just assumed Benoit because he self assigned the feature, but I think
+> you've got it Junli! Maybe start with an email or forum thread of
+> interested parties?
+> 
+> —
+> Reply to this email directly or view it on GitHub
+> https://github.com/tensorflow/tensorflow/issues/22#issuecomment-172963537
+> .
+ +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP953399 +++$+++ ROOT +++$+++ COM27 +++$+++ 2016-01-19T20:20:44Z +++$+++ I'm interested. Is there any roadmap?
+
+> On Jan 19, 2016, at 11:46 AM, Martin Wicke notifications@github.com wrote:
+> 
+> @benoitsteiner knows more about interested parties that may not have shown
+> up in this thread (or this issue). I'd wait for him to coordinate to make
+> sure we avoid duplicating work.
+> 
+> On Tue, Jan 19, 2016 at 11:42 AM Dan McLaughlin notifications@github.com
+> wrote:
+> 
+> > I just assumed Benoit because he self assigned the feature, but I think
+> > you've got it Junli! Maybe start with an email or forum thread of
+> > interested parties?
+> > 
+> > —
+> > Reply to this email directly or view it on GitHub
+> > https://github.com/tensorflow/tensorflow/issues/22#issuecomment-172963537
+> > .
+> > 
+> > —
+> > Reply to this email directly or view it on GitHub.
+ +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP105434 +++$+++ ROOT +++$+++ COM28 +++$+++ 2016-01-19T20:44:37Z +++$+++ Is there a list of CUDA dependency libraries that Tensorflow relying on?
+
+This would help to see if we could have immediate OpenCL alternatives.
+ +++$+++ 0 +++$+++ 0

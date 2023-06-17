@@ -1,0 +1,99 @@
+ROOT +++$+++ SP34246760 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-10-05T23:19:23Z +++$+++ ⏱️ Call to action: Help shape the future for ASP.NET Core Hi. Thanks for stopping by.
+
+We're actively working on .NET 6 planning and we would like your help with this.
+In the next few weeks we are going to scan through all the issues in our backlog and identify candidates for .NET 6. To make a decision whether an issue is a good candidate or not for the upcoming release, we also look into the number of upvotes 👍 (and other reactions). To help us prioritize the issues the community feels are most important, please find the issues you want to see resolved and upvote 👍 them.
+
+
+**⚠️ Please don't add descriptions of what you want to see as comments in this issue. Simply find an existing of file a new issue and upvote it** +++$+++ 45 +++$+++ 0
+COM0 +++$+++ SP16502423 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-10-06T09:14:28Z +++$+++ AoT compilation https://github.com/dotnet/aspnetcore/issues/5466 +++$+++ 186 +++$+++ 0
+COM1 +++$+++ SP16502423 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-10-06T09:15:04Z +++$+++ SVG Support in Blazor https://github.com/dotnet/aspnetcore/issues/18271 +++$+++ 103 +++$+++ 0
+COM2 +++$+++ SP23618436 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-10-06T09:22:33Z +++$+++ HTML Autofocus supprt in Blazor WASM +++$+++ 45 +++$+++ 0
+COM3 +++$+++ SP23618436 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-10-06T09:23:05Z +++$+++ Projet Reload on save with Kestrel like IIS Express does. +++$+++ 96 +++$+++ 0
+COM4 +++$+++ SP281441 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-10-06T11:08:41Z +++$+++ #26091 Download compressed resources by default +++$+++ 28 +++$+++ 0
+COM5 +++$+++ SP25498672 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-10-06T11:17:57Z +++$+++ MobileBlazorbindings in the experiment has got a good response. We hope that it can become a formal project of Microsoft as soon as possible, and can provide complete functions, so that users can focus on their own business logic, especially the hybrid applications. It seems to have a chance to surpass electron, more streamlined but more powerful. +++$+++ 58 +++$+++ 0
+COM6 +++$+++ SP4984486 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-10-06T11:51:58Z +++$+++ Editor & debugger improvements and Hot Reload (Edit & Continue) : [https://github.com/dotnet/aspnetcore/issues/5456](https://github.com/dotnet/aspnetcore/issues/5456) +++$+++ 168 +++$+++ 0
+COM7 +++$+++ SP4289694 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-10-06T13:19:32Z +++$+++ #11558 
+Streaming API support to MVC
+Example: https://github.com/dotnet/aspnetcore/issues/4833#issuecomment-298857229
+```
+public class MyStreamingApi : Controller
+{
+     [HttpGet("/tweets")]
+     [Streaming]
+     public async IAsyncEnumerable<Tweet> Get()
+     {
+         while (var tweet = await GetOneTweet())
+         { 
+             yield return tweet;
+         }
+     }
+}
+``` +++$+++ 106 +++$+++ 0
+COM8 +++$+++ SP34246760 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-10-06T15:36:41Z +++$+++ All this is great, folks. Please make sure to upvote on the related issues, rather than linking issues here. That's what we're going to look at after all. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP4289694 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-10-06T16:10:45Z +++$+++ @mkArtakMSFT #11558 is locked, we can't to upvote. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP12733414 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-10-06T16:16:28Z +++$+++ Feature Request: **`Drop-in component for ASP Identity Administration, Portals, UI, SSO, Claims, AD-Sync, Token, Multi.Tenant Management`** so that the Visual Studio templates don't require commercial licensed 3rd party components.
+
+I have been watching/waiting few yrs. patiently, however some recent changes have forced me to request -- Microsoft revisit this for their developer community, keeping in mind some of the pricing out there compares to the salaries of 10 to 15 developers in Bangladesh, Vietnam, India, Philippines etc.
+
+Core & Basic need, yet very complex and critical.
+
+There's a void in .NET native drop-in solution, unlike the Java, PHP Stacks etc, where there are many native drop in Identity Administration & Management Frameworks options that are leveraged across all their platforms seamlessly by developers, for e.g. the J2EE Pluggable Identity Management Framework or JSR 168 or JSR 286 or JSR-351 or JSR-375.
+
+Why is this important? because using Java or PHP, it has allowed easy, clear, core and basic functionalities in those native stacks. As a result if you look `JSR 168` or `JSR 286` or `JSR-351` or `JSR-375` Multi-tenants, [Group to roles, or to claims](https://javaee.github.io/security-spec/spec/jsr375-spec.html#_group_to_role_mapping) vice versa is so easy vs. NET , mobile devices, portals, they all work seamlessly and cohesively with security fixes managed by either IBM or SalesForce or Oracle or Red Hat etc. This is enables developer to be productive right out of the gate.
+
+In .Net there is void/very limited support, always requiring a combination of 3rd parties as a barrier to entry & adoption of ASP app. This is non-trivial for developers and security vulnerability that requires the attention of Microsoft Experts.
+
+Example: We have private information sharing site non OSS for the community almost free (pay if you want), and when we started with web forms, then Simple Membership, the Identity, Identity 2 ASP MVC we had implement much of it on top of these from scratch, when we moved to .NET Core it was another effort. Besides the development there was a lot of confusion on the internal concepts and how they now meant new things. Roles, Claims, Federation, SAML then SAML 2.0 and then Open ID 2.
+
+Describe the solution you'd like
+
+- A drop-in is extensible solution that supports ASP Identity eco-system, Administration, UI, SSO, Token, Multi-tenant Management
+- A configuration section to turn on-off the various features.
+- Embedded into VS Templates (remove Identity Server, use native MS option etc.)
+- Allow-Easy AD Active Directory Integration
+- `User Defined/Created Fields UDF` from the Admin level Support.
+- The current options and the pricing eliminate many of the existing applications from continuing usage on the .NET stack without extensive retooling or completely abandoning the MS framework.
+-  SAML2/CAS [per](https://github.com/dotnet/aspnetcore/issues/26625#issuecomment-710908106) @tbonham
+-  Allow template option `Configuration.MultiTenancy.IsEnabled = true;` [Global DataFilter for Tenant entities](https://github.com/dotnet/aspnetcore/issues/27006#issue-723795948)
+
+Its high time MS address this core gate-keeping feature!! +++$+++ 89 +++$+++ 4
+COM11 +++$+++ SP12733414 +++$+++ ROOT +++$+++ COM10 +++$+++ 2020-10-06T16:30:07Z +++$+++ - [ ] Controller/API `DDOS throttling` support
+- [ ] Login Controller/API Captcha Anti Spambot support
+- [ ] Timeouts are easily by passed using Singal-R and there's [no way to force anonymous connections to disconnect](https://stackoverflow.com/questions/49590384/signalr-persist-connections-for-anonymous-users)
+- [ ] No way to handle anonymous chats on public website. For e.g. if _Web User is Surfing/browsing for help or FAQ on product/chat_ on ASP website with SignalR, we have to create a duct-taped solution for this, there is no way to identify them uniquely to create a chat stream/session unless they login. 
+ +++$+++ 12 +++$+++ 0
+COM12 +++$+++ SP34246760 +++$+++ ROOT +++$+++ COM11 +++$+++ 2020-10-06T16:50:31Z +++$+++ > @mkArtakMSFT #11558 is locked, we can't to upvote.
+
+@expcat I've reopened it! +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP34246760 +++$+++ ROOT +++$+++ COM12 +++$+++ 2020-10-06T16:51:52Z +++$+++ @papyr please upvote to the related issues and if you can't find such, create new issues for each one separately. That way we can actually track these requests. Otherwise many asks will be lost / forgotten. +++$+++ 2 +++$+++ 0
+COM14 +++$+++ SP751732 +++$+++ ROOT +++$+++ COM13 +++$+++ 2020-10-06T18:32:21Z +++$+++ Built-in admin panel template and Vue integration. +++$+++ 8 +++$+++ 0
+COM15 +++$+++ SP12733414 +++$+++ ROOT +++$+++ COM14 +++$+++ 2020-10-06T20:59:43Z +++$+++ @mrkarMSFT thanks for the idea 👍 but they keep closing my feature requests and locking them, so its not able to upvote!
+
+Can you please [unlock 26594](https://github.com/dotnet/aspnetcore/issues/26594) to allow voting on the feature please! +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP12733414 +++$+++ ROOT +++$+++ COM15 +++$+++ 2020-10-06T21:02:43Z +++$+++ > Built-in admin panel template and Vue integration.
+
+Do you mean Like Skoruba.Admin then upvote https://github.com/dotnet/aspnetcore/issues/26594 +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP1616137 +++$+++ ROOT +++$+++ COM16 +++$+++ 2020-10-06T22:33:17Z +++$+++ RFC 7692 (WebSocket per-message compression) for SignalR. It seems this depends on [runtime#20004](https://github.com/dotnet/runtime/issues/20004) but it seems relevant in this context. There was an old [issue](https://github.com/aspnet/WebSockets/issues/19) referencing this, but it is now closed and I could find no equivalent open issue here, so I am recommending that people upvote on the runtime issue. +++$+++ 3 +++$+++ 0
+COM18 +++$+++ SP48260620 +++$+++ ROOT +++$+++ COM17 +++$+++ 2020-10-06T22:49:28Z +++$+++ blazor wasm-to-wasm interop without javascript (WASI)  [https://github.com/WebAssembly/interface-types/blob/master/proposals/interface-types/Explainer.md] +++$+++ 13 +++$+++ 0
+COM19 +++$+++ SP48260620 +++$+++ ROOT +++$+++ COM18 +++$+++ 2020-10-06T22:52:16Z +++$+++ please provide a way to improve the user experience for blazor wasm load progress, progress bar and/or filename currently downloading. +++$+++ 22 +++$+++ 0
+COM20 +++$+++ SP48260620 +++$+++ ROOT +++$+++ COM19 +++$+++ 2020-10-06T22:55:19Z +++$+++ project template blazor server/wasm using fast (components) as a user interface as quick start/example +++$+++ 1 +++$+++ 0
+COM21 +++$+++ SP48260620 +++$+++ ROOT +++$+++ COM20 +++$+++ 2020-10-06T22:58:13Z +++$+++ please add support for sftp +++$+++ 5 +++$+++ 0
+COM22 +++$+++ SP1382768 +++$+++ ROOT +++$+++ COM21 +++$+++ 2020-10-07T03:19:22Z +++$+++ "Proposal: View Component Slots" is locked
+
+> Provide a built-in or otherwise framework supplied mechanism for View Components, when rendered via a tag helper, to render user-supplied child content that can be injected into the View Component's view template in pre-defined locations
+
+https://github.com/dotnet/aspnetcore/issues/4901 +++$+++ 2 +++$+++ 0
+COM23 +++$+++ SP3264826 +++$+++ ROOT +++$+++ COM22 +++$+++ 2020-10-07T04:25:39Z +++$+++ In-house (Microsoft made) identity server and other security modules +++$+++ 89 +++$+++ 0
+COM24 +++$+++ SP1522516 +++$+++ ROOT +++$+++ COM23 +++$+++ 2020-10-07T04:27:07Z +++$+++ I can't find an issue regarding fast dev loop in general that is not mentioning blazor, I would like the whole dev experience  would be much faster +++$+++ 15 +++$+++ 0
+COM25 +++$+++ SP3111981 +++$+++ ROOT +++$+++ COM24 +++$+++ 2020-10-07T12:15:25Z +++$+++ Might it be a good idea to create a new call to action with comments disabled?
+@mkArtakMSFT  +++$+++ 1 +++$+++ 0
+COM26 +++$+++ SP1616137 +++$+++ ROOT +++$+++ COM25 +++$+++ 2020-10-07T13:54:54Z +++$+++ @mrpmorris @mkArtakMSFT You should seriously consider abandoning the whole call-to-action thing. Choosing what issues need solving based on community votes is why I never leave MS product feedback/bug reports anymore - if you don't have a social following or plenty of co-workers to upvote your issues they just languish and eventually get closed.
+
+My suggestion would be to select topics / general directions that the project can move in, let people pick from those, and let that guide part of the overall effort, without making specific commitments to specific issues.  +++$+++ 7 +++$+++ 7
+COM27 +++$+++ SP3111981 +++$+++ ROOT +++$+++ COM26 +++$+++ 2020-10-07T15:55:29Z +++$+++ It's a non-binding advisory vote :) +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP34246760 +++$+++ ROOT +++$+++ COM27 +++$+++ 2020-10-07T18:08:57Z +++$+++ > @mrkarMSFT thanks for the idea 👍 but they keep closing my feature requests and locking them, so its not able to upvote!
+> 
+> Can you please [unlock 26594](https://github.com/dotnet/aspnetcore/issues/26594) to allow voting on the feature please!
+
+@papyr looking into the issue I believe it's not something aligned with our long-term vision. And that's the reason why @blowdart has closed that issue. Given that, it seems we won't be able to prioritize that one for .NET 6 for sure. +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP34246760 +++$+++ ROOT +++$+++ COM28 +++$+++ 2020-10-07T18:10:26Z +++$+++ @3GDXC you've listed multiple feature requests above. Please make sure you file separate issues for each one so we can track these better. +++$+++ 0 +++$+++ 0

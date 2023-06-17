@@ -1,0 +1,59 @@
+ROOT +++$+++ SP48388055 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-03-09T17:04:35Z +++$+++ Make wording in the directives more inclusive # 🚀 feature request
+
+### Description
+I led a workshop on web development for the youth. A girl asked me a question what a certain line on an angular template meant. She was unusually shy and had trouble pointing at the line. Later she said in private that she didn't know how to read ng-repeat out loud. Spelling it reminded her of an ugly racial slur. I understand that it is just an unfortunate abbreviation, but it limits the pool of the talented folks who could learn angular.
+
+### Describe the solution you'd like
+Replacing the ng with ang or something similar would be awesome. It will make the project more inclusive. It also matches the library name better, so it's easier to remember. There is evidence that it is a confusing name https://stackoverflow.com/questions/14669322/what-does-the-ng-stand-for-in-angular-js-directives
+
+### Describe alternatives you've considered
+This is a big change. We could start it by improving documentation and accepting two prefixes by default.
+ +++$+++ 0 +++$+++ 15
+COM0 +++$+++ SP7661457 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-03-10T16:55:51Z +++$+++ I disagree with this feature request.
+
+Firstly, I tilted my head in confusion when I read "ugly racial slur", because none came to mind. Took me a couple of seconds of staring at `ng-repeat` to understand what you mean. I think that the girl was in a vast minority of people who would interpret `ng-repeat` as [the word I assume you're referring to](https://en.wikipedia.org/wiki/Nigger). In fact, I find it fascinating that someone at an Angular workshop was confused. Did the girl really not notice the pattern of `ng-app`-`ng-init`-`ng-model`-`ng-if` leading to `ng-repeat`? Furthermore, I am amazed by how you, as the teacher, managed to avoiding pronouncing _any_ of the directives as "en-gee" during the whole workshop.
+
+Furthermore, a question on StackOverflow asking for the etymology of the `ng-` prefix is by no means "evidence that it is a confusing name". Being curious about an official origin doesn't mean you're confused.
+
+Replacing the directive would not make the project more "inclusive". There are several definitions for this word, but I will assume that you meant this one: "not excluding any section of society or any party involved in something" (please correct me if my assumption was incorrect). The project is already as inclusive as it gets: _everyone_ is welcome to use it and participate in its evolution by contributing, pointing out bugs, asking questions and helping others. Changing `ng-` to `ang-` would not affect this fact, positively or negatively. 
+
+Also, it would certainly not be "easier to remember" because that would mean changing every existing material online. It would be a huge breaking change and I'm sure that a huge portion of developers would be outraged. Angular already had one issue with renaming few years ago, which brings me to the following point: `ng-repeat` is not an Angular directive. It comes from a different framework called AngularJS, so this issue is opened in a wrong place. Angular uses `ngFor`. +++$+++ 9 +++$+++ 0
+COM1 +++$+++ SP2392216 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-03-10T22:21:11Z +++$+++ By this logic ang- is a terrible choice as it could stand for anything from negative words like ang-ry to religious words like ang-el.
+
+Trying to find two or three letters that are universally innocent in every language in a way that you cannot somehow turn them into something negative is probably an impossible task.  +++$+++ 4 +++$+++ 0
+COM2 +++$+++ SP3506071 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-03-11T18:05:51Z +++$+++ @lazarljubenovic did you mean "vast minority"?
+
+As mentioned, [`ng-repeat`](https://docs.angularjs.org/api/ng/directive/ngRepeat) is from [AngularJS](https://github.com/angular/angular.js), not Angular (this repo) where `*ngFor` is used. 
+
+Also please note that [AngularJS has reached LTS](https://blog.angular.io/stable-angularjs-and-long-term-support-7e077635ee9c) and is no longer being modified other than for security issues or major breaking changes to browser or jQuery support. +++$+++ 1 +++$+++ 0
+COM3 +++$+++ SP12599934 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-06-12T19:49:49Z +++$+++ > The project is already as inclusive as it gets: everyone is welcome to use it and participate in its evolution by contributing, pointing out bugs, asking questions and helping others.
+
+@lazarljubenovic I believe that, in this case, "inclusive" means ~"how welcome someone ***feels*** in the angular community." The poster is _telling us_ that, in at least one case, someone doesn't feel like the angular community is inclusive. Responding to that feeling by saying, basically, "you are wrong" is practically providing proof that the angular community is not that welcoming.
+
+> In fact, I find it fascinating that someone at an Angular workshop was confused. Did the girl really not notice
+
+That sentence reads as a euphemism for "that girl is stupid". Again: Not. Welcoming.
+
+A better response would be something along the lines of, ~"You raise a valid concern. At the moment I think that this issue is not a generally applicable because...".
+
+Ignoring the fact that this issue is concerning angularjs and not angular, this seems to boil down to "what percentage of the community/potential community might interpret `ng` as a slur." Personally, I also fall on the side of "this sounds like an isolated experience that isn't generally applicable." However, responding this way also provides a clear avenue for @jKittyj, or someone else, to bolster their suggestion by providing more examples or reasons why the interpretation the girl had is actually generally applicable.
+
+It also makes clear that, as a community, we do care about how welcome people feel and our issue is not with the _intent_ of the original post (to be more inclusive and thoughtful), but rather the execution.
+
+Regarding 
+
+> I tilted my head in confusion when I read "ugly racial slur", because none came to mind
+
+This strikes me as equivalent to someone commenting on a feature request by saying "FYI, I don't need this feature." Great, I'm glad you don't interpret `ng-repeat` negatively. If I were evaluating this issue, I wouldn't care how many people interpret `ng-repeat` the way I intended, I'm interested in how many people interpret `ng-repeat` the way I *didn't* intend.
+
+Because of this, this issue strikes me as providing valuable feedback and I would encourage people to surface similar experiences that they may have had. +++$+++ 0 +++$+++ 7
+COM4 +++$+++ SP216296 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-02-29T20:52:08Z +++$+++ Hi @jKittyj, I'm sorry to hear about your experience and I understand the sensitivity of your concern. Let us take some time to consider your request and respond in a mindful way.
+
+Given our past experience with these kinds of issue discussions getting out of hand due to comments from people outside of our team, I'm going to lock this thread until we have a chance to respond. Thanks for understanding. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP216296 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-11-06T19:26:36Z +++$+++ We've discussed this issue quite a bit. We the Angular team, strongly believe in building an inclusive community where everyone feels welcome, and we see how especially ng-repeat could be problematic in certain scenarios. It was never our intention. 
+
+"ng" simply stands for a*NG*ular - the two characters in the middle of the name. And the name Angular has its roots in angle brackets that are the key part of HTML syntax that Angular uses.
+
+After reviewing the current names of APIs that are prefixed with ng we concluded that ng-repeat was the only one that stood out as potentially problematic. Fortunately, the latest versions of Angular use [ngFor](https://angular.io/api/common/NgForOf) instead of  ng-repeat. ng-repeat is no longer used by Angular and was deprecated along with AngularJS a few years ago, so this api is no longer used in new development.
+
+For these reasons, we will not make any changes in our current APIs, but we will be very mindful of this problem when creating future APIs. Thank you for bringing it to our attention. +++$+++ 0 +++$+++ 0

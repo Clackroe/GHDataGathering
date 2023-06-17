@@ -1,0 +1,52 @@
+ROOT +++$+++ SP35543887 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-06-12T20:53:49Z +++$+++ Deno 
+Ryan Dahl pinpoints the core problems of node.js: http://tinyclouds.org/jsconf2018.pdf
+The community, judging by the amount of stars on https://github.com/ry/deno, feels the same.
+
+How do you feel about addressing those issues? Is it doable? May be a fork? +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP718899 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-06-12T21:13:42Z +++$+++ > Ryan Dahl pinpoints the core problems of node.js
+
+Don't confuse "decisions he says he regrets" with "core problems of node.js". 
+
+> The community, judging by the amount of stars on https://github.com/ry/deno, feels the same.
+
+Judging by the amount of stars seems like a pretty poor way to judge. "I am interested in seeing where this project goes" is not necessarily the same as "Right on! I agree that the other project has huge problems!"
+
+> How do you feel about addressing those issues? Is it doable? May be a fork?
+
+Sorry, this isn't really much of a question appropriate for the issue tracker. This is more of a Call For Hot Takes, which is not particularly helpful here IMO.
+
+Many of the core devs on Node.js have commented (e.g. on Twitter) on what aspects of the presentation they agree with and disagree with. You can do some web searches if you really care what the core devs think. Or maybe a few will weigh in here. (Sorry, I won't be one of them.)
+
+If you have a very specific question, feel free to post it in an appropriate forum. Depending on the question, this issue tracker *might* be the right forum.
+ +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP718899 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-06-12T21:18:47Z +++$+++ > (Sorry, I won't be one of them.)
+
+OK, maybe I will comment a little bit. Some of these so-called "core problems of node.js" are just unimportant things we'll have to keep supporting or else break the entire ecosystem. So no, they won't get "fixed". But they're also not "broken". For example, supporting "index.js" as the default file for modules is maybe a less-than-perfect original decision, but now that there are hundreds of thousands of modules that do this, we're not going to change. The benefit of changing is negligible and the cost of changing is enormous. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP899444 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-06-12T21:29:09Z +++$+++ Maybe to add one thing: If you, or somebody else, think Node.js *should* address one of the particular concerns, and are willing to help in making that happen, I’m sure we can arrange that. :slightly_smiling_face:  +++$+++ 2 +++$+++ 0
+COM3 +++$+++ SP35543887 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-06-12T21:31:22Z +++$+++ > Don't confuse "decisions I regret" with "core problems of node.js".
+
+Ryan is not the first to mention them, there were others along the road who complained about packaging, gyp and node_modules.
+
+Security is a major issue IMHO, its only a matter of time until someone will plant a malware in some popular module.
+
+> Judging by the amount of stars seems like a pretty poor way to judge. "I am interested in seeing where this project goes" is not necessarily the same as "Right on! I agree that the other project has huge problems!"
+
+Possibly. Lets say only 1/3 of these people starred the project because they feel that node has problems - it is still a lot for a fresh project on GitHub. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP502396 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-06-12T21:36:21Z +++$+++ There is quite a bit of work being done in each of those areas, most of which it seemed Ryan was unaware of. I suggest checking out the discussion in [nodejs/modules](https://github.com/nodejs/modules), discussions around migrating away from gyp, and the [Security Working Group](https://github.com/nodejs/security-wg/).
+
+If you'd like to contribute to any of those and help us address the perceived issues you mentioned, we'd welcome contributions with open arms. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP418097 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-06-12T21:40:43Z +++$+++ "Too heated" doesn't really capture it, but none of the choices fit perfectly. On the whole, though, I agree with @Trott that this is a topic best addressed through individual discussions, and trying to handle it all in a single issue is unproductive. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP4299420 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-06-12T21:45:21Z +++$+++ > How do you feel about addressing those issues? Is it doable? May be a fork?
+
+I believe most of the points raised in the talk are not new to the project, but out of compatibility concerns it would be hard to do anything about them at this point. Deno is new and is free to experiment with ideas, but Node.js cannot afford that luxury with the enormous user base and the existing code out there - people may be upset when the existing design is not perfect, but they are usually more upset when their working code gets broken or when they are told to upgrade their massive code base to a more idiomatic style. Starting a general discussion around the issues may be helpful to make progress, but it is likely to go nowhere without anything actionable proposed.
+
+The current ways of introducing significant changes into Node.js core are:
+
+1. Start a working group, or a team, like [nodejs/modules](https://github.com/nodejs/modules), that may or may not does periodic meetings and has their own issue tracker to tackle the cross-cutting concerns and reach consensus before starting the implementation in core
+2. Start a new repo under this organization that contains a fork of Node.js core (there is usually a team started for it as well), work on the implementation there and sync with the upstream from time to time, but it's not going to have its own release (maybe that can be improved). When the team thinks it's ready, submit a PR back to the upstream. Past examples that have been merged into core:  [nodejs/http2](https://github.com/nodejs/http2) and [nodejs/abi-stable-node](https://github.com/nodejs/abi-stable-node) (prototype of N-API, you'll need to switch branches to find the prototypes and the collaboration happened there)
+
+For both type of efforts we will usually have an item listed in the [strategic initiatives](https://github.com/nodejs/TSC/blob/master/Strategic-Initiatives.md) and a champion (usually TSC member) who reports the status of the initiative every week at the TSC meeting, which is live-streamed on [YouTube](https://www.youtube.com/channel/UCQPYJluYC_sn_Qz_XE-YbTQ) with a public Q&A session (there are also recordings in the channel) and the [meetings minutes are available in the TSC repo](https://github.com/nodejs/TSC/tree/master/meetings).
+
+The members of those initiatives do not have to be Node.js core collaborators or even members of this organization, but the team will decide how they recruit new members (it's usually a call-for-participants kind of thing). If you want to start an initiative, I think the best way is to [go to the #node-dev IRC](http://nodeirc.info/) and find people who are interested in a particular item, and discuss about starting a new team for it. It is also important to make sure that the stakeholders are aware and willing to participate (like the VM vendors in the case of N-API), reaching out to them in private should help as well. A lot of work (coordination is work and it's hard) would be needed to make this happen so you'll either do it yourself, or find people who are interested in spending their time on that.
+
+There used to be [node-eps](https://github.com/nodejs/node-eps) but it's not used anymore. +++$+++ 0 +++$+++ 0

@@ -1,0 +1,254 @@
+ROOT +++$+++ SP692635 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-08-21T03:36:57Z +++$+++ Global variable scope rules lead to unintuitive behavior at the REPL/notebook ### Example 1
+
+This came up with a student who upgraded from 0.6 to 1.0 directly, so never even got a chance to see a deprecation warning, let alone find an explanation for new behavior:
+
+```julia
+julia> beforefor = true
+true
+
+julia> for i in 1:2
+         beforefor = false
+       end
+
+julia> beforefor  # this is surprising bit
+true
+
+julia> beforeif = true
+true
+
+julia> if 1 == 1
+         beforeif = false
+       end
+false
+
+julia> beforeif  # Another surprise!
+false
+
+julia> function foo()
+         infunc = true
+         for i in 1:10
+           infunc = false
+         end
+         @show infunc
+       end
+foo (generic function with 1 method)
+
+julia> foo()  # "I don't get this"
+infunc = false 
+```
+
+### Example 2
+
+```julia
+julia> total_lines = 0
+0
+
+julia> list_of_files = ["a", "b", "c"]
+3-element Array{String,1}:
+ "a"
+ "b"
+ "c"
+
+julia> for file in list_of_files
+         # fake read file
+         lines_in_file = 5
+         total_lines += lines_in_file
+       end
+ERROR: UndefVarError: total_lines not defined
+Stacktrace:
+ [1] top-level scope at ./REPL[3]:4 [inlined]
+ [2] top-level scope at ./none:0
+
+julia> total_lines  # This crushs the students willingness to learn
+0
+```
+
+I "get" why this happens in the sense that I think I can explain, with sufficient reference to the arcana in the manual about what introduces scopes and what doesn't, but I think that this is problematic for interactive use.
+
+In example one, you get a silent failure. In example two, you get an error message that is very there-is-no-spoon. Thats roughly comparable to some Python code I wrote in a notebook at work today.
+
+I'm not sure what the rules are in Python, but I do know that generally you can't assign to things at the global scope without invoking global. But at the REPL it does work, presumably because at the REPL the rules are different or the same logic as if they were all are in the scope of function is applied.
+
+I can't language-lawyer the rules enough to propose the concrete change I would like, and based on Slack this isn't even necessarily perceived as an issue by some people, so I don't know where to go with this except to flag it.
+
+Cross-refs:
+#19324
+https://discourse.julialang.org/t/repl-and-for-loops-scope-behavior-change/13514
+https://stackoverflow.com/questions/51930537/scope-of-variables-in-julia +++$+++ 15 +++$+++ 0
+COM0 +++$+++ SP692635 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-08-21T03:39:24Z +++$+++ (Per @mlubin, this is the relevant change https://github.com/JuliaLang/julia/pull/19324) +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP11729078 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-08-21T04:18:59Z +++$+++ Stefan suggested [here](https://discourse.julialang.org/t/repl-and-for-loops-scope-behavior-change/13514/9) that one possibility to solve this issue is automatic wrapping of REPL entries in `let` blocks +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP1282691 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-08-21T09:36:57Z +++$+++ But wouldn't that be confusing in that you couldn't do
+
+```
+a = 1
+```
+
+and use `a` after that? Unless `global` is inserted for all the toplevel assignments, I guess? +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP153596 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-08-21T12:57:46Z +++$+++ The behavior wouldn't be just to wrap everything in a `let` block—it's more complicated than that. You need to let-bind any global that's assigned inside the expression and then extract the let-bound value to a global at the end of the expression. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP153596 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-08-21T13:05:47Z +++$+++ So you would turn `a = 1` into something like `a = let a; a = 1; end`. And something like
+```jl
+for i in 1:2
+    before = false
+end
+```
+would be turned into this:
+```jl
+before = let before = before
+    for i in 1:2
+        before = false
+    end
+end
+```
+Frankly, I'm pretty annoyed that people are only giving this feedback now. This has change has been on master for ten months. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP6333339 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-08-21T13:38:14Z +++$+++ I'm guilty of not having followed master very closed until recently, so this feedback is indeed a bit late. More than a concern for programmers (most `for` loops will be inside a function in library code) I'm afraid this is a concern for teaching. Often `for` loops are taught before functions or scopes (of course you need to understand scopes to really understand what's going on but in teaching things are often simplified).
+
+Here it becomes a bit difficult to teach a beginner how to sum numbers from 1 to 10 without explaining functions or global variables. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP1733683 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-08-21T13:46:42Z +++$+++ > Frankly, I'm pretty annoyed that people are only giving this feedback now. This has change has been on master for ten months.
+
+To be fair, Julia 0.7 was released 13 days ago. This is a new change for most Julia users. +++$+++ 7 +++$+++ 0
+COM7 +++$+++ SP692635 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-08-21T13:59:17Z +++$+++ > Frankly, I'm pretty annoyed that people are only giving this feedback now. This has change has been on master for ten months
+
+Unfortunately for those of us who can not handle living on the edge, its brand-new from our perspective. +++$+++ 14 +++$+++ 0
+COM8 +++$+++ SP6000188 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-08-21T14:04:29Z +++$+++ > Frankly, I'm pretty annoyed that people are only giving this feedback now. This has change has been on master for ten months.
+
+And for those of us who have been encouraged to stay off the development branches, "it's brand-new from our perspective." +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP1282691 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-08-21T14:21:27Z +++$+++ Can we please go back to focus on the issue at hand now, instead of having a meta discussion about how long people have had to test this. It is what it is right now, so let's look forward. +++$+++ 12 +++$+++ 0
+COM10 +++$+++ SP1814174 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-08-21T14:25:47Z +++$+++ >I'm guilty of not having followed master very closed until recently, so this feedback is indeed a bit late. More than a concern for programmers (most for loops will be inside a function in library code) I'm afraid this is a concern for teaching. Often for loops are taught before functions or scopes (of course you need to understand scopes to really understand what's going on but in teaching things are often simplified).
+
+>Here it becomes a bit difficult to teach a beginner how to sum numbers from 1 to 10 without explaining functions or global variables.
+
+This is a big point. After finding out what the issue really is, it's surprising how little it actually shows up. It is less of an issue with a lot of Julia code in the wild and in tests, and it did reveal a lot of variables which were accidentally global (in both Julia Base's tests according to the original PR, and I noticed this on most of DiffEq's tests). In most cases it seems that the subtly wrong behavior isn't what you get (expecting a change in a loop), but rather expecting to be able to use a variable in a loop is what I've found to be the vast majority of where this shows up in updating test scripts to v1.0. So the good thing is that in most cases the user is presented with an error, and it's not difficult to fix.
+
+The bad thing is that it's a little verbose to have to put `global x` inside of the loops, and now your REPL code is also different from the function code. Whether or not it's more intuitive behavior than before is a tough opinion because [there were definitely some edge cases in hard/soft local scoping](http://ucidatascienceinitiative.github.io/IntroToJulia/Html/ScopingExperiment) and so this is clearly easier to explain. But at the same time, while having a much more succinct explanation than the behavior of before, it's now easier to hit the edge cases where understanding scoping rules matters. 🤷‍♂️. 
+
+I for one would like to see the experiments with `let` blocking. This would keep the "you didn't really want so many globals" aspect of it, along with the simplified scoping explanation, while at the same time make REPL code behave like function interiors (which is seemingly what we've always wanted). Or inversely, making people specify variables they want to act as globals
+
+```julia
+global x = 5
+for i = 1:5
+  println(x+i)
+end
+```
+
+could be a nice way to keep the explicitness, and would make the "REPL code is slow because of globals" be much more obvious. The downside is that once again throwing things into a function would not require the `global` markers. 
+
+But given how this tends to show up, it's not really gamebreaking or a showstopper. I'd classify it as a wart  that should get a mention in any workshop but it's not like v1.0 is unusable because of it. I hope that changing this behavior isn't classified as breaking and require v2.0 though. +++$+++ 1 +++$+++ 0
+COM11 +++$+++ SP11379353 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-08-21T14:58:56Z +++$+++ I'm not so sure I like the idea that the REPL should behave like a function interior.  It clearly isn't, so I expect it to behave like global scope.  To me the REPL not behaving like global scope would be potentially even more confusing than the discrepency that causes this issue.
+
+Regardless, at the very least I think that the documentation should be somewhat more explicit about this issue.  Casually reading the docs I would have assumed that you would need to use the `local` keyword to get the behavior occurs in global scope by default. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP6333339 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-08-21T15:06:32Z +++$+++ > I for one would like to see the experiments with `let` blocking. This would keep the "you didn't really want so many globals" aspect of it, along with the simplified scoping explanation, while at the same time make REPL code behave like function interiors (which is seemingly what we've always wanted)
+
+If we're going for "REPL is the same as the inside of a function" we should also think about `outer`:
+
+```julia
+julia> i = 1
+1
+
+julia> for outer i = 1:10
+       end
+ERROR: syntax: no outer variable declaration exists for "for outer"
+```
+
+versus:
+
+```julia
+julia> function f()
+          i = 0
+          for outer i = 1:10
+          end
+          return i
+       end
+f (generic function with 1 method)
+
+julia> f()
+10
+``` +++$+++ 1 +++$+++ 0
+COM13 +++$+++ SP2913679 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-08-21T16:29:03Z +++$+++ > Frankly, I'm pretty annoyed that people are only giving this feedback now. This has change has been on master for ten months.
+
+People haven't been using master for interactive use or for teaching, they've been using it to upgrade packages, which are only minimally affected by this and are mostly written by experienced programmers.
+
+(I was one of the few people who did give feedback in #19324, though, where I argued [for the old behavior](https://github.com/JuliaLang/julia/pull/19324#issuecomment-356484761).)
+
+A non-breaking way out of this would be to change back to the old behavior (ideally not by inserting implicit `let` blocks or anything — just restore the old code in `julia-syntax.scm` as an option) in the REPL.  Or rather, to make it available in environments like IJulia that might want it, add a `soft_global_scope=false` flag to `include`, `include_string`, and `Core.eval` to restore the old behavior. +++$+++ 10 +++$+++ 0
+COM14 +++$+++ SP153596 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-08-21T16:52:48Z +++$+++ > (I was one of the few people who did give feedback in #19324, though, where I argued for the old behavior.)
+
+Yes, and I greatly appreciate it. It doesn't much matter now since we made the choice, let it bake for ten months and have now released it with a long-term commitment to stability. So the only thing to do now is to focus on what to do going forward.
+
+Having an option to choose between the old behavior and the new one is interesting but it feels very hacky. That means we not only sometimes have a scoping behavior that everyone apparently found incredibly confusing, but we don't always have it and whether we have it or not depends on a global flag. That feels pretty unsatisfactory, I'm afraid. +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP2913679 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-08-21T16:56:11Z +++$+++ > Having an option to choose between the old behavior and the new one is interesting but it feels very hacky.
+
+If someone implements an "unbreak me" soft-scope AST transformation, it will be very tempting to use it in IJulia, OhMyREPL, etcetera, at which point you get the even more problematic situation in which the default REPL is seen as broken. +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP153596 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-08-21T17:02:31Z +++$+++ That's not what I'm saying. Clearly we should use the same solution in all those contexts. But implementing it as two different variations on scoping rules seems less clean than implementing it as a code transformation with one set of scoping rules. But perhaps those are functionally equivalent. However, it seems easier to explain in terms of the new simpler scoping rules + a transformation that takes REPL-style input and transforms it before evaluating it. +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP153596 +++$+++ ROOT +++$+++ COM16 +++$+++ 2018-08-21T17:06:55Z +++$+++ That could be done as `Meta.globalize(m::Module, expr::Expr)` that transforms an expression by automatically annotating any globals which exist in the module as global if they are assigned inside of any top-level non-function scope. Of course, I think that's equivalent to what the old parser did, but a bit more transparent since you can call `Meta.globalize` yourself and see what the REPL will evaluate. +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP2913679 +++$+++ ROOT +++$+++ COM17 +++$+++ 2018-08-21T17:07:36Z +++$+++ > That could be done as `Meta.globalize(m::Module, expr::Expr)` that transforms an expression by automatically annotating any globals which exist in the module as global if they are assigned inside of any top-level non-function scope.
+
+I actually started looking into implementing something like this a few minutes ago.  However, it looks like it would be *much* easier to implement as an option in `julia-syntax.jl`:
+
+* Writing an external AST transformation is possible, but it seems like there are lots of tricky corner cases — you basically have to re-implement the scoping rules — whereas we already had the code to get it right in `julia-syntax.scm`.
+* It's even more tricky for something like IJulia that currently uses `include_string` to evaluate a whole block of code and get the value of the last expression.  Not only would we have to switch to parsing expression by expression, but some hackery may be needed in order to preserve the original line numbers (for error messages etcetera).  (Though I found a [hack for ChangePrecision.jl for this sort of thing](https://github.com/stevengj/ChangePrecision.jl/blob/master/src/ChangePrecision.jl#L105-L111) that may work here also.)
+* Not to mention of the case of people that `include` external files, which would not be caught by your AST transformation.
+
+> However, it seems easier to explain in terms of the new simpler scoping rules + a transformation that takes REPL-style input and transforms it before evaluating it.
+
+I seriously doubt this would be easier to explain to new users than just saying that the rules are less picky for interactive use or for `include` with a certain flag. +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP2913679 +++$+++ ROOT +++$+++ COM18 +++$+++ 2018-08-21T17:54:27Z +++$+++ Here is a rough draft of a `globalize(::Module, ast)` implementation: https://gist.github.com/stevengj/255cb778efcc72a84dbf97ecbbf221fe +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP2913679 +++$+++ ROOT +++$+++ COM19 +++$+++ 2018-08-21T19:48:16Z +++$+++ Okay, I've figured out how to implement a `globalize_include_string` function that preserves line-number information, and have added it to [my gist](https://gist.github.com/stevengj/255cb778efcc72a84dbf97ecbbf221fe).
+
+A possible (non-breaking) way forward, if people like this approach:
+
+1. Release a SoftGlobalScope.jl package with the `globalize` etc. functions.
+2. Use SoftGlobalScope in IJulia (and possibly Juno, vscode, and OhMyREPL).
+3. Fold the SoftGlobalScope functions into a future release of the REPL stdlib package and use it in the REPL.
+
+Or is it practical to roll it into REPL.jl immediately?  I'm not completely clear on how stdlib updates work in 1.0.
+
+Please take a look at my implementation, in case I'm missing something that will cause it to be fragile. +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP1282691 +++$+++ ROOT +++$+++ COM20 +++$+++ 2018-08-21T21:26:09Z +++$+++ Can't we have it as a non-default feature of the REPL in 1.1? +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP744556 +++$+++ ROOT +++$+++ COM21 +++$+++ 2018-08-21T21:50:05Z +++$+++ Duplicate of #28523 and #28750. To those saying they don't want to teach people about global variables, I suggest teaching functions first, before `for` loops. Functions are more fundamental anyway, and this will help set the expectation that code should be written in functions. While I understand the inconvenience, this scoping behavior can be turned into a pedagogical advantage: "In fact, global variables are such a bad idea, particularly using them in loops, that the language makes you bend over backwards to use them."
+
+Adding a non-default feature to the REPL for this seems ok to me though. +++$+++ 5 +++$+++ 5
+COM23 +++$+++ SP2913679 +++$+++ ROOT +++$+++ COM22 +++$+++ 2018-08-21T23:11:58Z +++$+++ @JeffBezanson, remember that many of us would like to use Julia as a substitute for Matlab etcetera in technical courses like linear algebra and statistics.  These are *not* programming courses and the students often have no programming background.   We never do structured programming — it's almost *all* interactive with short snippets and global variables.
+
+Furthermore, the reason I'm using a dynamic language in the first place is to switch fluidly between interactive exploration and more disciplined programming.   The inability to use the same code in a global and a function context is a hindrance to that end, even for someone who is used to scoping concepts, and it is much worse for students from non-CS backgrounds. +++$+++ 31 +++$+++ 0
+COM24 +++$+++ SP11379353 +++$+++ ROOT +++$+++ COM23 +++$+++ 2018-08-21T23:34:20Z +++$+++ > remember that many of us would like to use Julia as a substitute for Matlab etcetera in technical courses like linear algebra and statistics. These are not programming courses and the students often have no programming background. We never do structured programming — it's almost all interactive with short snippets and global variables.
+
+Many of us Julia users have absolutely 0 CS background (including myself), but it seems to me that the proper attitude (*especially* for students) is a willingness to learn rather than demanding things be changed for the worse to accommodate our naivete.
+
+Now, I'm not necessarily implying that this particular change would be for the worse as I only have a limited understanding of what's going on here, but if it *is* the case that this is a significant complication or makes it excessively easy to write needlessly badly performing code it does not seem worth it to make a change in order to have a better lecture example.  You can't change the laws of physics so that the electrostatics examples you show to freshman are more applicable to real life.
+
+So my question as a non-CS user who also cares about performance is how would I be likely to screw up if this were made the default behavior.  Is it literally just the sorts of examples we are seeing here that are a problem (which I was already aware of), or are we likely to often screw this up badly in more subtle ways?
+
+For what it's worth, I do agree that having code behave differently depending on its enclosing scope is a generally undesirable feature. +++$+++ 1 +++$+++ 0
+COM25 +++$+++ SP2913679 +++$+++ ROOT +++$+++ COM24 +++$+++ 2018-08-22T00:57:15Z +++$+++ Making code harder to write interactively, forcing beginners writing their first loops to understand obscure scoping rules, and making code pasted from functions not work in global scopes does not help programmers write fast code in functions. It just makes it harder to use Julia interactively and harder for beginners.  +++$+++ 7 +++$+++ 0
+COM26 +++$+++ SP2913679 +++$+++ ROOT +++$+++ COM25 +++$+++ 2018-08-22T01:10:43Z +++$+++ > Can't we have it as a non-default feature of the REPL in 1.1?
+
+Making an "unbreak me" option the default seems wiser, especially an option that is aimed squarely at beginning users.   If it is a non-default option, then precisely those people who need it most will be those who don't have it enabled (and don't know it exists). +++$+++ 9 +++$+++ 0
+COM27 +++$+++ SP4098145 +++$+++ ROOT +++$+++ COM26 +++$+++ 2018-08-22T06:51:02Z +++$+++ What would the proposed REPL-mode do to `include`ed scripts?  Would the evaluation of global statements depend on whether the REPL mode is activated?  If so, IMO this would be at odds with the 1.0 stability promise. +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP153596 +++$+++ ROOT +++$+++ COM27 +++$+++ 2018-08-22T07:21:58Z +++$+++ If we did something like this it seems like it might make sense for the module to determine how it works. So `Main` would be a "soft scope" module while by default other modules would be "hard scope" modules. +++$+++ 1 +++$+++ 0
+COM29 +++$+++ SP1260244 +++$+++ ROOT +++$+++ COM28 +++$+++ 2018-08-22T15:00:15Z +++$+++ I was interested to see if it was possible to monkey patch the REPL to use @stevengj's `globalize` function and it appears it is without too much effort (though quite hacky). See the [gist](https://gist.github.com/dawbarton/0388715fb56fb5cd05e0e4b12c322815). This doesn't work with Juno (or anything else that calls `Core.eval` directly).
+
+I'm **not** going to be recommending this to people, but it's quite useful to me when doing quick-and-dirty data analysis. I would very much like to see a (better thought out) solution since it really is quite confusing for inexperienced and often reluctant coders (i.e., my students) when you can't copy and paste in code from a function into the REPL to see what it does and vice-versa.
+
+```julia
+julia> a = 0                                                                
+0                                                                           
+                                                                            
+julia> for i = 1:10                                                         
+         a += i                                                             
+       end                                                                  
+ERROR: UndefVarError: a not defined                                         
+Stacktrace:                                                                 
+ [1] top-level scope at .\REPL[2]:2 [inlined]                               
+ [2] top-level scope at .\none:0                                            
+                                                                            
+julia> using SoftGlobalScope                                                
+[ Info: Precompiling SoftGlobalScope [363c7d7e-a618-11e8-01c4-4f22c151e122] 
+                                                                            
+julia> for i = 1:10                                                         
+         a += i                                                             
+       end                                                                  
+                                                                            
+julia> a                                                                    
+55                                                                          
+```
+(BTW: the above is about as much testing as it has had!) +++$+++ 2 +++$+++ 0

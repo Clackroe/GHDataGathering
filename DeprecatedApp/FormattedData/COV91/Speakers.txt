@@ -1,0 +1,8 @@
+SP68514 +++$+++ kenyon +++$+++ CONTRIBUTOR (AUTHOR)
+SP6585283 +++$+++ ansibot +++$+++ CONTRIBUTOR
+SP39340 +++$+++ sivel +++$+++ MEMBER
+SP4280480 +++$+++ Oloremo +++$+++ NONE
+SP9899409 +++$+++ timflannagan +++$+++ NONE
+SP481677 +++$+++ geerlingguy +++$+++ CONTRIBUTOR
+SP891871 +++$+++ thaumos +++$+++ CONTRIBUTOR
+SP197972 +++$+++ zem +++$+++ NONE

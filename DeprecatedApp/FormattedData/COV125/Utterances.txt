@@ -1,0 +1,7 @@
+ROOT +++$+++ SP600504 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-19T13:13:37Z +++$+++ Issues tracker being spammed with SantaGate silliness: proposed fix Bring back the hat.
+
+:santa: +++$+++ 25 +++$+++ 1
+COM0 +++$+++ SP54486529 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-19T13:14:19Z +++$+++ I strongly support that fix ! +++$+++ 9 +++$+++ 1
+COM1 +++$+++ SP1487073 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-12-19T18:53:54Z +++$+++ Thanks for creating this issue. We think this issue is unactionable or unrelated to the goals of this project. Please follow our [issue reporting](https://aka.ms/vscodeissuereporting) guidelines.
+
+Happy Coding! +++$+++ 0 +++$+++ 0

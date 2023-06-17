@@ -1,0 +1,172 @@
+ROOT +++$+++ SP21359676 +++$+++ ROOT +++$+++ ROOT +++$+++ 2016-12-01T12:06:29Z +++$+++ depends_on cannot be used in a module Hi there,
+
+
+### Terraform Version
+0.8.0 rc1+
+
+### Affected Resource(s)
+module
+
+
+### Terraform Configuration Files
+```hcl
+module "legacy_site" {
+  source = "../../../../../modules/site"
+  name = "foo-site"
+  health_check_target = "TCP:443"
+  azs = "${var.azs}"
+  instance_count = "${var.instance_count}"
+  vpc = "apps"
+  region = "${var.region}"
+  environment = "${var.environment}"
+  run_list = "hs_site_foo"
+
+  #rds_complete = "${module.rds.db_instance_id}"
+  #elasticache_cache_complete = "${module.elasticache_cache.elasticache_id}"
+  #elasticache_sessions_complete = "${module.elasticache_sessions.elasticache_id}"
+
+  depends_on = [
+  "module.rds",
+  "module.elasticache_sessions"
+  ]
+
+}
+```
+
+### Debug Output
+Error loading Terraform: module root: module legacy_site: depends_on is not a valid parameter
+module root: module legacy_site: depends_on is not a valid parameter
+
+### Expected Behavior
+I am trying to use the new depends_on instead of the above outputs, so I create and provision my app once I know database and caches are built.
+
+### Actual Behavior
+Nothing as terraform errors out as above.
+
+### Steps to Reproduce
+
+1. `terraform apply`
+
+### References
+depends_on can reference modules. This allows a resource or output to depend on everything within a module. (#10076)
+ +++$+++ 339 +++$+++ 0
+COM0 +++$+++ SP227823 +++$+++ ROOT +++$+++ ROOT +++$+++ 2016-12-01T12:10:37Z +++$+++ Hi @chrisrlong 
+
+This is very strange - we introduced depends_on for modules in 0.8.0-beta2
+
+can you run terraform version and post the output here for me?
+
+Paul +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP21359676 +++$+++ ROOT +++$+++ COM0 +++$+++ 2016-12-01T13:24:05Z +++$+++ Hi @stack72,
+
+I have complied master from version b15b8bd (Terraform v0.8.0-dev (b15b8bd99aae33c5b68cbecf5aef375c0798147c+CHANGES)), which should include beta2 features. (I did this to get 10337  and 10338 fixes)
+
+It seems it would work if you set a resource to depend on a module, but you cannot set a module to depend_on another module......
+
+Thanks for the great tool btw ;)
+
+Chris
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP227823 +++$+++ ROOT +++$+++ COM1 +++$+++ 2016-12-01T13:35:08Z +++$+++ Hi @chrisrlong 
+
+thanks for getting back to me - you are indeed correct - modules cannot (currently) depend_on other modules but can depend on a resource only
+
+Will change the tag on this from bug to enhancement :)
+
+Keep an eye out for it soon ™️ 
+
+Thanks
+
+Paul +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP1299 +++$+++ ROOT +++$+++ COM2 +++$+++ 2016-12-01T13:42:28Z +++$+++ Retagging as enhancement, since this isn't broken functionality, its functionality that doesn't exist yet. :)  +++$+++ 19 +++$+++ 0
+COM4 +++$+++ SP292365 +++$+++ ROOT +++$+++ COM3 +++$+++ 2017-01-03T13:49:22Z +++$+++ My use case: the slave virtual machine depends on master virtual machine to exist +++$+++ 1 +++$+++ 0
+COM5 +++$+++ SP2508915 +++$+++ ROOT +++$+++ COM4 +++$+++ 2017-01-07T22:10:25Z +++$+++ I am seeing the same error:
+`module root: module example: depends_on is not a valid parameter`
+
+My Terraform version is:
+Terraform v0.8.2
+
+My use case is that I want a module to depend on a resource. +++$+++ 9 +++$+++ 0
+COM6 +++$+++ SP19910529 +++$+++ ROOT +++$+++ COM5 +++$+++ 2017-01-09T01:54:54Z +++$+++ Error loading Terraform: module root: module etcdbastion: depends_on is not a valid parameter.
+^ Seeing it here too +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP44156 +++$+++ ROOT +++$+++ COM6 +++$+++ 2017-01-10T21:22:10Z +++$+++ @mitchellh I believe this one can solve unnested modules problem too. There were some issues regarding this #10883 before. This solution would be intuitive and address these issues.  +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP7099677 +++$+++ ROOT +++$+++ COM7 +++$+++ 2017-02-14T14:47:28Z +++$+++ Waiting for this feature to be added :+1:  +++$+++ 12 +++$+++ 0
+COM9 +++$+++ SP10016756 +++$+++ ROOT +++$+++ COM8 +++$+++ 2017-02-23T08:35:01Z +++$+++ +1 +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP1661326 +++$+++ ROOT +++$+++ COM9 +++$+++ 2017-02-23T19:14:21Z +++$+++ +1 +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP2211089 +++$+++ ROOT +++$+++ COM10 +++$+++ 2017-02-23T19:16:41Z +++$+++ +1 This would really help modularizing our code
+ +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP1547547 +++$+++ ROOT +++$+++ COM11 +++$+++ 2017-02-23T19:35:21Z +++$+++ +1 +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP220566 +++$+++ ROOT +++$+++ COM12 +++$+++ 2017-02-23T19:40:47Z +++$+++ +1 +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP2413361 +++$+++ ROOT +++$+++ COM13 +++$+++ 2017-02-24T20:23:34Z +++$+++ +1 +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP7687780 +++$+++ ROOT +++$+++ COM14 +++$+++ 2017-02-25T11:33:35Z +++$+++ +1 +++$+++ 3 +++$+++ 0
+COM16 +++$+++ SP11324092 +++$+++ ROOT +++$+++ COM15 +++$+++ 2017-02-28T16:48:52Z +++$+++ +1 +++$+++ 3 +++$+++ 0
+COM17 +++$+++ SP10996883 +++$+++ ROOT +++$+++ COM16 +++$+++ 2017-03-02T18:25:03Z +++$+++ +1 +++$+++ 5 +++$+++ 0
+COM18 +++$+++ SP24323193 +++$+++ ROOT +++$+++ COM17 +++$+++ 2017-03-07T16:55:41Z +++$+++ +1 +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP22669322 +++$+++ ROOT +++$+++ COM18 +++$+++ 2017-03-07T22:14:42Z +++$+++ +1 +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP7409186 +++$+++ ROOT +++$+++ COM19 +++$+++ 2017-03-10T17:28:36Z +++$+++ Anyone have a good workaround for this in the meantime? +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP130874 +++$+++ ROOT +++$+++ COM20 +++$+++ 2017-03-10T17:35:55Z +++$+++ My pseudo workaround is to add a list variable inside the module:
+
+```hcl
+variable "depends_on" { default = [], type = "list" }
+```
+
+Then when using the module, pass it a computed value from the resource I want it to depend on:
+
+```hcl
+module "something" {
+  depends_on = ["${aws_instance.instance.private_ip}"]
+}
+```
+
+ +++$+++ 13 +++$+++ 9
+COM22 +++$+++ SP7409186 +++$+++ ROOT +++$+++ COM21 +++$+++ 2017-03-10T18:17:30Z +++$+++ Thanks, that doesn't entirely fit what I think this issue is talking about though - making a module able to depend on another one. I don't have any resources that the module should depend on - it should depend on another module being created.
+
+I've tried doing stuff like this:
+module 1:
+```
+output "wait_for_cluster" { value = "ref to a resource that gets created last by this module" }
+```
+
+module 2:
+```
+variable "wait_for_cluster" {}
+```
+
+Main terraform template:
+```
+module "1" {
+
+}
+
+module "2" {
+ wait_for_cluster = "${module.1.wait_for_cluster}"
+}
+```
+
+But this doesn't do anything - my module two is still created at basically the same time as module 1. +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP3189231 +++$+++ ROOT +++$+++ COM22 +++$+++ 2017-03-10T18:45:43Z +++$+++ @AirbornePorcine In your second module you need to actually use the wait_for_cluster variable somewhere that establishes a dependency. Such as in a template or a trigger on a `null_resource`, etc.
+
+See https://github.com/hashicorp/terraform/issues/1178#issuecomment-207369534 from @kristjanelias
+
+The only change I'd make to his workaround is to maybe make the dummy dependency resource use a trigger so it changes when the instance changes.
+
+```hcl
+resource "null_resource" "dummy_dependency" {
+  triggers {
+    dependency_id = "${aws_instance.instance.id}"
+  }
+}
+``` +++$+++ 5 +++$+++ 0
+COM24 +++$+++ SP7409186 +++$+++ ROOT +++$+++ COM23 +++$+++ 2017-03-10T20:59:08Z +++$+++ Ah, that makes sense! Should have known that Terraform would optimize away my variable if I didn't use it. :) I tried out your suggestion with the trigger and that didn't do it, but setting the depends_id on a tag on some resource in module 2 seems to have done it. Hacky but oh well I guess. +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP12733397 +++$+++ ROOT +++$+++ COM24 +++$+++ 2017-03-16T05:00:59Z +++$+++ @stack72 
+
+On 0.9.0
+
+Still getting "depends_on is not a valid parameter" when used within a module definition. I see a lot of +1s asking to be able to depend on another module itself, but the feature that's supposed to work (depend on a module's resource), is broken.
+
+This is biting me HARD because of the big warning at the top of the [ecs service page](https://www.terraform.io/docs/providers/aws/r/ecs_service.html) which describes needing to use depends_on to prevent a race condition. Due to this bug, **you cannot prevent it**. +++$+++ 29 +++$+++ 0
+COM26 +++$+++ SP10048340 +++$+++ ROOT +++$+++ COM25 +++$+++ 2017-03-27T20:11:51Z +++$+++ +1
+ +++$+++ 0 +++$+++ 3
+COM27 +++$+++ SP153561 +++$+++ ROOT +++$+++ COM26 +++$+++ 2017-03-29T13:58:04Z +++$+++ +1 +++$+++ 0 +++$+++ 5
+COM28 +++$+++ SP25717908 +++$+++ ROOT +++$+++ COM27 +++$+++ 2017-04-02T18:24:46Z +++$+++ +1 +++$+++ 0 +++$+++ 5
+COM29 +++$+++ SP1967006 +++$+++ ROOT +++$+++ COM28 +++$+++ 2017-04-19T16:59:37Z +++$+++ +1 +++$+++ 0 +++$+++ 0

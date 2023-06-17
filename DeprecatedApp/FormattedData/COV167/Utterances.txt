@@ -1,0 +1,28 @@
+ROOT +++$+++ SP41162158 +++$+++ ROOT +++$+++ ROOT +++$+++ 2021-02-01T06:44:57Z +++$+++ 关于微软应用商店语言简洁的一个非常重要的建议，请将【中文（台湾）】改为【中文（繁体）】，谢谢！ <!-- Briefly describe which document needs to be corrected and why. -->
+台湾属于中国![image](https://user-images.githubusercontent.com/41162158/106423712-f0f18280-649b-11eb-8104-97003199f862.png)
+修改为【中文（繁体）】更为贴切
+
+![image](https://user-images.githubusercontent.com/41162158/106423689-e636ed80-649b-11eb-93e7-7c536a332a3b.png)
+ +++$+++ 3 +++$+++ 0
+COM0 +++$+++ SP4710575 +++$+++ ROOT +++$+++ ROOT +++$+++ 2021-02-01T15:17:27Z +++$+++ Technically “繁体” is more accurate since it’s used in various regions like HongKong & Taiwan.  +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP14009719 +++$+++ ROOT +++$+++ COM0 +++$+++ 2021-02-01T16:44:30Z +++$+++ > Technically “繁体” is more accurate since it’s used in various regions like HongKong & Taiwan.
+
+Should also change 中文（中国）to 中文（简体）since not only China uses it.  +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP189190 +++$+++ ROOT +++$+++ COM1 +++$+++ 2021-02-01T20:47:24Z +++$+++ @skyline75489 Mind helping me with a translation? I believe the request is, "the language list inside the Store is incorrect for Chinese"
+
+If so, I will need to forward this to the Store team; we do not control the specifics of that list -- just checkboxes for "yes, no" for each language. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP4710575 +++$+++ ROOT +++$+++ COM2 +++$+++ 2021-02-02T00:00:08Z +++$+++ @DHowett With pleasure. Basically the issue is about the supported language list being misleading by marking Simplified Chinese as “中文（中国）” aka Chinese（China）,and marking Traditional Chinese as “中文（台湾）” aka Chinese(Taiwan). This is technically misleading and incorrect. 
+
+More commonly we see Simplified Chinese as “中文（简体）” and Traditional Chinese as “中文（繁体）, which is region-neutral. But if the supported language list is designed to be (language, region) pair, I think we should mark at least Taiwan as a region instead of a country.  +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP41162158 +++$+++ ROOT +++$+++ COM3 +++$+++ 2021-02-02T01:34:13Z +++$+++ 没错直接叫【中文（简体）】和【中文（繁体）】比较好，叫法上没有任何歧义。
+
+如下Edge这种叫法就很好，谁也不得罪。
+![image](https://user-images.githubusercontent.com/41162158/106540041-17fe9180-653a-11eb-8f9b-bd49fdb350ed.png)
+ +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP19565938 +++$+++ ROOT +++$+++ COM4 +++$+++ 2021-02-02T07:21:22Z +++$+++ I don't think so. and the term is 繁體 in traditional Chinese.
+ +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP60381489 +++$+++ ROOT +++$+++ COM5 +++$+++ 2021-02-05T14:37:17Z +++$+++ 但是台湾和香港的繁体是有些不同的，特别是在词汇方面。我觉得叫做【中文（中国台湾）】和【中文（中国香港）】就好了。 +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP14009719 +++$+++ ROOT +++$+++ COM6 +++$+++ 2021-02-06T07:33:55Z +++$+++ > 但是台湾和香港的繁体是有些不同的，特别是在词汇方面。我觉得叫做【中文（中国台湾）】和【中文（中国香港）】就好了。
+
+There's no 中国台湾 +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP189190 +++$+++ ROOT +++$+++ COM7 +++$+++ 2021-02-06T07:36:29Z +++$+++ This seems like it could become a geopolitical issue, so I am going to lock this thread before it does. I will engage the Store team about the wording here.  +++$+++ 0 +++$+++ 0

@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/scratchfoundation/scratch-blocks/issues/1489
+Number of Comments: 3

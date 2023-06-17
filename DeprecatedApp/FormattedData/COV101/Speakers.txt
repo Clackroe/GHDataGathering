@@ -1,0 +1,10 @@
+SP9435135 +++$+++ MartinLion +++$+++ NONE (AUTHOR)
+SP869592 +++$+++ AlexanderFabisch +++$+++ MEMBER
+SP78827 +++$+++ jnothman +++$+++ MEMBER
+SP1867024 +++$+++ MechCoder +++$+++ MEMBER
+SP358737 +++$+++ afzal +++$+++ NONE
+SP5497303 +++$+++ davidavdav +++$+++ NONE
+SP9487348 +++$+++ raghavrv +++$+++ MEMBER
+SP208217 +++$+++ GaelVaroquaux +++$+++ MEMBER
+SP263366 +++$+++ emmanuelle +++$+++ CONTRIBUTOR
+SP449558 +++$+++ amueller +++$+++ MEMBER

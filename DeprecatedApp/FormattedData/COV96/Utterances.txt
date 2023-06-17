@@ -1,0 +1,151 @@
+ROOT +++$+++ SP169707 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-04T15:02:23Z +++$+++ Include Ctrl+C, Ctrl+V keybindings by default I've read the other "copy not working" bugs and the universal suggestion seems to be "just create your own keybinding".
+
+It's quite puzzling for a *Windows* terminal to not come with the most commonly used *Windows* shortcuts ever. 
+
+I'd suggest these two are added to the product, and people can instead *change* (or remove them) if they wish. I guess that's a much more intuitive default.
+
+For others wondering why they are missing, just add these two to your keybindings:
+
+```
+{ "command": "copy", "keys": ["ctrl+c"] },
+{ "command": "paste", "keys": ["ctrl+v"] },
+```
+
+Just to add to the discussion: the built-in Terminal in VS Code supports this out of the box too, which is awesome.  +++$+++ 39 +++$+++ 12
+COM0 +++$+++ SP679326 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-04T17:58:28Z +++$+++ cmd.exe didn't support these for years and finally added them quite recently. Even more puzzling to have these missing in the new one. +++$+++ 6 +++$+++ 0
+COM1 +++$+++ SP1633401 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-10-04T18:50:50Z +++$+++ Copy and Paste was added in 0.3, if you installed 0.3 (or later), they were there by default. If you upgraded to 0.3, you needed to add them manually: https://devblogs.microsoft.com/commandline/windows-terminal-preview-v0-3-release/
+
+![image](https://user-images.githubusercontent.com/1633401/66232216-34b45c00-e69d-11e9-83b1-7ed2e467b6c5.png)
+ +++$+++ 1 +++$+++ 0
+COM2 +++$+++ SP130238 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-10-04T19:05:41Z +++$+++ For the curious,  [here is the PR](https://github.com/microsoft/terminal/pull/1093) where they added the default keybindings for copy and paste and they discuss the challenges of using `Ctrl+C` by default.
+
+There is also #2285 that has extensive discussion about using Ctrl+C for copy vs emitting SIGINT.
+ +++$+++ 2 +++$+++ 0
+COM3 +++$+++ SP16944 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-10-04T20:57:15Z +++$+++ Please don't do this. Ctrl+C already has meaning inside terminals that long outdates copy/paste. +++$+++ 19 +++$+++ 1
+COM4 +++$+++ SP14316954 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-10-04T20:59:42Z +++$+++ > Even more puzzling to have these missing in the new one.
+
+> Please don't do this. Ctrl+C already has meaning inside terminals that long outdates copy/paste.
+
+This is a delightful vignette about why we have rebindable key actions, and why we don't want to be prescriptive with user experience where "terminal input" is concerned. +++$+++ 2 +++$+++ 0
+COM5 +++$+++ SP14316954 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-10-07T23:20:24Z +++$+++ We can 100% bind <kbd>Ctrl+C</kbd> by default, now that we have support for passing through bindings that didn't trigger an action. We can **100% not** bind <kbd>Ctrl+V</kbd> by default. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP679326 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-10-08T00:20:02Z +++$+++ I know `Ctrl+C` cancels the current execution, but what does `Ctrl+V` do? Out of curiosity. +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP16944 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-10-08T03:21:27Z +++$+++ @KirillOsenkov https://superuser.com/a/421468 +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP20691252 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-10-10T21:18:04Z +++$+++ My (admittedly uneducated) guess is the percentage of users expecting Ctrl+V to result in paste is substantially larger than the percentage of users expecting Ctrl+V to result in "verbatim insert mode." +++$+++ 11 +++$+++ 4
+COM9 +++$+++ SP1912284 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-11-07T04:57:16Z +++$+++ @sgreenmsft 
+
+To be honest, for users used to using Terminal from Linux, Ubuntu, OSX, etc. I don't expect ctrl-V to paste. And seeing how a lot of the purpose of terminal is geared in that direction (to finally have Windows be able to start having a culture around working in the terminal instead of in GUI apps, catering towards those users seems preferable). +++$+++ 4 +++$+++ 0
+COM10 +++$+++ SP20691252 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-11-07T18:31:23Z +++$+++ @impguard 
+I honestly don't know how frequently verbatim insert mode is used by folks in linux/osx.  My uneducated guess is "very infrequently."  On the other hand, I suspect Ctrl+V is used quite frequently by folks familiar with cmd.exe and PowerShell.  If my uneducated assumptions are accurate, then having Ctrl+V perform paste makes the experience significantly better for Windows-background users at minimal cost to Linux/OSX-background users. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP3229632 +++$+++ ROOT +++$+++ COM10 +++$+++ 2019-11-24T21:21:36Z +++$+++ I am new to Microsoft terminal (v0.6.2951.0) and am starting to warm up to the idea of having access to powershell, cmd, ubuntu/wsl and azure cloud shell baked directly into a native Windows 10 app.
+
+BUT, I was pulling my hair out today trying to copy the contents of a Ubuntu console, and would have assumed this functionality was baked in by default to a modern Win10 app. I acknowledge the ctrl-c issues above, but why not enable the copy functionality through a right mouse click, like that implemented in the more modern cmd versions? If you open cmd using Windows terminal there is no right click options enabled, whereas using the old cmd you get:
+![image](https://user-images.githubusercontent.com/3229632/69501798-3f30ec00-0ebd-11ea-97ce-f12331226c54.png)
+
+It'd be great if a future version of Windows Terminal baked this in by default across all shells - it's really useful to have +++$+++ 2 +++$+++ 0
+COM12 +++$+++ SP361574 +++$+++ ROOT +++$+++ COM11 +++$+++ 2019-12-29T20:53:20Z +++$+++ I'm using Version: 0.5.2762.0, and was tripped up by this today.  While I agree that a mapping of "copy" => Ctrl+C is understood as the Windows default, it will also cause confusion with Linux based terminal applications.  My solution for now is to map:
+
+```json
+{"command": "copy", "keys": ["ctrl+insert"]},
+{"command": "paste", "keys": ["ctrl+shift+insert"]},
+```
+
+I've seen this mapping used before as an alternative.
+
+That said, I originally wanted to use:
+
+```json
+{"command": "copy", "keys": ["win+c"]},
+{"command": "paste", "keys": ["win+v"]},
+```
+
+which maps to the muscle memory I've built using MacOS, however the linter in VSCode told me only `ctrl|shift|alt` are acceptable modifier keys.  Is there a way to allow the `win` key to be a modifier as well for custom key bindings? +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP1295229 +++$+++ ROOT +++$+++ COM12 +++$+++ 2020-01-18T19:45:19Z +++$+++ I feel pretty strongly about this -- I'm a UNIX user (also the author of the popular tcell package for building console interface apps in Golang), and understand the need to separate copy from delivering the control-c to the application.  There are challenging trade-offs here.
+
+However, I really liked legacy conhost's solution to this -- if I have text selected, then Ctrl-C is copy just like windows.  And Ctrl-V is paste.  If I have no selected text, then CTRL-C is passed through to the application.  IMO, these should be the default settings.  They should be customizable, in case a user wants to change them.
+
+(On macOS its CMD-C and CMD-V, and I've bound those for Windows Terminal, but what really messes me up is that in every *other* app on Windows its CTRL. )
+
+To be honest what I really wish is that I could change the rest of Windows to use ALT-C and ALT-V (or META-C and META-V) for copy/paste, which would not collide with most other uses but keep the control bindings available for terminal windows.  I do understand why that's not practical -- given the fact that each application manages it's own key bindings.
+
+Another possible solution is to offer some extra modifier (e.g. SHIFT-CTRL-) that would send the control sequence to the application running in the window.  Even as a UNIX user, I know for a fact that I use CTRL-C and CTRL-V occasionally in the terminal to control my apps, but far less frequently than I use copy-paste.   So I'd prefer to require keyboard-twister in the uncommon case, and be able to use copy-paste like I do everywhere else by default. +++$+++ 2 +++$+++ 0
+COM14 +++$+++ SP169707 +++$+++ ROOT +++$+++ COM13 +++$+++ 2020-01-29T21:46:42Z +++$+++ Totally agree on making this "smart" depending on whether there's a selection at all. 
+
+BTW, this is *exactly* how the integrated terminal in VS Code behaves, which is awesome. +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP14316954 +++$+++ ROOT +++$+++ COM14 +++$+++ 2020-01-29T21:47:18Z +++$+++ If you bind <kbd>Ctrl+C</kbd>, it will be "smart". There is no way to make <kbd>Ctrl+V</kbd> smart. +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP169707 +++$+++ ROOT +++$+++ COM15 +++$+++ 2020-01-29T22:05:34Z +++$+++ If it will be "smart" already, then it's even more puzzling why this isn't already bound by default (again, as it is in VS Code terminal, where I think people seem to be mostly happy with it) +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP679326 +++$+++ ROOT +++$+++ COM16 +++$+++ 2020-01-29T22:10:22Z +++$+++ I'm curious if we have any data or telemetry to indicate what percentage of users prefer Ctrl+C and Ctrl+V to copy/paste. My intuition tells me it'll be the majority. Curious how many people turn on QuickEdit mode in cmd.exe. +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP10468217 +++$+++ ROOT +++$+++ COM17 +++$+++ 2020-02-03T15:05:38Z +++$+++ The same way as powershell, ctrl+c should copy if anything selected and break if nothing selected. Even cmd have it - Enter to copy if there is any selection and execute if there is no selection. Though Enter never been really convenient.
+
+There is specifically Break button to enforce break of execution in case of emergency, if there is selection. +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP5951045 +++$+++ ROOT +++$+++ COM18 +++$+++ 2020-02-16T16:47:52Z +++$+++ > 
+> 
+> Please don't do this. Ctrl+C already has meaning inside terminals that long outdates copy/paste.
+
+I would've expected that the shells hosted by Terminal would interpret the keystrokes. So since CTRL+C/CTRL+V were recently added to cmd.exe, I would've expected them to be passed down the shell and work as expected. 
+
+If you are using a different shell (PowerShell, Bash, etc), then I would expect they should be passed down to that shell for it to interpret as expected. 
+
+I find it odd that Terminal is interpreting these keys instead of the shell currently in use. I would only expect Terminal to try to interpret any keys you have defined in the key-bindings. Otherwise yeah, they should just be interpreted by the shell in use, so as to provide consistency with what people expect in each shell. +++$+++ 3 +++$+++ 0
+COM20 +++$+++ SP74080 +++$+++ ROOT +++$+++ COM19 +++$+++ 2020-03-05T16:53:28Z +++$+++ Hi there, while `win+c` is working great, `win+v` does not, I disabled `win+v` shortcut in Explorer registry section since` win+v` is special paste in Windows now, but terminal does not respond to` win+v`
+```json
+    {
+      "command": "copy",
+      "keys": [ "win+c" ]
+    },
+    {
+      "command": "paste",
+      "keys": [ "win+v" ]
+    },
+
+``` 
+
+So my goal to mimic cmd+c and cmd+v behavior, and it's  99% ready, the only thing left  is just `win+v` handling with windows terminal +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP14316954 +++$+++ ROOT +++$+++ COM20 +++$+++ 2020-03-05T18:17:57Z +++$+++ @shtirlic this isn't the right issue for your comment; this issue is for <kbd>ctrl</kbd>. +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP10800041 +++$+++ ROOT +++$+++ COM21 +++$+++ 2020-03-28T00:12:24Z +++$+++ I don't understand why Windows Terminal Preview is favoring Xterm/Gnome compatibility over cmd.exe compatibility, especially for Ctrl+V. I think that will add frustration and will slow adoption from Windows users. But, I tried the recommended bindings to make it work. After reading the documentation I found where to put the recommended snippet (in the global section, in a "keybindings" array, but it is also important to notice the existing keybindings array, because if you paste a new one at then it gets overwritten by the empty array at the bottom. Yay .json!
+
+Anyway, paste this in over the empty keybindings array at the bottom:
+
+  "keybindings": [
+    {
+      "command": "copy",
+      "keys": [ "ctrl+c" ]
+    },
+    {
+      "command": "paste",
+      "keys": [ "ctrl+v" ]
+    }
+  ],
+
+And please consider favoring Windows compatibility, at least for Ctrl+V. Or make it easier to enable instead of requiring editing of error-prone .json files. +++$+++ 3 +++$+++ 0
+COM23 +++$+++ SP48340428 +++$+++ ROOT +++$+++ COM22 +++$+++ 2020-04-22T17:15:57Z +++$+++ :tada:This issue was addressed in #5217, which has now been successfully released as `Windows Terminal Preview v0.11.1121.0`.:tada:
+
+Handy links:
+* [Release Notes](https://github.com/microsoft/terminal/releases/tag/v0.11.1121.0)
+* [Store Download](https://www.microsoft.com/store/apps/9n0dx20hk701?cid=storebadge&ocid=badge) +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP1041752 +++$+++ ROOT +++$+++ COM23 +++$+++ 2020-04-27T09:44:38Z +++$+++ Given that "Ctrl+C" is now default copy keybinding on new installations. how will standard "Ctrl+C" for SIGINT work?
+
+Imagine a long-running console program with some text selected and Ctrl+C typed. What will Windows Terminal do? Copy? Interrupt the program? Both? @carlos-zamora  +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP18356694 +++$+++ ROOT +++$+++ COM24 +++$+++ 2020-04-27T13:48:55Z +++$+++ * If the user is using the new keybindings:
+  - If text is selected: <kbd>Ctrl+c</kbd> will copy the selected text.
+  - If text is **NOT** selected: <kbd>Ctrl+c</kbd> will send a interrupt, the same way <kbd>Ctrl+c</kbd> usually behaves.
+
+If the user doesn't like that behavior, it's pretty trivial to remove the new <kbd>Ctrl+c</kbd> binding from their `settings.json`, and rely on the <kbd>Ctrl+shift+c</kbd> binding that's in `defaults.json` +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP10800041 +++$+++ ROOT +++$+++ COM25 +++$+++ 2020-04-27T15:38:05Z +++$+++ Does Enter now copy text by default? I realized when switching from cmd.exe to the new terminal that I use that to copy text a lot. I'm not sure if there is any significant disadvantage to making that the default, and it seems that the new terminal should, where possible, ease the transition from cmd.exe. +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP18356694 +++$+++ ROOT +++$+++ COM26 +++$+++ 2020-04-27T17:00:23Z +++$+++ @randomascii nope, but that is a lot less common of a scenario for our users then <kbd>Ctrl+C</kbd> for copy. There's a balance we need to strike between "keeping the old behavior of conhost" and "making space to create a better experience". For those of our users who actually do want copy on enter, adding it isn't terribly difficult:
+
+```json
+        { "command": "copy", "keys": ["enter"] },
+```
+
+but I'd bet most people weren't even aware that feature existed in the original conhost 😆  +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP10969616 +++$+++ ROOT +++$+++ COM27 +++$+++ 2020-05-31T05:21:52Z +++$+++  
+> To be honest what I really wish is that I could change the rest of Windows to use ALT-C and ALT-V (or META-C and META-V) for copy/paste, which would not collide with most other uses but keep the control bindings available for terminal windows. I do understand why that's not practical -- given the fact that each application manages it's own key bindings.
+
+@gdamore What you’ve suggested is actually the most practical thing in this thread. Checkout my https://github.com/rbreaves/kinto project.
+
+@kzu +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP4022813 +++$+++ ROOT +++$+++ COM28 +++$+++ 2020-06-27T15:17:53Z +++$+++ Okay great. Now how do we disable this?
+
+-- sad linux user
+
+Edit: Nevermind. Found it in settings.json and deleted it. +++$+++ 1 +++$+++ 0

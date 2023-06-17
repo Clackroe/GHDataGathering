@@ -1,0 +1,101 @@
+ROOT +++$+++ SP2030591 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-06-10T02:00:35Z +++$+++ So many issues and pull requests with only one contributor? _Instructions: Replace the template text and remove irrelevant text (including this line)_
+
+**Describe the bug**
+A clear and concise description of what the bug is.
+(Issues related to the runtime files should be reported to their maintainer, check the file header.)
+
+**To Reproduce**
+Detailed steps to reproduce the behavior:
+1. Run `vim --clean` (or `gvim --clean`, etc.)
+2. Edit `filename`
+3. Type '....'
+4. Describe the error
+
+**Expected behavior**
+A clear and concise description of what you expected to happen.
+
+**Screenshots**
+If applicable, copy/paste the text or add screenshots to help explain your problem.
+
+**Environment (please complete the following information):**
+ - Vim version [e.g. 8.1.1234] (Or paste the result of `vim --version`.)
+ - OS: [e.g. Ubuntu 18.04, Windows 10 1809, macOS 10.14]
+ - Terminal: [e.g. GNOME Terminal, mintty, iTerm2, tmux, GNU screen] (Use GUI if you use the GUI.)
+
+**Additional context**
+Add any other context about the problem here.
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP5274565 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-06-10T02:13:00Z +++$+++ When a project pre-dates github, don't be surprised to see a non-github workflow +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP840186 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-06-10T02:20:55Z +++$+++ First, please use the issue template properly. Replace the template text and remove irrelevant text as the instruction says.
+
+If you talking about that you can see only one person (Bram) in https://github.com/vim/vim/graphs/contributors, check each commit. Each contributor name is written in each commit log.
+There are several hundreds of contributors in Vim.
+
+Anyway, this is not a place to ask a question and this is not an issue of Vim. So closing. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP840186 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-06-10T04:25:21Z +++$+++ See also: #1554 +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP297678 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-12-30T02:06:35Z +++$+++ Seems more like Bram enjoys taking all the credit.
+
+Vim has been on GitHub for a while now, and there has been plenty of opportunity for the right thing to be done. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP297678 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-12-30T02:11:57Z +++$+++ Note, I said _seems_. That's important.
+
+Also, people on GitHub may enjoy their stats being visible in various GitHub pages, like the contributor graph, so that people may click on them and see their profiles, etc. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP244927 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-12-30T07:58:06Z +++$+++ > Also, people on GitHub may enjoy their stats being visible in various GitHub pages, like the contributor graph, so that people may click on them and see their profiles, etc.
+
+Yes, people may enjoy it, but for me, I contribute because I want to make Vim better and not to have a nice contribution graph. Also I think it is more important that the main developer of Vim can concentrate on enhancing and improving Vim instead of having to change a workflow, that has been proven to be working well for the past 30 years. Thanks for understanding. +++$+++ 4 +++$+++ 0
+COM6 +++$+++ SP13550529 +++$+++ ROOT +++$+++ COM5 +++$+++ 2021-01-05T14:06:01Z +++$+++ > but for me, I contribute because I want to make Vim better
+
+would not doubt that;
+just some people thought they joined to discuss or gave patch/advice was a help too.. i think..
+especially sometime were treated as 'asking', (though some was), but some actually were 'giving' report/improvement to vim..
+
+as for 'workflow', to do some adjust to fit some perhaps was necessary too
+e.g . recording the 'commiter' name as some formal/fixed format even in the commits msg, then some stupid shell script can generate it or list it to somewhere, then everyone happy!
+e.g . some runtime files owners perhaps disappeared long time / some classic plugins were not update-2-date long time, then setup a heartbeat check to confirm their alive (sorry but that's) or willing, perhaps was necessary too..
+ +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP13550529 +++$+++ ROOT +++$+++ COM6 +++$+++ 2021-01-05T15:37:35Z +++$+++ https://github.com/vim/vim/issues/7624 +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP8358 +++$+++ ROOT +++$+++ COM7 +++$+++ 2021-04-18T23:34:31Z +++$+++ > Thanks for understanding.
+
+No, I don't understand.
+
+Any software developer doing things exactly the same as 10 years ago is a **bad** software developer, let alone 30 years ago.
+
+It literally takes less than 30 minutes to learn git. That's no excuse.
+
+30 minutes for one person so that thousands others don't have to run through loops is a no-brainer. +++$+++ 0 +++$+++ 2
+COM9 +++$+++ SP11653528 +++$+++ ROOT +++$+++ COM8 +++$+++ 2021-04-19T01:06:41Z +++$+++ On 2021-04-18, Felipe Contreras wrote:
+>     Thanks for understanding.
+> 
+> No, I don't understand.
+> 
+> Any software developer doing things exactly the same as 10 years ago is a bad
+> software developer, let alone 30 years ago.
+
+That's just plain not true.  A idea that was good 10 or even 30
+years ago may be just as good today.  Ideas are good or bad because
+they're good or bad, not because they're new or old.  To think that
+a new idea is better than an old one simply because it is new is
+foolish.
+
+> It literally takes less than 30 minutes to learn git. That's no excuse.
+
+That's not true, either.  While basic git operations are reasonably
+straightforward, anything beyond the basics is horribly obscure and
+inconsistent.  To paraphrase Jamie Zawinski's comment about regular
+expressions:
+
+    Some people, when confronted with a problem, think "I know,
+    I'll use git."  Now they have two problems.
+
+And of course:  https://xkcd.com/1597/
+
+Regards,
+Gary
+
+ +++$+++ 3 +++$+++ 0
+COM10 +++$+++ SP11653528 +++$+++ ROOT +++$+++ COM9 +++$+++ 2021-04-19T16:00:39Z +++$+++ 吕海涛 : When looking for information about Vim, the place to look is
+always the built-in help. Not Google, not the manpages, not the github
+metadata, just the help. In this case: :help credits
+
+Best regards,
+Tony.
+ +++$+++ 0 +++$+++ 0

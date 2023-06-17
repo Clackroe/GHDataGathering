@@ -1,0 +1,9 @@
+SP13589599 +++$+++ cbazza +++$+++ NONE (AUTHOR)
+SP5479 +++$+++ sethladd +++$+++ CONTRIBUTOR
+SP551196 +++$+++ Hixie +++$+++ MEMBER
+SP1377460 +++$+++ HansMuller +++$+++ CONTRIBUTOR
+SP1326504 +++$+++ branflake2267 +++$+++ NONE
+SP348942 +++$+++ InMatrix +++$+++ NONE
+SP6463915 +++$+++ nsuper +++$+++ NONE
+SP180773 +++$+++ birkir +++$+++ NONE
+SP405837 +++$+++ zoechi +++$+++ CONTRIBUTOR

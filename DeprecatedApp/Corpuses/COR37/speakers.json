@@ -1,0 +1,42 @@
+{
+    "DartBot": {
+        "id": "SP8958862",
+        "role": "NONE (AUTHOR)"
+    },
+    "kasperl": {
+        "id": "SP2156198",
+        "role": "NONE"
+    },
+    "iposva-google": {
+        "id": "SP5449880",
+        "role": "CONTRIBUTOR"
+    },
+    "sgjesse": {
+        "id": "SP1343914",
+        "role": "CONTRIBUTOR"
+    },
+    "mulander": {
+        "id": "SP107247",
+        "role": "NONE"
+    },
+    "sethladd": {
+        "id": "SP5479",
+        "role": "CONTRIBUTOR"
+    },
+    "whesse": {
+        "id": "SP4905639",
+        "role": "MEMBER"
+    },
+    "pbgc": {
+        "id": "SP180825",
+        "role": "NONE"
+    },
+    "krytarowski": {
+        "id": "SP6665730",
+        "role": "NONE"
+    },
+    "mezoni": {
+        "id": "SP2311549",
+        "role": "NONE"
+    }
+}

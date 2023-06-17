@@ -1,0 +1,109 @@
+ROOT +++$+++ SP1975567 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-29T08:51:43Z +++$+++ Some parameter names of function lead to shader compilation errors **Godot version:** 3.1.1
+
+**OS/device including version:** Linux (Manjaro 18.1.2)
+
+**Issue description:**
+White rectangle is drawn (outside of image) when shader uses specific argument names in function.
+
+**Steps to reproduce:**
+Create 2D sprite and attach shader:
+```glsl
+shader_type canvas_item;
+
+vec4 f(sampler2D TEXTURE, vec2 UV, float TIME) {
+	vec4 tx = texture(TEXTURE, UV);
+	return tx;
+}
+
+void fragment() {
+	COLOR = f(TEXTURE, UV, TIME);
+}
+```
+
+Looking at the compiled shader, I thought maybe `TEXTURE` and `UV` are magically accessible in functions.
+
+```glsl
+vec4 g() {
+	vec4 tx = texture(TEXTURE, UV);
+	return tx;
+}
+```
+
+They are not: `Unknown identifier in expression: TEXTURE`.
+
+It's interesting that passing `TIME` works fine, but not the others mentioned above.
+
+<!--**Minimal reproduction project:**-->
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP3036176 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-29T09:21:28Z +++$+++ Duplicate of #32978 +++$+++ 1 +++$+++ 1
+COM1 +++$+++ SP1975567 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-10-29T09:39:17Z +++$+++ That "duplicate" doesn't mention shader being **broken**, only that it is possible to pass `TIME` and `UV` (btw `UV` doesn't work for me). From my testing it is clear `TEXTURE`, if named same, cannot be passed without second compiler (glsl?) crashing. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP3036176 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-10-29T09:51:27Z +++$+++ It looking like the same issue, and happens for the same reason - comparsion with pre-existed shader variables for the function parameters does not exist. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP1975567 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-10-29T09:57:54Z +++$+++ > It looking like the same issue, and happens for the same reason
+
+Maybe same reason, but the result is different and expected behaviour as well.
+
+> comparsion with pre-existed shader variables for the function parameters does not exist
+
+Not true (if I understand you correctly), `g` function clearly demonstrates the `TEXTURE` does not exist. And `f` is fed a valid variable from `fragment` function (unlike the "duplicate" issue), yet the shader **fails** to compile (also unlike the "duplicate" issue).
+
+Kinda glad I will be leaving Godot, this "duplicate" labeling feels as lazy as on stackoverflow... +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP3036176 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-10-29T10:03:00Z +++$+++ You could add these descriptions to the original "duplicate" issue and this is fine. I'm very sorry if this will cause you to leave Godot. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP4701338 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-10-29T10:10:51Z +++$+++ It *is* the same bug as #32978, I don't see why you're being so annoyed about it being closed as a duplicate.
+
+Use this code, it works fine:
+```
+shader_type canvas_item;
+
+vec4 f(sampler2D p_TEXTURE, vec2 p_UV, float p_TIME) {
+	vec4 tx = texture(p_TEXTURE, p_UV);
+	return tx;
+}
+
+void fragment() {
+	COLOR = f(TEXTURE, UV, TIME);
+}
+```
+
+So the issue *is* about the shader language allowing users to pass global, context-specific (`TEXTURE` is only available in `fragment()` for example) built-ins as argument names, and the shadowing doesn't work as it should. Most likely, the magic performed by Godot to replace built-in by their actual value also replaces it in the function where they have been declared as arguments. In your case, this function is outside `fragment()` and used `TEXTURE` which is fragment-only, so it breaks. Same bug, just different manifestation.
+
+> Kinda glad I will be leaving Godot, this "duplicate" labeling feels as lazy as on stackoverflow...
+
+That's petty, but well. We have enough work not to have to keep duplicate issues open for entitled users. +++$+++ 1 +++$+++ 0
+COM6 +++$+++ SP1975567 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-10-29T10:11:58Z +++$+++ > I'm very sorry if I cause you to leave Godot.
+
+You did not, simply my next project will be 3D and Godot is not yet there (I am hoping it will be).
+
+> You could add these descriptions to the original "duplicate" issue and this is fine
+
+But, that bug is from an engine user perspecity entirely different:
+
+this: crashes shader compilation results in white square
+"duplicate": magically works, even though it should'n
+
+this: `TEXTURE` and `UV` doesn't work
+"duplicate": `UV` and `TIME` work, even though it shoudl'n
+
+this: 2D
+"duplicate": 3D
+
+this: I **am** passing correct values, yet compilation fails and result is broken sprite.
+"duplicate": passes incorrect values (constants), yet they are being replaced in a function by dynamic values of shader variables
+
+Do I need to continue? I don't understand how this can be a duplicate when result is different, variables are different (`TEXTURE`, `TIME`) or working differently (`UV`). +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP4701338 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-10-29T10:14:47Z +++$+++ >  "duplicate": magically works, even though it should'n
+
+It does not work, read the code. If it worked the material would be plain white (`vec3(1.0, 1.0, 1) * sin(0.0)`). +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP1975567 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-10-29T10:15:08Z +++$+++ > That's petty, but well.
+
+Maybe, but factually correct.
+
+> We have enough work not to have to keep duplicate issues open for entitled users.
+
+I took the time to compile a bug report, only to be closed instantly as a duplicate when nothing in "duplicate" is same as in my bug report? +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP4701338 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-10-29T10:18:48Z +++$+++ At some point you have to trust engine contributors to know what bugs are. You see symptoms, we see the underlying cause for them, and we tell you that these are both symptoms of the exact same bug.
+
+A duplicate bug report is not a bad thing, it just confirms the bug with possibly slightly different steps to reproduce. It's pointless to keep two or 50 issues open about the same bug, so we close duplicates, usually keeping the oldest one open. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP1975567 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-10-29T10:18:52Z +++$+++ > It does not work, read the code. If it worked the material would be plain white (vec3(1.0, 1.0, 1) * sin(0.0)).
+
+I mean it compiles and runs, at least that what title suggests: "Strange syntax is **allowed** to pass global parameters to the shader function". It "works" as in the functions gets `TIME` from context of a `fragment` (not passed argument in call) which doesn't happen in my case - it crashes during compilation because probably renaming fails. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP4701338 +++$+++ ROOT +++$+++ COM10 +++$+++ 2019-10-29T10:20:14Z +++$+++ Here, renamed, be happy. +++$+++ 0 +++$+++ 0

@@ -1,0 +1,37 @@
+ROOT +++$+++ SP13465486 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-22T03:35:35Z +++$+++ Can't login for the last few days I'm trying to login for the last 3 days, using my google/github account but everytime getting the message: 
+
+> "Oops! Something went wrong. Please try again in a moment." 
+
+I've tried clearing cache/cookies/incognito. But nothing is working. Also getting the same error when starting a project task. 
+
+![image](https://user-images.githubusercontent.com/13465486/67257769-48d6c680-f4af-11e9-8288-4c16cc3032f6.png)
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP1884376 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-22T07:23:27Z +++$+++ Hi @nicknabdullah 
+
+Chances are you have a duplicate account. Please email us at `supporr@freecodecamp.org` and We will try and get this resolved for you. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP2600927 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-10-22T09:34:49Z +++$+++ Hi @raisedadead 
+I've the same issue. I've tried revoking and granting access with Github and login with email and Google, but nothing. 
+I hope you solve it soon. Thanks
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP1884376 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-10-22T10:50:24Z +++$+++ > ### Chances are you have a duplicate account.
+
+**How to fix?**
+
+> #### Please email us at `support@freecodecamp.org` and we will get this resolved for you.
+
+**But why would I have duplicate accounts?**
+
+Back in June 2018, we had updated our platform. At that time, a bug had caused account duplications for some users. 
+
+With the recent Oct, 2019 update to the platform, we have identified that the bug was fixed but the account duplications remain in the database. These unfortunately have to fixed by our team manually. Users have progressed with the curriculum since last year and a programmatic fix may not be possible.
+
+None of your progress is gone or lost. They are simply lying in a different account with the same email address or username attached to it.
+
+**Does this affect how I login? Can I use GitHub or other logins**
+
+We simply rely on the email address that is received by us, as long as GitHub, Facebook, Google are returning the same email you have with us you will be signed into your correct account.
+
+Thanks for your patience, and understanding with this. The newer platform is more resilient and we look forward to your feedback 
+
+ +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP20648924 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-09-08T18:42:39Z +++$+++ Closing as stale. Please read the comment above if you are having issues with your account. Thanks and happy coding 🎉  +++$+++ 0 +++$+++ 0

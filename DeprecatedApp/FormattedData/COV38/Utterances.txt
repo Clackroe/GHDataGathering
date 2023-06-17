@@ -1,0 +1,75 @@
+ROOT +++$+++ SP3176632 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-07-05T15:47:22Z +++$+++ How to copy text? Ctrl + C isn't working? I installed the terminal from the windows app store, created a powershell tab, ran a command.
+
+I then wanted to copy that command text, so I highlighted it, then pressed ctrl + c but it doesn't appear to have copied the command text. I also tried ctrl + shift + c. Getting desperate I right clicked on the tab item itself, looking for a menu where I could select "copy" but no such menu seems to exist. I also tried right clicking with the text selected hoping for a menu where I could select "copy selection" but again no such menu exists. In desperation I gave up - copying text does not appear possible. What am I doing wrong?
+ +++$+++ 7 +++$+++ 0
+COM0 +++$+++ SP18329590 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-07-05T16:26:15Z +++$+++ from what I remember this function has not yet been added to the terminal2 it still implements the copy -paste protocol from cmd and PowerShell. highlight text and press <enter> to copy and <rightclick> to paste the clipboard #1180  +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP40315783 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-07-06T01:36:43Z +++$+++ Right clicking the selected text will copy it to the clipboard.
+
+I'd like a way to do this that uses the keyboard instead. +++$+++ 8 +++$+++ 0
+COM2 +++$+++ SP1208947 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-07-06T01:51:55Z +++$+++ Shoud we open a new issue requesting a feature to enable CTRL+C / CTRL+V  to copy/paste? +++$+++ 1 +++$+++ 0
+COM3 +++$+++ SP14316954 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-07-06T02:04:58Z +++$+++ Please don’t! We’ll just have to close it as a duplicate of a feature that made it into v0.3 +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP22885633 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-07-08T04:49:37Z +++$+++ actually Ctrl+C works fine in powershell in windows terminal, the real problem is the support to wsl, when I use wsl2 in windows terminal, for example, a ubuntu18.04, I can't use Ctrl+C or Ctrl+Shift+C, but in bash or wsl.exe, it works fine. +++$+++ 2 +++$+++ 0
+COM5 +++$+++ SP28060986 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-07-08T17:58:28Z +++$+++ It would be nice to have shift+insert or Ctrl+shift+insert to have a linux like feeling or ctrl+shift+c and ctrl+shift+v like powershell does +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP14316954 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-07-08T21:31:44Z +++$+++ This was fixed with #1093  +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP1452968 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-07-10T00:53:21Z +++$+++ I don't think this is fixed?
+
+The changes in #1093:
+
+- set the default binding to `ctrl+shift+c`
+- and even if we could rebind the default to `ctrl+c`, doesn't implement the copy-if-text-selected-or-send-ctrl+c semantics discussed in https://github.com/microsoft/terminal/pull/1093#issuecomment-498829169
+
+I apologise if I've misread any of the code.
+
+I've been fighting years of muscle memory this last week because ctrl+c doesn't work; I realise it may seem like a triviality, but I think it's important for user experience.  +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP14316954 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-07-10T01:01:36Z +++$+++ I'll reopen it for our next Triage cycle. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP14316954 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-07-15T21:12:43Z +++$+++ We'll track all copy/selection issues as part of #524  +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP10132417 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-07-27T11:53:03Z +++$+++ Any idea when this will be fixed?
+Copying is a fairly standard function... +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP10132417 +++$+++ ROOT +++$+++ COM10 +++$+++ 2019-07-27T11:53:23Z +++$+++ Also, shouldn't this be open since CTRL+C still doesn't copy? +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP40315783 +++$+++ ROOT +++$+++ COM11 +++$+++ 2019-07-27T13:42:03Z +++$+++ No this should be closed, since the decided upon feature is customisable binding not hard-coded use of ctrl+c. +++$+++ 0 +++$+++ 1
+COM13 +++$+++ SP3176632 +++$+++ ROOT +++$+++ COM12 +++$+++ 2019-07-27T13:47:53Z +++$+++ Customisable is great! - but what's the default setting out of the box? +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP18356694 +++$+++ ROOT +++$+++ COM13 +++$+++ 2019-07-30T13:13:55Z +++$+++ The default keybindings for copy and paste are Ctrl+Shift+C/V. If your profiles.json file was created before #1093, then they won't contain that keybinding, and you'll need to add it manually. +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP18540738 +++$+++ ROOT +++$+++ COM14 +++$+++ 2019-07-30T13:52:40Z +++$+++ > Right clicking the selected text will copy it to the clipboard.
+> 
+> I'd like a way to do this that uses the keyboard instead.
+
+get it, really cool.
+ +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP10893522 +++$+++ ROOT +++$+++ COM15 +++$+++ 2019-08-06T11:43:42Z +++$+++ > This was fixed with #1093
+
+Nope, it wasn't. 
+
+Making Ctrl+Shift+C the keybinding for copy is pointless. You may as well make it anything else Ctrl+P. People expect Ctrl+C and using anything except that will just make the copy feature undiscoverable.  +++$+++ 1 +++$+++ 2
+COM17 +++$+++ SP10132417 +++$+++ ROOT +++$+++ COM16 +++$+++ 2019-08-06T13:54:36Z +++$+++ I couldn't agree more with @CobusKruger. 
+Some things are just so common and expected, that not to use them just seems like you're actively hiding features from users. 
+No one expects CTRL+SHIFT+C/V, They expect CTRL+C/V; If it were otherwise, there wouldn't be so many users here clamoring for it. 
+CTRL+C/V is what should be in the json by default. 
+This is very much a case of "Old Microsoft" rearing it's head, rather then new forward looking Microsoft.
+So yes, this should not be closed until this problem has actually been fixed... +++$+++ 0 +++$+++ 1
+COM18 +++$+++ SP18221333 +++$+++ ROOT +++$+++ COM17 +++$+++ 2019-08-06T16:39:36Z +++$+++ > This is very much a case of "Old Microsoft" rearing it's head, rather then new forward looking Microsoft.
+
+@Panzerbjrn, please let me refresh you on the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). We can disagree here and have debates, but please halt yourself before assuming the motivations of others and attacking individuals personally or their work.
+
+We are happy to continue to discuss the way that this prerelease product should evolve before it meets v1.0 (and even after 1.0!) Please exercise patience and understanding when working with us and members of the community as the software develops.
+ +++$+++ 3 +++$+++ 1
+COM19 +++$+++ SP18356694 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-08-06T16:45:28Z +++$+++ In fact, I'd suggest that the new keybindings are very "new"-Microsoft.
+
+> [Gnome Terminal](https://help.gnome.org/users/gnome-terminal/stable/txt-copy-paste.html) has a consistent keybinding that's not intuitive at first, but easy to adopt, and not too far from the usual <kbd>CTRL + C</kbd> for copy.
+> <kbd>CTRL + C</kbd> : Cancel
+> <kbd>CTRL + Shift + C</kbd> : Copy
+> <kbd>CTRL + Shift + V</kbd> : Paste
+
+This is the style of copy/paste keybindings for every other terminal on the planet, and the style we've chosen as the defaults. If you're unhappy with them, you're absolutely free to change them.  +++$+++ 2 +++$+++ 0
+COM20 +++$+++ SP10132417 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-08-06T17:26:50Z +++$+++ > 
+> please halt yourself before assuming the motivations of others and attacking individuals personally or their work.
+
+Please feel free to point out what I said that was even remotely an attack on *anyone* or an assumption of motivations?
+Or did you perhaps recognise the truth of what I wrote and felt defensive? +++$+++ 0 +++$+++ 1
+COM21 +++$+++ SP40315783 +++$+++ ROOT +++$+++ COM20 +++$+++ 2019-08-06T19:10:13Z +++$+++ I am so tempted to chime in with something more confrontational but I don't think it'll add to the debate so I'll just say this:
+
+- The devs have been very responsive, and have been  accommodating of the many (often mutually conflicting) requests coming in from users. By this token the "old Microsoft" assertion seems unfounded and potentially disheartening for the people who have plowed a lot of work in to this.
+- This is a beta product, if you expect it to meet all your needs straight away you probably need to realign your expectations.
+- Some decisions will be made that won't work in your favour. Many won't work in my favour. However these are educated decisions made in the interest of supporting the average user (not just you), by talented devs who are acknowledging some compromise but are making pragmatic decisions nonetheless. By assuming your needs are paramount, you are potentially dismissing the needs of other users (e.g. WSL users like me who support the sensible decision to align with Gnome bindings and avoid escape sequence characters for default bindings).
+- This is open source. If you feel you have the expertise to override their decisions, then you are free to implement changes in your own fork. If you don't have that expertise, you can't reasonably claim that the decision taken is actually wrong. "It's not what I'm familiar with" is probably not a good enough justification (in my view).
+
+I won't reply to responses as I know it won't add anything and that I shouldn't have even posted the above, but I couldn't resist throwing my two cents in - sorry! +++$+++ 0 +++$+++ 0

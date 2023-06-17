@@ -1,0 +1,15 @@
+SP14953974 +++$+++ Byloth +++$+++ NONE (AUTHOR)
+SP14316954 +++$+++ DHowett-MSFT +++$+++ CONTRIBUTOR
+SP11341342 +++$+++ yodurr +++$+++ NONE
+SP1423520 +++$+++ ShadowEO +++$+++ NONE
+SP20713561 +++$+++ magiblot +++$+++ NONE
+SP23501700 +++$+++ tanayagar +++$+++ NONE
+SP48139394 +++$+++ gfbearsfan +++$+++ NONE
+SP1331777 +++$+++ andreili +++$+++ NONE
+SP11259414 +++$+++ corganfuzz +++$+++ NONE
+SP238842 +++$+++ vRITHNER +++$+++ NONE
+SP20636874 +++$+++ MrR0bert +++$+++ NONE
+SP44852729 +++$+++ 8thHalfHour +++$+++ NONE
+SP18221333 +++$+++ miniksa +++$+++ MEMBER
+SP937871 +++$+++ cpbotha +++$+++ NONE
+SP1039862 +++$+++ metathinker +++$+++ CONTRIBUTOR

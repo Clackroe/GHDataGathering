@@ -1,0 +1,40 @@
+ROOT +++$+++ SP5600962 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-11-05T11:33:47Z +++$+++ Push: NoneType has no attribute Write I am getting the error: 
+```
+b'device'
+Traceback (most recent call last):
+  File "autoroot.py", line 123, in <module>
+    install_firmware(dloadfirmware, device)
+  File "autoroot.py", line 120, in install_firmware
+    print(device.Push(os.path.join(d, 'Software', 'dload'), storage+'/dload', timeout_ms=100000))
+  File "/home/penn/python-adb/adb/adb_commands.py", line 269, in Push
+    progress_callback=progress_callback)
+  File "/home/penn/python-adb/adb/adb_commands.py", line 280, in Push
+    mtime=int(mtime), progress_callback=progress_callback, **kwargs)
+  File "/home/penn/python-adb/adb/filesync_protocol.py", line 149, in Push
+    cnxn.Send(b'DATA', data)
+  File "/home/penn/python-adb/adb/filesync_protocol.py", line 207, in Send
+    self._Flush()
+  File "/home/penn/python-adb/adb/filesync_protocol.py", line 254, in _Flush
+    self.adb.Write(self.send_buffer[:self.send_idx])
+AttributeError: 'NoneType' object has no attribute 'Write'
+```
+
+I've confirmed that the path I'm pushing to exists. I'm pushing a directory to another directory. I'm using Ubuntu 18.04. I am able to use the Shell command fine.
+
+This looks similar to #125 except in Push not Pull.
+
+The adbd is running as root on the phone, as is python3 on my PC. +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP26262208 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-11-13T08:51:22Z +++$+++ Hello, what is your version Android me it's 8.1  +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP26262208 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-11-13T16:20:42Z +++$+++  Look here for me solve my problem temporary https://github.com/google/python-adb/issues/132  +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP22151742 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-11-13T16:55:13Z +++$+++ @VBlackOut Read @fahhem's response. That is not the way to solve the issue. 
+
+Also, something odd is happening, your replies are either getting auto-deleted on threads (likely because of the repetitive comments) or you're deleting them yourself. For my Issue you posted the same comment and NO, that does not fix the problem and NO that is not the answer to the bug.  +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP26262208 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-11-13T17:08:43Z +++$+++ It's just re-identify the id if change  +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP26262208 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-11-13T17:09:15Z +++$+++ Not best practice but it's works +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP26262208 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-11-13T17:11:22Z +++$+++ Sorry I use GitHub on phone (fasthub) it's not ideal for comment and explore the interface GUI +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP22151742 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-11-13T17:16:00Z +++$+++ I use the same app and have zero issues with comments, etc. Also, your explanation still makes zero sense "It's just re-identify the id if change" isn't even a proper sentence. And even after being told by the main contributor of the repo that that is not a fix you continue to spam peoples' posts with this. Just PLEASE STOP. Listen to his comment and stop suggesting this crudely thought-up bandaid of a "fix".  +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP26262208 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-11-13T17:32:37Z +++$+++ It's just forward fix but it's not finally real fix  +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP26262208 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-11-13T17:33:01Z +++$+++ I just for understand the code  +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP306100 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-11-13T17:44:37Z +++$+++ Whoa let's all calm down please. @vBlackOut is just trying to help (and clearly english isn't his first language, so give him a break), it seems you're a little too caffeinated here :)
+
+Let's start over in a new issue to avoid this exchange. +++$+++ 0 +++$+++ 0

@@ -1,0 +1,21 @@
+ROOT +++$+++ SP29434060 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-28T07:55:20Z +++$+++ 你好，你的语言版本上违反了中国法律 ![up-796da3ff8acde0e73f27b9035ab0b3b0](https://user-images.githubusercontent.com/29434060/67661067-37078e80-f99b-11e9-9929-19064b5ab7dd.png)
+
+你好。你的文档上对于国家的标注违反了中国法律，台湾是中国的一部分，是中国的一个省！不应该被单独列出来，希望修改！ +++$+++ 5 +++$+++ 16
+COM0 +++$+++ SP7832163 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-28T14:19:46Z +++$+++ Translated:
+
+### Hello, your language version violates Chinese law.
+
+> Hello there. The marking of the country on your document violates Chinese law. Taiwan is a part of China and a province of China! Should not be listed separately, I hope to modify +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP1990166 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-10-30T10:04:10Z +++$+++ Uhhh China ......
+
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP9070188 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-10-31T10:03:57Z +++$+++ 没必要这样，想让台湾回归这样做是适得其反 +++$+++ 4 +++$+++ 0
+COM3 +++$+++ SP8279406 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-11-07T04:12:39Z +++$+++ > Uhhh China ......
+
+Welcome to the world of Chinazi, my friend. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP2213000 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-11-11T02:07:04Z +++$+++ China law not world law, if you are using this framework at China, feel free to address it by yourself. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP11588822 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-11-12T09:26:47Z +++$+++ Just want to jump in here because it seems to be getting slightly heated.
+
+This docs page has nothing to do with countries or territories it's just to show all the **_flags_** provided by SUI and because Taiwan and China use different flags there is 2 entries in this list. +++$+++ 7 +++$+++ 0
+COM6 +++$+++ SP33802653 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-11-30T07:37:31Z +++$+++ 額...台灣就台灣搞什麼 +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP47655623 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-11-30T07:43:24Z +++$+++ ur mum this is other language and tw and hk is using same lanuage we dont want to fking Simplified chinese L +++$+++ 0 +++$+++ 0

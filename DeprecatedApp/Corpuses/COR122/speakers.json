@@ -1,0 +1,42 @@
+{
+    "pakkpl": {
+        "id": "SP13785488",
+        "role": "NONE (AUTHOR)"
+    },
+    "ncrawlins": {
+        "id": "SP291462",
+        "role": "NONE"
+    },
+    "thecp": {
+        "id": "SP6319976",
+        "role": "CONTRIBUTOR"
+    },
+    "djleonskennedy": {
+        "id": "SP8366455",
+        "role": "NONE"
+    },
+    "mlc-mlapis": {
+        "id": "SP5693835",
+        "role": "CONTRIBUTOR"
+    },
+    "ericmartinezr": {
+        "id": "SP13039652",
+        "role": "CONTRIBUTOR"
+    },
+    "Achilles1515": {
+        "id": "SP23387905",
+        "role": "NONE"
+    },
+    "robinbastien": {
+        "id": "SP2096859",
+        "role": "NONE"
+    },
+    "lazarljubenovic": {
+        "id": "SP7661457",
+        "role": "CONTRIBUTOR"
+    },
+    "mgechev": {
+        "id": "SP455023",
+        "role": "MEMBER"
+    }
+}

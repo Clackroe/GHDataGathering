@@ -1,0 +1,68 @@
+ROOT +++$+++ SP44156 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-02-07T13:46:46Z +++$+++ FR: Firebase Analytics Server Side My Environment: 
+
+  * Operating System version: Any
+  * Firebase SDK version: Any
+  * Library version: Latest
+  * Firebase Product: analytics
+
+Please provide Firebase analytics Api for server side. We would like to give a decision right now and being limited on client side is unfortunately not acceptable. 
+ +++$+++ 87 +++$+++ 0
+COM0 +++$+++ SP2375201 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-02-07T17:47:31Z +++$+++ What features would you like to see in a server-side analytics API? Client SDKs primarily support logging analytics events. I don't think there's a use case to support that server-side. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP44156 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-02-07T18:17:08Z +++$+++ I would like to use firebase analytics as a marketing automation tool. My primary purpose is forwarding all events in our system to firebase and using its audience feature. 
+
+I want to do this in server side because it has major advantages. 
+
+1. Instead of implementing firebase in multiple client, I can implement in a single server and maintain it. 
+2. Accuracy of data in client sides are usually problematic. 
+
+I believe that it has great potential in server side as well.  +++$+++ 43 +++$+++ 0
+COM2 +++$+++ SP4755574 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-02-14T22:36:32Z +++$+++ Just to clarify, 
+A user does something which you log on your server, you are looking for a way for the server to log the event *as the user* (would you be passing user specific event attributes? (e.g. user-agent)). 
+is that it?  +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP44156 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-02-15T09:42:16Z +++$+++ @avishalom the scenario you are describing is exactly valid. You can consider our server as an agent.  +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP415779 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-02-16T03:42:11Z +++$+++ We have the same problem in cloud functions. The cloud function reacts to the client doing something and needs to log an event to analytics on behalf of that user. We don't want to give the client access to the data necessary to log such an event though.
+
+It's the same use cases and motivate:
+https://developers.google.com/analytics/devguides/collection/protocol/v1/ +++$+++ 9 +++$+++ 0
+COM5 +++$+++ SP3938076 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-05-24T18:23:28Z +++$+++ This appears to be exactly what we need to send data from Firebase to BigQuery using Cloud Functions: [From Firestore to BigQuery with Firebase Functions](https://blog.questionable.services/article/from-firestore-to-bigquery-firebase-functions/). +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP102188 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-08-04T09:20:15Z +++$+++ @avishalom  I'm not able to track revenue because it's not bound to any user action on the client, it's actually an event by the negation of an action. It's not bound by a specific schedule either (it's not subscription model). The only way i could sort of maybe kind of do this is with silent push notifications that trigger a Firebase event, but this error prone. The only thing i can think of is using user properties to track accumulating revenue which will at least provide some context.  +++$+++ 7 +++$+++ 0
+COM7 +++$+++ SP3489182 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-08-09T17:40:06Z +++$+++ Any updates on this feature, or documentation on doing it ourselves (via REST API for example)? I'm rather surprised this isn't a use-case covered by the core library. In server-authoritative applications, there are many use-cases where analytics events are emitted by the server, and not available to the client. In order to have a complete data-set we need to be able to emit analytics events server-to-server.  +++$+++ 7 +++$+++ 0
+COM8 +++$+++ SP2727051 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-08-14T19:51:46Z +++$+++ Is there any solution here? Is there some way to use BigQuery perhaps? +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP7241357 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-08-15T13:21:58Z +++$+++ Also interested in this. Any updates? +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP44156 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-08-15T13:46:43Z +++$+++ Please upvote issue as well +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP2727051 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-08-15T13:49:57Z +++$+++ For what it's worth, I don't see this happening anytime soon. Google simply doesn't support server side analytics, firebase analytics is exclusively for apps.
+
+Right now I've imported my data into bigquery and am working on adding server side integration with my bigquery table. With this, I should be able to use bq to query data and later use datastudio to display it. I found this video helpful: https://www.youtube.com/watch?v=Ki_F6VCOtXU +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP39138572 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-11-17T12:52:10Z +++$+++ Is still there an option to add Firebase Analytics on the server side? +++$+++ 6 +++$+++ 0
+COM13 +++$+++ SP1761038 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-12-20T20:29:50Z +++$+++ I'll add in that a SaaS analytics product that doesn't support a server-to-server flow today is extremely rare. Google's own "measurement protocol" for Google Analytics is widely adopted. And of course players like Adobe, Amplitude and Mixpanel support it. The value and use-cases for server-side APIs are well enumerated over hundreds of other tools. 
+
+That being said - opening up a server-to-server flow is more complicated than just documenting an API - since you have to support all of the "interesting" things folks will use it for. *Supporting* server data means that customers will try to send in web data, and offline data, and OTT data, etc. How do you accurately link up client-side and server-side identity? 
+
+By way of a guess - perhaps Google is in the process of combining GA and Firebase Analytics (frankly the branding is already getting conflated - they're calling it "Google Analytics for Firebase" as of this writing...), in which case it makes sense to hold off on releasing a true server-to-server flow. More conspiratorially, maybe they're deliberately limiting the use-cases for Firebase such that it's basically unusable for the enterprise businesses, who absolutely need a server-to-server flow, but who already are paying for GA 360.
+
+Only time will tell! Either they'll come up with a solution or, in my opinion, Firebase will be relegated as a 2nd-tier analytics offering. +++$+++ 3 +++$+++ 0
+COM14 +++$+++ SP4397978 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-12-21T18:49:45Z +++$+++ Hey, folks. I'll just chime in to say this is a feature request the Analytics team has certainly heard from customers, and it's something they're looking into, but as usual I can't share any specific plans or roadmap or anything.
+
+Right now, probably your best option would be to import your analytics data from Google Analytics for Firebase into BigQuery and then combine that with any other data you might be generating server-side, kinda like what @namanyayg mentioned. +++$+++ 5 +++$+++ 0
+COM15 +++$+++ SP44156 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-12-22T18:55:17Z +++$+++ @ToddKerpelman This is great. I think that this API is already implemented for mobile devices. In order to send events by mobile devices there must be an API for this purpose. I feel that the API needs to be officially documented and publicly available for server side.  +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP327778 +++$+++ ROOT +++$+++ COM15 +++$+++ 2019-01-30T21:36:45Z +++$+++ This is the only solution to implement subscription tracking since there is no automatic subscription tracking provided by firebase +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP22150857 +++$+++ ROOT +++$+++ COM16 +++$+++ 2019-02-25T14:11:41Z +++$+++ Is there any update on this or a link to a custom solution? 
+Ideally I want to be able to update user properties in firebase analytics from server side, so I can filter by them later when using other firebase services e.g. FCM +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP9335422 +++$+++ ROOT +++$+++ COM17 +++$+++ 2019-04-29T06:50:56Z +++$+++ We also need this. +++$+++ 2 +++$+++ 0
+COM19 +++$+++ SP2107535 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-05-07T15:37:15Z +++$+++ There is an important use case for games with IAP as any client-side information is going to be unreliable. Having the event logged in server-side make it a bit more reliable.  +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP9335422 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-05-12T08:18:54Z +++$+++ Many things happen server-side (e.g. events happening when the user is offline). Without such a simple feature, it's impossible to target the right users. This fact forces us think towards other solutions on the market :(  +++$+++ 1 +++$+++ 0
+COM21 +++$+++ SP13032789 +++$+++ ROOT +++$+++ COM20 +++$+++ 2019-05-15T08:27:26Z +++$+++ This is crucial for our solution as well. Please consider a fix ;-) +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP913631 +++$+++ ROOT +++$+++ COM21 +++$+++ 2019-07-07T13:15:59Z +++$+++ It is now possible to [add an Analytics label to messages](https://firebase.google.com/docs/cloud-messaging/understand-delivery#adding_analytics_labels_to_messages). Does that mean this FR can now be implemented? +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP44156 +++$+++ ROOT +++$+++ COM22 +++$+++ 2019-09-26T13:03:49Z +++$+++ @ToddKerpelman, Is there any update on this?  +++$+++ 4 +++$+++ 0
+COM24 +++$+++ SP11584944 +++$+++ ROOT +++$+++ COM23 +++$+++ 2019-10-02T13:44:49Z +++$+++ > It is now possible to [add an Analytics label to messages](https://firebase.google.com/docs/cloud-messaging/understand-delivery#adding_analytics_labels_to_messages). Does that mean this FR can now be implemented?
+
+Looks like it has some limitations. Do you recommend for general logging from Firebase functions? +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP56365321 +++$+++ ROOT +++$+++ COM24 +++$+++ 2019-10-09T18:59:54Z +++$+++ @ToddKerpelman  I consulting Firebase analytics with the clients and its common problem :/ I was thinking about solution and maybe create few standard events (or it will be a new type of standard events) which can have permission to connect with server-side. Two cases that I have in my mind are 1. mobile app with subscription model 
+2. mobile app like a uber where clients don't need to have an open app after they finished their trip. 
+I'm not programmer but marketer so sry if my thoughts are totally wrong ;) +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP327778 +++$+++ ROOT +++$+++ COM25 +++$+++ 2019-10-10T06:17:45Z +++$+++ Looks like there're server-side reporting already which is used to report app_store_* events.
+They are not exported to BigQuery and do not have any standard properties (user_id, device, ...) comparing to any other events. Here is my SO question about it: https://stackoverflow.com/questions/58300435/app-store-subscription-events-are-not-exported-to-bigquery +++$+++ 2 +++$+++ 0
+COM27 +++$+++ SP1434530 +++$+++ ROOT +++$+++ COM26 +++$+++ 2019-10-25T13:43:50Z +++$+++ Oh, you gotta be joking. There's in-app subscription events happening, which is related directly to client app, but can only be reliably detected on server side. Such as users being charged on monthly basis, trial periods, introductional periods, etc. So there is no way (apart from using a billion other tools) to directly send these events to Firebase? All analytics tools support this... +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP1138614 +++$+++ ROOT +++$+++ COM27 +++$+++ 2019-11-06T12:55:27Z +++$+++ We also need this. +++$+++ 3 +++$+++ 0
+COM29 +++$+++ SP13811487 +++$+++ ROOT +++$+++ COM28 +++$+++ 2019-11-22T13:01:26Z +++$+++ I am a little surprised that this also was not ported over from old analytics - absolutely need this for server side event logging out of things happening in the database into user lifecycles...
+For us especially it would also be crucial in order to get some events as conversions into ads... +++$+++ 0 +++$+++ 0

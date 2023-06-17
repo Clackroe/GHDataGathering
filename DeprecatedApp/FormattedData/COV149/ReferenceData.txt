@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/hashicorp/vagrant/issues/5319
+Number of Comments: 112

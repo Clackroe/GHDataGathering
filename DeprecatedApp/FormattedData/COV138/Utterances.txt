@@ -1,0 +1,438 @@
+ROOT +++$+++ SP99365 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-12-28T22:12:37Z +++$+++ Conditionally import_playbook aka include_playbook ##### ISSUE TYPE
+ - Feature Idea
+
+##### COMPONENT NAME
+import_playbook
+
+##### ANSIBLE VERSION
+<!--- Paste verbatim output from "ansible --version" between quotes below -->
+```
+2.4.0.0
+```
+
+##### CONFIGURATION
+<!---
+If using Ansible 2.4 or above, paste the results of "ansible-config dump --only-changed"
+Otherwise, mention any settings you have changed/added/removed in ansible.cfg
+(or using the ANSIBLE_* environment variables).
+-->
+
+n/a
+
+##### OS / ENVIRONMENT
+
+CentOS 6
+
+##### SUMMARY
+
+I need to conditionally import a playbook, which isn't possible.  The keyword I'm missing is "include_playbook" which would allow a "when" to apply to it.  Why?
+
+I have a playbook that performs some maintenance, OS, Kernel, package, and firmware upgrades.  For Major upgrades, we track progress in a ticketing system.  So, during those runs, I'd like to conditionally import a playbook that updates the ticket information.  In order for that to work, I need to pass the user's password to the ticketing system, so there's a `vars_prompt` in the ticket update playbook.  If the user specifies which ticket they're working to the maintenance playbook, I'd like the ticket update playbook to be called after the maintenance is performed.
+
+If there's another way for this to work, I'm open to alternate ideas, but I think conditionally playbook imports would be generically useful.  I'm not understanding why tasks could be included dynamically, but a playbook wouldn't be.
+
+##### STEPS TO REPRODUCE
+<!---
+For bugs, show exactly how to reproduce the problem, using a minimal test-case.
+For new features, show how the feature would be used.
+-->
+
+<!--- Paste example playbooks or commands between quotes below -->
+```yaml
+# Maintenance Play Runs first, then conditionally import a second playbook
+- import_playbook: update-ticket.yaml
+  when: ticket_id is defined
+```
+
+<!--- You can also paste gist.github.com links for larger files -->
+
+##### EXPECTED RESULTS
+<!--- What did you expect to happen when running the steps above? -->
+
+I expect `update-ticket.yaml` to only import if the `ticket_id` is defined.
+
+##### ACTUAL RESULTS
+<!--- What actually happened? If possible run with extra verbosity (-vvvv) -->
+
+no parse error, and playbook `update-ticket.yaml` is imported 100% of the time.
+ +++$+++ 103 +++$+++ 0
+COM0 +++$+++ SP6585283 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-12-28T22:18:52Z +++$+++ Files identified in the description:
+* [lib/ansible/modules/utilities/logic/import_playbook.py](https://github.com/ansible/ansible/blob/devel/lib/ansible/modules/utilities/logic/import_playbook.py)
+
+If these files are inaccurate, please update the `component name` section of the description or use the `!component` bot command.
+
+[click here for bot help](https://github.com/ansible/ansibullbot/blob/master/ISSUE_HELP.md)
+<!--- boilerplate: components_banner ---> +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP171090 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-01-29T15:17:35Z +++$+++ We have similar need. We have a main playbook that prepares the system, but we allow the user to provide some extra steps by creating a playbook files in a well known directories. We do not know what files will be present there in advance. For this we would really like to have include_playbook that supports with_fileglob (or with_items). +++$+++ 4 +++$+++ 0
+COM2 +++$+++ SP171090 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-01-29T15:21:43Z +++$+++ Just to explain why include_tasks is not enough. The system is clustered and the tasks talk to localhost, other physical hosts and virtual machines. We could in theory use delegate_to if it supported host groups. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP341037 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-03-22T02:21:37Z +++$+++ I also have this need in order to import different playbooks to configure Vagrant guests differently depending on the active hypervisor.
+
+Alternate to `when` is something like (this is also not supported):
+```YAML
+- import_playbook: "install_{{ 'virtualbox' if ansible_product_name == 'VirtualBox' else 'vmware' if ansible_product_name = 'VMware Virtual Platform' else 'noop' }}_extensions.yml"
+```
+ +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP102495 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-04-23T09:27:31Z +++$+++ Is this going to be fixed soon? I find it as a serious source of problems because the optional playbook code ca be huge when it comes to number of tasks, causing over **extensive console/log verbosity** of tasks that are never supposed to be loaded.
+
+The `skip_reason": "Conditional result was False"` is not of much help either because the user will not see any condition on those tasks, the condition being few nested includes/imports away in another file.
+
+It helps nobody that Ansible will list hundreds of lines of files that were never supposed to be run, making much harder to investigate them. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP22767209 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-05-05T20:55:47Z +++$+++ As a workaround until this is possible, if the use case is to support different host groups it is possible to use an include_task with a conditional on group names, i.e. a task include for a group `foo` is included when a file `tasks_directory/foo.yml` is provided:
+
+```
+- include_tasks: "{{item}}"
+  with_fileglob: "tasks_directory/*.yml"
+  vars:
+    file_host_group: "{{ (item | basename | splitext)[0]}}"
+  when: "file_host_group in group_names"
+```
+
+The playbook including this construct has to run for all hosts.
+ +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP1863643 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-08-31T19:06:38Z +++$+++ Is this still being worked at all?  I'm kind of implementing something like an `ansible-galaxy` style method of "installing" playbooks into a playbooks sub-directory and then I want to `include_playbook` a playbook that was just "installed".  
+
+Here is what I've got so far:
+
+```yaml
+- name: PLAY | Install other required playbooks
+  hosts: localhost
+  connection: local
+  tasks:
+
+    - name: INCLUDE_VARS | include variables to discover other needed playbooks
+      include_vars:
+        dir: playbooks/
+        files_matching: requirements.yml
+        depth: 1
+
+    - name: GIT | Clone playbooks
+      git:
+        repo: "{{ item.src }}"
+        dest: "playbooks/{{ item.src.split('/')[-1] }}"
+        version: "{{ item.version }}"
+      loop: "{{ elk_required_playbooks }}"
+
+    - name: SHELL | Install included playbooks roles
+      shell: ansible-galaxy install -r roles/requirements.yml -p roles/
+      args:
+        chdir: "playbooks/{{ item.src.split('/')[-1] }}"
+      loop: "{{ elk_required_playbooks }}"
+
+- name: PLAY | Run the installed helloWorld playbook
+  import_playbook: "playbooks/ap_hello_world/helloWorld.yml"
+```
+If I run this as-is, I get an import error because the playbook to be imported isn't there yet.
+
+```bash
+ERROR! Unable to retrieve file contents
+Could not find or access '/path/to/playbooks/ap_hello_world/helloWorld.yml'
+```
+If I comment out the `import_playbook` play, the functionality above that works nearly like `ansible-galaxy` and "installs" the playbooks I need (and the roles they need).  
+
+```bash
+PLAY [PLAY | Install other required playbooks] *************************************************************************************************************************************
+
+TASK [Gathering Facts] *************************************************************************************************************************************************************
+Friday 31 August 2018  13:54:13 -0500 (0:00:00.239)       0:00:00.240 ********* 
+Friday 31 August 2018  13:54:13 -0500 (0:00:00.237)       0:00:00.237 ********* 
+ok: [localhost]
+
+TASK [INCLUDE_VARS | include variables to discover other needed playbooks] *********************************************************************************************************
+Friday 31 August 2018  13:54:15 -0500 (0:00:01.366)       0:00:01.606 ********* 
+Friday 31 August 2018  13:54:15 -0500 (0:00:01.366)       0:00:01.604 ********* 
+ok: [localhost]
+
+TASK [GIT | Clone playbooks] *******************************************************************************************************************************************************
+Friday 31 August 2018  13:54:15 -0500 (0:00:00.124)       0:00:01.730 ********* 
+Friday 31 August 2018  13:54:15 -0500 (0:00:00.124)       0:00:01.728 ********* 
+changed: [localhost] => (item={u'src': u'<gir_url>/ap_hello_world', u'version': u'v0.3.0'})
+
+TASK [SHELL | Install included playbooks roles] ************************************************************************************************************************************
+Friday 31 August 2018  13:54:17 -0500 (0:00:02.591)       0:00:04.322 ********* 
+Friday 31 August 2018  13:54:17 -0500 (0:00:02.591)       0:00:04.319 ********* 
+changed: [localhost] => (item={u'src': u'<git_url>/ap_hello_world', u'version': u'v0.3.0'})
+
+PLAY RECAP *************************************************************************************************************************************************************************
+localhost                  : ok=4    changed=2    unreachable=0    failed=0 
+```
+And now I can run the same playbook again, this time with the `import_playbook` play not commented and it works as I desire:
+
+```bash
+PLAY [PLAY | Install other required playbooks] *************************************************************************************************************************************
+
+TASK [Gathering Facts] *************************************************************************************************************************************************************
+Friday 31 August 2018  14:00:30 -0500 (0:00:00.244)       0:00:00.244 ********* 
+Friday 31 August 2018  14:00:30 -0500 (0:00:00.241)       0:00:00.241 ********* 
+ok: [localhost]
+
+TASK [INCLUDE_VARS | include variables to discover other needed playbooks] *********************************************************************************************************
+Friday 31 August 2018  14:00:32 -0500 (0:00:01.471)       0:00:01.716 ********* 
+Friday 31 August 2018  14:00:32 -0500 (0:00:01.471)       0:00:01.713 ********* 
+ok: [localhost]
+
+TASK [GIT | Clone playbooks] *******************************************************************************************************************************************************
+Friday 31 August 2018  14:00:32 -0500 (0:00:00.138)       0:00:01.854 ********* 
+Friday 31 August 2018  14:00:32 -0500 (0:00:00.138)       0:00:01.852 ********* 
+ok: [localhost] => (item={u'src': u'<git_url>/ap_hello_world', u'version': u'v0.3.0'})
+
+TASK [SHELL | Install included playbooks roles] ************************************************************************************************************************************
+Friday 31 August 2018  14:00:35 -0500 (0:00:02.821)       0:00:04.675 ********* 
+Friday 31 August 2018  14:00:35 -0500 (0:00:02.821)       0:00:04.673 ********* 
+changed: [localhost] => (item={u'src': u'<git_url>/ap_hello_world', u'version': u'v0.3.0'})
+
+PLAY [PLAY | BEGIN Setup & Timing] *************************************************************************************************************************************************
+
+TASK [set_fact] ********************************************************************************************************************************************************************
+Friday 31 August 2018  14:00:36 -0500 (0:00:01.323)       0:00:05.999 ********* 
+Friday 31 August 2018  14:00:36 -0500 (0:00:01.323)       0:00:05.997 ********* 
+ok: [localhost]
+
+TASK [debug] ***********************************************************************************************************************************************************************
+Friday 31 August 2018  14:00:36 -0500 (0:00:00.155)       0:00:06.154 ********* 
+Friday 31 August 2018  14:00:36 -0500 (0:00:00.155)       0:00:06.152 ********* 
+ok: [localhost] => {
+    "msg": "Start Time - 2018-08-31 14:00:36"
+}
+
+PLAY [PLAY | Say Hello to My Little Friend] ****************************************************************************************************************************************
+
+TASK [SHELL | echo something] ******************************************************************************************************************************************************
+Friday 31 August 2018  14:00:36 -0500 (0:00:00.096)       0:00:06.251 ********* 
+Friday 31 August 2018  14:00:36 -0500 (0:00:00.096)       0:00:06.249 ********* 
+ok: [knebawils001]
+
+TASK [DEBUG | debug host's standard output] ****************************************************************************************************************************************
+Friday 31 August 2018  14:00:37 -0500 (0:00:00.714)       0:00:06.965 ********* 
+Friday 31 August 2018  14:00:37 -0500 (0:00:00.714)       0:00:06.963 ********* 
+skipping: [knebawils001]
+
+PLAY [PLAY | Say Hello via an Ansible Role] ****************************************************************************************************************************************
+
+TASK [ar_hello_world : SHELL | echo role's message on host] ************************************************************************************************************************
+Friday 31 August 2018  14:00:37 -0500 (0:00:00.151)       0:00:07.117 ********* 
+Friday 31 August 2018  14:00:37 -0500 (0:00:00.151)       0:00:07.115 ********* 
+ok: [knebawils001]
+
+TASK [ar_hello_world : DEBUG | debug host shell standard output] *******************************************************************************************************************
+Friday 31 August 2018  14:00:37 -0500 (0:00:00.342)       0:00:07.459 ********* 
+Friday 31 August 2018  14:00:37 -0500 (0:00:00.342)       0:00:07.457 ********* 
+skipping: [knebawils001]
+
+PLAY [PLAYBOOK | END Setup & Timing] ***********************************************************************************************************************************************
+
+TASK [set_fact] ********************************************************************************************************************************************************************
+Friday 31 August 2018  14:00:38 -0500 (0:00:00.212)       0:00:07.672 ********* 
+Friday 31 August 2018  14:00:38 -0500 (0:00:00.212)       0:00:07.669 ********* 
+ok: [localhost]
+
+TASK [debug] ***********************************************************************************************************************************************************************
+Friday 31 August 2018  14:00:38 -0500 (0:00:00.179)       0:00:07.851 ********* 
+Friday 31 August 2018  14:00:38 -0500 (0:00:00.178)       0:00:07.848 ********* 
+ok: [localhost] => {
+    "msg": "Start Time - 2018-08-31 14:00:36, End Time - 2018-08-31 14:00:38, Elapsed Time - 0:00:02"
+}
+
+PLAY RECAP *************************************************************************************************************************************************************************
+knebawils001          : ok=2    changed=0    unreachable=0    failed=0   
+localhost                  : ok=8    changed=1    unreachable=0    failed=0
+```
+I suppose this could be split up into two (2) separate playbooks in the same Git repo.  The first would be called `prepare.yml` or maybe `prerequisites.yml` to "install" the other needed playbooks and the second main playbook (`playbook.yml`) will do the necessary imports, etc.  I was really wanting to make this a "one-shot" playbook. +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP23485244 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-09-11T15:27:00Z +++$+++ Include conditionals are very useful for creating branches in our playbooks.  Will it be ensured that import_playbook will support conditionals in the next release citing this issue?
+
+If not, you are losing a lot of power and will end up creating a lot of hacks.  Not to mention breaking a ton of include playbook conditionals in end user plays. +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP1874225 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-09-24T04:10:28Z +++$+++ +1 on implementing a "when" conditional. +++$+++ 14 +++$+++ 0
+COM9 +++$+++ SP7383422 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-10-03T21:31:39Z +++$+++ soon-ish we approaching 1 y since this request was open and no progress so far ...  any chance this get some attention @bcoca ? much thanks ! +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP390197 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-10-10T08:58:25Z +++$+++ I would like to vote a '+1'as well. +++$+++ 0 +++$+++ 1
+COM11 +++$+++ SP17454073 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-10-10T11:24:10Z +++$+++ +1 +++$+++ 0 +++$+++ 1
+COM12 +++$+++ SP6311058 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-10-10T14:04:16Z +++$+++ +1 as well, would love to see this feature +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP711940 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-10-10T14:10:29Z +++$+++ Please use the 👍  button to let the maintainers know you need this feature. Getting a ton of emails from these +1s. +++$+++ 32 +++$+++ 0
+COM14 +++$+++ SP30902622 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-10-12T11:32:02Z +++$+++ +1 +++$+++ 0 +++$+++ 4
+COM15 +++$+++ SP652496 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-10-18T14:41:38Z +++$+++ If someone is interested how to use play-level variables for conditional playbook-import:
+1. Set up that variable as a fact in the play
+2. Use `when` with `import_playbook` to check this variable (with full path, `hostvars.hostname.a_variable`)
+
+If someone is interested, I managed to make import_playbook be conditional on `--limit` in the command line:
+
+https://medium.com/opsops/import-playbook-with-play-level-condition-775122fe78ff
+
+An example:
+
+```
+- hosts: all,localhost
+  gather_facts: no
+  run_once: True
+  tasks:
+   - set_fact:
+        full_run: '{{ play_hosts == groups.all }}'
+     delegate_to: localhost
+     delegate_facts: yes
+
+- import_playbook: test.yaml
+  when: hostvars.localhost.full_run
+``` +++$+++ 4 +++$+++ 0
+COM16 +++$+++ SP25477935 +++$+++ ROOT +++$+++ COM15 +++$+++ 2019-04-02T09:38:34Z +++$+++ is this issue/request still up to date in a more current version of ansible? Iam using ansible 2.6.1 and the when condition doesn't seem to work when I use the import_playbook function. +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP652496 +++$+++ ROOT +++$+++ COM16 +++$+++ 2019-04-02T10:00:11Z +++$+++ @brotaxt  You need to initialize variables before doing `when`. Just add some random task to random host (before doing first 'import_playbook'). F.e., do set_fact on localhost, as in example above. +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP25477935 +++$+++ ROOT +++$+++ COM17 +++$+++ 2019-04-02T13:47:30Z +++$+++ @amarao 
+
+many thanks for the quick response. :+1:  Unfortunately it doesn't seem to work for me. Even if answer the prompt with "no" the playbook "vmware_createsnap.yml" gets invoked. The other tasks are working as expected. What I am doing wrong? 
+
+
+My playbook: 
+
+```
+---
+-
+  hosts: all
+  gather_facts: true
+  vars_prompt:
+   - name: "snapshots_required"
+     prompt: "Do you want to automatically create VMWare Snapshots? [yes/no]"
+     private: no
+  name: "Install all available Updates"
+  tasks:
+
+   - name: Check for Updates
+     include: checkforupdates.yml
+
+   - name: setting fact for hosts which have outstanding updates
+     set_fact:
+       updates_available: "yes"
+     when: "yumoutput.changed or zypperoutput.changed"
+
+
+   - name: setting fact for hosts which have no outstanding updates
+     set_fact:
+       updates_available: "false"
+     when: updates_available is not defined
+
+
+- import_playbook: vmware_createsnap.yml
+  when: snapshots_required = "yes"
+``` +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP836171 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-04-02T14:09:58Z +++$+++ @brotaxt  this is a feature request, you currently CANNOT conditionally import playbooks, the conditions above happen to skip all the tasks in one, but this is not a supported behaviour and not guaranteed to work across versions of Ansible. +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP114300 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-04-02T14:14:33Z +++$+++ just to be clear:
+import or include? because I think the current implementation or naming is actually wrong, based on the definition in https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_includes.html
+
+Does import_playbook actually "lazy load" or does it get loaded & parsed with the yaml file? +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP836171 +++$+++ ROOT +++$+++ COM20 +++$+++ 2019-04-02T14:28:04Z +++$+++ @Kriechi neither, it gets loaded at 'playbook compile time' which is before execution but not on file load
+
+there is no include_playbook, that is the whole purpose of this feature request, to add one +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP114300 +++$+++ ROOT +++$+++ COM21 +++$+++ 2019-04-02T14:31:08Z +++$+++ @bcoca mhm that sounds even more wrong - or am I missing the big picture here?
+I would have expected that `import_task` and `include_task` have an `*_playbook` sibling... +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP836171 +++$+++ ROOT +++$+++ COM22 +++$+++ 2019-04-02T14:32:46Z +++$+++ @Kriechi the engine never supported that, why `include:` was very misleading and we had to separate it into the different include_X/import_X options and make each behaviour explicit. So include_X is dynamic aka runtime, while import_X is 'static' aka 'compile time'. +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP114300 +++$+++ ROOT +++$+++ COM23 +++$+++ 2019-04-02T14:36:14Z +++$+++ ok - so `include_playbook` would be a feature request? Or can we track it here?
+
+E.g., I'm running a git-checkout task on localhost, and then want to `include_playbook: some/repo/foo.yml`
+This should include (lazy-load) the updated playbook from that repository, AFTER pulling the latest commit from the remote. Currently, `import_playbook` imports the "old" playbook, then pulls, and then runs the outdated playbook. +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP836171 +++$+++ ROOT +++$+++ COM24 +++$+++ 2019-04-02T15:23:28Z +++$+++ @Kriechi  ... please read the subject of this ticket, that is EXACTLY what we are tracking here +++$+++ 1 +++$+++ 0
+COM26 +++$+++ SP114300 +++$+++ ROOT +++$+++ COM25 +++$+++ 2019-04-02T15:37:22Z +++$+++ true - the part the confused me is "conditionally import...".
+`import_playbook` and `include_playbook` are the feature we want. +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP45837141 +++$+++ ROOT +++$+++ COM26 +++$+++ 2019-05-23T17:30:07Z +++$+++ I'm trying to do what [watsonb](https://github.com/ansible/ansible/issues/34281#issuecomment-417762220) was, using ansible-galaxy to install roles, and then using the roles. 
+
+I found a decent workaround for the all-in-one playbook, which was to place the playbooks, in the order that you want them to execute, on the command line. In Watsonb's case, that would look like
+
+ansible-playbook ... prepare.yml playbook.yml
+
+Any variables that you set on the command line are passed to the playbooks, sequentially.
+
+This might also solve [MarSik's](https://github.com/ansible/ansible/issues/34281#issuecomment-361277446) problem, also, using file globbing on the command line instead of in the playbook. +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP171090 +++$+++ ROOT +++$+++ COM27 +++$+++ 2019-05-23T18:47:20Z +++$+++ @decet It could, but that would basically mean using a top level bash script as the entrypoint and spliting the main ansible playbook into multiple stage files. Not too horrible, just ugly. +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP1863643 +++$+++ ROOT +++$+++ COM28 +++$+++ 2019-05-24T00:37:55Z +++$+++ I've overcome this in my own way as follows.  First, my typical playbook directory structure:
+
+```bash
+.
+├── .ansible-lint
+├── .gitignore
+├── .yamllint
+├── ansible.cfg
+├── callback_plugins
+│   ├── junit.py
+│   ├── log_plays.py
+│   ├── profile_roles.py
+│   ├── profile_tasks.py
+│   ├── timer.py
+├── check_ansible_lint.sh
+├── check_syntax.sh
+├── check_yaml_lint.sh
+├── create.yml
+├── destroy.yml
+├── Jenkinsfile
+├── localhost_inventory.yml
+├── playbooks
+│   ├── ap_linux_instance
+│   └── requirements.yml
+├── prerequisites.yml
+├── README.md
+├── reports
+├── requirements.txt
+├── roles
+│   ├── ar_linux_ansible_venv
+│   ├── ar_linux_cname
+│   ├── config_encoder_filters
+│   └── requirements.yml
+└── VERSION.md
+```
+
+My .gitignore ignores most sane OS/language/IDE things, but also ignores everything in the `roles/` and `playbooks/` folders except for the `requirements.yml` files in each folder.  The requirements.yml file within the playbooks folder is similar to your Galaxy-style requirements.yml, but rather than calling out dependent playbooks by Galaxy owner.name, I specify the full Git source (Galaxy supports this of course).  The requirements.yml within the roles/ folder is just your traditional Galaxy-style requirements.
+
+I have this `prerequisites.yml` playbook, that looks like this:
+
+```yaml
+---
+
+- name: PLAY | Install other required playbooks
+  hosts: localhost
+  connection: local
+  tasks:
+
+    - name: INCLUDE_VARS | include variables to discover other needed playbooks
+      include_vars:
+        dir: playbooks/
+        files_matching: requirements.yml
+        depth: 1
+
+    - name: GIT | Clone playbooks
+      git:
+        repo: "{{ item.src }}"
+        dest: "playbooks/{{ item.src.split('/')[-1] }}"
+        version: "{{ item.version }}"
+      loop: "{{ required_playbooks }}"
+
+    - name: SHELL | Install included playbooks roles
+      shell: ansible-galaxy install -r roles/requirements.yml -p roles/ --force
+      args:
+        chdir: "playbooks/{{ item.src.split('/')[-1] }}"
+      loop: "{{ required_playbooks }}"
+      when: item.galaxy
+      changed_when: false
+      tags: [ skip_ansible_lint ]
+```
+And, assuming that my "big bang" create.yml depends on a playbook and its roles from another playbook project, I import it like this:
+
+```yaml
+# ~~~~~~~~~~
+# Ensure that all of the host VMs in the inventory are up and running
+# either on-prem or in Azure as specified in the inventory
+#
+- name: Ensure inventory hosts are present
+  import_playbook: "playbooks/ap_linux_instance/create.yml"
+  tags: [ base_server, hosts ]
+```
+
+And so, the work-flow to run my "big bang" (e.g. create.yml) is a 3-liner:
+
+```bash
+ansible-playbook prerequisites.yml
+ansible-galaxy install -r roles/requirements -p roles/
+ansible-playbook create.yml -i <path_to_inventory>
+```
+
+You could, of course, wrap the above 3-liner in a `create.sh` shell script for convenience.  This method has served me well for some fairly complex playbook projects that depend on other playbook projects.  This forces us to keep roles and playbooks fairly self-contained and re-usable and factor variables out into their own inventory projects.  When performed with discipline, it makes it really easy to migrate unaltered roles/playbooks to other environments, then just update inventory variables that are unique to that environment.
+
+**This doesn't solve the conditional import problem**, mind you, but does help me use the `import_playbook` statement for something that may not exist just yet.  It kind of gets around a conditional in my very specific use-case.  I make use of tagging on the `import_playbook` to leverage the command-line `--tags` and `--skip-tags` features if I need scalpel-like precision at run-time. But if you had to make an import decision based on some other conditional logic (e.g., OS family), well, we still need that as a language feature I think.  For now, I just handle those cases with sub-playbooks and chain them together ensuring I target the appropriate hosts/groups that should or should not be targeted based on how I've setup my inventory (yes, it can get messy).
+
+This is all pretty wild and requires a high degree if what I commonly refer to as "4th dimensional thinking", especially when you consider branches/versions of things and running them from CI/CD platforms like Jenkins or even AWX.  But I still find Ansible fascinating and use it daily.
+
+HTH,
+
+Ben +++$+++ 1 +++$+++ 0

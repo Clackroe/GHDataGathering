@@ -1,0 +1,246 @@
+ROOT +++$+++ SP1037931 +++$+++ ROOT +++$+++ ROOT +++$+++ 2021-02-08T14:11:32Z +++$+++ deps: add Yarn 1.22.5 <!--
+Before submitting a pull request, please read
+https://github.com/nodejs/node/blob/master/CONTRIBUTING.md.
+
+Commit message formatting guidelines:
+https://github.com/nodejs/node/blob/master/doc/guides/contributing/pull-requests.md#commit-message-guidelines
+
+For code changes:
+1. Include tests for any bug fixes or new features.
+2. Update documentation if relevant.
+3. Ensure that `make -j4 test` (UNIX), or `vcbuild test` (Windows) passes.
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+-->
+
+Ref https://github.com/nodejs/node/discussions/37193 (and https://github.com/nodejs/node/discussions/37193#discussioncomment-332622 in particular, cc @jasnell @mcollina)
+
+This commit adds Yarn to the Node release tarballs and installers. I tested:
+
+- Windows (`.\vcbuild.bat msi` and ran the resulting exe)
+- MacOS (`make pkg` and ran the resulting pkg)
+- Linux (untar'd the `.tar.gz` file)
+
+In all cases, running `yarn --version` yielded the correct Yarn version (1.22.5 for infra reasons, which is for all purposes identical to 1.22.10 minus a postinstall script which has no impact whatsoever in this situation).
+
+---
+
+* This PR changes close to nothing for existing Node.js users (this PR doesn't remove `npm` from the Node.js project, and you can still install Yarn separately from Node.js), it's meant to improve the experience of new users.
+* Reasons for integrating Yarn v1 (rather than v2) are outlined in https://github.com/nodejs/node/pull/37277#issuecomment-775586604 and more in depth in https://github.com/nodejs/node/discussions/37193#discussioncomment-341160
+* Please keep the discussion focused on Yarn v1, integration of other package managers can happen in a separate issue. +++$+++ 23 +++$+++ 82
+COM0 +++$+++ SP502396 +++$+++ ROOT +++$+++ ROOT +++$+++ 2021-02-08T22:53:15Z +++$+++ I am -1 based on the fact that Yarn v1 (a.k.a. anything other than Berry) is frozen. That does not sound like a dependency that we should be taking on imo.
+
+From [yarnpkg/yarn](https://github.com/yarnpkg/yarn):
+
+> The 1.x line is frozen - features and bugfixes now happen on https://github.com/yarnpkg/berry +++$+++ 28 +++$+++ 0
+COM1 +++$+++ SP1037931 +++$+++ ROOT +++$+++ COM0 +++$+++ 2021-02-08T23:04:38Z +++$+++ @bnb This point is discussed (and answered) [there](https://github.com/nodejs/node/discussions/37193#discussioncomment-341160). As the maintainer of both release lines I don't mind discussing it further, but I think this linked thread would be a better opportunity to discuss these topics than an implementation PR - both for ergonomic reasons and because it's already been answered.
+
+Just to be clear, I don't mind waiting for a TSC evaluation. I've only contributed to Node a couple times, and processes / ownerships are still a bit fuzzy to me. I'm happy to wait for the decision of whoever group is in charge of this kind of work. At least the implementation exists and provides a concrete picture of what the outcome would be. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP502396 +++$+++ ROOT +++$+++ COM1 +++$+++ 2021-02-08T23:37:51Z +++$+++ @arcanis I appreciate the content there but it does not address my concern. The fact that Yarn v1 is frozen is a massive red flag to me as a 'new' dependency. IMO that context deserves to be held in the PR to add a dependency if it is a concern.
+
+You assert that you expect people to stop using Yarn in favor of Berry, and have data to back that up. Further, you assert that the only changes you're planning on making are security changes - this is relatively well demonstrated by the [backlog of PRs](https://github.com/yarnpkg/yarn/pulls) that are submitted solving issues that users are having but aren't being merged or addressed, including tiny ones like [fixing broken links](https://github.com/yarnpkg/yarn/pull/8427).
+
+From the perspective of looking at Node.js over the next few years - rather than the short-term benefit of such a change - I frankly cannot see a reason why the Node.js project would take something on that's actively and intentionally being migrated off of as a result of the maintainers' choice in direction for it and isn't addressing problems end-users are facing outside of security issues. +++$+++ 27 +++$+++ 1
+COM3 +++$+++ SP1037931 +++$+++ ROOT +++$+++ COM2 +++$+++ 2021-02-09T01:32:20Z +++$+++ > I frankly cannot see a reason why the Node.js project would take something on that's actively and intentionally being migrated off of as a result of the maintainers' choice in direction for it and isn't addressing problems end-users are facing outside of security issues.
+
+That's because you're deriving an incorrect premise, which is that Yarn 1 doesn't address problems end-users are facing. To reiterate:
+
+**Yarn 1 isn't legacy**
+
+Yarn 1, as it is, is fine. It has its flaws, and some people would like more features, but, and that's critical, **its value comes from its stability**. People using Yarn 1.x right now have a project that already works. They may hit edge cases every once in a while, but the whole reason they use it is that they mostly figured out that the tradeoff was still value-positive for their current project. **Being frozen is a feature**, it's a gift that we are giving. It means that existing users won't get accidental regressions or bugs. **Yarn is about stability, and putting our users in control.** You shouldn't need to upgrade just because we release something new.
+
+Yarn 2 is technologically better in many aspects. It would be easier for us to simply say that it should be the global binary at all time and that's it - similar to how npm is distributed. But different projects value different things, and in our case we care a lot about giving each user exactly the version they expect - whether it's Yarn 1, 2, 3, or 42. We care about it so much that we introduced a builtin feature for that three years ago, that we made it the default a year ago, and that we started the discussions around Corepack three months ago.
+
+Of course it means that not all users are necessarily on the latest release. That's fine! Because they already have a tool that solves their needs right now, and because we'll never break semantics by redefining existing fields or ranges - as that would negatively affect past users by forcing them to upgrade. Now, perhaps later their use case will evolve, they'll need better perfs, or to solve a particular bug, or to implement something on their own, and they'll upgrade to the latest release, which will keep receiving regular bugfixes and new features. But perhaps not, and that's fine, because they will still follow an explicitly supported use case. +++$+++ 5 +++$+++ 4
+COM4 +++$+++ SP502396 +++$+++ ROOT +++$+++ COM3 +++$+++ 2021-02-11T18:16:35Z +++$+++ >That's because you're deriving an incorrect premise, which is that Yarn 1 doesn't address problems end-users are facing.
+
+At no point am I basing my assertion in that on the premise that Yarn 1 doesn't address problems end-users are facing. Bower is a good tool that solve(d/s) problems that end-users were facing. There are absolutely still people using it in production, and it still "works" as far as I'm aware.
+
+That's not justification for being bundled in Node.js, imo.
+
+> Yarn 1, as it is, is fine. It has its flaws, and some people would like more features, but, and that's critical, its value comes from its stability. People using Yarn 1.x right now have a project that already works. They may hit edge cases every once in a while, but the whole reason they use it is that they mostly figured out that the tradeoff was still value-positive for their current project. Being frozen is a feature, it's a gift that we are giving. It means that existing users won't get accidental regressions or bugs. Yarn is about stability, and putting our users in control. You shouldn't need to upgrade just because we release something new.
+
+I can understand where you're coming from here, but this sounds like a pitch to me. It feels like justification of decisions without crediting the potential trade-offs or drawbacks of those decisions.
+
+There's so much to deconstruct in this bit so rather than doing it in paragraphs, I'm going to try to summarize in bullets:
+
+* "It has its flaws" there are bug reports and PRs to patch them that are going unmerged. This is a very... simple and kind way to frame this.
+* "People using Yarn 1.x right now have a project that already works." People using pnpm, bower, or jspm also have projects that work. If they're already using it and have a workflow that works for them, why do we need to include Yarn in Node.js? Why is yarn different from those other package managers?
+* "They may hit edge cases every once in a while, but the whole reason they use it is that they mostly figured out that the tradeoff was still value-positive for their current project." Same point as above. If they're already using it and have a workflow around that, what is the reason to add it to Node.js?
+* "Being frozen is a feature, it's a gift that we are giving." Framing a decision you've made as a "gift" implies that the recipient should be grateful. If they're not, that sets them up to be the villain. Frankly, I don't really think this framing has a space in this PR nor, honestly, to our users.
+* "It means that existing users won't get accidental regressions or bugs. Yarn is about stability, and putting our users in control." How is this different than permanently pinning to a package manager version across a company? I can use the first-ever published version of Yarn and expect the same, just like I can for npm, pnpm, Bower, or jspm.
+* "You shouldn't need to upgrade just because we release something new." Wasn't your previous assertion that you're only going to be doing security releases from now on?
+
+I am entirely familiar with the arguments around projects being "done" and feature complete. I think that those reasons are entirely fine within userland. Where I think we need to be more critical of that is when we're committing it into Node.js in a way that is effectively irrevocable.
+
+> that we started the discussions around Corepack three months ago.
+
+Is Corepack still progressing? If so, why are we considering this PR since Corepack would theoretically replace it?
+
+> Of course it means that not all users are necessarily on the latest release. That's fine! Because they already have a tool that solves their needs right now
+
+Again, if they already have the tool why are we putting it in Node.js core? Doing so would _force_ them to change their existing workflows - including involuntarily upgrading users who are on an older version - which seems to be antithetical to the stated goals of Yarn. +++$+++ 15 +++$+++ 0
+COM5 +++$+++ SP1037931 +++$+++ ROOT +++$+++ COM4 +++$+++ 2021-02-11T18:34:41Z +++$+++ > Again, if they already have the tool why are we putting it in Node.js core? Doing so would _force_ them to change their existing workflows - including involuntarily upgrading users who are on an older version - which seems to be antithetical to the stated goals of Yarn.
+
+I don't think you understand this diff, or how Yarn is distributed. All versions of Yarn act both as a package manager and a jumper (similar, if you will, to `gulp-cli`). If it finds a `yarnPath` entry in `.yarnrc.yml`, it will use it instead of the global one. In other words, older projects will use Yarn 1 (because that's the global version used as fallback when nothing is found), or the checked-in package manager if it finds the right configuration to do so. Put simply, everyone gets what they ask for. There is no "involuntarily upgrading users who are on an older version". On the other hand, it does require *a* Yarn to be globally available.
+
+> I can understand where you're coming from here, but this sounds like a pitch to me. It feels like justification of decisions without crediting the potential trade-offs or drawbacks of those decisions.
+
+Let's be clear - you're telling *me* that I don't credit trade-offs or drawbacks, on a project I maintain, for a protocol that was designed a year ago, and for which noone has reported any automated breakage of any system, while still being able to migrate at the time of their choice. At this point I don't know what to tell you.
+
+> Is Corepack still progressing? If so, why are we considering this PR since Corepack would theoretically replace it?
+
+[That's answered](https://github.com/nodejs/node/discussions/37193#discussioncomment-332122).
+ +++$+++ 0 +++$+++ 3
+COM6 +++$+++ SP502396 +++$+++ ROOT +++$+++ COM5 +++$+++ 2021-02-11T19:16:01Z +++$+++ > Put simply, everyone gets what they ask for.
+
+Are you 100% certain, without question, that nobody is relying on the global yarn to be a specific version rather than using `yarnPath`? If there is _anyone_ who is and they upgrade, it'll very quickly become our problem.
+
+> you're telling me that I don't credit trade-offs or drawbacks, on a project I maintain
+
+Yes. In the paragraph you wrote - which is clearly what I was replying to - you only focus on the aspirational positives of Yarn v1 being frozen (outside of security updates, which you'd mentioned in a previous comment) without addressing potential trade-offs or drawbacks in a neutral way. I'm not sure how that's seemingly absurd or controversial to you.
+
+> That's answered.
+
+You point to the Binary Management Discussion, which is somewhat about Corepack but ended up being more about version management. The [PR](https://github.com/nodejs/node/pull/35398) you opened, says this:
+
+>In short, the intent is to provide standard shims that allow users to run Yarn and pnpm commands without having to explicitly install them first, and without cluttering the Node distribution.
+
+I fail to see how this PR is not entirely antithetical to the goal of including Corepack and does not "clutter the Node distribution" +++$+++ 9 +++$+++ 0
+COM7 +++$+++ SP1037931 +++$+++ ROOT +++$+++ COM6 +++$+++ 2021-02-11T19:37:59Z +++$+++ > Are you 100% certain, without question, that nobody is relying on the global yarn to be a specific version rather than using `yarnPath`? If there is _anyone_ who is and they upgrade, it'll very quickly become our problem.
+
+No 2.x stable release was ever made on the npm registry. The last one which was, `2.0.0-rc.27` (out of 36), was only assigned to a `berry` tag. I'm positive no Yarn 2 user relies on a specific global version.
+
+As for Yarn 1 users, past releases were semver-compliant, so 1.22.5 (the latest one) can installs the whole 1.x line. I would also point out that this wouldn't be any different from how npm releases work: you recently upgraded npm from 6 to 7, which is far riskier than Yarn 1.20 to 1.22 - at least semver-wise. +++$+++ 2 +++$+++ 0
+COM8 +++$+++ SP9373002 +++$+++ ROOT +++$+++ COM7 +++$+++ 2021-02-25T21:49:06Z +++$+++ Discussed in the meeting today:
+
+Consensus seems to be to try to do survey to get more information to help TSC members understand the need before calling a vote. Next step is to find volunteer to drive survey as we had no volunteers in the meeting. More details in: https://github.com/nodejs/TSC/pull/973/files and you can also watch the recording https://youtu.be/7WJ1p-W56nY at around 10:00 minutes in.
+ +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP4048656 +++$+++ ROOT +++$+++ COM8 +++$+++ 2021-02-25T22:27:22Z +++$+++ @mhdawson it was also suggested that we invite @arcanis to a meeting to make a case in favor of this PR before we move to a vote. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP1037931 +++$+++ ROOT +++$+++ COM9 +++$+++ 2021-02-26T00:00:26Z +++$+++ Sounds good 👍
+
+Only remark I have: as we probably all know, which package managers people use tend to be a quite polarizing topic, where both communities can sometimes display a certain lack of empathy. Years ago it was Emacs v Vim, then Tabs v Space, and nowadays Yarn v npm. I feel the need to mention this, because studies have shown that those who oppose tend to be more vocal than those who support, especially when the opposition is the status quo.
+
+Given that the primary goal (at least for me) is to help current users, not necessarily acquire new ones, I'd be wary of the survey wording. Specifically, I'd be cautious about not making it look like a "two parties" question. In my opinion, the survey would benefit by proving not only that a segment of the Node community would be positively impacted by this change, but also that even those who wouldn't directly benefit from it *wouldn't be negatively impacted* either.
+
+For instance, rather than "would you like it? Y/N/neutral", which could incite non-Yarn users to answer N rather than neutral, perhaps a more suitable question would be "would it benefit your workflows? Y/N; would it impede your workflows? Y/N" (perhaps with a "Why?" box on each, to get testimonies on both sides). Basically focusing on the effects rather than the feelings. My 2 cents.
+
+(One last note in the meantime, @jasnell made an informal Twitter poll pretty much about this about a year ago; while the results are incomplete with only 378 answers, it can help set expectations and perhaps give ideas about wording: https://github.com/nodejs/node/discussions/15244#discussioncomment-99336) +++$+++ 6 +++$+++ 0
+COM11 +++$+++ SP2352663 +++$+++ ROOT +++$+++ COM10 +++$+++ 2021-04-01T06:56:53Z +++$+++ I started a test release build so we can check the result on all platforms. Will post the download link when it's ready.
+~https://ci-release.nodejs.org/job/iojs+release/6772/~ https://ci-release.nodejs.org/job/iojs+release/6773/ +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP2352663 +++$+++ ROOT +++$+++ COM11 +++$+++ 2021-04-01T11:31:12Z +++$+++ Here it is: https://nodejs.org/download/test/v16.0.0-test5708b0c1e5/ +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP2352663 +++$+++ ROOT +++$+++ COM12 +++$+++ 2021-04-01T15:08:51Z +++$+++ [license-builder](https://github.com/nodejs/node/blob/master/tools/license-builder.sh) should be updated to add Yarn's license to our distribution. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP496775 +++$+++ ROOT +++$+++ COM13 +++$+++ 2021-04-01T17:27:15Z +++$+++ What will the planned future of the Yarn v1 be? Every project, which was once feature freezed, is to be sunset. There is v2 and there may be  v3, etc. The time will come when the user group is very small or 0.
+Do you have any metrics which shows the trend of the v1 usage?
+
+Node.js has a release calendar that makes changes planable.
+
+A lifetime plan for Yarn v1 is needed too, specially in the current case when it can be one of the elements of the Node.js installer.
+
+Honestly, I would like to remove it from the official docker images, too. The time will come when the question is raised:
+- keep Yarn v1 and add v2 to the docker image
+- replace Yarn v1 with v2
+
+Sorry for the extra topic I just wanted to highlight this question, too. +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP1037931 +++$+++ ROOT +++$+++ COM14 +++$+++ 2021-04-01T17:46:31Z +++$+++ > What will the planned future of the Yarn v1 be? Every project, which was once feature freezed, is to be sunset.
+
+It's fairly frustrating to see my words being repeatedly [ignored](https://github.com/nodejs/node/pull/37277#issuecomment-775586604). Perhaps consider that the idea may have been tossed around *a few times already* (including on this very repository, and in this very thread) and that there's a reason why the Yarn core team is doing a PR adding Yarn 1 (which acts as a jumper for both v1 and v2 users), and not Yarn 2 (which does not).
+
+If we are to work together for the sake of our users I'd expect to see trust go both ways. +++$+++ 5 +++$+++ 5
+COM16 +++$+++ SP439929 +++$+++ ROOT +++$+++ COM15 +++$+++ 2021-04-01T18:15:38Z +++$+++ @nodejs/tsc ... What do we need to do at this point to get this moving forward? I'd like to see this move forward. +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP496775 +++$+++ ROOT +++$+++ COM16 +++$+++ 2021-04-01T18:22:09Z +++$+++ Sorry, you are right I skipped the discussion.
+I read it and I found the answer to many question. +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP9373002 +++$+++ ROOT +++$+++ COM17 +++$+++ 2021-04-01T20:04:49Z +++$+++ @jasnell it is waiting on a volunteer to move the survey forward that was discussed in the TSC meeting.
+
+@Trott also mentioned that he might use it to test out an RFC processes he was thinking of proposing.
+
+Not sure if there was discussion in the meeting today as I was not able to be there, but last week we agreed that if there is no progress with 2-3 weeks on either of those we'll just put it to a vote of the TSC. +++$+++ 1 +++$+++ 0
+COM19 +++$+++ SP952783 +++$+++ ROOT +++$+++ COM18 +++$+++ 2021-04-01T23:11:52Z +++$+++ I would really like to push for Yarn not to be included in Node. As a project it has abandoned its original intentions which made Yarn v1 appealing to the Node community. And the new direction of the Berry project has led to massive confusion and division in the community. At the same time, npm has addressed the original concerns that led to the creation of Yarn in the first place, and has shown a far more stable path forward for the community. +++$+++ 20 +++$+++ 3
+COM20 +++$+++ SP983798 +++$+++ ROOT +++$+++ COM19 +++$+++ 2021-04-09T18:51:23Z +++$+++ My main concern about Yarn v1 is that [bugs are now being closed](https://github.com/yarnpkg/yarn/issues/7610) as "fixed in v2" which is not what you do in a maintained major version. These kinds of bugs are complete show stoppers for some private registries. Shipping an unupdatable version of Yarn as an unchanging artifact in Node leaves Node permanently broken. Bugs happen, but there needs to be some process through which they can be fixed.
+
+If this really was just a feature freeze, I would be less concerned, but as can be seen from the issue and associated PR, that's not how it's playing out on the ground.
+
+I would also add that the ecosystem needs to be able to add features to package management systems. Blessing a package manager that can't receive feature updates would reduce the ability for the Node community to adapt to changes. For instance, there's the open npm RFC to add registry dependencies -- if that lands in a way that's acceptable and adopted the major package managers still under development, it would be very uncomfortable for Node itself to be shipping with one that didn't support it. +++$+++ 33 +++$+++ 0
+COM21 +++$+++ SP1037931 +++$+++ ROOT +++$+++ COM20 +++$+++ 2021-04-09T19:17:12Z +++$+++ > here's the open npm RFC to add registry dependencies
+
+Which is a very interesting example, thanks for bringing that up. The RFC you're talking about has received strong objections from both Yarn and pnpm - objections which from what transpire from the issue don't plan to be addressed. In other words, npm being the only package manager is already putting the ecosystem at risk (at least under their current handling of RFCs).
+
+Also note that this isn't a unique occurence - in fact, it already happened a few months ago with npm 7, which tried to change how peer dependencies are semantically defined. Just like now, the RFC received early and strong pushback from both Yarn and pnpm (and other projects), but the RFC author decided to ignore them and go with it.
+
+The lack of package managers diversity (and thus neutrality) is a problem. The role of the Node TSC is to find a solution. This PR (along with others) is a way to do that. If you have a better one go for it? I don't mind seeing competing ideas. +++$+++ 3 +++$+++ 0
+COM22 +++$+++ SP45469 +++$+++ ROOT +++$+++ COM21 +++$+++ 2021-04-09T19:24:14Z +++$+++ Which peer dep RFC are you referring to? (peer deps have always been semantically required, for example; but i'm not sure if that's what you're referring to) +++$+++ 0 +++$+++ 3
+COM23 +++$+++ SP1037931 +++$+++ ROOT +++$+++ COM22 +++$+++ 2021-04-09T19:26:56Z +++$+++ > Which peer dep RFC are you referring to? (peer deps have always been semantically required)
+
+This isn't the time nor place to have this debate with you once more.
+
+> since it would have greatly fragmented the package ecosystem if many package authors had gotten the wrong idea and assumed peer deps were optional by default.
+
+You're incorrect, and I don't appreciate trying to have the last word on this argument after I told you I don't wish to debate it. +++$+++ 0 +++$+++ 6
+COM24 +++$+++ SP45469 +++$+++ ROOT +++$+++ COM23 +++$+++ 2021-04-09T19:28:34Z +++$+++ Sounds like that's indeed the change you meant, then - I wasn't trying to rehash the debate, just trying to clarify what you were referring to.
+
+In that case, I think that the ecosystem benefited hugely from having a single authority for that, since it would have greatly fragmented the package ecosystem if many package authors had gotten the wrong idea and assumed peer deps were optional by default. +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP439929 +++$+++ ROOT +++$+++ COM24 +++$+++ 2021-04-09T19:52:39Z +++$+++ @ljharb:
+> ...having a single authority for that
+
+That depends entirely on the point of view and on how accountable that authority is to the community. Even with the RFC process, npm's roadmap is still controlled by a singular commercial interest. Perhaps the better forum for such discussions would be the OpenJS Foundation, where a spec and reference implementation for such things could live while allowing competition on specific implementations. But... that's a separate conversation.
+
+@iarna does raise a valid point about ensuring that bugs that need to be fixed in the 1.x stream are fixed in 1.x. As I understand it, there's no intent on shipping yarn2 in core which means we cannot interpret "fixed in 2" as being meaningful here. @arcanis addresses that concern rather well [here](https://github.com/nodejs/node/discussions/37193#discussioncomment-341216). So long as there is a demonstrated commitment to ensuring that security and critical bug fixes are made, and that yarn1 remains functional/compatible with Node.js@latest, then I'm not sure what else can be said there that would be convincing. Specifically, no one has asserted that the yarn versions shipped in node.js would be "unupdatable".
+
+I would not expect Node.js to just accept that unquestioningly. I would expect Node.js to hold Yarn accountable to that promise that the issues would be addressed, and if it turns out the issues are not addressed and major bugs persist, then we would always have the option of removing yarn from the distribution.
+
+@iarna also said:
+> ...if that lands in a way that's acceptable and adopted the major package managers still under development, it would be very uncomfortable for Node itself to be shipping with one that didn't support it.
+
+But that's not the case here. Node.js would not just be shipping a single package manager option that did not support the feature, it would continue shipping multiple package manager options. It would be up to users to determine what they want to use -- and whether support for that new feature is important to them or not. The users would give us the necessary feedback to determine which is the right path. That said, it would be rather unfriendly to the ecosystem as a whole for a single package manager run by a singular commercial interest to unilaterally ship a new feature that would qualify as a "must support" by others. +++$+++ 3 +++$+++ 0
+COM26 +++$+++ SP9373002 +++$+++ ROOT +++$+++ COM25 +++$+++ 2021-04-09T19:59:17Z +++$+++ @jasnell with respect to your earlier questions, this issue is now open to work on/agree on what a vote should look like: https://github.com/nodejs/TSC/issues/1012 +++$+++ 1 +++$+++ 0
+COM27 +++$+++ SP983798 +++$+++ ROOT +++$+++ COM26 +++$+++ 2021-04-09T20:37:45Z +++$+++ @arcanis 
+
+>Which is a very interesting example, thanks for bringing that up. The RFC you're talking about has received strong objections from both Yarn and pnpm - objections which from what transpire from the issue don't plan to be addressed. In other words, npm being the only package manager is already putting the ecosystem at risk (at least under their current handling of RFCs).
+
+Which is exactly why I included this caveat:
+
+> if that lands in a way that's acceptable and adopted the major package managers 
+
+There were suggestions in that RFC that you expressed support for. I don't believe consensus is impossible.
+
+@jasnell 
+
+> But that's not the case here. Node.js would not just be shipping a single package manager option that did not support the feature, it would continue shipping multiple package manager options. It would be up to users to determine what they want to use -- and whether support for that new feature is important to them or not. The users would give us the necessary feedback to determine which is the right path.
+
+**Are you suggesting that the Node Foundation will be taking on responsibility for updating Yarn1 in the future, if it's included? If that were the case then my concerns would be answered.** Right now the problem is, if you have to patch Yarn1 you're SOL. You have to support floating patches forever and the version users can install independently diverges from the one bundled with Node.
+
+> That said, it would be rather unfriendly to the ecosystem as a whole for a single package manager run by a singular commercial interest to unilaterally ship a new feature that would qualify as a "must support" by others.
+
+Surely that is true, and also not afaict relevant? +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP439929 +++$+++ ROOT +++$+++ COM27 +++$+++ 2021-04-09T20:41:33Z +++$+++ > Are you suggesting that the Node Foundation will be taking on responsibility for updating Yarn1 in the future, if it's included? If that were the case then my concerns would be answered.
+
+No, I'm saying that we would look to yarn to fix those issues and if they do not we retain the option of removing it from the distribution. It's no different than the relationship with npm today. Fixes are made upstream.  +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP983798 +++$+++ ROOT +++$+++ COM28 +++$+++ 2021-04-09T20:43:11Z +++$+++ > No, I'm saying that we would look to yarn to fix those issues and if they do not we retain the option of removing it from the distribution. It's no different than the relationship with npm today. Fixes are made upstream.
+
+But, and maybe I'm misunderstanding(?), they are as a matter of  policy not making fixes. It's frozen to the degree that you can't fix bugs in it. There is no plan to have more releases of Yarn 1, is there?
+
+Edited to add: If Yarn 1 were actively maintained, receiving bug fixes, I would have no complaints. But "frozen but not legacy" isn't enough, imo. All I want is _someone_ to be responsible for it. +++$+++ 6 +++$+++ 0

@@ -1,0 +1,48 @@
+ROOT +++$+++ SP40324644 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-06-16T20:13:42Z +++$+++ Are you serious? Sorry to say, that I am totally pissed off from this worst programmed piece of software/plugin I have ever seen. With every new version something else is not working anymore. I shouldn't complain about software I had nothing to pay for, but have you ever heard something about quality management? You are releasing a version 1.0.0 that is simply not working. How couldn't this be seen? Then a few days later a "fixed" version 1.0.1 still not working. And the same with the versions in the past. Fatal errors over errors again. If you have no linux pc please install yourself a virtual machine and have at least a try before releasing such an sh... It's an effort from < 1 hour.
+
+PLEASE improve your testing in future. Thanks.
+
+Debian Stretch 9.4
+cmake version 3.11.3
+
+[fatal] [rollbar] Unhandled exception: Unhandled Promise rejection: build Error: spawn /usr/local/bin/ctest ENOENT {}
+t.log @ /usr/share/code/resources/app/out/vs/workbench/workbench.main.js:268
+/usr/share/code/resources/app/out/vs/workbench/workbench.main.js:268 [Extension Host] Error: spawn /usr/local/bin/ctest ENOENT
+	at exports._errnoException (util.js:1050:11)
+	at Process.ChildProcess._handle.onexit (internal/child_process.js:193:32)
+	at onErrorNT (internal/child_process.js:367:16)
+	at _combinedTickCallback (internal/process/next_tick.js:80:11)
+	at process._tickCallback (internal/process/next_tick.js:104:9)
+t.log @ /usr/share/code/resources/app/out/vs/workbench/workbench.main.js:268 +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP7832423 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-06-16T21:23:16Z +++$+++ @Gibson85 Have you looked up what `spawn * ENOENT` means?
+It means that it couldn't find the command/executable in question, so this doesn't really have anything to do with the extension itself.
+You could argue that unhelpful error messages are a kind of bug, but that is another issue.
+
+So, instead of ranting here, maybe you should try to find the cause of the problem and/or open a PR that fixes this kind of issue, if necessary.
+I don't have anything against bug reports, but the above is really sad... +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP354581 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-06-16T23:02:32Z +++$+++ "Sorry to say, that I am totally pissed off from this worst programmed piece of software/plugin I have ever seen."
+
+This seems unnecessarily hostile, especially given that, in your own words, - "I shouldn't complain about software I had nothing to pay for"
+
+Have you considered simply reporting the issue, without any of the assholery? Ultimately if you do think it is the "worst programmed piece of software", you do have other options. Can write your own, can use something else, or, now this is my preferred approach generally, to help the maintainer improve it without being a douche. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP17038621 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-06-16T23:16:07Z +++$+++ > I shouldn't complain about software I had nothing to pay for
+
+Then don't?
+
+I develop almost always using a Linux environment. It's *Windows* and *macOS* that receive the most bugs.
+
+I take pride in my work, even if I only do this in my free time for no payment.
+
+The 1.0.0 release was mostly a two-person effort and focused on code health. The 1.0.1 saw only fixes that were pending 1.0.1 since 1.0.0 was hugely behind schedule. I experienced hardware failures that prevented me from working for nearly two weeks. Almost no bugs that were introduced by 1.0.0 were addressed, and I was pleasantly surprised by the lack of an influx of bug reports following 1.0.0 and 1.0.1.
+
+I feel personally responsible for almost every bug that anyone opens in this issue tracker, and I strive to keep the issue count low and under control.
+
+I do not feel so keen on this ticket.
+
+Issue #428 is similar, but I closed it because I believed I had fixed it. That issue was opened by a collaborator, not a general user.
+
+I have received no automated error reports with a traceback resembling yours. I address issues based on how frequently they appear in my Rollbar account, or how frequently people react using GitHub issue tracker. No one other than a collaborator has ever reported seeing this problem.
+
+I'm going to close this and lock the conversation.
+
+If you would like to re-open another GitHub issue calmly describing your problem with less vitriol and toxicity, I will gladly add it to my next release milestone, I'll add a test case for the situation, and I'll forget that this exchange happened. +++$+++ 0 +++$+++ 0

@@ -1,0 +1,220 @@
+ROOT +++$+++ SP121766 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-08-19T23:02:47Z +++$+++ npm install funding # The experiment is over – read the [recap](https://feross.org/funding-experiment-recap/) here!
+
+Hey folks! 👋
+
+I've already spoken to a few of you about this idea, but I'd like to share it with the broader community now that `standard` 14 has shipped.
+
+**Background:** I think that the current model of sustaining open source is not working and we need more experimentation. This is one such experiment.
+
+**What's the experiment?** Whenever `standard` 14 is installed, we'll display a message from a company that supports open source. The sponsorship pays directly for maintainer time. That is, writing new features, fixing bugs, answering user questions, and improving documentation.
+
+**What's the goal?** My goal with this experiment is to make `standard` healthier. If we learn that the experiment works, perhaps we can help make all open source healthier, too. For complex reasons, companies are generally hesitant or unwilling to fund OSS directly. When it does happen, it's never enough and it never reaches packages which are transitive dependencies (i.e. packages that no one installs explicitly and therefore no one knows exists). Essentially, we have a public good which is consumed by huge numbers of users, but which almost no one pays for. Fortunately, there exists a funding model that usually works for public goods like this – ads. The goal of this experiment is to answer the question: Can we use ethical ads – ads that don't track users or collect data – to fund open source software?
+
+**What does the code do?** The code for this experiment is available here: [`feross/funding`](https://github.com/feross/funding). Essentially, it calls `console.log()` on some text. There is no tracking, data collecting, or unexpected behavior. You can look at the code to verify – indeed, this is the beauty of open source!
+
+**What will the funds be used for?** The funds raised so far ($2,000) have paid for Feross's time to [release Standard 14](https://standardjs.com/changelog.html#1400---2019-08-19) which has taken around five days. If we are able to raise additional funds, the next thing I'd like to focus on is out-of-the-box TypeScript support in StandardJS (one of the most common feature requests!) and modernizing the various text editor plugins (many of which are currently unmaintained). If others in the community are interested in taking the lead on any of these issues, I'd like to direct some funds to you.
+
+Feedback welcome!
+
+---
+
+## EDIT: This thread is now locked :lock:
+
+For why + next steps, [scroll to the end >>](https://github.com/standard/standard/issues/1381#issuecomment-524589455)
+
+## EDIT: The experiment is over – Feross posted [a recap](https://feross.org/funding-experiment-recap/) on his blog +++$+++ 47 +++$+++ 704
+COM0 +++$+++ SP587740 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-08-20T15:09:29Z +++$+++ > Feedback welcome!
+
+I noticed the (fairly large bright bold) banner. It reminds me of the OpenCollective-style banners used by webpack / corejs.
+
+![image](https://user-images.githubusercontent.com/587740/63358843-b47aa700-c339-11e9-991a-0c9f78f51373.png)
+
+I think it's OK... I do worry that `npm install` will just become a long trail of banner ads though eventually and it won't scale. Because if _every_ npm package adds ads, the noticeability of each ad will diminish. (Interestingly, the most valuable "realestate" will be packages whose banner is displayed _last_, so if it becomes a literal "race-to-the-bottom" people might add `sleep` statements to their post-install scripts so they are displayed nearest the bottom. What a dystopian installation experience!)
+
+Fun fact: `yarn` does not display the output of post-install scripts. One might say yarn has built-in ad-blocking. +++$+++ 232 +++$+++ 4
+COM1 +++$+++ SP303226 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-08-20T19:36:57Z +++$+++ While I'm totally OK with this on development machines, I think this is strange behavior for staging/production/etc.  Perhaps https://github.com/feross/funding/blob/master/index.js should have a NODE_ENV check?
+
+Then again, I don't imagine `standard` is going to be installed outside of NODE_ENV={test, development} anyway... so it's probably OK! +++$+++ 1 +++$+++ 62
+COM2 +++$+++ SP2665886 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-08-21T23:17:55Z +++$+++ I am whole-heartedly behind this experiment.
+It's not the perfect end solution, but that's not the point - it's about moving the conversation about how to build healthy relationships between our commons and companies forward.
+
+Thanks for taking leadership on this @feross .  +++$+++ 9 +++$+++ 126
+COM3 +++$+++ SP14796043 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-08-21T23:31:27Z +++$+++ Admittedly, I haven't contributed an immense amount to open source code, so I realize I don't have the same perspective on this issue. That being said, I sincerely hope that this solution does not become standard. 
+
+I agree wholeheartedly that this is a problem that needs a solution, and I am glad that the conversation is being pushed forward by this experiment. Advertisements in my terminal is not the solution.
+
+For me, `yarn` or `"standard": "^13.0.0"` is going to have to be my "standard" until this is removed.
+
+[Fifteen Million Installs](https://en.wikipedia.org/wiki/Fifteen_Million_Merits) +++$+++ 161 +++$+++ 3
+COM4 +++$+++ SP1466140 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-08-22T14:51:51Z +++$+++ I'm with @morgansliman, of any place I don't want to see ads, my terminal is on the top of that list.
+
+I would a low a "buy me a coffee"-link, but that's about it.
+
+On another note: For me, it was totally not clear that this ad was for a company that donates to `standard`. So it took me a while to figure out where this ad came from. So I'm not sure what the ad should convey, but I don't think it is the feeling "what is this and how do I get rid of it?". +++$+++ 89 +++$+++ 0
+COM5 +++$+++ SP13974112 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-08-22T16:02:01Z +++$+++ First off, I love standard and use it in all my JS projects. Thank you so much for your hard work in making a fantastic, easy-to-use, and solid linter.
+
+I was really taken off guard seeing this in my terminal today. It's the last place I expect to see an ad, and really the last place I want to. While I get the idea behind it, and I agree that we must think of innovative ways to support open-source, relying on displaying an ad in a place that typically doesn't have them opens up the doors to new behavior of ad spamming when I simply want to install a dependency.
+
+I'm not saying this is the case here, but let's say that this really frustrates a percentage of developers and they decide to no longer use the project/tool/library, but the project does see an uptick in sponsorship. More than likely they'd see that as a win, and this could slowly shift the focus from a community-driven project to a sponsorship-driven project (and not as in individual sponsors, but company sponsorship). Again, I'm not saying this is the case here, but you can sort of see how that could happen if this becomes a normal practice in how we try to support open-source projects.
+
+I'd much rather see an innovative solution that tries to encourage individual community members to give more to projects they want to support rather than relying on sponsorship ads.
+
+Finally, I also agree with @mhogerheijde, when I first saw this I was confused, and my initial thought was to immediately find the package and to remove it since it wasn't clear at all where this was coming from or why an ad was in my terminal.
+
+EDIT: spelling
+
+ +++$+++ 29 +++$+++ 0
+COM6 +++$+++ SP2665886 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-08-22T20:00:33Z +++$+++ Great point that it could be more clear why the ads there, and specifically
+that it's making the tools you love maintainable.
+
+I think if you're not into it, then the obligation is in you to put some
+work in to come up with more aligned solutions.
+
+Enthusiastic verbal support does not help maintainers thrive.
+
+At the moment many of them are generously giving and experience a few
+breadcrumbs of thanks in return.
+
+I want to live in a world where maintainers have enough to pay rent, eat
+food, have health care, save money, dream about big future projects.
+
+
+
+On Fri, 23 Aug 2019, 04:02 Chris, <notifications@github.com> wrote:
+
+> First off, I love standard and use it in all my JS projects. Thank you so
+> much for your hard work in making a fantastic, easy-to-use, and solid
+> linter.
+>
+> I was really taken off guard seeing this in my terminal today. It's the
+> last place I expect to see an add, and really the last place I want to.
+> While I get the idea behind it, and I agree that we must think of
+> innovative ways to support open-source, relying on displaying an add in a
+> place that typically doesn't have them opens up the doors to new behavior
+> of add spamming when I simply want to install a dependency.
+>
+> I'm not saying this is the case here, but let's say that this really
+> frustrates a percentage of developers and they decide to no longer use the
+> project/tool/library, but the project does see an uptick in sponsorship.
+> More than likely they'd see that as a win, and this could slowly shift the
+> focus from a community-driven project to a sponsor-driven project. Again,
+> I'm not saying this is the case here, but you can sort of see how that
+> could happen if this becomes a normal practice in how we try to support
+> open-source projects.
+>
+> I'd much rather see an innovative solution that tries to encourage
+> individual community members to give more to projects they want to support
+> rather than relying on sponsorship adds.
+>
+> Finally, I also agree with @mhogerheijde <https://github.com/mhogerheijde>,
+> when I first saw this I was confused, and my initial thought was to
+> immediately find the package and to remove it since it wasn't clear at all
+> where this was coming from or why an add was in my terminal.
+>
+> —
+> You are receiving this because you commented.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/standard/standard/issues/1381?email_source=notifications&email_token=AAUK3HVSVRIKOQRBTT2VO2TQF22BFA5CNFSM4INH7WL2YY3PNVWWK3TUL52HS4DFVREXG43VMVBW63LNMVXHJKTDN5WW2ZLOORPWSZGOD45SDTI#issuecomment-523968973>,
+> or mute the thread
+> <https://github.com/notifications/unsubscribe-auth/AAUK3HTGZ2JHVTQG6C4XLADQF22BFANCNFSM4INH7WLQ>
+> .
+>
+ +++$+++ 6 +++$+++ 65
+COM7 +++$+++ SP1466140 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-08-23T07:20:08Z +++$+++ This isn't about having our cake and eating it too. Selling ad-space is not innovative. And it's particularly unhelpful in my logs.
+
+I don't fully agree with @ckipp01 on the sponsorship driven OSS. It is a risk, but it already exists outside of selling ad-space in logs.
+
+For me, the issue is more that I don't want stuff that doesn't help me in my logs. I wholeheartedly agree with putting your "supported by company X" in the readme. That helps me understand, it does resonate with me when I see certain companies donating money to OSS.
+
+By the way, just stating that "if you don't like it, come up with a better solution" is a cop-out. There _is_ value in feedback, _especially_ when you don't agree.
+
+EDIT: PS: I too want to live in a perfect world where every developer can live, pay rent and only work on projects they like. That perfect world for me does not include ads in my terminal.
+
+EDIT2: PPS: Support of my peers for me is a _big_ reason to work on stuff. I know others that earn enough in their day-job that they enthusiastically spend time on OSS in their free time as a hobby and get value out of verbal support from their peers. That support is more often than not shown in a verbal/written way. +++$+++ 80 +++$+++ 0
+COM8 +++$+++ SP3055345 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-08-23T08:21:40Z +++$+++ > By the way, just stating that "if you don't like it, come up with a better solution" is a cop-out.
+
+Fact of the matter is, OSS maintainers need money _today_. Better solutions may come along; putting up with ads in the mean time is a small price to pay. While I don't particularly like seeing ads in this space, I understand its necessity and fully support it.
+
+I do agree that:
+
+> it could be more clear why the ads there, and specifically that it's making the tools you love maintainable. +++$+++ 12 +++$+++ 66
+COM9 +++$+++ SP8430123 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-08-23T09:12:25Z +++$+++ That reminds me of the article https://www.theatlantic.com/technology/archive/2014/08/advertising-is-the-internets-original-sin/376041/ . Basically, our hated ads-driven business model of internet (google, facebook, ...) was forced to original publishers by people.... (posting it as a slight OT because when people dont know history, they tend to make same mistakes and desicisons) +++$+++ 7 +++$+++ 0
+COM10 +++$+++ SP1559888 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-08-23T09:32:02Z +++$+++ Hi @feross, I would favor advertisements for services that you would be willing to offer, either personally or from a company that you own and run. +++$+++ 3 +++$+++ 11
+COM11 +++$+++ SP1466140 +++$+++ ROOT +++$+++ COM10 +++$+++ 2019-08-23T09:37:30Z +++$+++ @vweevers Nobody is denying that money needs to flow to OSS maintainers. I don't mind putting up with ads _anywhere else_ than in the logs of my build. There is plenty of space in things like README's and landing pages for links to sponsors and patreon(-like) solutions. Logs for me are a way of doing my job. I will (try to) weed out anything that negatively impacts my ability to do work.
+
+Also, consider the effect that letting people know that you've got sponsoring can diminish the amount of support you get from your peers, as Matthias Wandel points out in one of his videos: https://www.youtube.com/watch?v=SToyIb9tNiY
+
+@ArcanisCz interesting read!
+
+@brodybits you mean you prefer ads for services from @feross over 3rd party ads? I agree, I probably wouldn't make this much a fuss if the advertisement was a single line with a link to buy them a cup of coffee or a side-project. +++$+++ 38 +++$+++ 0
+COM12 +++$+++ SP1559888 +++$+++ ROOT +++$+++ COM11 +++$+++ 2019-08-23T10:03:29Z +++$+++ > @brodybits you mean you prefer ads for services from @feross over 3rd party ads?
+
+Yes. +++$+++ 0 +++$+++ 3
+COM13 +++$+++ SP1037931 +++$+++ ROOT +++$+++ COM12 +++$+++ 2019-08-23T11:14:28Z +++$+++ As maintainer of Yarn I'm strongly against this pattern, although not for the reasons you might think. **Post-install scripts deoptimize packages and break workflows.**
+
+When a package has postinstall scripts, we (package managers) cannot assume anymore that it's safe to share its directory between projects. Even worse, we must extract it on the disk (in case there's a build step) even if it's actually completely unnecessary (because you only print things). We've been exploring a lot of optimisations in this space lately (Yarn 2 will keep your packages within their archives by default), and this kind of pattern will prevent your users from exploiting them to full benefits.
+
+*(Note that I'm not saying the postinstall scripts are deprecated - just that they should be reserved to the use case they were designed for, which is building a package against a local environment)*
+
+Fwiw, as is mentioned somewhere in this thread, Yarn already doesn't print the build logs unless they make the installs crash, so this post-install script wouldn't have any visible effect for our users. Still, I value the health of the ecosystem a lot, both from the point of view of maintainers and users, and I would be happy to discuss how we could satisfy this use case in a more integrated and less intrusive way (for example by adding a specific field to the `package.json`). I've actually opened [an issue](https://github.com/opencollective/opencollective/issues/1625) against the OpenCollective repo to discuss that, but it got no traction until now. +++$+++ 110 +++$+++ 0
+COM14 +++$+++ SP981957 +++$+++ ROOT +++$+++ COM13 +++$+++ 2019-08-23T12:07:57Z +++$+++ I agree with a bunch of folks here that the goal here is great, but I already have enough trouble getting devs to pay attention to warnings like "unmet peer dependencies" when an npm install is finished. Having screens of ads go by makes it impossible to see them.
+('core-js' comes to mind begging for money AND a job for the lead dev)
+
+[Update: spelling] +++$+++ 38 +++$+++ 0
+COM15 +++$+++ SP3149669 +++$+++ ROOT +++$+++ COM14 +++$+++ 2019-08-23T12:21:15Z +++$+++ Companies should sponsor OSS projects because they use them. Not to get ads in front of the project's users.
+
+Also, this kind of thing is easily blocked so it's unlikely to be a good revenue stream anyway. +++$+++ 56 +++$+++ 0
+COM16 +++$+++ SP29307652 +++$+++ ROOT +++$+++ COM15 +++$+++ 2019-08-23T14:13:21Z +++$+++ I'm all for (better) compensation of OSS developers but I will go lengths to avoid ads, just any ads in general. Ads are a toxic pest in modern days, wherever you go you're slammed with them. The console is not intended for this either.
+
+If this means I have to change a dependency or library to not have ads, I will do it, not because you don't deserve money, but because you're intruding an area you're not supposed to intrude by design. 
+
+_Edited a word. _  +++$+++ 40 +++$+++ 0
+COM17 +++$+++ SP8526819 +++$+++ ROOT +++$+++ COM16 +++$+++ 2019-08-23T14:13:56Z +++$+++ If a company is advertising in my terminal, even if they're technically sponsoring a project as means to do so, I will do everything I can to avoid that company. Whether or not they know it, I'm pretty sure this is the exact opposite of the sort of publicity these sponsors would want among developers. +++$+++ 103 +++$+++ 1
+COM18 +++$+++ SP6632738 +++$+++ ROOT +++$+++ COM17 +++$+++ 2019-08-23T14:24:11Z +++$+++ My terminal is the one last stronghold, the one last haven of peace that doesn't endlessly serve me ads from corporate overlords all day long. I vehemently oppose this idea as I believe it is fundamentally opposed to the open source ethos we've built up over decades. 
+
+Yes, it's important to help out open source contributors and project owners - but ads are not the solution.  +++$+++ 73 +++$+++ 0
+COM19 +++$+++ SP1559888 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-08-23T16:19:15Z +++$+++ -1 for that kind of non-permissive licensing, it does not even seem to fit the definition of "open source" ref:
+* https://opensource.org/osd#persons-or-groups
+* https://opensource.org/osd#fields-of-endeavor
+
++1 for offer of services from the primary author, which is sometimes needed to help with open-source sustainability
+
+-1 for promotion of third-party products or services (noisy, distracting, etc.) +++$+++ 7 +++$+++ 0
+COM20 +++$+++ SP598803 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-08-23T18:44:26Z +++$+++ The package maintainers are welcome to do as they see fit. However, I would like a way to opt-out entirely from this package ever being install into my system. As far as I can tell, that is not possible with NPM.
+
+https://npm.community/t/blacklist-entire-packages/9659 +++$+++ 29 +++$+++ 0
+COM21 +++$+++ SP4481831 +++$+++ ROOT +++$+++ COM20 +++$+++ 2019-08-23T18:59:55Z +++$+++ This does 2 things, 1 is objectively bad and one is subjective.
+
+1. Encourages users to run with `--silent` as an adblocker 
+    - Bad because it means users won't see critical errors, security warnings etc
+    - If we can agree it's bad to encourage users to ignore key warnings, we inherently agree that polluting the output of `install` is bad _for the exact same reason_.
+2. It's the most annoying thing you could possibly do as a package maintainer other than remove your package.
+
+Regardless, NPM will undoubtedly decide to block any method of serving advertisements through the terminal. It doesn't matter what Standard chooses to do. +++$+++ 32 +++$+++ 0
+COM22 +++$+++ SP16427849 +++$+++ ROOT +++$+++ COM21 +++$+++ 2019-08-23T19:40:55Z +++$+++ If it will change the name of this project to something sensible, I will greet them with open arms  +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP304786 +++$+++ ROOT +++$+++ COM22 +++$+++ 2019-08-24T12:28:15Z +++$+++ Dang it. Just enabled it the other week, already going to have to raise another PR to remove from the project now :disappointed:  +++$+++ 15 +++$+++ 0
+COM24 +++$+++ SP3734297 +++$+++ ROOT +++$+++ COM23 +++$+++ 2019-08-24T12:37:33Z +++$+++ Given that this package is essentially a config file and thin wrapper script for ESLint, I am curious how much of this revenue will be shared with the upstream ESLint developers. +++$+++ 135 +++$+++ 0
+COM25 +++$+++ SP10486993 +++$+++ ROOT +++$+++ COM24 +++$+++ 2019-08-24T13:08:04Z +++$+++ We are going to need adblockers for `npm install` output now...
+
+Now I'm actually wondering how that might work... maybe just blocking specific packages' postinstall scripts would do it. For now. It's not like there's some easy way to detect sponsored messages. +++$+++ 12 +++$+++ 0
+COM26 +++$+++ SP46686565 +++$+++ ROOT +++$+++ COM25 +++$+++ 2019-08-24T13:17:58Z +++$+++ This is a very bad idea. It violates the user's right to privacy and choice.
+
+I even go farther and say that it is abuse by upstream developers (does not matter WHO these developers are; feross could be replaced by any other developer who wants to abuse users).
+
+If the goal is to seek financing, it would be better to request donations etc...
+
+Note that some users may be ok with ads, but it is NOT ok to NOT ask users whether they are fine with that. Because many are NOT fine with targeted ads. +++$+++ 9 +++$+++ 0
+COM27 +++$+++ SP5349389 +++$+++ ROOT +++$+++ COM26 +++$+++ 2019-08-24T13:18:58Z +++$+++ How can you be so smart and stupid at the same time. This idea is horrible. +++$+++ 21 +++$+++ 8
+COM28 +++$+++ SP10486993 +++$+++ ROOT +++$+++ COM27 +++$+++ 2019-08-24T13:21:04Z +++$+++ > Because many are NOT fine with targeted ads.
+
+In fairness, this appears to not actually be very targeted - it's just a postinstall script in the `funding` package.
+
+ +++$+++ 2 +++$+++ 0
+COM29 +++$+++ SP4991309 +++$+++ ROOT +++$+++ COM28 +++$+++ 2019-08-24T13:49:49Z +++$+++ I do love OSS and all the amazing open source projects available ❤️ and I do very much understand that funding is required now for many projects and services such as Open Collective and/or GitHub Sponsors either don't work for their needs or don't meet their funding needs.
+However, my fear is that this `experiment` will result in many more OSS projects picking it up and lead to a future where CI build logs are full of banner ads and then potentially lead to other worse advertising means.
+The user `u/crabbytag` [put it best](https://www.reddit.com/r/programming/comments/cus0zu/a_3mil_downloads_per_month_javascript_library/exy73hc?utm_source=share&utm_medium=web2x) for me and my concerns for what this could start in the future.
+
+> This reminds me of the early years of the web when websites were looking for funding. At that time, adding a banner or two brought in revenue. People were clicking out of sheer novelty effect. But as it became more widespread, people started ignoring it. Then websites had to resort to more aggressive ads - animated banners, pop-ups, pop-unders. When those started getting blocked, they moved to advanced tracking.
+The maintainer is getting $2000 for these banners because no one else is displaying ads there. Once other library authors notice this opportunity, they'll start adding ads too. Then the average payout comes down. But since we've already accepted ads here, some authors will include more annoying ads for slightly more money. For example, 2x the payout if the developer is required to take some action ('press enter to unpause the build) and 3x if the action is more annoying ('type out "Linode rocks" to unpause the build).
+
+That's just me of course but I feel like this is not the correct direction to go towards in helping to fund open source projects and we need to continue looking for another alternative. +++$+++ 14 +++$+++ 0

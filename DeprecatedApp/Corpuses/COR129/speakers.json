@@ -1,0 +1,30 @@
+{
+    "powercode": {
+        "id": "SP3505151",
+        "role": "NONE (AUTHOR)"
+    },
+    "IISResetMe": {
+        "id": "SP7413755",
+        "role": "NONE"
+    },
+    "zadjii-msft": {
+        "id": "SP18356694",
+        "role": "MEMBER"
+    },
+    "bitcrazed": {
+        "id": "SP961950",
+        "role": "CONTRIBUTOR"
+    },
+    "randomascii": {
+        "id": "SP10800041",
+        "role": "NONE"
+    },
+    "mixmastamyk": {
+        "id": "SP767039",
+        "role": "NONE"
+    },
+    "levicki": {
+        "id": "SP16415478",
+        "role": "NONE"
+    }
+}

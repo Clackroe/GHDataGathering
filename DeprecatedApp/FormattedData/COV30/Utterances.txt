@@ -1,0 +1,169 @@
+ROOT +++$+++ SP1228484 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-06-16T16:26:42Z +++$+++ Proposal: Consider using  bgfx as a rendering backend? I started using Godot lately, and I find it ingenious. I am using a Mac, and while I don't intend to release something Mac-only in the end, it is the best development platform for me, as well as many others.
+
+Following the news regarding the deprecation of OpenGL for Apple platforms I saw this issue on GitHub, https://github.com/godotengine/godot/issues/19368 and I personally feel that the issues raised by the Godot team are all valid. It also seems that the team has already planned Vulkan support, and Mac / iOS will be supported using MoltenVK.
+
+However, before this happens, I would like to throw another option to the table, which is using bgfx as a rendering backend. https://github.com/bkaradzic/bgfx
+
+BGFX has DirectX, OpenGL, and Metal support out of the box and will soon add Vulkan support (https://github.com/bkaradzic/bgfx/issues/274). MoltenVK for Mac also seems like a viable option, but it has some limitations atm (https://github.com/KhronosGroup/MoltenVK/blob/master/Docs/MoltenVK_Runtime_UserGuide.md#limitations) which I have to admit I don't know how much they affect Godot (if at all).
+
+Since BGFX's API allows supporting multiple rendering backends without changing its core API, perhaps using this instead of investing time only in Vulkan will be better for Godot in the long run?
+
+I totally respect Godot team's decisions regarding Vulkan, and I trust that if Godot chooses this path it will work as good as now - if not better. I just threw the BGFX idea in order to have some feedback on whether BGFX was something that was already considered - and what is the team's opinion on choosing BGFX instead of investing time only on Vulkan support (also having to trust that MoltenVK will always work as advertised). +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP32321 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-06-16T17:35:30Z +++$+++ See the reason why SDL was not accepted at. https://github.com/godotengine/godot/pull/16470 +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP1228484 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-06-16T17:47:28Z +++$+++ Can you please elaborate on how the SDL issue is relevant?
+
+SDL was considered as an abstraction layer on user input systems and getting rendering contexts ready to use.
+
+Bgfx, however, allows full and API-agnostic rendering. 
+
+Do you mean that maintenance of an additional abstraction layer in Godot would be painful? +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP32321 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-06-16T18:07:05Z +++$+++ See: https://github.com/godotengine/godot/pull/16470#issuecomment-364070439
+
+Summary of points:
+
+\<Reduz> Imagine a situation where we use SDL2 and drop the existing backends. What happens every time we need a platform specific feature not available on SDL2? (Something it happens often) . We have the following scenarios:
+
+\<Reduz> Added to that, the problem is that we may need to add something that SDL does not support and, while for us it's something specific with a simple use, while adding this function to SDL may involve creating a large API with all the functions that are needed for abstraction.
+
+\<Reduz> I'm sorry, no matter how I try to think of ways we could use SDL, it's always more disadvantages than advantages.. 
+
+Now replace SDL with BGFX. 
+
+There are two parts of abstraction. A) low level abstraction B) construction of the rendering pipeline for mobile (gles2) vs pc (vulkan)
+
+Using bfgx only helps for A), B) needs to rebuilt. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-06-17T11:17:46Z +++$+++ possible dumb question incoming:
+but, when vulkan rendering stuff gets complete, it would negate this issue right?
+
+i imagine time spent on vulkan will far supersede bgfx, or other rendering systems +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP1228484 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-06-17T14:19:52Z +++$+++ @girng correct.
+
+@fire the way I understand your comments, it's an issue of third party support (what if Godot needs something that bgfx does not offer in the future), and having full control over the implemented features.
+
+I get it, but I also hope that Vulkan works as advertised as well. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP6265307 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-06-19T15:52:19Z +++$+++ This option was discussed and discarded in the past (as you can imagine), but since this was not discussed in an issue, I will take the time to explain why BGFX is not an option.
+
+1) There are two main platforms that need to be supported. Modern Desktop PC (OpenGL ES 3, and later Vulkan) and mobile including medium and low end (OpenGL ES 2). These APIs are not programmed the same way, so a "wrapper" to simplify the work is impossible. GLES3/Vulkan uses UBOs, VAOs, TBOs. shaders with integers and plenty of features. GLES2 is very basic and supports none of that, so different approaches need to be used to write a back end. Modern hardware also uses certain rendering techniques (HDR/clustered/single pass shading), while low end uses other techniques (LDR/multipass). As such, being a fact that pretty much no code is shared between backends, BGFX does not save the work of having to write two backends for different hardware.
+
+2) Having an extra layer of complexity in the middle makes things more complex, and makes debugging more difficult. Contributors would need to learn BGFX to write rendering code instead of a more standard API like Vulkan or OpenGL, out of which there is plenty of documentation and examples. If you want to use tools for debugging Vulkan or OpenGL, they will be confusing with BGFX as a backend too. As net worth, BGFX as a middle layer is a negative point here, not a positive one.
+
+3) Khronos has the [Vulkan Portability Initiative](https://www.khronos.org/vulkan/portability-initiative), where they aim to run it over Metal, DirectX, etc. This is pretty much the same as BGFX, thus decreasing even further the value of  BGFX.
+
+4) Using Vulkan allows us to take advantage of extensions and new features on bleeding edge hardware much faster than using BGFX.
+
+5) Our contributors are part of the Khronos Advisory Board, so by using Vulkan we can give valuable feedback of our experience to hardware manufacturers, making sure they hear us when woring on future versions of the specification.
+
+Hope it's clearer now! There is more than plenty of reasons to not use BGFX.
+
+ +++$+++ 12 +++$+++ 5
+COM6 +++$+++ SP1228484 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-06-21T18:49:38Z +++$+++ @reduz this was exactly the kind of answer I was aiming for, thanks. +++$+++ 2 +++$+++ 1
+COM7 +++$+++ SP814772 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-09-01T17:34:24Z +++$+++ @reduz Please refrain from talking negatively about bgfx when you justifying your strategic decision about Godot, since there is really no animosity between two projects. Both are open source, have their own place, and not even competitors...
+
+Whatever your strategic decision for Godot is, it's totally legit. I'm here only to defend bgfx from false statements.
+
+> There are two main platforms that need to be supported. Modern Desktop PC (OpenGL ES 3, and later Vulkan) and mobile including medium and low end (OpenGL ES 2). These APIs are not programmed the same way, so a "wrapper" to simplify the work is impossible. GLES3/Vulkan uses UBOs, VAOs, TBOs. shaders with integers and plenty of features. GLES2 is very basic and supports none of that, so different approaches need to be used to write a back end.
+
+Example of this actually exist in bgfx code base. Since bgfx is declarative API not imperative, you can actually write code that works optimally on two completely different APIs.
+
+> Modern hardware also uses certain rendering techniques (HDR/clustered/single pass shading),  while low end uses other techniques (LDR/multipass). As such, being a fact that pretty much no code is shared between backends, BGFX does not save the work of having to write two backends for different hardware.
+
+You're talking here about two different rendering pipelines, not two different renderers. Yes with bgfx too you have to implement two different pipelines to support your low-end hardware and high-end hardware. The difference is, when you use bgfx that both pipelines are avilable on all renderers. Which means that you can enable your low-end pipeline for desktop users who have old HW/OS/etc. and you can enable your high-end pipeline for mobile users who have beefy phone/table.
+
+>  If you want to use tools for debugging Vulkan or OpenGL, they will be confusing with BGFX as a backend too. As net worth, BGFX as a middle layer is a negative point here, not a positive one.
+
+This is actually nonsensical statement. When you debug rendering issues in bgfx with for example RenderDoc, PIX, or GPA, you see underlying API and they are not getting confused with bgfx.
+
+> Khronos has the Vulkan Portability Initiative, where they aim to run it over Metal, DirectX, etc. This is pretty much the same as BGFX, thus decreasing even further the value of BGFX.
+
+Not really, since bgfx is not low-level renderer.
+
+> Using Vulkan allows us to take advantage of extensions and new features on bleeding edge hardware much faster than using BGFX.
+
+If you just want to use single renderer in bgfx, and you don't care about cross-platform and feature parity between renders it's as fast to add features to single renderer with bgfx too.
+ +++$+++ 15 +++$+++ 0
+COM8 +++$+++ SP6265307 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-09-01T20:30:34Z +++$+++ @bkaradzic I never said anything negative about BGFX itself, only in the context of Godot.
+
+The point of the discussion was mainly that, given two render pipelines need to be written anyway, using BGFX is not an advantage or solution regarding to that. You answers completely missed it.
+
+For the other answers, I was not questioning whether BGFX was high or low level, or whether it can be debugged, or anything else. The point was simply that _it is_ added complexity (which is undeniable) for an use case that is redundant and provides no advantages **_in the context of Godot_**. As this added complexity does not solve our problems, there is no justification to going for it.
+
+Apologies, but I think you are being overly defensive when the whole argument was about Godot, not BGFX.
+ +++$+++ 2 +++$+++ 0
+COM9 +++$+++ SP814772 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-09-02T00:43:57Z +++$+++ > The point was simply that it is added complexity (which is undeniable) for an use case that is redundant and provides no advantages in the context of Godot. As this added complexity does not solve our problems, there is no justification to going for it.
+
+This is what I'm talking about. You're saying that bgfx would add complexity into your code base, but it's actually quite oposite, by using bgfx it removes complexity from usual code base. Once someone replaces their own renderer with bgfx, they usually have redundant code on higher level, they don't have to do state tracking anymore since bgfx deals with that, they don't have to do multiple passes over scene because bgfx allows you to submit out of order and orders draw calls for you, etc. But bgfx is complex on it's own.
+
+In the past you made statements that you want to control whole stack, and you don't want to introduce risk by adding 3rd party open source software. I find this is more honest response, since there is nothing that I can add or remove from bgfx that would make you reconsider your strategy about renderer. So no need to justify your decision about renderer by saying bgfx does or doesn't do X, Y, Z, if your decision was unrelated to bgfx as you stated before.
+ +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP6265307 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-09-02T01:39:18Z +++$+++ @bkaradzic It definitely _is_ complexity. You seem to be assuming that just because of adding BGFX support, everything will be fine and no one will ever have to learn how the underlying APIs work. 
+
+This is, unfortunately not the case and how things work in real life. This may work for APIs or libraries where you truly no longer need to care how internal implementations of things work as long as they do what they have to. Bullet is a good example of this.
+
+However, in my experience, if we were to use BGFX, contributors would still need to also know the underlying APIs as well (OpenGL or Vulkan). How else are they supposed to fine tune performance, or understand why something fails when it does? 
+
+If this was a simple game, or a tool or something like that I am sure BGFX would be fine, but thinking BGFX will fit like a glove for us and just work is very naive. We have a lot more responsibility than you do at providing something that works for our users. We need to extract the best out of the resources and performance from the underlying hardware, since we are already a middle layer ourselves.
+
+So, as I already made it pretty clear that there is no advantage to it, due to us needing two rendering pipelines, and that contributors will still need to understand the underlying rendering APIs. I hope you understand that to me it's just extra unnecessary complexity that is best kept away of Godot. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP4701338 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-09-02T08:15:17Z +++$+++ @bkaradzic I understand that you are defensive about the project you maintain, but please re-read [@reduz's arguments](https://github.com/godotengine/godot/issues/19602#issuecomment-398449702) and you'll see that there is no critic made of BGFX itself.
+
+Replace "BGFX" by "a rendering middle layer" and you'll get what @reduz meant, if it was not clear enough. @reduz doesn't even have experience using BGFX, so he can only assess the concept of a rendering middle layer and not BGFX's specific API and features.
+
+The TL;DR would be:
+
+1. A rendering middle layer wouldn't simplify things as we still need to rendering pipelines anyway.
+
+2. A rendering middle layer *is* added complexity, as we need to debug both the middle layer and the low level graphics API when facing driver-related issues.
+
+3. *If* we had to use a rendering middle layer, the Vulkan PI seems a lot more promising for our needs.
+
+4. Using Vulkan directly instead of a rendering middle layer means that we can implement new features the way we want, directly.
+
+5. We want to work with Khronos to further Vulkan's usage, and doing our own Vulkan renderer is the best approach for that.
+
+As you can see, there is no judgement of value of BGFX itself, it's just as you said:
+
+> In the past you made statements that you want to control whole stack, and you don't want to introduce risk by adding 3rd party open source software. I find this is more honest response, since there is nothing that I can add or remove from bgfx that would make you reconsider your strategy about renderer.
+
+That's exactly what the above points amount to.
+
+So we're glad that BGFX exists and that it's a great solution for many applications, but as of today it's not something that we're interested in for Godot. Thanks for respecting our decision. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP1228484 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-09-08T11:36:57Z +++$+++ I gained a lot of interesting information here, not only by the Godot members, but also from @bkaradzic . 
+
+Just wanting to clarify the reasoning behind my question:
+
+Personally, when developing, I want options. In the case of a game engine, I want it to be as flexible as it can be - this is why I would choose bgfx - because I want to be able to not be unaffected by changes and politics of the graphics ecosystem (like Apple not supporting OpenGL anymore, etc). The reasoning behind my question was if Godot shared the same thoughts.
+
+In the case of Godot, the team wants full control over _one_ rendering stack, and flexibility comes second. This will probably allow them to implement more features and be completely unaffected by 3rd party frameworks in the long run. Which is also a very good approach.
+
+-- 
+
+From this discussion, the thing I am keeping is that @bkaradzic was right to point out that using bgfx actually saves a ton of code (something I have seen in many testimonies around), but @akien-mga and @reduz were also right to point out that if the flexibility of supporting more than one rendering backends is not a primary goal, then relying on a 3rd party middle layer just for having only one rendering backend may hinder the process later down the road. +++$+++ 1 +++$+++ 0
+COM13 +++$+++ SP8399299 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-09-08T14:46:38Z +++$+++ The problem is you need to support many APIs if you want to ship a cross-platform product of acceptable quality. If multiple backends isn't a primary goal then by consequence cross-platform support isn't a goal too. It's not pretty, it's not what people want to hear, but it's the reality we live in today. In order to ship a quality cross-platform product you can only accept that and do what it takes to conform to that reality. 
+And yes, I'm ready for the thumbdowns... let them come! +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP6265307 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-09-09T21:46:26Z +++$+++ @csotiriou, @Alan-FGR You are both wrong. We can still rely on more rendering back-ends via lower level wrappers like Angle (OpenGL ES 2.0) and MoltenVK / GFX-RS (Vulkan), so we already get best of both worlds.
+
+ +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP1333661 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-10-17T19:15:01Z +++$+++ My 5 cents: maintaining your own renderer is more actual work than it sounds. And it will drain your resources on fixing things that don't necessary add end user value.
+
+Image one day you need to ship a game on PS4/Switch/etc, what do you do? Spend month porting Godot to a random platform? bgfx is already ported IIRC. And then another day you get strange rendering bug reports on random Android phone that you never know existed, what you gonna do? etc.
+
+To get real feeling of what it takes to actually ship something GL based nowadays, try to look at UE4: https://github.com/EpicGames/UnrealEngine/tree/release/Engine/Source/Runtime/OpenGLDrv/Private - it is full of hacks for random devices. Value of rendering libs is not that they are "cross-platform", but rather that they are proven to work on platforms.
+
+IMHO Value of Godot is not in "%insert_your_gapi_of_choice% support", but rather in features in the editor. +++$+++ 6 +++$+++ 0
+COM16 +++$+++ SP8399299 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-10-17T20:13:42Z +++$+++ > they are proven to work on platforms
+
+Exactly. Bgfx is being used in production by renowned studios to deploy cross-platform products. So it's reasonably battle-tested and I don't see any compelling reason not to take advantage of that, not to mention the API is very well designed too. Angle isn't a good option if you care about performance. +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP6265307 +++$+++ ROOT +++$+++ COM16 +++$+++ 2018-11-01T14:02:29Z +++$+++ @jimon , @Alan-FGR, @neikeq : Guys, thanks a lot for your enthusiasm, but I am the one doing the rendering work in Godot, not you. I've been working on 3D rendering for 25 years so, if I am telling you that things as they are now are optimal and BGFX will just stand in the way to being productive I hope you believe me.
+
+As always with Godot, you are free to make your own renderer with BGFX, show me that it's flawless, has better better performance, works better than mine (of course while supporting the full Godot feature set) and uses less resources and code to prove me wrong.. as well as commiting full time over the next years to maintain it.
+
+If you want a revolution, begin with it yourself. If you want to prove your ideas, invest in them because words are free.
+
+If not, keep pestering all you want and it will be ignored. +++$+++ 0 +++$+++ 1
+COM18 +++$+++ SP7718100 +++$+++ ROOT +++$+++ COM17 +++$+++ 2018-11-01T16:39:52Z +++$+++ I only remember ever mentioning bgfx once or maybe twice in the past. All I can find is this comment back in [2017](https://godot.eska.me/irc-logs/devel/2017-07-21.log) asking _"What about bgfx?"_. I don't understand why you would include me. I guess it's because I up-voted a comment I consider brings an interesting point to the table.
+
+Regarding the others, I don't understand why such a negative response. I don't see anything wrong in their comments. They are not pestering in any way... +++$+++ 3 +++$+++ 0
+COM19 +++$+++ SP885648 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-02-22T23:29:20Z +++$+++ > Guys, thanks a lot for your enthusiasm, but I am the one doing the rendering work in Godot, not you. I've been working on 3D rendering for 25 years so, if I am telling you that things as they are now are optimal and BGFX will just stand in the way to being productive I hope you believe me.
+
+What a classic example of elitism and douchebaggery. I will stay miles away from Godot and any projects you maintain, thanks. +++$+++ 0 +++$+++ 1
+COM20 +++$+++ SP4701338 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-02-23T06:45:13Z +++$+++ This issue has long outlived its usefulness. And insulting community members is not tolerated in this community, so you are indeed more than encouraged to stay clear from this project. +++$+++ 0 +++$+++ 0

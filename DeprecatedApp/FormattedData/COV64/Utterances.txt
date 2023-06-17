@@ -1,0 +1,619 @@
+ROOT +++$+++ SP1183 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-09-08T14:38:48Z +++$+++ proposal: Go 2: error handling with functions and an error return? # Background (go 2 Process)
+
+go 2 has laid out the [problem of error handling](https://go.googlesource.com/proposal/+/master/design/go2draft-error-handling-overview.md) (Please read before reading this proposal).
+
+I am told that alternative proposals should be raised as git issues here. Please add anyone else you think would like to join the discussion.
+
+
+# Introduction
+
+It is amazing to see the [error handling problem](https://go.googlesource.com/proposal/+/master/design/go2draft-error-handling-overview.md) being properly addressed. The [existing draft proposal](https://go.googlesource.com/proposal/+/master/design/go2draft-error-handling.md) is good, but I think we can iterate to make it better.
+To avoid confusion by comparison to the existing proposal, I will avoid mentioning it in this one.
+However, if you are a supporter of the existing proposal, please separately read my [critique](https://gist.github.com/gregwebs/cdaaaae475ae3012730694598a24e0b9) of it.
+
+It's useful to take a step back and clearly state what we are trying to do with our implementation:
+
+* provide an abstraction that allows for the insertion of a return statement for errors.
+* compose handler functions together before they are used with the error return
+
+In the existing go language, I cannot write a handler function which will create an early return from the function.
+There are a few approaches that use existing languages features for this control flow:
+* Macros (e.g. Rust originally used a `try!` macro).
+* Ruby supports anonymous functions that return from the enclosing function (method)
+* exceptions
+* Sequencing code with short-circuits. Some usage of monads in Haskell are a particularly good example of this.
+
+For sequences with short-circuits, see the errors are values post for how this can be done in go. However, this severely alters how one would write go code.
+
+
+# Proposal: handlers as functions, just a special check
+
+Lets repeat our goals again:
+
+* provide an abstraction that allows for the insertion of a return statement for errors.
+* compose handler functions together before they are used with the error return
+
+Composition can be handled with ordinary functions that take and return an error.
+
+That means we just need a mechanism to insert a `return`.
+For early return in my proposal, I will use a question mark operator `?` rather than a `check` keyword. This is for two reasons
+* the operator can be used postfix, which has readability advantages
+* the original draft proposal used `check`, but it functions differently, so this may help avoid confusion.
+
+See "Appendix: Operator versus check function" for a discussion on using `?` or a `check` keyword. 
+
+
+## Implementation as syntactic expansion
+
+``` go
+v := f() ? handler
+```
+expands to
+
+``` go
+v, err := f()
+if err != nil {
+    return Zero, handler(err)
+}
+```
+
+Where `handler` is a function that takes an `error` and returns one. `Zero` is the zero value for the (success) value returned before the error, assuming the function returns a single success value. A function that returns 4 values, the last one being an error, would have.
+
+``` go
+    return Zero, Zero, Zero, handler(err)
+```
+
+This is a simple, easy to understand transformation. It is easy to underestimate the value from being able to [understand the usage site without searching for context](https://github.com/golang/go/issues/27567#issuecomment-421204131). I am trying to avoid comparisons to other proposals, but I want to say that none of the others I have seen can be described this simply.
+
+All of the transformation is performed entirely by `?`. It inserts the nil check, the `return`, and creates the needed zero values. The handler is just a normal function and an argument to `?`.
+
+For some small convenience in writing cleanup handlers, the return section would actually expand to this:
+
+``` go
+    return Zero, handler.ToModifyError()(err)
+```
+
+See the section on handler types and the appendix section on `ThenErr` and `ToModifyError`.
+
+
+## Basic example from the original proposal, re-written
+
+Putting this together, lets re-write SortContents, which wants different handlers in different places.
+
+``` go
+func SortContents(w io.Writer, files []string) error {
+    handlerAny := func(err error) error {
+	return fmt.Errorf("process: %v", err)
+    }
+
+    lines := []strings{}
+    for _, file := range files {
+	handlerFiles := func(err error) error {
+	    return fmt.Errorf("read %s: %v ", file, err)
+	}
+	scan := bufio.NewScanner(os.Open(file) ? handlerFiles)
+	for scan.Scan() {
+	    lines = append(lines, scan.Text())
+	}
+	scan.Err() ? handlerFiles
+    }
+    sort.Strings(lines)
+    for _, line := range lines {
+	io.WriteString(w, line) ? handlerAny
+    }
+}
+```
+
+Let's show another example from the proposal (slightly simplified) that has handler composition:
+
+``` go
+func process(user string, files chan string) (n int, err error) {
+    ahandler := func(err error) error { return fmt.Errorf("process: %v", err) }
+    for i := 0; i < 3; i++ {
+	bhandler := func(err error) error { return fmt.Errorf("attempt %d: %v", i, err) }
+	do(something()) ? ahandler.ThenErr(bhandler)
+    }
+    do(somethingElse()) ? ahandler
+}
+```
+
+It is possible to combine handlers in the same way one would combine functions:
+
+``` go
+do(something()) ? ahandler.ThenErr(func(err error) error {
+	return fmt.Errorf("attempt %d: %v", i, err) }
+)
+```
+
+Or
+
+``` go
+do(something()) ? func(err error) { return ahandler(bhandler(err)) }
+```
+
+The example uses a `.ThenErr` method (see appendix) as a way to compose error handler functions together. 
+
+
+## Results
+
+* This alternative proposal introduces just one special construct, `?`
+* The programmer has control and flexibility in the error handling.
+* Handlers can be naturally composed as functions
+* The code is much more succinct and organized than current go error handling code.
+* errors can be returned from `defer`.
+
+
+## Checking error returns from deferred calls
+
+This alternative proposal can support returning errors from `defer`:
+
+	defer w.Close() ? closeHandler
+
+
+
+## Notes on error handler function types
+
+To respond to errors we want to do one of two things:
+* cleanup (side-effecting): `(error) -> nil` or `() -> nil`
+* modify the error: `(error) -> error`
+
+An error handler function must always have the type of the modifier, but we may not want the extra noise when writing a purely cleanup handler. The question mark operator can accept all forms. A cleanup function can be automatically converted to return the original error that would have been passed to it.
+
+This is also true of helpers that compose error functions such as `ThenErr`.
+See the Appendix section on `ThenErr` to see how this is implemented.
+
+
+# Appendix
+
+## Appendix: Handle and anonymous function syntax
+
+This proposal is slightly more verbose than others that introduce a special anonymous function syntax that is lighter-weight and infers types.
+
+``` go
+handle err { return fmt.Errorf("process: %v", err) }
+```
+
+Without this syntax, the proposal would read:
+
+``` go
+handle func(err error) error { return fmt.Errorf("process: %v", err) }
+```
+
+I think it is worthwhile to explore having anonymous functions that are lighter-weight.
+However, I think this should be usable anywhere rather than just with a single keyword.
+
+But please leave this for another proposal rather than throw it in the mix with error handlers!
+
+
+## Appendix: unary and binary.
+
+The question mark operator can be used as a unary to just return the exception without any handlers running.
+
+``` go
+something()?
+```
+
+This is equivalent to 
+
+``` go
+something() ? func(err error) error { return err }
+```
+
+I am favoring writing the unary form without any spaces in this case (more similar to Rust), but we should use whatever syntax the community finds best.
+
+
+## Appendix: Handling errors within the handler itself
+
+A cleanup handler may generate a new error that should be propagated in addition to the current error.
+I believe this should just be handled by a multi-error technique, e.g. [multierr](https://github.com/uber-go/multierr/blob/master/error.go).
+
+
+## Appendix: custom error types
+
+The existing proposal seems like it would cast a concrete error type to the `error` interface when it is passed to a handler.
+I don't think this proposal is fundamentally different.
+I think this issue should be solved by the generics proposal.
+
+
+## Appendix: ThenErr and ToModifyErr
+
+An implementation of ThenErr  and ToModifyErr. See the syntax expansion section for how the `?` operator uses `ToModifyError`.
+
+``` go
+type Cleanup func(error)
+type CleanupNoError func()
+type ModifyError func(error) error
+
+type ToModifyError interface {
+	ToModifyError() ModifyError
+}
+
+func (fn1 ModifyError) ToModifyError() ModifyError {
+	return fn1
+}
+
+func (fn1 CleanupNoError) ToModifyError() ModifyError {
+	return func(err error) error {
+		fn1()
+		return err
+	}
+}
+
+func (fn1 Cleanup) ToModifyError() ModifyError {
+	return func(err error) error {
+		fn1(err)
+		return err
+	}
+}
+
+// Its easier to write this once as a function
+func CombineErrs(funcs ...ToModifyError) ModifyError {
+	return func(err error) error {
+		for _, fn := range funcs {
+			err = fn.ToModifyError()(err)
+		}
+		return err
+	}
+}
+
+// But method syntax is convenient
+type ErrorHandlerChain interface {
+	ThenErr(ToModifyError) ModifyError
+}
+
+func (fn1 ModifyError) ThenErr(fn2 ToModifyError) ModifyError {
+	return func(err error) error {
+		return fn1(fn2.ToModifyError()(err))
+	}
+}
+
+func (fn1 Cleanup) ThenErr(fn2 ToModifyError) ModifyError {
+	return func(err error) error {
+		fn1(err)
+		return fn2.ToModifyError()(err)
+	}
+}
+
+func (fn1 CleanupNoError) ThenErr(fn2 ToModifyError) ModifyError {
+	return func(err error) error {
+		fn1()
+		return fn2.ToModifyError()(err)
+	}
+}
+```
+
+
+## Appendix: Operator versus check function
+
+The original proposal [rejected the question mark](https://go.googlesource.com/proposal/+/master/design/go2draft-error-handling.md#considered-ideas) and gave some reasons why.
+Some of those points are still valid with this proposal, and others are not.
+
+Here is [another proposal](https://gist.github.com/PeterRK/4f59579c1162cdbc28086f6b5f7b4fa2) that I believe advocates the same solution proposed in this alternative, but with a `check` function. I would be happy with that as a solution, but below I give my preference for `?`.
+
+The original proposal had just one argument given to `check`. This alternative favors the question mark in large part because there are now 2 arguments.
+The original proposal states that there is a large readability difference in these two variants:
+
+``` go
+check io.Copy(w, check newReader(foo))
+io.Copy(w, newReader(foo)?)?
+```
+
+However, I think this is a matter of personal preference. Once there is a left-hand-side assignment, the readability opinion may also change.
+
+``` go
+copied := check io.Copy(w, check newReader(foo))
+copied := io.Copy(w, newReader(foo)?)?
+```
+
+Now lets add in a handlers and check our preference again.
+
+``` go
+copied := check(io.Copy(w, check(newReader(foo), ahandler), bhandler)
+copied := io.Copy(w, newReader(foo) ? ahandler) ? bhandler
+```
+
+I believe `?` will be slightly nicer to use due to
+* fewer parantheses
+* putting error handling solely on the right-hand-side rather than both the left and right.
+
+Note that it is also possible to put all the error handling on the left-hand-side of the error source.
+
+``` go
+copied := check(bhandler, io.Copy(w, check(ahandler, newReader(foo)))
+```
+
+But I prefer keeping error handling on the right-hand-side for two reasons
+* a success result is still transferred to the left
+* it is possible to write an anonymous handler rather than being forced to declare it ahead of time
+
+
+## Appendix: built-in result type
+
+A go programmer that has used Rust, Swift, Haskell, etc will be missing a real result type.
+I would like to see a go 2 proposal for discriminated unions which includes a result type.
+However, I think both the original proposal and this alternative proposal would work fine with the addition of a result type.
+This is because go effectively already has a result type when dealing with errors. It is a tuple where the last member is of type `error`.
+
+A future version of go with discriminated unions should be able to use `?` for dealing with a discriminated union result type.
+
+
+## Appendix: intermediate bindings for readability
+
+Error handling on the right-hand-side may increase line length undesirably or seem to be easy to miss. Its always possible to use an intermediate binding.
+
+```
+v, err := f(...) // could be a million lines long
+err ? handler
+```
+
+## Appendix: left-hand-side
+
+It is possible to support placing the handler on the left-hand-side.
+
+```
+v := handler ? f(...)
+```
+
+This could make more sense for `check`. One of the ideas behind this would be to emphasize the handler, for example in the case where `f(...)` is an enormous expression (see above section on intermediate bindings which is another way to handle this).
+
+## Appendix: returning the zero value
+
+This proposal does not allow for the defensive practice of returning `-1` as the success value, along with the error. Where `-1` is useful because zero or a positive number are an allowed value in the problem domain, so someone may notice a `-1` propagating. I don't think we need to support this use case for a few reasons:
+
+  * It is not generally applicable anyways (consider a `uint`).
+  * The contract of using the function is already that errors must be checked before looking at success values.
+  * There are standard linters (errcheck) that will warn people about ignoring errors: we should instead ship this ability with `go vet`.
+
+
+## Appendix: all proposal examples re-written
+
+Below are the rest of the code snippets shown in the original proposal, transformed to this alternative proposal.
+
+``` go
+func TestFoo(t *testing.T) {
+	handlerFatal := func(err error) { t.Fatal(err) }
+	for _, tc := range testCases {
+		x := Foo(tc.a) ? handlerFatal
+		y := Foo(tc.b) ? handlerFatal
+		if x != y {
+			t.Errorf("Foo(%v) != Foo(%v)", tc.a, tc.b)
+		}
+	}
+}
+
+func printSum(a, b string) error {
+	handler := func(err error) error { fmt.Errorf("printSum(%q + %q): %v", a, b, err) }
+	x := strconv.Atoi(a) ? handler
+	y := strconv.Atoi(b) ? handler
+	fmt.Println("result:", x + y)
+	return nil
+}
+
+func printSum(a, b string) error {
+	fmt.Println("result:", strconv.Atoi(x)? + strconv.Atoi(y)?)
+	return nil
+}
+
+func CopyFile(src, dst string) error {
+	handlerBase := func(err error) error {
+		return fmt.Errorf("copy %s %s: %v", src, dst, err)
+	}
+
+	r := os.Open(src) ? handlerBase
+	defer r.Close()
+
+	w := os.Create(dst) ? handlerbase
+	handlerWithCleanup := handlerBase.ThenErr(func(err error) {
+		w.Close()
+		os.Remove(dst) // (only if a check fails)
+	})
+
+	check io.Copy(w, r) ? handlerWithCleanup
+	check w.Close() ? handlerWithCleanup
+	return nil
+}
+
+
+func main() {
+	handlerAll := func(err error) error {
+		log.Fatal(err)
+	}
+
+	hex := check ioutil.ReadAll(os.Stdin) ? handlerAll
+	data := check parseHexdump(string(hex)) ? handlerAll
+	os.Stdout.Write(data)
+}
+``` +++$+++ 3 +++$+++ 2
+COM0 +++$+++ SP4464013 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-09-08T16:11:25Z +++$+++ Operator ? looks less noticeable than "check". +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP1183 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-09-09T00:02:05Z +++$+++ @PeterRK you might want to state whether that is a good or a bad thing! I am assuming it is a critique.
+
+One advantage of this proposal is that it is not breaking any new ground, but instead following the lead of Rust (but adding a handler component). So we could survey Rust users to see if noticeably of `?` is a problem.
+
+Although I have a preference for `?`, I want to note that I would be perfectly happy with this proposal being accepted but modified to use `check` instead.
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP458838 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-09-09T00:09:27Z +++$+++ https://go.googlesource.com/proposal/+/master/design/go2draft-error-handling.md#considered-ideas +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP4464013 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-09-09T01:06:39Z +++$+++ @gregwebs You are right. Less noticeable may be an advantage. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP1183 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-09-09T04:45:24Z +++$+++ @networkimprov you are right I should explicitly talk about how the question mark was mentioned in "considered ideas". In that, the case is made for `check` rather than `?`. 
+Some of those points are still valid with this proposal, and others are not. This is reviewed in the section "Appendix: Operator versus check function".
+
+I hope we can move the conversation from comparing `?` to `check` (either of which are acceptable to me) to the bigger picture of using regular functions instead of special stacking. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP458838 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-09-09T06:09:47Z +++$+++ There is no doubt in my mind that the next proposal draft from the Go team will add named handlers (or a func type) and drop implicit handler chains, given the feedback to date. It might drop `check` altogether.
+
+However, that isn't enough IMO. My detailed critique: [Golang, how dare you handle my checks!](https://medium.com/@mnmnotmail/golang-how-dare-you-handle-my-checks-d5485f991289) +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP3196327 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-09-09T06:35:22Z +++$+++ I'll say this a million times - I hate exiting from a function without a return. This should _never_ happen unless there is a catastrophic error (panic). Also, returning an error without adding on to the context should be discouraged. The unary `?` is just a bad idea for Go in general. (Both returning implicitly AND not adding context to the error)
+
+The rest of the proposal is interesting, but I'm not sure how much I like the idea of the `?`. I think it means too many things in too many different languages, and it would add to the confusion. (Conditional operator (C), null-safe operation (Kotlin), Coallessing (C#), etc).
+
+I also feel like the built-in `check` function approach _feels_ more like Go. I like that better than the `?`. You guys discussed it being "less noticable" which is "good", but I'd say the opposite. It's the potential exit to a function, it _needs_ to be noticable to be maintainable.
+
+Using `check(...)` instead of `?` also resolves your "should we allow `break` and `continue` as the RHS? The answer: no.
+
+Either way, this shouldn't be about syntax, syntax can be rethought. Let's discuss the idea behind it.
+
+I think having different function signatures doing different things is an interesting idea, but I don't like it. I think it makes reading code confusing, especially at the call site ("check site"?) of the handler function. If I'm reading someone else's code, I don't want to have to scroll back up to the top of the function to see if my code continues or not. The nice thing about the `handle/check` construct is that you _know_ that _if the error is not nil, the function exits_.
+
+I do like this idea though. Those are my critiques, I like the rest of the proposal. The use of anonymous functions rather than handler blocks is a good idea in my book. +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP3196327 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-09-09T06:44:19Z +++$+++ To expand on the whole function signature thing, here's what I mean:
+
+```go
+func errorProne() error {
+    handler := func(err error) {
+        fmt.Println("unimportant error occurred:", err)
+    }
+
+    // 50 lines later
+
+    // My internal monologue:
+    // "Does this function exit if there's an error,
+    // or does it continue execution?"
+    f := check(os.Create("Foo"), handler)
+}
+```
+
+Again, in the `check/handle` made it clear: `if err != nil, the function will exit` +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP4464013 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-09-09T07:38:07Z +++$+++ Error handling is a potential control flow changing point, so we care about it.
+
+The design in original draft introduces a new control flow changing rule, what we call "special stacking" or "chained handler". That brings confusion more than convenience.
+
+Some guys, include me, suggest to use a new control flow changing mark with normal function as error handler. However, how to implement this mark is controversial. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP458838 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-09-09T08:14:32Z +++$+++ A named catch block after check/?/etc does the trick nicely :-)
+```
+?outer f1() // or more Go-like: #outer = f()
+for ... {
+   ?inner f2()
+   catch inner { ?outer fmt.Errorf("loop %v", inner) } // no return
+}
+catch outer { return fmt.Errorf("context %v", outer) }
+``` +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP4464013 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-09-09T08:51:50Z +++$+++ @deanveloper I agree with that `if err != nil, the function will exit`. I believe exit on error is the common case. We should focus on the common case. If needing continue, just handle it with old style.
+
+@networkimprov @gregwebs  I know you guys want to figure out a solution covering all cases. I hope it will be a lightweight one. I think heavy solution is against the philosophy of GO. And the design in original draft is already too heavy to me.  +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP4464013 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-09-09T09:38:13Z +++$+++ Error handling consists of handler and trigger.
+Let me ask some questions.
+
+1) Should trigger be bound with one or more handlers explicitly?
+In the original draft, "check" is the trigger. It cannot be bound with any handler explicitly. So a matching rule is needed.
+
+2) Should handler be special or just a normal function?
+
+3) Should trigger be a filter or just a consumer?
+ In the original draft, "check" is the filter. It take return values from child function, and filters out the error. But in code `_, #err := function()`, the trigger `#err` is just a consumer. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP458838 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-09-09T10:06:23Z +++$+++ In #27519 (#id/catch model), `#err = f()` filters for non-zero, as stated. +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP4464013 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-09-09T10:19:35Z +++$+++ @networkimprov I mean that filter can work with pipe. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP458838 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-09-09T11:27:37Z +++$+++ See link I posted above re "critique" for perspective on nesting calls that return error. (A "pipe" is an IPC or stream mechanism btw.) +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP4464013 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-09-09T11:47:56Z +++$+++ Good luck! @networkimprov  +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP1183 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-09-09T14:20:17Z +++$+++ @deanveloper it seems you have misread the proposal. Perhaps I wrote too much, let me know how I can make the section on handler function types more clear. Currently it does state:
+"A cleanup function will automatically be converted to return the original error that would have been passed to it."
+
+If you write
+
+``` go
+    handler := func(err error) {
+        fmt.Println("unimportant error occurred:", err)
+    }
+```
+
+When used as a handler, the error will still be passed along (see the section on `ThenErr` to show how this can be accomplished).
+
+In this proposal, the usage of `check` or `?` always means that the function returns immediately if the error is not nil. +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP1183 +++$+++ ROOT +++$+++ COM16 +++$+++ 2018-09-09T14:53:54Z +++$+++ @deanveloper thanks for critiquing adding `break/continue`. I removed that section now because I don't like the idea either and it seems to distract from the proposal rather than to clarify. +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP3196327 +++$+++ ROOT +++$+++ COM17 +++$+++ 2018-09-09T15:12:46Z +++$+++ Ah, I see. You are correct I did misread it, although now there's no explicit exit to the function. (See how that can get confusing to a reader? The function doesn't mark an exit, so I didn't think there was one)
+
+Anyway, there shouldn't be a special case to allow a developer to return the error which occurred without additional context. If they want to do that, they should do it explicitly with `return err`
+
+Also, assuming you want to return the zero value for the other numbers is a dangerous game. For instance, let's say I wanted to write the following function:
+
+```go
+// Returns how many occurrences of find exist in the UTF8 encoded reader r
+func CountOccurences(r io.Reader, find string) (n int, err error)
+```
+
+If an error occurs, I don't want to return `n=0` because 0 is a valid return value of my function, I'd want to return `n=-1`.
+
+`check/handle` does this well because the `return` in it's system actually returns to the function, so there's no assumptions about what you're trying to return.
+
+Perhaps the handler should always be in the form `(error) -> (parent function's return values)`. This kind-of destroys the idea of reusable handler generators (`ThenErr`), though. +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP1183 +++$+++ ROOT +++$+++ COM18 +++$+++ 2018-09-09T15:19:17Z +++$+++ @bmeh (or anyone else that comes along), it would be great if you left your reason for the thumbs down.  The proposal has received a lot of useful critiques around the edge cases of language interaction. 
+But I actually have not yet seen a single critique of the core idea of this proposal, including outside this go 2 process where I have shown it to others.
+
+@networkimprov similarly, it would be great to see critical comments of the core idea here and leave promotions of your proposal on the github issue that is already open for that. +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP458838 +++$+++ ROOT +++$+++ COM19 +++$+++ 2018-09-09T18:15:21Z +++$+++ I posted a link to a pure critique of check/handle, which largely applies to this proposal. It does not mention #id/catch. I urge you to read it.
+
+I mentioned a catch block here as a solution to the control flow issue raised above, and used a prefix variation of your `? handler` syntax with it. +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP1183 +++$+++ ROOT +++$+++ COM20 +++$+++ 2018-09-09T21:51:12Z +++$+++ @deanveloper zero values: thanks for bringing that up. This proposal is essentially for discriminated unions. That is, the non-error value should not exist. I know that use cases do exist for actually returning a tuple of two meaningful values. However, I believe they are rare enough (I have seen thousands of lines of go code that never do this) that it is a mistake to place them as a design constraint on an error handling system. One can still use one of two approaches:
+
+* use the existing style of error handling
+* use an error type that gives back the value you want
+
+The latter looks something like this:
+
+``` go
+type CountOccurencesError struct {
+    Count int
+    Err error
+}
+func (e CountOccurencesError) Error() string { return e.Err.Error() }
+
+// Returns how many occurrences of find exist in the UTF8 encoded reader r
+func CountOccurences(r io.Reader, find string) (n int, err CountOccurencesError)
+```
+
+I believe you do need generics to be able to return the concrete type through an error check. +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP1183 +++$+++ ROOT +++$+++ COM21 +++$+++ 2018-09-09T21:58:40Z +++$+++ @deanveloper no unary form of the check: I would be okay with always requiring an error handler that adds context. But I thought always requiring a handler was probably too heavy-handed for a go community that is not already consistently doing that.
+
+If you define a function `identity`, then you just have to write `? identity` if you don't want to add anything to an error. So keep in mind it is easy to subvert the intent.
+
+An additional consideration is that some users may be satisfied enough by using stack traces that they don't feel the need to add context in every passing of an error. +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP3196327 +++$+++ ROOT +++$+++ COM22 +++$+++ 2018-09-09T22:02:03Z +++$+++ That's not what I'm trying to say here - what I'm saying is that the zero-value of `int` is meaningful in the `CountOccurences` function, so I would much rather return a `-1` to make it clear that the function doesn't return meaningful information if an error occurs.
+
+I want to be clear. I don't want the caller to see `0, err`, as it could be mistaken for "zero occurrences were found before finding the following error", I want them to see values from the function indicating that the function does not return useful information (other than the error) if an error occurs, which can be done by returning `-1, err`.
+
+Most of the time `0, err` works, but in my experience, returning `-1, err` is not an uncommon case +++$+++ 2 +++$+++ 0
+COM24 +++$+++ SP1183 +++$+++ ROOT +++$+++ COM23 +++$+++ 2018-09-09T22:40:36Z +++$+++ @deanveloper sorry for missing your actual concern. I think your level of programming defensiveness is probably appropriate given the lack of discriminated unions in go and the prevalence of zero values. However, it seems not generally applicable (what if I have a `uint`?) and unnecessary. The contract is always that the caller must check the error value before looking at the success value. We shouldn't weaken this proposal because someone is going to ignore errors. There are linters that check for this (errcheck): it would be much more powerful to add that capability to `go vet` or otherwise have this statically checked. +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP5985165 +++$+++ ROOT +++$+++ COM24 +++$+++ 2018-09-10T01:37:02Z +++$+++ I personally think that handle is sugar for goto rather than an anonymous function.
+
+It seems to be doing this:
+```go
+func something() {
+    var __reservedVar error
+    {
+    errHandle:
+        return __reservedVar
+    }
+    blah, err := x()
+    if err != nil {
+        __reservedVar = err
+        goto errHandle
+        return
+    }
+}
+```
+aka
+```go
+func something() {
+    handle err {
+        return err
+    }
+    blah := check x()
+}
+```
+If you read it like that, the return makes perfect sense. Simplified example. +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP3196327 +++$+++ ROOT +++$+++ COM25 +++$+++ 2018-09-10T03:51:23Z +++$+++ > The contract is always that the caller must check the error value before looking at the success value
+
+This is a very fair point. Although I think that `-1` is still a pretty common thing to return when an error occurs.
+
+I've said this before, I really like the proposal. It feels very Go-like (at least when using a `check` built-in function), which is hard to come by for proposals not from the Go team themselves.
+
+I added a +1. Sorry if it seems like I'm nitpicking it pretty hard, just want to make sure everything is considered, this is a really good proposal
+
+> I personally think that handle is sugar for goto rather than an anonymous function.
+
+Yeah I was the same way. I saw `handle` as more of a goto than a function.
+
+Although both views work and I can see it going both ways. I think it personally makes more sense as a goto (it's how it probably works under the hood, AND just works better in general when it comes to how it returns). +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP1183 +++$+++ ROOT +++$+++ COM26 +++$+++ 2018-09-13T19:10:34Z +++$+++ @deanveloper thanks for the :+1: thorough review, and the good questions!
+Also, please help me promote usage of `errcheck`/`gosec` so that we don't have to bend over backwards with defensive coding practices!
+
+@ianlancetaylor is there a process to moving this proposal forward with more reviews? +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP3194333 +++$+++ ROOT +++$+++ COM27 +++$+++ 2018-09-13T19:28:45Z +++$+++ There is a relatively slow moving Go2 proposal review process. +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP3194333 +++$+++ ROOT +++$+++ COM28 +++$+++ 2018-09-13T19:29:35Z +++$+++ Let me expand on that to say that nothing is going to happen in a hurry.  We're going to take the time required to make changes that seem good. +++$+++ 0 +++$+++ 0

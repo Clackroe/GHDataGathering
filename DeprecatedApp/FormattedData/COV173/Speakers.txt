@@ -1,0 +1,9 @@
+SP65908293 +++$+++ Yara-smurf +++$+++ NONE (AUTHOR)
+SP37534529 +++$+++ PunkPun +++$+++ MEMBER
+SP167819 +++$+++ pchote +++$+++ MEMBER
+SP1614714 +++$+++ netnazgul +++$+++ CONTRIBUTOR
+SP1355810 +++$+++ dragunoff +++$+++ CONTRIBUTOR
+SP7704140 +++$+++ abcdefg30 +++$+++ MEMBER
+SP756669 +++$+++ Mailaender +++$+++ MEMBER
+SP48881353 +++$+++ MlemandPurrs +++$+++ NONE
+SP59416324 +++$+++ deleted-user-1 +++$+++ CONTRIBUTOR

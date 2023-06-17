@@ -1,0 +1,202 @@
+ROOT +++$+++ SP10364499 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-03-15T13:20:54Z +++$+++ Bootstrap 4 with npm and webpack I've been spending WAY too much time on adding bootstrap 4 with npm to a webpack project. In hope to save others the time, I thought i'll share the final recipe -
+
+start by installing bootstrap in your project -
+```
+npm install bootstrap@4.0.0-alpha.6 --save
+```
+(notice bootstrap has two dependencies - jquery and tether. If you would rather have explicit versions of those two, you should install them as well)
+
+import bootstrap's javascript through index.js -
+```javascript
+import 'bootstrap';
+```
+(i'm assuming you're using es6, in case of es5, use `require('bootstrap')`)
+
+The previous line will only import the js part of bootstrap. for the styling part you have two options -
+
+### 1. Precompiled SASS
+Inside one of your sass files (index.scss for example) add this line -
+```SASS
+@import "~bootstrap/scss/bootstrap.scss";
+```
+(notice the ~ (tilde) which points to the node modules folder)
+This mehtod is beneficial if you plan on using your own version of the wonderful __variables_ file bootstrap comes with. just make sure you import __variables_ before _bootstrap_. Also, now you can use all the cool mixins bootstrap has.
+
+### 2. Compiled CSS only
+If you're not planning on using the variables or the mixins, and prefer the precooked css file, simply add this line to index.js or any other js file -
+```javascript
+import 'bootstrap/dist/css/bootstrap.css';
+```
+(btw - you can also import this way the sass file, but it's nicer to import it via another sass file as shown in pervious mehtod)
+
+now comes the webpack part. for _jquery_ and _tether_ to be available as a global variable throughout the project, you'll have to add this to your webpack plugins sections -
+```javascript
+new webpack.ProvidePlugin({ // inject ES5 modules as global vars
+  $: 'jquery',
+  jQuery: 'jquery',
+  'window.jQuery': 'jquery',
+  Tether: 'tether'
+})
+```
+The different jquery definition are meant to answer requirements of different libraries (for example angular looks for 'window.jQuery'). I'm assuming your webpack.config already has rules for scss and/or css.
+
+And that's it! now you have bootstrap in your webpack project.
+Let me know if any further explanation is needed, and if anyone knows of a better way, please share. +++$+++ 64 +++$+++ 0
+COM0 +++$+++ SP4064582 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-03-16T07:59:37Z +++$+++ > `@import "~bootstrap/scss/bootstrap.scss";`
+> (notice the ~ (tilde) which points to the node modules folder)
+
+@IdanCo Do you need to install a dependency to be able to use `~` instead of the `node_modules` folder?
+I tried it but it didn't work. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP10364499 +++$+++ ROOT +++$+++ COM0 +++$+++ 2017-03-16T14:09:34Z +++$+++ @Olivia101 good question. [I took this convention from sass-loader](https://github.com/webpack-contrib/sass-loader#imports), but if in addition to sass-loader you're also using postcss than this could be related -
+https://github.com/postcss/postcss-import/issues/209
+
+Anyway you can try without the tilde, or worst case use '../../node_modules'.
+
+let me know how it goes. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP377734 +++$+++ ROOT +++$+++ COM1 +++$+++ 2017-03-22T07:41:57Z +++$+++ Really nice explanations @IdanCo :+1: 
+
+I'm also using Bootstrap w/ Webpack but I have a slightly different configuration regarding the "Jquery & Tether" part.
+
+Instead of using this :
+```javascript
+new webpack.ProvidePlugin({ // inject ES5 modules as global vars
+  $: 'jquery',
+  jQuery: 'jquery',
+  'window.jQuery': 'jquery',
+  Tether: 'tether'
+})
+```
+which does not inject $ as a global variable but 'auto-require' it when encountered in a dependency, I use the "expose-loader" (which, actually, expose global variables ;-) ).
+
+You could use it directly in the webpack config but, personnaly, I prefer using it in my entry file like this : 
+```javascript
+require('expose-loader?$!expose-loader?jQuery!jquery');
+require("expose-loader?Tether!tether");
+```
+(yeah, the syntax looks like some sort of incantations or something ;-))
+
+But if you prefer the webpack config way, it looks like this : 
+```javascript
+module: {
+  rules: [
+    {
+      test: require.resolve('jquery'),
+      use: [
+        { loader: 'expose-loader', options: 'jQuery' },
+        { loader: 'expose-loader', options: '$' }
+      ]
+    },
+    
+    {
+      test: require.resolve('tether'),
+      use: [
+        { loader: 'expose-loader', options: 'Tether' }
+      ]
+    }
+  ]
+}
+```
+
+My 2 cents... +++$+++ 13 +++$+++ 0
+COM3 +++$+++ SP15182121 +++$+++ ROOT +++$+++ COM2 +++$+++ 2017-03-27T13:41:09Z +++$+++ O u can use bootstrap-loader https://github.com/shakacode/bootstrap-loader +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP98681 +++$+++ ROOT +++$+++ COM3 +++$+++ 2017-04-08T21:35:34Z +++$+++ Is there something here we need to update in our docs or JS? +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP10364499 +++$+++ ROOT +++$+++ COM4 +++$+++ 2017-04-09T18:17:09Z +++$+++ @mdo I think a webpack configuration is something that many developers might find useful. I'll wrap it as a PR and leave it for you to decide. +++$+++ 4 +++$+++ 0
+COM6 +++$+++ SP10364499 +++$+++ ROOT +++$+++ COM5 +++$+++ 2017-05-07T12:15:00Z +++$+++ thanks for reporting @bbottema , a few questions to better diagnose the issue -
+1. when importing scss, you do it directly from the js or from a secondary scss file?
+2. If you use a secondary scss file, do rules before/after the import **are working** in the browser?
+3. what version of style-loader are you using? +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP10364499 +++$+++ ROOT +++$+++ COM6 +++$+++ 2017-05-07T12:31:52Z +++$+++ Smells to me like could be related to [this issue](https://github.com/webpack-contrib/css-loader/issues/484), try a couple of things for me -
+
+1. use a secondary scss, and add this code **before** importing bootstrap -
+```sass
+$navbar-inverse-color: #FFF;
+$navbar-light-color: #FFF; 
+```
+2. upgrade style-loader to 0.17.0
+3. take a look at a [demo project implementing bootstrap](https://github.com/IdanCo/webpack-modular/tree/bootstrap4) +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP2115718 +++$+++ ROOT +++$+++ COM7 +++$+++ 2017-05-07T15:42:29Z +++$+++ @IdanCo Sorry, nevermind. I made a mess out of it :D. My config was not in order,  +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP12740 +++$+++ ROOT +++$+++ COM8 +++$+++ 2017-05-26T21:24:52Z +++$+++ @Mioleris bootstrap-loader currently does not support Bootstrap 4. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP98681 +++$+++ ROOT +++$+++ COM9 +++$+++ 2017-05-27T04:09:23Z +++$+++ Closing since #22423 was merged. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP7289816 +++$+++ ROOT +++$+++ COM10 +++$+++ 2017-07-13T14:14:29Z +++$+++ For consideration:
+https://github.com/twbs/bootstrap/pull/22423#issuecomment-315081413 +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP3457668 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-01-18T13:37:27Z +++$+++ This thread helped me. But dont forget to install dependencies. Im surprised this is not mentioned more explicit in https://getbootstrap.com/ npm installation section.
+```
+npm install --save jquery popper.js
+npm install bootstrap@4.0.0-beta.3 --save
+```
+ +++$+++ 1 +++$+++ 0
+COM13 +++$+++ SP1689750 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-01-18T13:43:22Z +++$+++ @ajthinking it's written here : https://getbootstrap.com/docs/4.0/getting-started/webpack/#importing-javascript
+
+>Bootstrap is dependent on jQuery and Popper, these are defined as peerDependencies, this means that you will have to make sure to add both of them to your package.json using npm install --save jquery popper.js. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP3457668 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-01-18T13:52:17Z +++$+++ @Johann-S yes that page is great! But on https://getbootstrap.com no dependencies are mentioned in the npm section thats what caught me.  +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP7289816 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-01-18T20:09:10Z +++$+++ Feel free to check out https://github.com/petrpacas/webpack-bootstrap-4-setup to see how I tackled this... +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP33961 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-02-12T15:53:44Z +++$+++ I would stay far away from `bootstrap-loader`. We are using it on a React project and it's been a pain in the butt to update to Bootstrap 4.0 beta. I ultimately want to go to Bootstrap 4 GA and I think I'm going to have to ditch `bootstrap-loader` to do it. +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP6518259 +++$+++ ROOT +++$+++ COM16 +++$+++ 2018-02-16T02:57:08Z +++$+++ ^^ +1 on the staying away from bootstrap-loader you will regret using it I had to rip it out after it randomly broke compilation due to buggy path resolve & bootstrap version code. After forking bootstrap-loader in an attempt to fix their code I quickly realized my mistake in adding it in the first place. +++$+++ 1 +++$+++ 0
+COM18 +++$+++ SP98681 +++$+++ ROOT +++$+++ COM17 +++$+++ 2018-02-16T02:58:09Z +++$+++ Seeing all the follow-up comments, do we need more docs updates here? +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP1859799 +++$+++ ROOT +++$+++ COM18 +++$+++ 2018-03-21T16:19:19Z +++$+++ I'm very new to webpack, but I have just set up a project and I have TypeScript and SCSS compiling correctly. I asm using webpack version `4.1.1`. When I import bootstrap like this:
+
+`import 'bootstrap';`
+
+The TypeScript compiles, but I am given the following error on page load:
+
+```
+main.ts:3 Uncaught Error: Cannot find module "bootstrap"
+    at webpackMissingModule (main.ts:3)
+    at Object../ts/main.ts (main.ts:3)
+    at __webpack_require__ (bootstrap:19)
+    at bootstrap:68
+    at bootstrap:68
+```
+
+I have the following packages installed in my package.config:
+
+```
+  "@fortawesome/fontawesome-free-webfonts": "^1.0.4",
+  "@types/bootstrap": "^4.0.1",
+  "@types/jquery": "^3.3.1",
+  "bootstrap": "^4.0.0",
+  "jquery": "^3.3.1",
+  "popper.js": "^1.14.1"
+```
+
+This is the typescript code:
+
+```
+import "../scss/main.scss";
+import * as $ from "jquery";
+import 'bootstrap';
+
+$(() => {
+    $('[data-toggle="tooltip"]').tooltip();
+    alert(sayHello("TypeScript"));
+});
+```
+
+I imagine I also have to declare the `$` sign globally somewhere but this isn't documented in the bootstrap docs, but for me I can't seem to import the bootstrap js at all.
+
+Is there something missing from the docs that I need to do? +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP1859799 +++$+++ ROOT +++$+++ COM19 +++$+++ 2018-03-21T16:55:33Z +++$+++ Update: I fixed my issue by using:
+`import "bootstrap/dist/js/bootstrap.js`
+
+Apart from that the docs were enough for me to get going personally. +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP7289816 +++$+++ ROOT +++$+++ COM20 +++$+++ 2018-03-21T19:07:04Z +++$+++ Well, I’m not a Webpack guru myself, and I’m glad you sorted it out, but just gonna mention that my setup is importing the individual bootstrap.js pieces (so that you can select only the necessary ones), and you are importing the whole package. Which might ofc be fine for you…
+
+Just sayin’
+
+Take care,
+Petr
+
+On 21. 3. 2018 16:58 +0000, Connel Hooley <notifications@github.com>, wrote:
+> Update: I fixed my issue by using:
+> import "bootstrap/dist/js/bootstrap.js
+> Apart from that the docs were enough for me to get going personally.
+> —
+> You are receiving this because you commented.
+> Reply to this email directly, view it on GitHub, or mute the thread.
+ +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP8678852 +++$+++ ROOT +++$+++ COM21 +++$+++ 2018-03-30T20:16:10Z +++$+++ Well done, @IdanCo ! It worked nicely for me. Thanks! +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP10037514 +++$+++ ROOT +++$+++ COM22 +++$+++ 2018-04-06T10:23:51Z +++$+++ So many different solutions, so many different workable options, yet none of them helped me in the past 3 hours getting bootstrap up and running... The webpack documentation page looks so simple but it is not that simple, apparently. Please include some more documentation on how to test if it is working and if there are any differences when using typescript. I just installed, included, imported and my app just runs fine, no errors, but yet no col-md or container styling working.. meh, i'll just return to CDN's... +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP1689750 +++$+++ ROOT +++$+++ COM23 +++$+++ 2018-04-06T11:05:23Z +++$+++ Feel free @Ruud-cb to improve our docs if you found something, we cannot covered every use case +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP1689750 +++$+++ ROOT +++$+++ COM24 +++$+++ 2018-04-06T11:07:26Z +++$+++ I lock this issue everything is here: https://getbootstrap.com/docs/4.0/getting-started/webpack/
+
+If someone want to improve our docs feel free to do it, or you can open an issue which point what is missing in our docs +++$+++ 0 +++$+++ 0

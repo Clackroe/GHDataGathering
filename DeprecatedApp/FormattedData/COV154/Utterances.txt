@@ -1,0 +1,203 @@
+ROOT +++$+++ SP32892647 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-07-24T09:27:51Z +++$+++ Crash on Android 6.0 Xiaomi devices after release on PlayStore **Canonical issue: https://issuetracker.google.com/issues/147096055**
+-----
+
+I have launched my app in playstore, but i have found so many crash after the app is opened.
+And according my data on playstore, all crash happened in android 6.0. 
+I have tried to testing in debug and released mode and everything is work. So this is strange for me.
+So this crash decreases my rating on playstore. Flutter team please help me.
+
+This is my data
+
+<img width="968" alt="Screen Shot 2019-07-24 at 16 24 59" src="https://user-images.githubusercontent.com/32892647/61782084-a8312600-ae2f-11e9-9cb3-827072e6c436.png">
+
+This is error messages:
+<img width="973" alt="Screen Shot 2019-07-24 at 16 25 14" src="https://user-images.githubusercontent.com/32892647/61782106-b121f780-ae2f-11e9-9b92-72d1e52e0847.png">
+
+And this is the log while app crash
+
+> 07-24 15:58:02.066 377-386/? E/cutils: Failed to openat(/storage/0403-0201): Permission denied
+07-24 15:58:02.071 377-386/? E/cutils: Failed to openat(/storage/0403-0201): Permission denied
+07-24 15:58:02.161 11382-11382/? A/libc: Fatal signal 11 (SIGSEGV), code 1, fault addr 0x8 in tid 11382 (pkarir.topkarir)
+07-24 15:58:02.214 520-520/? A/DEBUG: *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+07-24 15:58:02.215 520-520/? A/DEBUG: Build fingerprint: 'Xiaomi/helium/helium:6.0.1/MMB29M/V7.3.14.0.MBDCNDE:user/release-keys'
+07-24 15:58:02.215 520-520/? A/DEBUG: Revision: '0'
+07-24 15:58:02.215 520-520/? A/DEBUG: ABI: 'arm64'
+07-24 15:58:02.215 520-520/? A/DEBUG: pid: 11382, tid: 11382, name: pkarir.topkarir  >>> com.topkarir.topkarir <<<
+07-24 15:58:02.215 520-520/? A/DEBUG: signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x8
+07-24 15:58:02.224 520-520/? A/DEBUG:     x0   0000007fed6aefd8  x1   0000007f7a03453f  x2   0000000000000006  x3   0000000000007472
+07-24 15:58:02.224 520-520/? A/DEBUG:     x4   0000000000000000  x5   0000000000000001  x6   00000055b4fca658  x7   0000007f7a034539
+07-24 15:58:02.224 520-520/? A/DEBUG:     x8   0000000000000021  x9   00000055b4fca640  x10  0000000051511100  x11  0000000000000033
+07-24 15:58:02.224 520-520/? A/DEBUG:     x12  0000007f94d5ba70  x13  00000055b4fca660  x14  00000055b4fca650  x15  000000000000af60
+07-24 15:58:02.224 520-520/? A/DEBUG:     x16  0000007f7a7afa78  x17  0000007f94cc5c08  x18  c000000000000000  x19  0000007fed6af178
+07-24 15:58:02.224 520-520/? A/DEBUG:     x20  0000007fed6af180  x21  0000007fed6af190  x22  0000000000000000  x23  0000007fed6aefd8
+07-24 15:58:02.224 520-520/? A/DEBUG:     x24  0000007f7a7c00d0  x25  0000000000000008  x26  0000000012c59080  x27  0000000071584b40
+07-24 15:58:02.224 520-520/? A/DEBUG:     x28  00000000724b5dd4  x29  0000000012caeca0  x30  0000007f7a229320
+07-24 15:58:02.224 520-520/? A/DEBUG:     sp   0000007fed6aefd0  pc   0000007f7a229320  pstate 0000000080000000
+07-24 15:58:02.225 520-520/? A/DEBUG: backtrace:
+07-24 15:58:02.225 520-520/? A/DEBUG:     #00 pc 000000000004d320  /data/app/com.topkarir.topkarir-1/split_config.arm64_v8a.apk (offset 0x715000)
+07-24 15:58:02.560 520-520/? A/DEBUG: Tombstone written to: /data/tombstones/tombstone_07
+07-24 15:58:02.560 520-520/? E/DEBUG: AM write failed: Broken pipe
+07-24 15:58:02.578 1287-11433/? E/ActivityManager: Invalid thumbnail dimensions: 0x0
+
+=====================================================================
+
+**Edit by @xster:**
+
+ We're closing this bug since it's an issue in the Xiaomi OS and we can't fix it. See more info in https://github.com/flutter/flutter/issues/36822#issuecomment-591173690 +++$+++ 25 +++$+++ 0
+COM0 +++$+++ SP32892647 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-07-24T09:53:17Z +++$+++ cc @tvolkert  +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP14226037 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-07-24T18:02:24Z +++$+++ The device codenames in the third graph are Xiaomi devices
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP15253456 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-07-24T18:29:24Z +++$+++ The top device (santoni), for instance, is the Xiaomi Redmi 4X +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP32892647 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-07-25T07:23:38Z +++$+++ yeah, it happens in every xiaomi devices who used android 6.0, and the most of my user use xiaomi devices +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP2319867 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-07-31T02:47:02Z +++$+++ Sorry to hear about the crashes. 
+
+Couple of questions, @bayuramadeza -- is this a regression from previous versions, or can you reproduce it on older builds? 
+
+And are you able to narrow this down to a reproducible crash with a small sample? I'm not aware that we're seeing general issues with these devices, so it would be nice to know the source of this (could be Flutter itself, a plug-in, or something else, of course).  +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP32892647 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-07-31T03:04:11Z +++$+++ @timsneath yes this regression happened since i used appbundle in playstore. when i tried to remove any plugin and all code, then i uploaded it to playstore it's still happened. So, i rechecked anything but there is no something wrong. 
+i just confused, why it's running in release mode with apk, but it crashed after internal teesting with appbundle? +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP2319867 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-07-31T03:10:05Z +++$+++ Hmm, that's interesting. And you're using `Flutter 1.7.4+hotfix.4`? (Check with `flutter doctor -v`, if you wouldn't mind -- I want to make sure you're running the very latest hotfix revision.)
+
+So to confirm:
+
+- Uploaded as an APK with Flutter 1.7.4+hotfix.4, the app does not crash on these devices
+- Uploaded as an APPBUNDLE with Flutter 1.7.4+hotfix.4, the app crashes on the same devices? +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP32892647 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-07-31T03:54:19Z +++$+++ i used the latest beta.
+
+[✓] Flutter (Channel beta, v1.7.8+hotfix.4, on Mac OS X 10.14.5 18F132, locale en-ID)
+    • Flutter version 1.7.8+hotfix.4 at /Users/topkarir/Documents/developments/flutter
+    • Framework revision 20e59316b8 (12 days ago), 2019-07-18 20:04:33 -0700
+    • Engine revision fee001c93f
+    • Dart version 2.4.0
+
+ 
+[✓] Android toolchain - develop for Android devices (Android SDK version 28.0.3)
+    • Android SDK at /Users/topkarir/Library/Android/sdk
+    • Android NDK location not configured (optional; useful for native profiling support)
+    • Platform android-29, build-tools 28.0.3
+    • Java binary at: /Applications/Android Studio.app/Contents/jre/jdk/Contents/Home/bin/java
+    • Java version OpenJDK Runtime Environment (build 1.8.0_152-release-1343-b01)
+    • All Android licenses accepted.
+
+[✓] Xcode - develop for iOS and macOS (Xcode 10.2.1)
+    • Xcode at /Applications/Xcode.app/Contents/Developer
+    • Xcode 10.2.1, Build version 10E1001
+    • CocoaPods version 1.6.1
+
+[✓] iOS tools - develop for iOS devices
+    • ios-deploy 1.9.4
+
+[✓] Android Studio (version 3.4)
+    • Android Studio at /Applications/Android Studio.app/Contents
+    • Flutter plugin version 37.1.1
+    • Dart plugin version 183.6270
+    • Java version OpenJDK Runtime Environment (build 1.8.0_152-release-1343-b01)
+
+[✓] VS Code (version 1.36.1)
+    • VS Code at /Applications/Visual Studio Code.app/Contents
+    • Flutter extension version 3.2.0
+
+[!] Connected device
+    ! No devices available
+
+! Doctor found issues in 1 category.
+
+And when i uploaded only apk in playstore it's running well in android 6.0 but when i uploaded appbundle the crash appears  +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP1410613 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-07-31T21:20:23Z +++$+++ We have requested a device to test this issue. It's expected to arrive between Aug 19 and Sep 30.
+
+In the meanwhile, would it be possible to access the app's source code? If yes, feel free to send the link via Gitter. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP15253456 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-07-31T22:11:37Z +++$+++ Please sign the CLA at https://cla.developers.google.com/ before sending us any source code, or we can't look at it 🙂  +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP32892647 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-08-02T09:31:32Z +++$+++ i'm sorry, i didn't get permission to share my code,  +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP10473719 +++$+++ ROOT +++$+++ COM10 +++$+++ 2019-08-03T08:03:27Z +++$+++ @tvolkert @timsneath Is it possible to expedite fix for this issue? Around 30% of our users are on these devices and we already reached 2,500 crashes. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP1941660 +++$+++ ROOT +++$+++ COM11 +++$+++ 2019-08-03T13:16:49Z +++$+++ Same for me. Have crash on redmi 4 since 1.2, 1.0 is working so I have to keep using it.  +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP15253456 +++$+++ ROOT +++$+++ COM12 +++$+++ 2019-08-08T19:43:49Z +++$+++ @ajinasokan see https://github.com/flutter/flutter/issues/36822#issuecomment-517025572 -- once we receive devices to try to reproduce the crashes on, we will have a look.  In the meantime, if you can send us symbolicated stack traces, that would be helpful. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP2025287 +++$+++ ROOT +++$+++ COM13 +++$+++ 2019-08-09T09:29:23Z +++$+++ i got the same problem... any solutions??? @bayuramadeza ? +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP10473719 +++$+++ ROOT +++$+++ COM14 +++$+++ 2019-08-09T14:23:58Z +++$+++ We had to upload APKs with split ABIs to solve this issue.
+
+@tvolkert I tried to reproduce this issue in a Redmi Note 4 (mido). But it is only causing in Android 6.0 and I'm unable to find the stock images for it because it is too old. +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP23216320 +++$+++ ROOT +++$+++ COM15 +++$+++ 2019-08-12T13:26:29Z +++$+++ same problem here, tested release build on Xiaomi Redmi Note4, android 6.0, my logs:
+
+08-12 16:20:30.419 2297-2438/com.miui.whetstone E/Whetstone-JNI: set process [index 0](addres 0x7f6f9c55c0), pid(24518), uid(0), processName(<MY_PACKAGE_NAME>), property(0)
+08-12 16:20:30.586 24518-24518/? A/libc: Fatal signal 11 (SIGSEGV), code 1, fault addr 0x8 in tid 24518 (<MY_PACKAGE_NAME>)
+08-12 16:20:30.670 2297-2438/com.miui.whetstone E/Whetstone-JNI: set process [index 0](addres 0x7f6f9c55c0), pid(24606), uid(0), processName(<MY_PACKAGE_NAME>), property(0)
+08-12 16:20:30.863 24606-24606/? A/libc: Fatal signal 11 (SIGSEGV), code 1, fault addr 0x8 in tid 24606 (<MY_PACKAGE_NAME>)
+08-12 16:20:30.954 2297-2438/com.miui.whetstone E/Whetstone-JNI: set process [index 0](addres 0x7f6f9c55c0), pid(24677), uid(0), processName(<MY_PACKAGE_NAME>), property(0)
+08-12 16:20:31.110 24677-24677/? A/libc: Fatal signal 11 (SIGSEGV), code 1, fault addr 0x8 in tid 24677 (<MY_PACKAGE_NAME>)
+
+[✓] Flutter (Channel stable, v1.7.8+hotfix.4, on Mac OS X 10.14.6 18G84, locale en-UA)
+    • Flutter version 1.7.8+hotfix.4 at /Users/admin908/flutter
+    • Framework revision 20e59316b8 (3 weeks ago), 2019-07-18 20:04:33 -0700
+    • Engine revision fee001c93f
+    • Dart version 2.4.0
+
+ 
+[✓] Android toolchain - develop for Android devices (Android SDK version 28.0.3)
+    • Android SDK at /Users/admin908/Library/Android/sdk
+    • Android NDK location not configured (optional; useful for native profiling support)
+    • Platform android-28, build-tools 28.0.3
+    • ANDROID_HOME = /Users/admin908/Library/Android/sdk
+    • Java binary at: /Applications/Android Studio.app/Contents/jre/jdk/Contents/Home/bin/java
+    • Java version OpenJDK Runtime Environment (build 1.8.0_152-release-1343-b01)
+    • All Android licenses accepted.
+
+[✓] Xcode - develop for iOS and macOS (Xcode 10.3)
+    • Xcode at /Applications/Xcode.app/Contents/Developer
+    • Xcode 10.3, Build version 10G8
+    • CocoaPods version 1.6.1
+
+[✓] iOS tools - develop for iOS devices
+    • ios-deploy 1.9.4
+
+[✓] Android Studio (version 3.4)
+    • Android Studio at /Applications/Android Studio.app/Contents
+    • Flutter plugin version 37.1.1
+    • Dart plugin version 183.6270
+    • Java version OpenJDK Runtime Environment (build 1.8.0_152-release-1343-b01)
+
+[✓] VS Code (version 1.36.1)
+    • VS Code at /Applications/Visual Studio Code.app/Contents
+    • Flutter extension version 3.3.0
+
+[✓] Connected device (1 available)
+    • Redmi Note 4 • UOK7GY89LNSOSWEI • android-arm64 • Android 6.0 (API 23)
+
+Building app using 'flutter build appbundle', installing using bundletool. +++$+++ 1 +++$+++ 0
+COM17 +++$+++ SP10192997 +++$+++ ROOT +++$+++ COM16 +++$+++ 2019-08-28T07:06:28Z +++$+++ @ajinasokan did you solve the issue by splitting apk:
+`flutter build apk --target-platform android-arm,android-arm64 --split-per-abi`
+or  by splitting bundle:
+`flutter build appbundle --target-platform android-arm,android-arm64` ? +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP10192997 +++$+++ ROOT +++$+++ COM17 +++$+++ 2019-08-30T07:52:47Z +++$+++ --removing my comment here as it was a different issue which was specific to Redmi developer options configuration... +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP10473719 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-08-30T08:00:11Z +++$+++ @psovit Second approach doesn't work. I'm not sure about the first approach. We are building APKs separately like this 
+
+```
+flutter build apk --target-platform android-arm --build-name=$(BUILD_NAME) --build-number $(BUILD_NUMBER_32)
+``` +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP5813694 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-08-30T08:59:55Z +++$+++ Guys, I am following this issue too. We have major incident after release appbundle. A lot of android 6 device crash.
+
+Well, after move to split-apk approach ([described here](https://stackoverflow.com/questions/56607075/could-not-find-an-option-named-split-per-abi)), I finally can install the app on Android 6.0. Still I need more tests to ensure not happening on other device. +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP23216320 +++$+++ ROOT +++$+++ COM20 +++$+++ 2019-08-30T09:26:39Z +++$+++ @codxse I'm now using same approach (split-per-abi)
+
+Noticing, in case of building using appbundle, the device i'm using (Redmi Note 4 • android-arm64 • Android 6.0 (API 23)) gets strange apk of bundletool. Installed app is **much smaller** (installed app normal size is about 20Mb, while this app - about 3Mb), definitely missing native libs!
+![device-2019-08-30-122337](https://user-images.githubusercontent.com/23216320/64009853-54e27f80-cb21-11e9-8188-87ca7f881aec.png)
+ +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP32892647 +++$+++ ROOT +++$+++ COM21 +++$+++ 2019-09-23T02:29:56Z +++$+++ Hai @tvolkert , is there a new update for this issue? because i used to build apk command rather than build appbundle since this issue makes problem to my users. Thanks +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP1410613 +++$+++ ROOT +++$+++ COM22 +++$+++ 2019-09-23T04:37:34Z +++$+++ @bayuramadeza I received the phone, but it came with Android 7.0 instead of 6.0. The crash doesn’t occur on 7.0. To install 6.0, the phone needs to be rooted first... I will try that when I get a chance.  +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP1410613 +++$+++ ROOT +++$+++ COM23 +++$+++ 2019-10-03T15:05:50Z +++$+++ The stacktrace you posted is very similar to this one https://github.com/flutter/flutter/issues/37234#issuecomment-536893636.
+
+The Android App Bundle team is looking into this issue and I will update as I find out more. In the meanwhile, have you tried to upload two APKs to the Play Store instead of an app bundle? 
+
+You can use `flutter build apk --split-per-abi` to generate two APKs for 32 and 64bit. +++$+++ 1 +++$+++ 0
+COM25 +++$+++ SP1410613 +++$+++ ROOT +++$+++ COM24 +++$+++ 2019-10-03T17:35:07Z +++$+++ The workaround is to use `flutter build apk --split-per-abi` to generate two APKs for 32 and 64bit.  
+
+I'm closing the issue, but feel free to reopen if the problem persists after uploading the two APKs. +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP32892647 +++$+++ ROOT +++$+++ COM25 +++$+++ 2019-10-04T02:30:10Z +++$+++ Yeah since this issue was opened, i have built apk --split, not appbundle anymore. I hope the issue can fix in appbundle, to optimize the app like playstore recommendation +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP729934 +++$+++ ROOT +++$+++ COM26 +++$+++ 2019-10-04T12:08:38Z +++$+++ @blasten as appbundle is the Play Store recommendation, I think this issue should be kept open until a proper fix is found and if it not found, it should be underlined extremely well in the docs (or even by the tool during a build) that appbundle builds are currently unstable and not recommended by Flutter +++$+++ 9 +++$+++ 0
+COM28 +++$+++ SP1410613 +++$+++ ROOT +++$+++ COM27 +++$+++ 2019-10-04T14:03:18Z +++$+++ Just to clarify. This isn’t a Flutter bug. I forwarded this issue to the Android team, and they are currently looking into ways to mitigate the problem at the Play Store level.
+
+I can keep the issue open and close once the upstream issue is fixed.  +++$+++ 3 +++$+++ 0
+COM29 +++$+++ SP729934 +++$+++ ROOT +++$+++ COM28 +++$+++ 2019-10-04T23:03:55Z +++$+++ Thank you for the clarification.
+If I understood correctly splitting per ABI with the current flutter build script is done by adding 1000/2000/3000/4000/5000 to the base build number.
+This means it would start causing potential issues with a base build number above 1000. Even if it seems a relatively high number, it is currently not that high (we are already at build number 200 after 18 months of release cycles).
+It's also important to pay attention when switching back to appbundle, as the build number needs to go above the highest build number already released.
+Switching back and forth multiple times between these two modes is not trivial.
+For this reason we have currently decided to release fat apks with binary code for both architectures, accepting a 8MB overhead in the size, hoping to see this bug solved soon. +++$+++ 3 +++$+++ 0

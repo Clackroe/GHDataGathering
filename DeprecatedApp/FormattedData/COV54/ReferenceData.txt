@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/MinecraftForge/MinecraftForge/issues/7467
+Number of Comments: 5

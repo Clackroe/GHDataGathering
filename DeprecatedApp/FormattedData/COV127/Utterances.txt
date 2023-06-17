@@ -1,0 +1,188 @@
+ROOT +++$+++ SP3466040 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-09-27T10:12:25Z +++$+++ WHy angular is retarded? Spoiler: no template i have no time to waste
+
+Problem: Reactive forms
+div with [ngClass] directive:
+
+``div
+                    class="custom-control custom-checkbox"
+                    style="padding-left:80px; padding-top:30px;"
+                    [ngClass]="{
+                      'd-none': f.somereactiveformcontrol.value !== '1'
+                    }"
+                  >``
+f is a getter in .ts file that returns all controls (and work everywhere else)
+d-none is bootstrap display:none class
+f.somereactiveformcontrol.value is a select/option dropdown which if !==1 shows div else hides it as you can guess
+
+When dropdown activated manually it works
+when the dropdown changes because changed from code (using your (change) method binding)
+it doesn't change
+
+I'm fed up the whole framework is filled with this crap. Why you even do double way binding if works half the needed cases? Don't even make a framework at this point
+
+I've read about observable something, but why would I use the whole framework if I had to use another framework and do my own implementation? It has no fucking sense.
+
+If the customer didn't specifically asked for angular I would have thrown this piece of trash in the toilet long time ago
+
+How to solve
+
+EDIT: Thumbs down my ass, it's reality  that smacks your face 👍 
+Instead of thumbing down like twitter and facebook kids, show me I'm wrong 🥇  +++$+++ 1 +++$+++ 6
+COM0 +++$+++ SP3466040 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-09-27T10:48:46Z +++$+++ https://github.com/udos86/ng-dynamic-forms/issues/253
+
+LAWL EVEN PEOPLE IS ASKING FOR IT
+thumbs down don't bother me, take some relief on your real life frustration and let them rain down 💯  +++$+++ 1 +++$+++ 3
+COM1 +++$+++ SP3466040 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-09-27T10:52:09Z +++$+++ HAHAHAHAHA look at which hacks people has to resort
+https://github.com/udos86/ng-dynamic-forms/issues/253#issuecomment-318623092 +++$+++ 1 +++$+++ 3
+COM2 +++$+++ SP3850197 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-09-27T11:00:50Z +++$+++ > Instead of thumbing down like twitter and facebook kids, show me I'm wrong 🥇
+
+Sure.
+
+I'll go issue by issue.
+
+> Spoiler: no template i have no time to waste
+
+Firstly, the Angular repository receives **hundreds** of issues a day. The issue template ensure that the report is structured so the team can understand the issue quickly.
+
+> 
+> Problem: Reactive forms
+> div with [ngClass] directive:
+> 
+> `<div class="custom-control custom-checkbox" style="padding-left:80px; padding-top:30px;" [ngClass]="{ 'd-none': f.somereactiveformcontrol.value !== '1' }" >`
+> f is a getter in .ts file that returns all controls (and work everywhere else)
+> d-none is bootstrap display:none class
+> f.somereactiveformcontrol.value is a select/option dropdown which if !==1 shows div else hides it as you can guess
+> 
+> When dropdown activated manually it works
+> when the dropdown changes because changed from code (using your (change) method binding)
+> it doesn't change
+> 
+
+Because you change the DOM, but didn't change the `ControlValueAccessor` behind it. I suggest you use [`f.somereactiveformcontrol.setValue`](https://angular.io/api/forms/FormControl#setvalue) instead.
+
+
+> I'm fed up the whole framework is filled with this crap. Why you even do double way binding if works half the needed cases? Don't even make a framework at this point
+> 
+
+No, Angular does not have two-way binding. AngularJS does. (Even the `[()]` thingy is one-way binding underneath.)
+
+> I've read about observable something, but why would I use the whole framework if I had to use another framework and do my own implementation? It has no fucking sense.
+> 
+
+RxJS is not a framework. It's library which enables reactive programming in Angular.
+
+> If the customer didn't specifically asked for angular I would have thrown this piece of trash in the toilet long time ago
+> 
+> How to solve
+> 
+
+I'm not able to reply on this one.
+
+> EDIT: Thumbs down my ass, it's reality that smacks your face 👍
+
+[This is not cool.](https://github.com/angular/angular/blob/master/CODE_OF_CONDUCT.md) +++$+++ 2 +++$+++ 0
+COM3 +++$+++ SP3466040 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-09-27T11:14:35Z +++$+++ > > Instead of thumbing down like twitter and facebook kids, show me I'm wrong 🥇
+> 
+> Sure.
+> 
+> I'll go issue by issue.
+
+Thank you
+> 
+> > Spoiler: no template i have no time to waste
+> 
+> Firstly, the Angular repository receives **hundreds** of issues a day. The issue template ensure that the report is structure so the team can understand the issue quickly.
+> 
+
+The issue is Angular then. Hundreds of issues at day you say. A stable and mature and professional product after all these years shouldnt. Thats the damn problem.
+
+I mean... what kind of working product in IT receives "hundreds" of issues each day....
+I once developed a C# utility library which was used for most of the tasks in the main programs of my company and so, used on customers machines. Given enough time to test it, It worked very well and the problems related to it were quite little and I had to put hands back into it like 8 times in 5 years for something that was trouble and not expanding it with new required functionalities. But it was used in companies with thousands of workers, in our company and in mostly all of our software.
+
+The functionalities where broad and large since in C# you can do anything, it was about managing file i/o, mail sending receive, attachments management, network synchronicazion (RabbitMQ and other queue managers of IBM if I remember well), database CRUDS, serialization (xml, json), automation of tasks, orchestrating various windows services through network and more and more.
+
+This has to do one thing: Web dev, yet it gets hundreds of issues each day, like web dev has changed much in the last years (and it's not, the only thing it changed is that anyone felt to be a great programmer and to excrete out a new js framework like it would be the new holy grail of web dev).
+So this means the whole framework is unpolished, untested and lazy coded.
+This [sums it up really well](http://imgs.xkcd.com/comics/standards.png) 
+
+> > Problem: Reactive forms
+> > div with [ngClass] directive:
+> > `<div class="custom-control custom-checkbox" style="padding-left:80px; padding-top:30px;" [ngClass]="{ 'd-none': f.somereactiveformcontrol.value !== '1' }" >`
+> > f is a getter in .ts file that returns all controls (and work everywhere else)
+> > d-none is bootstrap display:none class
+> > f.somereactiveformcontrol.value is a select/option dropdown which if !==1 shows div else hides it as you can guess
+> > When dropdown activated manually it works
+> > when the dropdown changes because changed from code (using your (change) method binding)
+> > it doesn't change
+> 
+> Because you change the DOM, but didn't change the `ControlValueAccessor` behind it. I suggest you use [`f.somereactiveformcontrol.setValue`](https://angular.io/api/forms/FormControl#setvalue) instead.
+> 
+
+And? It's matter of the framework taking care of it because of two way data binding (check below), not my worry, otherwise I could as well do things on my own like I always did.
+
+But there is an even more FUNNY thing. I AM ACTUALLY ALREADY USING setValue even before writing this post!!! 
+
+This is the actual code:
+
+on the changing select element:
+`(change)="onClienteChange($event)"`
+
+```
+onClienteChange(e) {
+    const customer= this.getCustomer(
+      e.target.value.toString()
+    );``
+
+ ``this.orderForm.controls.paymentMethod.setValue(
+      customer.paymentMethod
+    );
+}
+```
+
+
+
+
+So to follow up your discussion, I am already using the recommened method.
+
+> > I'm fed up the whole framework is filled with this crap. Why you even do double way binding if works half the needed cases? Don't even make a framework at this point
+> 
+> No, Angular does not have two-way binding. AngularJS does. (Even the `[()]` thingy is one-way binding underneath.)
+> 
+
+https://angular.io/api/forms/NgModel
+Quoting from official website:
+
+> If you have a two-way binding with [()] syntax (also known as 'banana-box syntax')
+
+If they make fool of me it's not my fault
+
+> > I've read about observable something, but why would I use the whole framework if I had to use another framework and do my own implementation? It has no fucking sense.
+> 
+> RxJS is not a framework. It's library which enables reactive programming in Angular.
+> 
+
+It's the same. Angular should leverage it to avoid me pulling hair or doing heavy lifting. Instead it leaves you clueless with these kind of things and stupid documentation which is a copy paste from semi working code samples from tour of heroes which in some case alre also wrong and with errors in it.
+
+> > If the customer didn't specifically asked for angular I would have thrown this piece of trash in the toilet long time ago
+> > How to solve
+> 
+> I'm not able to reply on this one.
+> 
+> > EDIT: Thumbs down my ass, it's reality that smacks your face 👍
+> 
+> [This is not cool.](https://github.com/angular/angular/blob/master/CODE_OF_CONDUCT.md)
+
+Angular is  [NOT COOL](https://medium.com/hackernoon/why-angular-made-me-quit-web-dev-f63b83a157af)
+
+And about the above article, I can second and confirm personally by experience EACH SINGLE point showed. It's all true and still relevant to the most up to date version of the angular framework.
+
+This long reply is to show that I'm not just an angry fool, lot of people is fed up with it and it actually is an half baked crippled tool
+
+Yeah @thetric don't cry in silence and show us your strong arguments against my point +++$+++ 1 +++$+++ 4
+COM4 +++$+++ SP15655 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-09-27T12:01:00Z +++$+++ Closing and locking this issue as it is not acceptable language to use on our issue tracker. Please adhere to our code of conduct https://github.com/angular/code-of-conduct.
+
+@Porkechebure - clearly you are feeling frustrated and angry right now. I can understand how that can happen. It is important that we work constructively to solve our problems and not resort to insults.
+
+Please take a while to cool down and then open a more appropriate issue if you would like a problem with the framework to be addressed.
+
+ +++$+++ 0 +++$+++ 0

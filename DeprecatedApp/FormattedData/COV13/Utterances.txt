@@ -1,0 +1,94 @@
+ROOT +++$+++ SP19866062 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-07-24T03:02:05Z +++$+++ Json support to set Firebase Remote Configs defaults <!-- DO NOT DELETE 
+validate_template=false
+template_path=.github/ISSUE_TEMPLATE/fr.md
+-->
+
+## What feature would you like to see?
+
+Would be very usefull to have a simple way to export the firebase remote config fields to a json/xml and import them into another project/default values file.
+
+Today in order to do that we must config a sample project (available here) but this project isnt able to generate de default values file.
+Would be very usefull to have a simple way to do that, i have several remote config fields and app wont work without them. so on first run user must wait a few seconds (depending on his internet) to load the remote config constants) would be very nice if i could take a snapshot of the remote config values and pack it inside the apk in order to make first run faster
+
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP26440463 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-07-24T03:02:06Z +++$+++ I couldn't figure out how to label this issue, so I've labeled it for a human to triage. Hang tight. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP211174 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-07-27T19:22:55Z +++$+++ Hi @bolds07 
+Thanks for the suggestion. Might need some help to understand better. We have a way for you to configure [default values](https://firebase.google.com/docs/remote-config/use-config-android) for RC. I assume what you are asking for is different in that you want to snapshot the config state of a client to an exported file that can be loaded into your app's distribution apk. That right?
+I do see that as a goal that competes directly with keeping your clients up to date with the latest config values that you have configured on the backend. Any thoughts on how you would want the clients to trade off those goals for new installations of your application? Would you rather see the values packed into your apk or the values configured on your backend? +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP19866062 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-07-27T21:03:14Z +++$+++ > We have a way for you to configure default values for RC  
+
+the way to configure default values for RC is taking a XML
+
+the RC rest api speaks JSON, there is an obvious miscommunication problem! 
+
+There is a sample project in this repo, which teaches how to export the current RC into a json and import it into another RC project.
+would be reasonable if that json could be used as default values for any project... without need of converting it to xml.
+ +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP211174 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-07-27T21:36:38Z +++$+++ Default values are **not** intended to be used as a cache that sits in front of the RC service. They are defaults when no values have been configured on the service.
+
+> the way to configure default values for RC is taking a XML
+> the RC rest api speaks JSON, there is an obvious miscommunication problem!
+
+We take the approach that is canonical to the platform. On Android, resources are typically XML. On iOS, it is a [plist](https://firebase.google.com/docs/remote-config/use-config-ios#set-in-app-default-parameter-values).
+
+If I understand correctly, you are suggesting that we provide a way to configure defaults on the client using json. That seems reasonable.
+
+Worth noting that this won't solve the problem you originally raised of having to wait for the config values to be fetched after app installation.
+
+ +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP19866062 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-07-27T23:19:33Z +++$+++ > Default values are not intended to be used as a cache that sits in front of the RC service. They are defaults when no values have been configured on the service.
+
+i really didnt understand that...
+
+follow my thought:
+1- user first install app
+2- app tries to read a RC field during `onCreate` of first activity, the value isn't fectched yet so it will result as "empty".
+
+in my mind the default values will be read at this moment... am i wrong?
+
+are you saying that they arent read at this moment and only when the api knows for sure the fields doesnt exist on firebase i cant imagine a use case for it.
+but if that is the case it is another suggestion to use this xml values as cache for first install apps.
+
+My current solution is to create a loading screen for this situation. but it will fail if user tries to first open the app without internet connection (this might happen if user cleans app data)
+ +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP3270544 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-07-28T01:07:58Z +++$+++ Hey @bolds07, I'm on the Remote Config team. Happy to help with how the RC SDK works with default values!
+
+When the SDK starts up, it loads any default values (like the ones in the XML file). When you call one of the get methods (like [`#getString(String key)`](https://firebase.google.com/docs/reference/android/com/google/firebase/remoteconfig/FirebaseRemoteConfig#getString(java.lang.String)), if a value has been fetched and activated the SDK will return that server value and otherwise return the default value for that key if one exists. Fetched values are also cached by the SDK so they'll be available (and be used over defaults) if the app has already fetched on a previous launch (and the user hasn't cleared app data).
+
+The use case you describe where a user first opens the app without internet connection is a good case for default values since the app can use those in place of the server values. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP19866062 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-07-28T12:59:54Z +++$+++ @danasilver, So I was right and @ashwinraghav comment might be misunderstood.
+
+this turn our case back to the start point. @danasilver 
+A - >RC SDK for android accept default values only as xml file
+B - >RC Rest SDK export the current RC fields only as JSON
+
+there is an  obvious miscomunication between the systems, they should speak a common language, otherwise you are forcing ALL PROJECTS to define twice the RC values +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP3270544 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-07-28T19:35:44Z +++$+++ I think @ashwinraghav explained this pretty well! We support a JSON REST API since that's a common standard for REST APIs on the web, and XML defaults on Android since that's the standard for the platform. I understand there can be frustration working between the formats.
+
+You should only need to define RC in-app defaults once though - in the XML file. The default values saved online and available through the REST API are the server-side defaults used when no condition is met. There's more documentation on how Remote Config prioritizes parameter values in the docs here: https://firebase.google.com/docs/remote-config/parameters#parameter_value_priority +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP19866062 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-07-29T13:37:40Z +++$+++ I'm sorry to tell you @danasilver but this isnt "frustrating" this is a super stupid architecture design...
+I dont understand why people working for google have such a problem admting they make mistakes...  everybody does, what makes difference is fix them or not.
+
+i cant even imagine a meeting to present the product:
+"Here we have a new tool that will allow developers to set constants remotelly, helping with A/B tests and allowing the developer to change apps behavior without re-deploy.
+
+We will provide a rest service which accepts data in the json format.
+And in case developer wants to set some default values he can use a XML/plist"
+
+In my company someone proposing such a frankstein architecture would be fired.
+
+You just told me that if someone has an app in both architectures and want to use the default values THIS PERSON MUST DEFINE EVERY FIELD 3 TIMES... does it sound smart?
+
+> You should only need to define RC in-app defaults once though
+
+this is a wrong assumption, although i agree these values shouldn't change very often, software are LIVE things: they grow, they mutate, they acquire new powers.
+Same way new constants are added, removed, or default values might change in a lifetime of any software.
+If you were using RC on the innitial development of other firebase services, are you telling me that the default values of 3 years ago would still work for today?
+
+
+I hate to be rude and also hate to teach people how to do their jobs. but this architecture design of firebase RC is a clear mistake, anyone with a basic software engineer understand should be able to see that.
+And this whole text could be avoided if you guys simple had said: 
+"yeah that was a bad idea, i will try to put your suggestion in a next changelog or add some tool to convert json/xml then json/plist and any other technology RC lays on"
+
+ +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP8466666 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-07-29T20:32:29Z +++$+++ @bolds07 I'm sorry but your tone is not acceptable, we expect everyone in the Firebase community to respect each other.  I hope you are able to work around your problem but we won't be able to help you any more on this thread. +++$+++ 0 +++$+++ 0

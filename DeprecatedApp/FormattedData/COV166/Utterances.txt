@@ -1,0 +1,255 @@
+ROOT +++$+++ SP32854332 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-08-24T00:40:21Z +++$+++ Incorrect formatting of C# comments When you want to disable (but not delete) a field etc in a C# class, you comment it out by writing &quot;//&quot; at the start of the line, but this causes VS 15.8.0 to incorrectly format the line when the previous line ends with a comment.  You can understand this much easier when you look at my screenshot attached.
+
+To reproduce this bug, first put this class in a .cs file:
+
+```csharp
+class ExampleClass1
+{
+    int ExampleField1;
+    int ExampleField2;  // Some comment here.
+    //int ExampleField3;
+    int ExampleField4;
+}
+```
+
+Then select the text (select the entire class).  Then click menubar -&gt; Edit -&gt; Advanced -&gt; Format Selection.  VS changes the class to:
+
+```csharp
+class ExampleClass1
+{
+    int ExampleField1;
+    int ExampleField2;  // Some comment here.
+                        //int ExampleField3;
+    int ExampleField4;
+}
+```
+
+![image](https://user-images.githubusercontent.com/12449387/44558946-c3655400-a6fb-11e8-9a75-b6960e057a2d.png)
+
+
+The bug also occurs when VS formats the class at other times, not only the &quot;Format Selection&quot; command.  See the &quot;Automatically format when/on XXXXX&quot; options in menubar -&gt; Tools -&gt; Options -&gt; Text Editor -&gt; C# -&gt; Code Style -&gt; Formatting -&gt; General.
+
+Thanks for investigating this!
+
+_This issue has been moved from https://developercommunity.visualstudio.com/content/problem/317225/incorrect-formatting-of-c-comments.html
+VSTS ticketId: 668245_
+_These are the original issue comments:_
+
+Etienne Poirier on 8/21/2018, 04:35 PM (2 days ago): <p>Same issue as </p><p><a target='_blank' href="https://developercommunity.visualstudio.com/content/problem/317225/https://developercommunity.visualstudio.com/content/problem/20554/line-comments-unwantedly-align-to-comment-above-in.html">https://developercommunity.visualstudio.com/content/problem/20554/line-comments-unwantedly-align-to-comment-above-in.html</a></p><p>Thank you to check this.</p>
+
+_These are the original issue solutions:_
+(no solutions) +++$+++ 5 +++$+++ 0
+COM0 +++$+++ SP4564579 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-08-24T01:24:39Z +++$+++ This seems by design to me...  it's a common pattern to have multi-line comments at the end of constructs, and to align them across multiple lines.
+
+In this case, we don't really have any way to know or believe that this isn't one of those cases, and aligning the comments as shown seems reasonable in terms of respecting the common pattern that is out there. +++$+++ 1 +++$+++ 0
+COM1 +++$+++ SP12449387 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-09-03T09:15:49Z +++$+++ ~~Also referred [here](https://developercommunity.visualstudio.com/content/problem/324827/vs2017-undesired-reformatting-when-uncommenting-a.html)~~ (edit: this was moved to #29647) +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP32857007 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-09-05T21:54:01Z +++$+++ > This seems by design to me...
+
+I can't really agree with you because VS 15.8.2 also does it when the first comment is single-line `//` and the second comment is multi-line `/* */`
+The following shows the result after executing the "Format Document" command:
+```
+int ExampleField2;  // Some comment here.
+                    /*
+                    int ExampleField3;
+                    int ExampleField4;
+                    int ExampleField5;
+                    */
+
+```
+
+I don't believe that anyone wants the above formatting.
+
+>  it's a common pattern to have multi-line comments at the end of constructs, and to align them across multiple lines.
+
+I never do that, and apparently multiple other people also never do that, therefore I suggest making a checkbox in the Options window, so that people can simply switch this behavior on or off as desired. 
+However, in my opinion, the mixed example above seems to be a bug not a feature. +++$+++ 1 +++$+++ 0
+COM3 +++$+++ SP5749229 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-02-05T18:53:31Z +++$+++ @sharwell do you recall if there was an outcome for this in design review, or does it still need to be discussed? +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP1408396 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-02-05T19:28:15Z +++$+++ @dibarbet This one is still in the queue +++$+++ 1 +++$+++ 0
+COM5 +++$+++ SP5749229 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-02-05T19:30:11Z +++$+++ Thanks for confirming, wanted to make sure.  I'll park these 2 until the next meeting then. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP1408396 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-04-08T19:28:45Z +++$+++ I'm bringing this to a design review today. My proposal is as follows:
+
+* The current behavior is generally by design
+* We could modify the current behavior in the case where a line comment starting with a space is followed by a line comment _not_ starting with a space:
+
+    ```csharp
+    int x; // This comment starts with a space
+           //This comment did not start with a space
+    ```
+
+    For this case, the first line comment not starting with a space would be aligned with `int` instead of the current behavior of aligning it with `//`. +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-04-08T19:29:57Z +++$+++ Note that some linters will complain if you don't start your comment without a space. +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP1408396 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-04-08T19:32:35Z +++$+++ @CyrusNajmabadi Other linters will complain about comments at the end of a line of code. Most relevant to this issue though is the fact that most cases where I've seen this reported as a bug, including the original example above, do not have a space on the line of code that the user did not want to see indented. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP32857007 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-04-08T19:45:51Z +++$+++ > most cases where I've seen this reported as a bug, including the original example above, do not have a space on the line of code that the user did not want to see indented.
+
+That's an interesting pattern observation, but I think you'd like to see this issue fixed and terminated forever, but I fear that if the solution relies upon whether or not that particular space character exists, then it will be precarious and this issue will in future again be reported as a bug, instead of being laid to rest permanently.  Did you dislike the idea of solving it via a tickable option in the Options window?
+
+Another case to remember is **mixed** comment types, such as the following example.  The solution for mixed comments appears to be simple and unambiguous and does not require an option in the Options window.  If the second comment is a different type than the first comment, then the second comment should **never** be indented to match the first comment, thus VS should never produce the following:
+```
+int ExampleField2;  // Some comment here.
+                    /*
+                    int ExampleField3;
+                    int ExampleField4;
+                    int ExampleField5;
+                    */
+```
+ +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP32857007 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-04-08T20:02:24Z +++$+++ If the idea of putting it in the Options window is rejected, then I'm trying to brainstorm an alternative solution, and I thought about _maybe_ making VS look for a tab character in the place marked with "\t" following:
+```
+int x;\t// This comment is preceded by one or more tab characters.
+// This comment would never be aligned with the previous comment.
+
+int x; // This comment is preceded by one or more space characters.
+       // This comment would be aligned with the previous comment.
+```
+
+On my computer, I have `Options -> Text Editor -> C# -> Tabs` set to "Keep tabs".  I can't stand the "Insert spaces" option.  I always use tab in-between ";" and "// comment".  Despite the fact that I have VS set to "Keep tabs", when I copy & paste a line or otherwise trigger VS to format the line, VS changes my tabs to spaces.  I wish it wouldn't do that.
+
+I write it with tabs like this:
+```
+int x;\t\t// Comment. 
+```
+...and VS 2019 changes my tabs to spaces against my wishes:
+```
+int x;     // Comment. 
+```
+ +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM10 +++$+++ 2019-04-08T20:09:54Z +++$+++ I thnk i'd much rather have the rule that the `//`s are aligned if they abut.  BUt not if there's a blank line between them.  So, if you have:
+
+```c#
+int foo; //a comment
+         //this follow the above
+```
+
+and
+
+```c#
+int foo; //a comment
+
+//this does not
+```
+
+Needing to understand that having a space (or not) would affect alignment of comments seems super strange to me.  Whereas, if there's this obvious gap between them, it would make it much more clear if they were intended to *not* be together. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM11 +++$+++ 2019-04-08T20:10:25Z +++$+++ > Another case to remember is mixed comment types,
+
+Yes, i think i would agree that mixed comment types should not align here. +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP32857007 +++$+++ ROOT +++$+++ COM12 +++$+++ 2019-04-08T20:13:30Z +++$+++ Wait, here is another alternative solution, better than my previous brainstorming.
+VS would only increase the indenting of a comment if it is _already_ indented by at least one space or tab char.  Example:
+```
+int x;  // First comment.
+    // VS would align this comment with the first comment because it is already indented.
+
+int y; // Blah blah.
+// This comment would never be aligned with the previous comment.
+```
+
+Thus the final result is:
+```
+int x;  // First comment.
+        // VS would align this comment with the first comment because it is already indented.
+
+int y; // Blah blah.
+// This comment would never be aligned with the previous comment.
+```
+
+In other words, if a comment is aligned with "int x;" then it remains at that level, but if it already indented beyond "int x;" by one or more space or tabs, then VS aligns it with the previous comment.
+ +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP32857007 +++$+++ ROOT +++$+++ COM13 +++$+++ 2019-04-08T20:20:47Z +++$+++ > Needing to understand that having a space (or not) would affect alignment of comments seems super strange to me. Whereas, if there's this obvious gap between them, it would make it much more clear if they were intended to not be together.
+
+I agree, but that's identical to the current behavior of VS 2019, therefore it would continue to trigger bug reports.  So how about making VS only increase the indenting of a comment when it is _already_ indented further right than `int x;` ?    If a comment is currently exactly aligned with `int x;`, then why should VS think that a preexisting exact alignment is incorrect? +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP32857007 +++$+++ ROOT +++$+++ COM14 +++$+++ 2019-04-08T20:43:22Z +++$+++ Note that if the formatting of comments is influenced by the preexisting formatting/spacing (in the manner as I described above), then this behavior is _not at all_ unusual nor inconsistent with other VS formatting behavior, because VS formatting is _already_ influenced by the preexisting spacing.  For example, when I run the "Format Selection" command on the following code in VS 2019 on my own computer, VS doesn't change the code at all.  VS respects the fact that I wrote TestProperty2 on a single line and it leaves it on a single line.
+
+```
+int TestProperty1
+{
+    get
+    {
+        return 123;
+    }
+}
+
+int TestProperty2 { get { return 456654; } }
+```
+
+In the same way as VS retains my preexisting formatting of a property, it can retain my preexisting formatting of a comment.
+```
+int x; // Blah blah.
+// This comment is already exactly aligned with "int x;" 
+// thus there is NO reason to think it's wrongly aligned.
+
+int y;   // another comment
+   // this comment does look wrong and should be reformatted.
+```
+ +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM15 +++$+++ 2019-04-08T20:45:36Z +++$+++ @verelpode in general we haven't had that concept in the formatting engine yet.  But i'm personally amenable to it.  I think it's a reasonable approach that would give the user some level of control here in a manner that would be reasonably intuitive. +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP1408396 +++$+++ ROOT +++$+++ COM16 +++$+++ 2019-04-08T21:05:27Z +++$+++ **Design review summary:**
+
+The current general recommended approach is to add a blank line before the comment which should not have the extra indentation. However, to address the specific issue here, we would take a pull request which added a conditional formatting rule where comments _already aligned_ where code would be indented on the same line will anchor at that location instead of the current behavior of anchoring to the trailing comment on the preceding line. +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP32857007 +++$+++ ROOT +++$+++ COM17 +++$+++ 2019-04-08T21:15:30Z +++$+++ Great, I think this solution will successfully prevent this issue being reported in future again as a bug.  To my surprise, it was even possible to satisfy all users automatically without the burden of creating yet another option in the Options window. +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP3721251 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-05-09T19:13:27Z +++$+++ This horribly annoying behavior in Visual Studio bothered me multiple times today.  It's so unbelievably annoying!  I'll upgrade to VS 2019 just for this improvement once it's available.  I'm anxiously awaiting. +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP12466233 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-07-14T05:10:05Z +++$+++ I've encountered this problem in Roslyn as well. The current behavior is annoying. See `CS1720WRN_DotOnDefault02` for an example.
+
+Original code (with formatting warning):
+![image](https://user-images.githubusercontent.com/12466233/61179603-87a8d680-a5ba-11e9-8e5e-7f2c7d2e1316.png)
+
+`1>C:\repos\roslyn\src\Compilers\CSharp\Test\Semantic\Semantics\SemanticErrorTests.cs(21922,17,21922,17): warning IDE0055: Fix formatting`
+
+Code with formatting fix applied, but undesirable formatting:
+![image](https://user-images.githubusercontent.com/12466233/61179606-9e4f2d80-a5ba-11e9-88f9-a880063ea6e2.png)
+
+This is using 16.2p3. +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP12449387 +++$+++ ROOT +++$+++ COM20 +++$+++ 2019-09-10T01:11:25Z +++$+++ also reported [DC](https://developercommunity.visualstudio.com/content/problem/719204/comment-code-style.html)  +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP3721251 +++$+++ ROOT +++$+++ COM21 +++$+++ 2019-10-31T04:27:48Z +++$+++ @jinujoseph Why is it moved to the backlog?  This keeps coming up and it is SO ANNOYING.  How about just adding an option to turn this nonsense off? +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM22 +++$+++ 2019-10-31T07:08:33Z +++$+++ @ChainReactive as mentioned in this post here: https://github.com/dotnet/roslyn/issues/29482#issuecomment-481007848
+
+> The current general recommended approach is to add a blank line before the comment which should not have the extra indentation. However, to address the specific issue here, we would take a pull request which added a conditional formatting rule where comments already aligned where code would be indented on the same line will anchor at that location instead of the current behavior of anchoring to the trailing comment on the preceding line.
+
+In other words, if a community member wanted to contribute such a PR, roslyn would take it.  however, absent that, the advice would be to just put in a blank line in the code.  
+
+If this is something you are passionate about (which seem evidenced by https://github.com/dotnet/roslyn/issues/29482#issuecomment-491030328 and https://github.com/dotnet/roslyn/issues/29482#issuecomment-548212118) perhaps you would be willing to help out here with a PR yourself?  
+
+Note that there are a couple of good channels to help out people working to contribute toward roslyn (internal and external alike):
+
+gitter.im/dotnet/roslyn and
+aka.ms/csharp-discord
+
+Cheers! +++$+++ 1 +++$+++ 0
+COM24 +++$+++ SP3721251 +++$+++ ROOT +++$+++ COM23 +++$+++ 2019-10-31T07:39:17Z +++$+++ @CyrusNajmabadi, @sharwell  Visual Studio is a commercial product with a dedicated team on staff at Microsoft.  I'm not already familiar with Roslyn, nor do I have time to dive down that rabbit hole.  The people who's job it is to improve Visual Studio's user experience would be better equipped to fix this.
+
+ +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM24 +++$+++ 2019-10-31T08:10:13Z +++$+++ > @CyrusNajmabadi, @sharwell Visual Studio is a commercial product with a dedicated team on staff at Microsoft.
+
+It's also an open source project with a community that actively contributes to it and provides PRs when their needs don't align with the priorities of the main team itself.  I'm one of those people and have contributed as an external community member a large number of times.
+
+As i've already pointed out, the stated view of the team is that there is an easy workaround if hte current behavior is undesirable to you.  If that workaround is not tenable and you want to see this fixed, it will have to come from a PR from someone willing to view the change as valuable enough to invest their own time.
+
+I personally don't feel like it's worth fixing myself, but i'd be happy to help you with a PR to change if it is something that is affecting you.
+
+> The people who's job it is to improve Visual Studio's user experience 
+
+As an open source project, "the people" includes the community (including you, me, and other interested parties).  
+
+> would be better equipped to fix this.
+
+Yes, that's likely true.  But they're also tasked with work felt to be more important and a more valuable use of their time.  And so here we are.  +++$+++ 2 +++$+++ 0
+COM26 +++$+++ SP3721251 +++$+++ ROOT +++$+++ COM25 +++$+++ 2019-10-31T09:07:23Z +++$+++ @CyrusNajmabadi I'd welcome your assistance in making up for Microsoft's negligence.  As I've already mentioned, I don't have time to get into Roslyn.  How about I send you my kudos once you fix this bug?  But if your Roslyn skills aren't up to stuff, then don't worry about it. +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM26 +++$+++ 2019-10-31T09:40:02Z +++$+++ > @CyrusNajmabadi I'd welcome your assistance in making up for Microsoft's negligence. 
+
+Teams prioritizing things different from you is not negligence.  There are millions of users and thousands of signals indicating what is valuable and important to actually address with the resources available.  This minor issue simply isn't one of those.  I can imagine you probably have to make similar decisions in your own work when deciding where to allocate your own resources.
+
+> How about I send you my kudos once you fix this bug? 
+
+I am personally not interesting in contributing a PR here.  Primarily because i don't find the behavior particularly problematic, nor do i feel that the workaround is insufficient.
+
+Still happy to help you out at any point if you change you mind.  The links to the channels still apply.   Cheers! +++$+++ 1 +++$+++ 0
+COM28 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM27 +++$+++ 2019-10-31T09:42:25Z +++$+++ > But if your Roslyn skills aren't up to stuff, then don't worry about it.
+
+When it comes to this area, they may not be.  Hence why I was offering to work through it with you.  Two minds being better than one and all that :)  
+
+Cheers and good luck!  If you change your mind, just let me know! :) +++$+++ 1 +++$+++ 0
+COM29 +++$+++ SP3721251 +++$+++ ROOT +++$+++ COM28 +++$+++ 2019-10-31T10:13:29Z +++$+++ > Teams prioritizing things different from you is not negligence
+
+I disagree with you on this in the current context.  The (ir)responsible team at Microsoft is neglecting a lot of users by not fixing this bug.  Just google "visual studio c# turn off align comments" to see.
+
+> This minor issue simply isn't one of those.
+
+It is a "minor issue" in that it'd be easy for them to fix, although the choose not to.  It's not a "minor issue" in that it is indeed super annoying. +++$+++ 0 +++$+++ 0

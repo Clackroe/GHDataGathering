@@ -1,0 +1,40 @@
+ROOT +++$+++ SP8466666 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-01-31T21:11:42Z +++$+++ Add an AuthUI.reauthenticate() function There are some Firebase Auth actions that require a recent (~5mins) sign-in to succeed:
+
+  * Delete account (#478)
+  * Change email
+  * Etc
+
+We should offer a simple method to launch into a re-authentication flow that allows the user to sign in choosing from any of their linked providers.
+
+Considerations:
+
+  * This would likely have to be a method that returns an `Intent` similar to the sign-in intent
+  * The developer will probably want to provide a reason for the re-authentication, maybe passed in
+  * This would be similar to the normal sign-in flow with a few alterations:
+    * Account creation disabled
+    * Account picker screen lists only methods the user has already linked to the `FirebaseUser` +++$+++ 12 +++$+++ 0
+COM0 +++$+++ SP879468 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-02-06T22:33:02Z +++$+++ Unless there are objections I'm going to start taking a crack at this. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP8466666 +++$+++ ROOT +++$+++ COM0 +++$+++ 2017-02-06T22:35:06Z +++$+++ Go for it, thanks! +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP7868782 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-02-22T14:52:15Z +++$+++ May I know , what is the current status of this implementation? +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP8466666 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-02-22T16:25:56Z +++$+++ @nikahmadz this is indefinitely on hold ... @amandle left the project and we are focusing on some other priorities for now. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP12475394 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-05-18T18:18:47Z +++$+++ FWIW, I'd really love to see this implemented. If I'm reading the comments here correctly, it seems like the work was already done for Android, but never released because it wasn't available on the other platforms. Is it possible to just push the release out for android?  I would implement the other devices myself if I had the time, but it seems like a shame to have this stuff ready to go but just waiting on other implementations. +++$+++ 2 +++$+++ 0
+COM5 +++$+++ SP69744 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-06-07T14:48:23Z +++$+++ This is really a necessary feature. 
+I am currently using the unreleased/unsupported iOS FUIAccountSettingsViewController, and it seems to be working for me.
+But it should be officially released and also available for Android.
+
+At the moment FirebaseAuthUI is a 80% solution for iOS and even less for Android. To be able to change email/password etc i still need to build everything myself and i really start to doubt our decision to use FirebaseAuthUI in the first place.
+
+From the website:
+"Easily add sign-in to your Android app with FirebaseUI
+FirebaseUI is a library built on top of the Firebase Authentication SDK that provides drop-in UI flows for use in your app."
+
+No it's not. Not if there is no support to do basic operations like email/password change.
+
+We need either documentation how to handle reauthentication (besides email/password which is documented) or even better, release the FUIAccountSettingsViewController and an Android-port of it. +++$+++ 9 +++$+++ 0
+COM6 +++$+++ SP18280101 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-05-24T07:50:24Z +++$+++ It's been more than 2 years from its initial progress and more than a year from the last update, did you guys abandon this key feature? +++$+++ 7 +++$+++ 0
+COM7 +++$+++ SP6423282 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-04-14T21:51:54Z +++$+++ When can we expect the release of this necessary feature? @samtstern  +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP959972 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-04-14T22:54:47Z +++$+++ Closing this conversation to prevent more "ETA requested" responses (which actually take time from feature work). 
+
+Latest status update: [#issuecomment-367736441](https://github.com/firebase/FirebaseUI-Android/issues/563#issuecomment-367736441)
+
+Firebase team will update here and potentially unlock thread if/when there is an update. +++$+++ 0 +++$+++ 0

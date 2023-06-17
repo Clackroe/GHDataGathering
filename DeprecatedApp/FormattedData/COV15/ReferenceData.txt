@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/microsoft/vscode-docker/issues/1622
+Number of Comments: 8

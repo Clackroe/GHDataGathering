@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/angular/angular/issues/23337
+Number of Comments: 36

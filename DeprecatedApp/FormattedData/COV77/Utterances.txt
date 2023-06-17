@@ -1,0 +1,99 @@
+ROOT +++$+++ SP952783 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-08-28T23:07:06Z +++$+++ ❌(REVERTED): Add text to MIT License banning ICE collaborators ## The Lerna Core team has reverted this PR and revert information and response can be found in https://github.com/lerna/lerna/pull/1633
+
+============================================
+
+In this PR, the following text has been added to the existing MIT license:
+
+```
+The following license shall not be granted to the following entities or any
+subsidiary thereof due to their collaboration with US Immigration and Customs
+Enforcement ("ICE"):
+
+- "Microsoft Corporation"
+- "Palantir Technologies"
+- "Amazon.com, Inc."
+- "Northeastern University"
+- "Ernst & Young"
+- "Thomson Reuters"
+- "Motorola Solutions"
+- "Deloitte Consulting LLP"
+- "Johns Hopkins University"
+- "Dell Inc"
+- "Xerox Corporation"
+- "Canon Inc"
+- "Vermont State Colleges"
+- "Charter Communications"
+- "LinkedIn Corporation"
+- "United Parcel Service Co"
+```
+
+I have already spoken to @kittens and @evocateur about this privately, but I do need @kittens to give us permission to make this change.
+
+# Explanation
+
+Over the last year I've been really disturbed to see what ICE has done to American immigrants, to an extreme with what has happened to children.
+
+The other day I saw this video from the ACLU about a toddler who after being separated from his family for several months could no longer look his mother in the face:
+
+[<img width="1312" alt="screen shot 2018-08-28 at 3 53 53 pm" src="https://user-images.githubusercontent.com/952783/44755388-cdf86280-aada-11e8-8749-3ec6fd27fdcc.png">
+](https://twitter.com/ACLU/status/1033084026893070338)
+
+<p align="center"><a href="https://twitter.com/ACLU/status/1033084026893070338">twitter.com/ACLU/status/1033084026893070338</a></p>
+
+Those with a background in early childhood development can tell you that severe cases of neglect at an early age can and will cause severe developmental delays and disabilities. They will grow up feeling detached, they will have deep rooted trust issues, and they will have an inability to feel empathy. The actions of ICE have had a lasting lifelong impact on these children, and many of them won't even remember it happening.
+
+I have trouble expressing how angry this makes me feel.
+
+And the worst part is that I feel helpless to improve the situation. I vote, I campaign, I phone bank, I donate, I protest, I write to officials, I try to inform others... and yet things just keep getting worse and worse.
+
+There is one thing I have control over, and that's open source. Open source has always been a way that I try to make the world a better place. Bringing new contributions to the community helps drives innovation and competition.
+
+Lerna is a perfect example of that. Historically monorepos required a lot of infrastructure and only large teams and companies could afford to set it up and maintain it. They had a very expensive cost to them. Lerna made it available to everyone and the community has flourished around it.
+
+Tool after tool, this is what we accomplish with open source. This is what we contribute back to the world. But today I want to do something more.
+
+As we've learned over the last few years with Facebook, Uber, Google, and others. Tech companies do a lot of shady things behind the scenes.
+
+Recently it's come out that a lot of big tech companies are supporting ICE by providing them with infrastructure and in some cases doing significant development work for them. They all have their excuses, but the fact is that these companies care only about the millions of dollars that ICE is paying them and are willing to ignore all the horrible things that ICE does.
+
+Recently it has come to my attention that many of these companies which are being paid millions of dollars by ICE are also using some of the open source software that I helped build.
+
+Now, it's not news to me that people can use open source for evil. That's part of the whole deal.
+
+But it's really hard for me to sit back and ignore what these companies are doing with my code. It doesn't feel like there are enough steps in between me and the horrible things ICE is doing.
+
+So my plan now is to start licensing my software differently.
+
+I have spoken to Sebastian and Daniel about this and we all want Lerna to do the same.
+
+For the companies that are known supporters of ICE: Lerna will no longer be licensed as MIT for you. You will receive no licensing rights and any use of Lerna will be considered theft. You will not be able to pay for a license, the only way that it is going to change is by you publicly tearing your contracts with ICE.
+ +++$+++ 18 +++$+++ 9
+COM0 +++$+++ SP1514352 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-08-29T02:04:08Z +++$+++ Lerna team, thank you for taking a stand 👏🏼👏🏼👏🏼 +++$+++ 4 +++$+++ 5
+COM1 +++$+++ SP1517291 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-08-29T03:04:04Z +++$+++ Please make sure that you amend your page on npmjs.org so that it does not state that the license of the project is "MIT". +++$+++ 7 +++$+++ 0
+COM2 +++$+++ SP1058931 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-08-29T03:09:47Z +++$+++ Curious: Do "parents" who drag their children across the desert with the express intent of illegally entering the United States have no share of blame for what happens to these children? +++$+++ 0 +++$+++ 17
+COM3 +++$+++ SP41707455 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-08-29T03:24:41Z +++$+++ Are you protesting the right of the United States to choose who to allow to immigrate by deporting illegal aliens, or are you protesting the specific treatment of these illegal aliens in the context of their removal? If it's the former, then there's no point in bringing up their specific treatment as a point for why ICE should be protested (because it would be the case regardless of the treatment of any particular alien), and if it's the latter, then why not specify that, and protest by listing what exactly you would like changed about the treatment of aliens during their deportation? That would make what exactly you are protesting much clearer. +++$+++ 3 +++$+++ 1
+COM4 +++$+++ SP273720 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-08-29T03:40:14Z +++$+++ I'm adding it to all my repos to prevent the lerna project from being used in any of those projects, both open source and commercial. Just as a matter of principal. Adding your political beliefs to your licensing is petty. The irony is that this very project is hosted on a resource owned by Microsoft... +++$+++ 2 +++$+++ 1
+COM5 +++$+++ SP207432 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-08-29T03:44:57Z +++$+++ While I too abhor ICE, this isn't actually a valid license change. In order to re-license a project without a CLA, the consent of all contributors needs to be sought. There are a variety of scripts out there that accomplish this, the one I am most familiar with is the [Rust Relicense assistant](https://github.com/cmr/relicense-assistant). I'd suggest using similar tooling to avoid potential legal issues. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP8072617 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-08-29T03:48:33Z +++$+++ Yep, noted that is is no longer Open Source Software, by definition of https://opensource.org/osd .
+
+The way this tirefire of a license can be interpreted, is that since a company uses Windows and pays Microsoft, they are complicit. Or Github for that matter, which is owned by Microsoft. Are the Lerna repo maintainers profiting on ICE, in direct opposition to their license? Github free accounts didn't come from nothingness. +++$+++ 2 +++$+++ 3
+COM7 +++$+++ SP53522 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-08-29T03:56:32Z +++$+++ @jwcrawley: So what? Maximal open source permissiveness is not automatically correct and just. It's just one option.
+
+And no, the terms are pretty clear, I suggest you read more carefully: "The following license shall not be granted to the following entities or any subsidiary thereof." It says nothing about people giving money to e.g. Microsoft or using Microsoft products. +++$+++ 2 +++$+++ 1
+COM8 +++$+++ SP1236202 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-08-29T04:21:19Z +++$+++ I'm not sure how disallowing corporations that deal with ICE from using lerna would affect ICE's behavior - which I assume is the intent behind this PR.
+
+Shoving politics into code will not help anyone.
+ +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP853712 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-08-29T04:28:52Z +++$+++ **Edit:** Just to clarify, I would not have personally made this change. I do however respect the existing maintainers of the projects decision to do so. I do not consider this project to be mine.
+
+Locking this issue.
+
+If you disagree with the license then you're welcome to use one of the alternatives or write your own.
+
+If you're employed by a subsidiary listed, direct any questions about the usage of Lerna to your company lawyer. This license only applies to future versions, you're free to use old versions that do not contain this clause.
+
+If you have concerns over the legality of relicensing. The MIT license allows sublicensing, which this falls under. Even still, all contributors implicitly agreed to the existing license, of which I am the original license holder, when they submitted code meaning we are within our rights to relicense.
+
+If you're a contributor with active code in Lerna, and disagree with the relicense, feel free to privately message @jamiebuilds, @evocateur, or myself and we'll ensure that your contributions are either removed or rewritten to remove attribution.
+
+Thanks everyone for your comments thus far. +++$+++ 0 +++$+++ 0

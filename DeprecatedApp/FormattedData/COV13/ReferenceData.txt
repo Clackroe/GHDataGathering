@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/firebase/firebase-android-sdk/issues/1818
+Number of Comments: 10

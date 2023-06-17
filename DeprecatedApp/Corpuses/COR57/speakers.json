@@ -1,0 +1,18 @@
+{
+    "ghost": {
+        "id": "SP10137",
+        "role": "NONE (AUTHOR)"
+    },
+    "googlebot": {
+        "id": "SP5384588",
+        "role": "COLLABORATOR"
+    },
+    "tikue": {
+        "id": "SP2915777",
+        "role": "COLLABORATOR"
+    },
+    "vorot93": {
+        "id": "SP240364",
+        "role": "COLLABORATOR"
+    }
+}

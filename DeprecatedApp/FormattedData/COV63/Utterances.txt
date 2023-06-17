@@ -1,0 +1,47 @@
+ROOT +++$+++ SP51417492 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-06-14T14:42:56Z +++$+++ Roll third_party/re2 0c95bcce2f1f..848dfb7e1d7b (2 commits) 
+https://github.com/google/re2.git
+/compare/0c95bcce2f1f..848dfb7e1d7b
+
+git log 0c95bcce2f1f0f071a786ca2c42384b211b8caba..848dfb7e1d7ba641d598cb66f81590f3999a555a --date=short --no-merges --format=%ad %ae %s
+2019-06-13 junyer@google.com Don&#39;t let DFA execution bail when slow for RE2::Set.
+2019-06-13 junyer@google.com Expose FilteredRE2::GetRE2() as public.
+
+The AutoRoll server is located here: https://autoroll.skia.org/r/re2-shaderc-autoroll
+
+Documentation for the AutoRoller is here:
+https://skia.googlesource.com/buildbot/+/master/autoroll/README.md
+
+If the roll is causing failures, please contact the current sheriff (radial-bots&#43;shaderc-roll@google.com), and stop
+the roller if necessary.
+
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP51417492 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-06-14T20:00:48Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-06-14T20:01:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-06-14T20:03:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-06-14T20:04:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-06-14T20:05:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-06-14T20:06:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-06-14T20:07:48Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-06-14T20:08:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-06-14T20:09:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-06-14T20:10:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-06-14T20:11:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM10 +++$+++ 2019-06-14T20:12:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM11 +++$+++ 2019-06-14T20:13:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM12 +++$+++ 2019-06-14T20:14:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM13 +++$+++ 2019-06-14T20:15:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM14 +++$+++ 2019-06-14T20:16:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM15 +++$+++ 2019-06-14T20:17:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM16 +++$+++ 2019-06-14T20:18:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM17 +++$+++ 2019-06-14T20:19:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-06-14T20:20:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-06-14T20:21:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM20 +++$+++ 2019-06-14T20:22:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM21 +++$+++ 2019-06-14T20:23:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM22 +++$+++ 2019-06-14T20:24:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM23 +++$+++ 2019-06-14T20:25:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM24 +++$+++ 2019-06-14T20:26:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM25 +++$+++ 2019-06-14T20:27:47Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM26 +++$+++ 2019-06-14T20:28:48Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM27 +++$+++ 2019-06-14T20:29:48Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP51417492 +++$+++ ROOT +++$+++ COM28 +++$+++ 2019-06-14T20:30:48Z +++$+++ PullRequest is not longer mergeable. Closing it. +++$+++ 0 +++$+++ 0

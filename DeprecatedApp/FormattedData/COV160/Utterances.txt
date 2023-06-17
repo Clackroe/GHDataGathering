@@ -1,0 +1,114 @@
+ROOT +++$+++ SP16024985 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-06-13T17:41:50Z +++$+++ Rename default branch from "master" to "main" **Is your feature request related to a problem? Please describe.**
+Lot of software developers are discussing on twitter to rename default branches for their projects from "master" to "main" or equivalent https://twitter.com/search?q=master%20branch&src=typed_query
+
+The primary reason being master-slave an oppressive metaphor.
+
+**Describe the solution you'd like**
+Node.js core follows the trend to change the industry standard, and renames default branch from "master" to "main" or similar
+
+**Describe alternatives you've considered**
+Sticking with existing master branch name for the default
+
+EDIT: Updated "renaming master to main" to "renaming default branch name from 'master' to 'main'" +++$+++ 4 +++$+++ 16
+COM0 +++$+++ SP5952481 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-06-13T17:52:45Z +++$+++ This is not a technically difficult task (https://www.hanselman.com/blog/EasilyRenameYourGitDefaultBranchFromMasterToMain.aspx) but it might break some things. I definitely think we should try to change it. +++$+++ 5 +++$+++ 2
+COM1 +++$+++ SP3065230 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-06-13T18:41:38Z +++$+++ Does this mean we would have to change the cluster API (which includes master in its vocabulary) as well in a semver-major? +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP7792608 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-06-13T18:52:36Z +++$+++ This is getting silly already. No way it makes any sense.
+
+UPD: How is this offtopic? Please stop bringing politics into development world. That's just mindblowingly silly. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-06-13T18:52:43Z +++$+++ That is hilarious. From defacing nodejs.org with blm propaganda, to renaming master branch to avoid similarity with master-slave metaphor. What is the next requirement OpenJS will ask for? To remove the **test** directory to avoid similarity with **test**icles? Please keep technical aspects of the software free of politics and globalistic propaganda. +++$+++ 1 +++$+++ 0
+COM4 +++$+++ SP5952481 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-06-13T19:01:09Z +++$+++ @ronag i don't think that cluster was brought up in this thread, though it has been discussed on other occasions. +++$+++ 1 +++$+++ 0
+COM5 +++$+++ SP3065230 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-06-13T19:06:17Z +++$+++ I'm -0 to the change itself. I don't think that changing it because it is "industry standard" is a valid argument, at least not yet. If we are changing it because we think it is a loaded/inappropriate word, then I think we should remove all occurrences to remain consistent with that decision. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP1315533 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-06-13T19:20:15Z +++$+++ I don't feel like this is something people have actually complained about. When we've made these changes in the past (for example in child_worker.suicide) it was guided by someone acting in good faith feeling strongly about the terminology. 
+
+If someone from the project's base does feel strongly about it - I suggest we rename it, though `master` is the default git branch name so I would caution we pick our battles.
+
+I vote we:
+ - Don't change the name from master to something else currently.
+ - Change it when a contributor/collaborator feels strongly enough about this.
+
+Of course, if you @trivikr personally feel strongly about this then I support you :] +++$+++ 4 +++$+++ 0
+COM7 +++$+++ SP16024985 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-06-13T19:28:22Z +++$+++ > Of course, if you @trivikr personally feel strongly about this then I support you :]
+
+I don't feel strongly against using master branch name. I proposed it as I plan to follow it in my personal projects and work projects, and wanted to ask Node.js community.
+
+Should we add this to tsc-agenda?
+
+> though `master` is the default git branch name so I would caution we pick our battles.
+
+Is there an equivalent ask in git repo?
+If not, we should create one.
+ +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP1315533 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-06-13T19:28:42Z +++$+++ Also, to all the people making the drive by comments: please keep discussion civil and remember Node.js has a [code of conduct](https://github.com/nodejs/admin/blob/master/CODE_OF_CONDUCT.md). If you can't be polite here you really don't have to comment. It's fine to either support or object to the proposed change (or any proposed change) as long as you are [civil](https://github.com/nodejs/admin/blob/master/CODE_OF_CONDUCT.md#our-standards) - **we do not tolerate abuse** towards the project and its members here.
+
+To collaborators: kind reminder that you are [allowed to ban users](https://github.com/nodejs/admin/blob/master/Moderation-Policy.md#non-collaborator-posts) that make these sort of comments and to hide said comments - but please update the project (as explained there) with what actions you took so that any moderation actions taken are done in full transparency. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP1315533 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-06-13T19:33:23Z +++$+++ > Is there an equivalent ask in git repo?
+
+I'm not sure where the git repo is - but I recommend trying the mailing list and asking there https://git-scm.com/community 
+
+I think "doing whatever git does and bringing the issue to their attention" is a viable strategy - but again, I don't feel particularly strongly about the use of "master" and if someone else does - sure.
+
+> Should we add this to tsc-agenda?
+
+I'm not entirely sure why?  +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP16024985 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-06-13T19:36:54Z +++$+++ > > Should we add this to tsc-agenda?
+>
+> I'm not entirely sure why?
+
+To let tsc make a call on this request.
+
+Other option would be to keep this issue open for a week or so, and see if it gathers more feedback or support. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP1315533 +++$+++ ROOT +++$+++ COM10 +++$+++ 2020-06-13T19:44:39Z +++$+++ > To let tsc make a call on this request.
+
+As far as I understand it that's not how our governance works. Any collaborator may add the `tsc-agenda` label for an issue so it gets TSC eyes on it - but that should only be done if consensus seeking fails. It's an escape hatch for when we need to _force a vote_ which is pretty rare. At least that is my understanding of [the process](https://github.com/nodejs/node/blob/master/GOVERNANCE.md).
+
+So far everyone here seems to be pretty in sync (no one is opposed but no one is particularly in favor). We're not even in disagreement 😅 +++$+++ 3 +++$+++ 0
+COM12 +++$+++ SP16024985 +++$+++ ROOT +++$+++ COM11 +++$+++ 2020-06-13T20:04:38Z +++$+++ > I'm not sure where the git repo is - but I recommend trying the mailing list and asking there git-scm.com/community
+
+I've sent an email to Git Community mailing list, and will update here once they come up with a decision. +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP45469 +++$+++ ROOT +++$+++ COM12 +++$+++ 2020-06-13T20:14:47Z +++$+++ Bear in mind that URLs linking to `master` will not redirect to the new default branch name (and for repos where it matters, which isn't this one, github-pages only works on the default branch when it's named `master`). It may be worth waiting for Github to fix these discrepancies before making the switch.
+
+(to be clear; i'm in favor of making the change, and "main" seems as good as anything else, but the disruption caused by Github's incomplete support for a non-master default branch are significant) +++$+++ 4 +++$+++ 0
+COM14 +++$+++ SP439929 +++$+++ ROOT +++$+++ COM13 +++$+++ 2020-06-13T20:27:02Z +++$+++ +1 to main but I do want to see what lead GitHub takes in making this easier +++$+++ 2 +++$+++ 1
+COM15 +++$+++ SP498775 +++$+++ ROOT +++$+++ COM14 +++$+++ 2020-06-13T20:27:30Z +++$+++ I personally feel very strongly that we should change this.
+
++1 to `main` +++$+++ 3 +++$+++ 1
+COM16 +++$+++ SP26796102 +++$+++ ROOT +++$+++ COM15 +++$+++ 2020-06-13T20:32:39Z +++$+++ I would be -1 untill a plan is drawn for the changes. This could cause a lot of issues with our build ci which would need to be accounted for. +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP1315533 +++$+++ ROOT +++$+++ COM16 +++$+++ 2020-06-13T20:37:21Z +++$+++ Ok, it looks like there are people in favor in the org who feel strongly that we should change this. So far no objections and everyone in the conversation is +0 -0 or +1.
+
+Does anyone object to changing this (just the main branch name from `master` to `main`)?
+
+It looks like it's [not particularly hard](https://github.com/nodejs/node/issues/33864#issuecomment-643656288) technically (+ an update to the collaborator guide and policy). We probably need to address [the links](https://github.com/nodejs/node/issues/33864#issuecomment-643672588) as well.
+
+ +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP3065230 +++$+++ ROOT +++$+++ COM17 +++$+++ 2020-06-13T20:39:17Z +++$+++ > So far no objections and everyone in the conversation is +0 -0 or +1.
+
+What about https://github.com/nodejs/node/issues/33864#issuecomment-643674646?
+
+Also, I think GitHub might pick `trunk` instead of `main`. https://github.com/cli/cli/issues/929...
+
+> Does anyone object to changing this (just the main branch name from master to main)?
+
+I don't object... but I don't think it's a good idea to rush this... +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP498775 +++$+++ ROOT +++$+++ COM18 +++$+++ 2020-06-13T20:40:58Z +++$+++ Fwiw there is quite a lot of work for us to do in order to make sure we do this in a way that is not disruptive.
+
+To @AshCripps point, we definitely need to do a large audit and preparation before moving forward.
+
+I was putting together some notes yesterday outlining steps to take and what to consider before making a change like this
+
+I'd like to suggest that we pause discussion until Monday and I can come back with a suggestion of what we should audit and steps to follow to do this in a way that would minimize disruption +++$+++ 4 +++$+++ 0
+COM20 +++$+++ SP1315533 +++$+++ ROOT +++$+++ COM19 +++$+++ 2020-06-13T20:42:13Z +++$+++ @ronag that message was posted after I started writing mine so I did not see it. Sorry for the (timing) confusion. Fwiw https://github.com/nodejs/node/issues/33864#issuecomment-643674646 isn't a conceptual -1 it's a -1 until a plan is drawn for how we make the changes. I thought that not making the change quickly without discussing this or laying out how (clearly) is a given. +++$+++ 5 +++$+++ 0
+COM21 +++$+++ SP5233816 +++$+++ ROOT +++$+++ COM20 +++$+++ 2020-06-13T22:38:46Z +++$+++ Needlessly censoring words does nothing to resolve the social issues surrounding them. The reasoning behind this is the same used when changing the gun emoji to a squirt gun. But in the end, such efforts only take away words and symbols we can use to easily describe concepts, such as the hierarchical and control structures we work with every day. It's destructive at worst and pointless virtue signalling at best. +++$+++ 1 +++$+++ 0
+COM22 +++$+++ SP5233816 +++$+++ ROOT +++$+++ COM21 +++$+++ 2020-06-13T22:44:46Z +++$+++ Anyway, -1 to this. Not worth the effort. +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP54666 +++$+++ ROOT +++$+++ COM22 +++$+++ 2020-06-13T22:52:06Z +++$+++ I am -1 on renaming/changing the branch. +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP1985555 +++$+++ ROOT +++$+++ COM23 +++$+++ 2020-06-13T23:32:41Z +++$+++ -1 on this. +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP439929 +++$+++ ROOT +++$+++ COM24 +++$+++ 2020-06-14T00:26:59Z +++$+++ Putting this on the tsc agenda for discussion +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP6447530 +++$+++ ROOT +++$+++ COM25 +++$+++ 2020-06-14T10:28:52Z +++$+++ -1 on renaming the branch +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP1315533 +++$+++ ROOT +++$+++ COM26 +++$+++ 2020-06-14T10:43:43Z +++$+++ I would recommend we escalate this (to a vote for example) when:
+ - We have a clear plan on how to make this change addressing the raised issues (GH links, build infrastructure etc).
+ - We have an individual or group willing to champion those changes.
+
+Can either of the collaborators -1ing (@gireeshpunathil / @mscdex ) speak up regarding what in particular they are objecting to? (The process of changing it? the name `main` itself?) +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP1315533 +++$+++ ROOT +++$+++ COM27 +++$+++ 2020-06-14T10:47:35Z +++$+++ Also, this issue is locked because it has received a large number of abuse comments. Like the website change - changes with this flavor tend to get a lot of attention. +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP275871 +++$+++ ROOT +++$+++ COM28 +++$+++ 2020-06-14T11:02:20Z +++$+++ > I can come back with a suggestion of what we should audit and steps to follow to do this in a way that would minimize disruption
+
+@MylesBorins Also think about how to roll back when things go wrong. Auditing Jenkins jobs is the kind of mind-numbing tedium that makes human error more likely than not. +++$+++ 0 +++$+++ 0

@@ -1,0 +1,9 @@
+SP12932925 +++$+++ jsalado +++$+++ NONE (AUTHOR)
+SP4302467 +++$+++ DerGary +++$+++ NONE
+SP919564 +++$+++ bryanmacfarlane +++$+++ CONTRIBUTOR
+SP16837142 +++$+++ ChrisLGardner +++$+++ NONE
+SP30379061 +++$+++ dmitryserbin +++$+++ NONE
+SP42773683 +++$+++ damccorm +++$+++ NONE
+SP13007450 +++$+++ samswork +++$+++ NONE
+SP9914262 +++$+++ sandersaares +++$+++ MEMBER
+SP18483384 +++$+++ gogbg +++$+++ NONE

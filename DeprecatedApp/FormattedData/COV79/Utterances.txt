@@ -1,0 +1,312 @@
+ROOT +++$+++ SP12108584 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-02-16T16:01:43Z +++$+++ Typescript should follow semantic versioning   I guess this can be considered as a bug as it is breaking my apps.
+If version 2.1.0 has breaking changes, why don't set it to 3.0.0?  Semantic versioning, right?
+Typescript lives and has important role in the nodejs ecosystem, therefore should follow some basic rules.
+We can not use the npm's semver features to block only major changes.
+
+**TypeScript Version:**  2.1.1 / nightly (2.2.0-dev.201xxxxx)
+> 2.1.0
+**Code**
+```ts
+// A *self-contained* demonstration of the problem follows...
+No need
+```
+**Expected behavior:**
+Follow semantic versioning rules
+**Actual behavior:**
+Just follows marketing versioning rules
+can be related to https://github.com/Microsoft/TypeScript/issues/6520 created a year ago and closed without being solved +++$+++ 32 +++$+++ 2
+COM0 +++$+++ SP8000722 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-02-16T18:08:50Z +++$+++ TypeScript never claimed to follow semantic versioning, in the sense that breaking changes imply major versions.
+
+TypeScript, however, promises no breaking changes after a stable release. so no breaking changes between `2.1.5` and `2.1.6`, `2.1.*`.
+
+My recommendation is fix your version of typescript to `major.minor` instead of just major. e.g. `^2.1` and not `^2` +++$+++ 5 +++$+++ 0
+COM1 +++$+++ SP12108584 +++$+++ ROOT +++$+++ COM0 +++$+++ 2017-02-17T06:44:46Z +++$+++ Thanks for the early response @mhegazy .
+As you mentioned, blocking the versions is easy to fix in my projects (I was being a bit ironic.). 
+However, as a developer i don't feel comfortable having to memorise a different set of rules for each package as the number of packages used grows very quickly.
+I guess having typescript follow semantic versioning would be a nice to have feature. +++$+++ 19 +++$+++ 0
+COM2 +++$+++ SP6685088 +++$+++ ROOT +++$+++ COM1 +++$+++ 2017-02-17T08:55:24Z +++$+++ The trade-off for getting millions of dollars of engineering investment in the TypeScript project is that marketing gets to control version numbers to a certain extent.
+
+It's not really an unalloyed good anyway. If we followed semver rules exactly, literally every single release would be a major version bump. Any time we produced the wrong type or emitted the wrong code or failed to issue a correct error, that's a breaking change, and we fix dozens of bugs like that in every release. The middle digit just isn't useful for TypeScript in a strict semver interpretation. +++$+++ 18 +++$+++ 24
+COM3 +++$+++ SP563469 +++$+++ ROOT +++$+++ COM2 +++$+++ 2017-02-19T12:18:39Z +++$+++ NPM should simply allow for descriptive marketing versions as a forth group. Then we'd have the best of both worlds, i.e.
+
+```json
+       marketing
+           ∨
+TypeScript 2.34.2.1 
+             ∧∧ ∧ ∧
+          major ∧ patch
+                ∧
+              minor
+```
+
+You would simply skip the marketing version while installing, i.e. `npm install typescript@^34` since it would hold no semantic meaning, i.e. bumping marketing wouldn't reset the `major` counter. +++$+++ 7 +++$+++ 0
+COM4 +++$+++ SP1734851 +++$+++ ROOT +++$+++ COM3 +++$+++ 2017-04-07T01:15:07Z +++$+++ I'm concerned that not following semver is creating unnecessary friction for TypeScript consumers who are opted in to having their builds broken whenever TypeScript releases a minor version as npm locks down to only major versions by default. The Microsoft Edge team has figured out how to do their marketing despite bumping the major version a few times a month (currently up to v38), I think TypeScript should give serious consideration to doing the same for the good of its consumers. +++$+++ 2 +++$+++ 1
+COM5 +++$+++ SP5034656 +++$+++ ROOT +++$+++ COM4 +++$+++ 2017-04-07T02:32:02Z +++$+++ Personally, I think it is a good idea to always specify exact versions of critical stack components such as compilers, loaders, bundlers, and of course frameworks.
+
+There are not that many of these tools in a single project and they do not tend to release more than once a week or so. This makes explicitly upgrading a relatively straightforward process.
+
+Also, reading the changelogs for updates to such key dependencies is almost certainly something that one should be doing.
+
+That said, I think it's fine to version more liberally. Each project is different in this regard.
+
+> The trade-off for getting millions of dollars of engineering investment in the TypeScript project is that marketing gets to control version numbers to a certain extent.
+
+That _is_ a trade well worth making.
+
+Furthermore, TypeScript is by no means the only project that does this.
+
+I think any project that is high profile enough is likely subject to this, at least to some extent.
+
+Even if it is not the marketing department, it may be the maintainers' own self-consciousness that leads to such versioning.
+
+> Any time we produced the wrong type or emitted the wrong code or failed to issue a correct error, that's a breaking change, and we fix dozens of bugs like that in every release.
+
+TypeScript really releases at a blisteringly unprecedented pace for a programming language so I think this is somewhat inevitable. I also think it's common across almost all software. Minor versions of most software contain breaking changes, but they often go unnoticed. The more high-profile the project, the more users that has,  the more likely it is that this will be noticed.
+
+The TypeScript team do an incredible job and they ship a wonderfully high quality product. +++$+++ 3 +++$+++ 0
+COM6 +++$+++ SP4066840 +++$+++ ROOT +++$+++ COM5 +++$+++ 2017-04-07T08:14:07Z +++$+++ I can't agree with @aluanhaddad more. Personally, I think using language version 81 and browser version 127 is terrible. It looks ugly and these high numbers quickly become meaningless. In the browser case that's the intention - forcing consumers to update to the latest version. However, for a language it's out of place and makes following new features and important changes extremely hard. Every version, no matter how big or small, looks the same way as every other. Flow has fallen in that trap and it doesn't seem to reap many benefits out of it.
+
+For TypeScript, if you still want automatic updates without worrying too much, just lock the minor version in and everything will fall into place. +++$+++ 3 +++$+++ 3
+COM7 +++$+++ SP6685088 +++$+++ ROOT +++$+++ COM6 +++$+++ 2017-04-07T16:15:30Z +++$+++ I mean, even semver's *own definition* of "breaking change" is arguably wrong. Minor updates can add new functionality under new properties, and new properties can break existing codepaths because JS is full of do-x-if-y-property-is-present patterns. Fixing a performance bug, which would in theory be a bugfix version update, could cause two async operations which previously always resolved in one order to instead always resolve in another order.
+
+It is simply not the case that you can safely upgrade code, with semver *as used* today by normal package maintainers, from 34.1 of some library to 34.9 and be guaranteed that your program will still behave the same way.
+
+What semver means *in practice* is that the major version bump is "You will probably need to update your code in a lot of places", and the minor version bump is "You should always be OK for the most part". *TypeScript never makes updates of the first kind*. We only make compat-breaking changes where we believe you should always be OK modulo a small number of fixes we think you'll be happy making (because we found new bugs).
+
+We're not going to take a major version bump because there was a bug in the compiler where it failed to identify early errors, even though that's technically a breaking change - we think you should be "along for the ride" on that one if you didn't shrinkwrap. That's how semver is used *in practice* by everyone anyway. +++$+++ 14 +++$+++ 10
+COM8 +++$+++ SP700871 +++$+++ ROOT +++$+++ COM7 +++$+++ 2017-06-15T04:14:36Z +++$+++ Can we at least get a section on "TypeScript and Semver" added to the docs? The fundamental problem is that `npm install --save typescript` will add `"typescript":"^2.4.0" by default. Consumers need to be aware that this is dangerous and you need to change it to "~2.4.0" (tilde, not carat). I'm happy to do the PR if you can advise on where you want such information.
+
+But for what it's worth:
+
+> "You will probably need to update your code in a lot of places" ... TypeScript never makes updates of the first kind.
+
+The Promise changes in 2.4 **is** resulting in lots of little changes all over the place. I'm not saying I don't agree with the changes, but they are there nonetheless. I've been caught only because I've [wrongly] assumed that TypeScript was following Semver.
+ +++$+++ 14 +++$+++ 0
+COM9 +++$+++ SP7957497 +++$+++ ROOT +++$+++ COM8 +++$+++ 2017-06-21T16:16:17Z +++$+++ I'd like to add a related question: should type definition files be compatible across all of 2.x.x? Can someone compile their library in 2.2, and have it work when someone pulls it in and compiles with 2.1? +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP9969889 +++$+++ ROOT +++$+++ COM9 +++$+++ 2017-07-10T14:03:34Z +++$+++ I too would prefer SemVer, and yes I know the majority of publishers are not "doing it right"...But lets look at an earlier comment:
+
+"If we followed semver rules exactly, literally every single release would be a major version bump. Any time we produced the wrong type or emitted the wrong code or failed to issue a correct error, that's a breaking change, and we fix dozens of bugs like that in every release. "
+
+Writing quality software is hard and requires investment. The above can be mitigated with improved testing and documentation.
+
+Remember the Agile principle: "the art of maximizing the amount of work not done--is essential. ". This should *not* mean the amount of work done by a team to get something out the door. Rather it should be a global optimization to minimize the work required by all stakeholders globally and across type - the TOTAL work.
+
+ +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP7957497 +++$+++ ROOT +++$+++ COM10 +++$+++ 2017-07-11T04:38:47Z +++$+++ If it is not possible to follow semver, could we come up with some sort of way to enable backwards compatibility / legacy behavior in our code? I am currently dealing with two major issues that I view as breaking changes:
+
+# Consuming a library where the `.d.ts` files are compiled in TS version higher than my project.
+
+Example: Using TS 2.0, consuming a project that exports an interface with a member that is of type `object`.
+
+A few ideas on how to fix this:
++ Allow TypeScript to compile to a previous version's output.
++ Allow TypeScript to compile to multiple versions of types output, and then include a root file that routes the consuming compiler to the right definition using some sort of markup (comments, conditional compilation, etc.)
+
+# Consuming a library where the `.d.ts` files are compiled in a TS version lower than my project.
+
+Some examples include:
+
++ https://github.com/Microsoft/TypeScript/issues/16536
++ https://github.com/DefinitelyTyped/DefinitelyTyped/issues/17925
++ https://github.com/ReactiveX/rxjs/pull/2722
+
+All of these issues stem from stricter type checking introduced in a later version of TS. This could probably be mitigated by doing the following:
+1. Having `.d.ts` files contian the compiler version via comments
+2. Having the compiler check the imported code's compiler version, and only apply new/stricter rules if they existed in the compiled version. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP3646758 +++$+++ ROOT +++$+++ COM11 +++$+++ 2017-11-23T16:13:17Z +++$+++ And what about a new `package.json` property : `"breaking"` which values can be `"MAJOR"` (default), `"MINOR"` ?
+See npm/npm#19231 +++$+++ 1 +++$+++ 0
+COM13 +++$+++ SP3153452 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-06-08T13:42:13Z +++$+++ > Fixing a performance bug, which would in theory be a bugfix version update, could cause two async operations which previously always resolved in one order to instead always resolve in another order.
+
+If the resolution order is *documented*, then indeed it is breaking change and should bump major version; otherwise it is *implementation details* and user is responsible for depending on this. +++$+++ 3 +++$+++ 0
+COM14 +++$+++ SP131776 +++$+++ ROOT +++$+++ COM13 +++$+++ 2019-02-06T16:38:32Z +++$+++ @mhegazy You have my full support. Semver is evil. And should be rejected everywhere. Typescript is a very good example. +++$+++ 0 +++$+++ 11
+COM15 +++$+++ SP12292047 +++$+++ ROOT +++$+++ COM14 +++$+++ 2019-02-06T17:24:52Z +++$+++ >  Fixing a performance bug, which would in theory be a bugfix version update, could cause two async operations which previously always resolved in one order to instead always resolve in another order.
+
+This is one of the go to arguments against SemVer and it's a classic strawman. The very first point of the SemVer spec invalidates the argument here that "semvers own definition is wrong. here's why:"
+
+> 1. Software using Semantic Versioning MUST declare a public API. This API could be declared in the code itself or exist strictly in documentation. However it is done, it should be precise and comprehensive.
+
+If your public API declared that two operations resolve in a given order then, yes, a performance fix is probably a breaking change. However I don't know any library that declares two public functions **and** declares that one is always fast than the other.
+
+I agree if you don't have a public API then the SemVer is meaningless. However most of the issues with SemVer are a result of a problematic public API. Also https://xkcd.com/1172/: Just because a change breaks a workflow does not mean it is a SemVer breaking change if the public API never documented that workflow. +++$+++ 8 +++$+++ 1
+COM16 +++$+++ SP131776 +++$+++ ROOT +++$+++ COM15 +++$+++ 2019-02-07T02:45:51Z +++$+++ Even with public apis, semver should never be applied.
+Version update is a way to note software changes, not software compatibility.
+Main versions for architectural or big updates. Minor versions for small changes and new feature additions. Patch versions for bug fixes. Either one can break compatibility.
+
+Semver is stupid focusing on compatibility, which is nothing to do with versions.
+
+Compatibility should be maintained by developers and test cases.
+
+npm is stupid in auto version updates which cause security issues and instability. The false assumption is originated from the idea semver bearing where versions should to be compatible within main version. +++$+++ 0 +++$+++ 8
+COM17 +++$+++ SP131776 +++$+++ ROOT +++$+++ COM16 +++$+++ 2019-02-07T02:47:50Z +++$+++ Another principal should be never update until updates are fully tested. +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP3646758 +++$+++ ROOT +++$+++ COM17 +++$+++ 2019-02-07T07:22:10Z +++$+++ > Compatibility should be maintained by developers and test cases.
+
+So developers should test all the API surface they consume ? That is a big field.
+In my opinion, they should test all the undocumented **assumptions** they are making on third party APIs. And of course, unexposed callpoints (classes and methods) they might use or inherit.
+
+> Fixing a performance bug, which would in theory be a bugfix version update, could cause two async operations which previously always resolved in one order to instead always resolve in another order.
+
+If you are assuming the order in which those async tasks resolve, you are *Programming by Coincidence* (The Pragmatic Programmer, Ch. 6). This is a major flaw in your development process.
+**Breaking** in SemVer means **breaking the contract**, not your program. If your program doesn't fulfil its contract with an API, minor changes might well break it (*Design by Contract*).  +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP131776 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-02-07T08:00:15Z +++$+++ @jsamr No one can do that. 
+
+No one can 100% predict the process of the software development.
+
+Software development is more of a way of exploring than a process of promise keeping.
+It is good to bear *Design by Contract* in mind and not to *Programming by Coincidence*.
+But the real life is not functioning that way.
+You even can't promise that your code is 100% correct. 
+Why you dear to say your updates are 100% compatible when you released a version?
+
+We should respect *Design by Contract* and *Pragmatic Programmers*.
+And we should also know that we are human beings, who make mistakes and break promises. 
+It is the fact and reality. 
+We lives in reality not in illusion or theory.
+
+The promise semver wants to keep breaks everyday and you still not wake up.
+Why?
+
+Do you really know the difference between angular 2, 3, 4 and 5?
+Do you really care?
+Why you care about the compatibility ? or you are simply driven by those people who propagating semver?
+Why should update be compatible while you even don't write test cases?
+Why should you update when no test is made ? Is that a pragmatic way?
+
+Never lie to yourself.
+
+To keep compatibility is a very good practice, but to assume compatibility is a very stupid thought.
+
+For major, minor, patch, all versions should try to keep compatibility.
+For developers, should never trust compatibility.
+ 
+ +++$+++ 0 +++$+++ 9
+COM20 +++$+++ SP3646758 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-02-07T09:02:59Z +++$+++ @calidion I think we are misunderstanding each other.
+
+I have never claimed that *I can promise code is 100% correct*. However, a library author can aim at testing all the features exposed to consumers.
+
+However, it doesn't mean *there is 0 chance a minor upgrade will break the contract entitled by its authors*.
+Semantic versioning is, from a producer perspective, about expressing the contract and its retro-compatibility. Patches are here to correct a mismatch between the contract and its implementation.
+
+It's **not**, from a consumer perspective, about neutralizing the risk of upgrading. I agree with you about testing upgrades, of course. Even better : put those tests in a pull request to library authors. If a test fails, they'll fix it and upgrade their patch version.
+
+Your argument is similar to refuting the utility of *Laws* because we can't promise it will be applied fairly to everybody. Do you have in mind a better system to address, **from a producer perspective**, the contract and retro-compatibility issues in library development? I don't, and that is why I find compliance with semantic versioning great.
+
+The flaw in npm use of semantic versioning has been addressed with lockfiles.  +++$+++ 1 +++$+++ 0
+COM21 +++$+++ SP9969889 +++$+++ ROOT +++$+++ COM20 +++$+++ 2019-02-07T14:42:49Z +++$+++ If SemVer is to be of value only to the producer [i.e. the consumer can not base their actions reliability upon it] then what is the value of it even being exposed to the consumer????
+
+Yes, I agree it is about contracts, but this leads to the discussion of what exactly is a contract that provides the value necessary to truly be useful to the consumer....  In my experience there are multiple orders of magnitude between what is typically produced as a contract [by the publisher] and what is needed by the consumer to determine the impact on their usage.
+ +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP131776 +++$+++ ROOT +++$+++ COM21 +++$+++ 2019-02-08T05:45:55Z +++$+++ @jsamr 
+
+Software won't get matured by merely contracts.
+It is a much more complicated way.
+
+Like humans constantly violating laws,  software development will surely break contracts.
+
+So it is stupid to believe in contracts.
+
+There are police stations and courts for law violations.
+There are no such things for software development and publishing.
+
+No one wants to breaks compatibility, but it is inevitable even when semver is applied.
+
+It's in fact not about contracts, It is about evolution which cannot be predicted precisely.
+
+
+Another wrong believe is that updated should always be executed after software updates.
+
+Nodejs has a service called green keeper which strengthens that wrong believe.
+
+Software quality is nothing to do with updates, newer updates maybe worse and mass things up.
+ 
+so updates should be applied when they are tested extensively not because they are newer.
+
+programmers should be selective to one stable version.
+
+For example Ubuntu 16.04 is more stable than 17.04, 16.10, and even 18.04.
+
+Win 7 is more popular than win 8, win 10.
+
+There are in fact no contracts, there are just releases.
+
+ +++$+++ 0 +++$+++ 12
+COM23 +++$+++ SP3646758 +++$+++ ROOT +++$+++ COM22 +++$+++ 2019-02-08T07:37:15Z +++$+++ @calidion It would be appreciable and civilized if you stopped calling the other's point of view &mdash; or the point of view you think they hold &mdash; "stupid". Just be decent and follow the community's rules. Even worse, you don't seem to try to understand the other side point of view, and rush to your own conclusions.
+
+@DynConcepts 
+
+> [If] the consumer cannot base their actions reliability upon [semantic versioning], then what is the value of it even being exposed to the consumer?
+
+Very easy. Just imagine a version signature which has majors only, which would be equivalent to a standardless version signature (i.e., not semantic).
+
+You need to upgrade a library from version `234 503` to `244 503` because this last version gives compatibility to a set of target platforms you need to integrate.
+
+But you have no idea of the **intended** breaking changes by just looking at the signature. So you have to read the changelog from `234 503` to `244 503`, have fun!
+
+Quoting from the original specification:
+
+> Without compliance to some sort of formal specification, version numbers are essentially useless for dependency management. By giving a name and clear definition to the above ideas, **it becomes easy to communicate your intentions to the users of your software**.
+
+Semantic versioning is about **communicating**, nothing more.
+
+> Yes, I agree it is about contracts, but this leads to the discussion of what exactly is a contract that provides the value necessary to truly be useful to the consumer.... In my experience there are multiple orders of magnitude between what is typically produced as a contract [by the publisher] and what is needed by the consumer to determine the impact on their usage.
+
+I am certain this is an area of improvements, and this is why semantic versioning is only at [version 2.0.0](https://semver.org/) right now! To do so, we could explore different canonical unintended breaking changes between minors that happened in software history, where the interpretation of the contract was at stake. And from there, extrapolate a taxonomy of contracts and library purity.
+
+What I mean by library purity is close to purity in functional programming: if you only expose functions with no side effects, the library is *pure*. If your library instantiates a singleton in the global namespace, it is *unpure*. If it rely on non-javascript, environment-specific binaries, it is *environment-coupled*. But I am sure we could go way further in describing what could be called the **library footprint**.
+ 
+From that library footprint exposed to public knowledge, leveraging the impact of a library update would be easier.
+ +++$+++ 13 +++$+++ 0
+COM24 +++$+++ SP131776 +++$+++ ROOT +++$+++ COM23 +++$+++ 2019-02-08T08:21:48Z +++$+++ @jsamr 
+
+You move from **assumptions**,  **contracts** to **communicating**.
+But you still don't realize the fact.
+
+Science and technologies draw principals from facts not from thinking, from what it is instead of what it should be.
+
+I think computer should based on decimal but it is binary.
+
+I think programs should be bug free but it will never be.
+
+If the fact is ignored,  what is the value of finding communicating methods?
+
+Semver bears a good will, but it will never be a realistic one.
+
+A false good will always lead to a bad result. 
+
+Npm's auto update has shown the downside and now lock fill has be introduced for remedy.
+
+I don't know why you still insist on use semver, what benefits do you gain on applying semver?
+
+Get sky high version number?
+Make versions meaningless?
+Upgrade major version on every small change that breaks?
+Auto updates that makes software unstable?
+
+I think there must be a list of gains if semver should be adopted.
+
+> I apologize for using `stupid` if it is offensive.
+
+Software quality will not be improve by merely defining very strict rules.
+
+
+
+
+ +++$+++ 0 +++$+++ 11
+COM25 +++$+++ SP3646758 +++$+++ ROOT +++$+++ COM24 +++$+++ 2019-02-08T08:34:56Z +++$+++ @calidion Perhaps the language barrier has an incidence, but I don't think you really grasp what I am attempting to express... If you want to continue this discussion, please drop a mail (see my profile to get the address). +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP522948 +++$+++ ROOT +++$+++ COM25 +++$+++ 2020-03-19T17:22:18Z +++$+++ TypeScript not following semver has some serious negative implications in an ecosystem that builds a lot of features around the assumption that packages _do_ follow semver.
+
+Since npm installs libraries with a default version range that allows for newer minor versions, the command `npm i typescript` _will_ install an unstable and occaisionally breaking version of TypeScript. Collaborators on a project may get different versions when they install, and may get different sets of compiler errors. Fixing them for one developer may break things for another. Yes, projects should override the npm default, but they have to understand TypeScript's unusual versioning scheme in order to know to do so.
+
+Even worse, an upgrade to a new minor version of TypeScript may break users of a project. We don't have any indication through version numbers of which .d.ts files are compatible with which versions of TypeScript. A project that implicitly upgrades TypeScript to a breaking version due to breaks occurring at minor releases, builds, and publishes a new version with newer declaration files, will break consumers using an older version of TypeScript. Some users can't even choose their version due to the compiler being integrated into their build system / runtime (Angular, Storybook, TS-Node).
+
+By adopting semver TypeScript would be a much better citizen in the npm ecosystem and reduce unintended breaks. +++$+++ 20 +++$+++ 1
+COM27 +++$+++ SP131776 +++$+++ ROOT +++$+++ COM26 +++$+++ 2020-03-19T17:49:11Z +++$+++ It is semver's problem not typescript.
+
+semver is the most misleading rule set ever.
+
+npm's default rules make things worse.
+
+as now npm Inc. is sold to Microsoft, maybe we can see further advance in npm.
+
+ +++$+++ 0 +++$+++ 14
+COM28 +++$+++ SP136556 +++$+++ ROOT +++$+++ COM27 +++$+++ 2020-03-20T04:32:03Z +++$+++ How is semver misleading? +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP131776 +++$+++ ROOT +++$+++ COM28 +++$+++ 2020-03-20T07:13:59Z +++$+++ Semver is like some idiots claim that all human are straight,  never know of LGBT. +++$+++ 0 +++$+++ 9

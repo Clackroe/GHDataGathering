@@ -1,0 +1,55 @@
+ROOT +++$+++ SP289220 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-19T10:22:04Z +++$+++ The removal of Santa Hat on vscode insiders is very offensive and has nothing to do with religion  
+Steps to Reproduce:
+Install latest build of insiders.
+
+Does this issue occur when all extensions are disabled?: No
+
+Sorry but the guy who created https://github.com/microsoft/vscode/issues/87268 has it all wrong. Having a santa hat on a cog icon (to go to settings/options) has nothing to do with religion in any shape or form.
+
+I find it offensive that the hat was removed and it should never have been removed in the first place.
+ +++$+++ 144 +++$+++ 1
+COM0 +++$+++ SP28792856 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-19T10:22:10Z +++$+++ (Experimental duplicate detection)
+Thanks for submitting this issue. Please also check if it is already covered by an existing one, like:
+- [Removal of the Santa hat and kowtowing to a single fake user is offensive to me (#87328)](https://www.github.com/microsoft/vscode/issues/87328) <!-- score: 0.579 -->
+- [Removal of the Santa Hat on vscode insiders is very offensive to me (#87296)](https://www.github.com/microsoft/vscode/issues/87296) <!-- score: 0.567 -->
+- [Santa Hat on vscode insiders and pushing of religion is very offensive to me (#87268)](https://www.github.com/microsoft/vscode/issues/87268) <!-- score: 0.526 -->
+- [Santa Hat removal on vscode insiders and bending to one jew is very offensive to me (#87291)](https://www.github.com/microsoft/vscode/issues/87291) <!-- score: 0.504 -->
+- [Removal of the Santa Hat and kowtowing to SJWs (#87314)](https://www.github.com/microsoft/vscode/issues/87314) <!-- score: 0.47 -->
+<!-- potential_duplicates_comment --> +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP2368976 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-12-19T10:53:37Z +++$+++ Two more things to add. @Christian-Schiffer have something against santa hat and releats it to religion. Pardon me but he dosn't distinguish between Saint Nicholas that was bishop and had totally diffrent hat and Santa Claus from popular culture who have other hat. Besides his name "Christian" smells like some kind of religious agitation and I think he should remove his account or be baned by highter autorities using his own argumentation preented in issue #87268 . Should I create separate issue for that? +++$+++ 36 +++$+++ 1
+COM2 +++$+++ SP7060605 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-12-19T10:56:12Z +++$+++ User Christian-Schiffer that created such awful request offended many users and Microsoft just standing there like nothing happened. Bring back the Santa's hat! +++$+++ 19 +++$+++ 1
+COM3 +++$+++ SP7060605 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-12-19T10:59:33Z +++$+++ to also add to that- The original requestor for this ridiculous change has 14 repositories from which 13 are forks. I doubt he's even a developer, just random troll that you- Microsoft fell for. Shame +++$+++ 14 +++$+++ 1
+COM4 +++$+++ SP21369706 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-12-19T11:07:41Z +++$+++ I liked the santa hat, it brought a little joy to my day. Very sad that it has been removed. +++$+++ 11 +++$+++ 1
+COM5 +++$+++ SP19749322 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-12-19T11:07:52Z +++$+++ I demand syntax highlighting be removed, as it reminds me of the other night when I puked out the three plates of ravioli I'd eaten. It is very offensive to me and instantly brings back memories of a very bad stomachache.
+
+See this? That's how silly that was. We can't take people seriously just because they slap religion on something completely unrelated and pretend it's a serious issue.
+
+That's offensive to **real** religious issues if anything. That's how real issues end up being taken as jokes. +++$+++ 13 +++$+++ 1
+COM6 +++$+++ SP600504 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-12-19T11:34:35Z +++$+++ I find the "V" in "VS Code" offensive. It represents two fingers being held up in an obscene gesture and could be read as "F*ck You". +++$+++ 0 +++$+++ 1
+COM7 +++$+++ SP52699069 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-12-19T11:47:53Z +++$+++ I agree. Nowadays everyone is offended by everything. The fact that he doesn't like the hat has nothing to do with religion. I find Hissvard's comment "That's offensive to real religious issues" completely right. There are real religious issues by now, and classifying such a thing (the hat) as "offensive" should be considered shameful. +++$+++ 10 +++$+++ 1
+COM8 +++$+++ SP6553887 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-12-19T12:03:10Z +++$+++ Sad thing is that some of us are afraid of writing anything about it and they are writing from newly created accounts and... and I understand it. No one know who will be targeted and his life/career be destroyed by "tolerance troops" which have nothing to do with tolerance.
+
+We are going into very, very gloomy era. 
+Chinese government (which is widely criticized by us) is doing the very same thing as "political correctness" is doing to us.
+
+**Whoever is afraid is a slave** - Seneca the Younger
+And we all are afraid - especially MS, as we could see. +++$+++ 0 +++$+++ 1
+COM9 +++$+++ SP27346831 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-12-19T13:21:34Z +++$+++ UpVote for Santa Hat! 🎅 Bring it back! Don't fall for the troll! +++$+++ 2 +++$+++ 2
+COM10 +++$+++ SP12067166 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-12-19T13:41:45Z +++$+++ We're moving to digital totalitarianism, pure and simple. In totalitarian state, anyone who voiced a different opinion than the state's, was forcibly silenced or 'disappeared'. Now, we have threads locked, accounts banned and single people deciding what's best for entire communities based on their 'feelings'. Well, I 'feel' it's pure evil masquerading as tolerance. +++$+++ 4 +++$+++ 0
+COM11 +++$+++ SP5352403 +++$+++ ROOT +++$+++ COM10 +++$+++ 2019-12-19T14:07:59Z +++$+++ It is very telling the true colours on the side of the Microsoft team that this is still up in the air instead of making - as it would be a proper reaction - to write a short apology for the mistake, revert the change and be done with it. 
+
+Added bonus would have been that the whole issue would be forgotten for everyone in some days. 
+
+So, this leaves a very sour taste regarding the whole thing and it has already the very opposite intented effect of "quick political correct reaction and stay clean" for the whole Microsoft and only will be worse if this will not be corrected and sit out.
+
+"Microsoft the Christmas Killer / Santa Killer" in the press... not a nice thought and I guess this has the potential to escalate to widely known bad press for the organisation.
+
+My advice to the managing team here:
+- don't wait it out and don't try to purge the taint when nobody's looking.
+- reinstate  the santa hat, at least make it a togglable option (default: on)
+- write a short paragraph that it was a mistake, include some funny joke for deescalation.
+- be done with it.
+ +++$+++ 1 +++$+++ 0
+COM12 +++$+++ SP1487073 +++$+++ ROOT +++$+++ COM11 +++$+++ 2019-12-19T21:53:39Z +++$+++ Thanks for creating this issue. We think this issue is unactionable or unrelated to the goals of this project. Please follow our [issue reporting](https://aka.ms/vscodeissuereporting) guidelines. 
+
+Happy Coding!  +++$+++ 0 +++$+++ 0

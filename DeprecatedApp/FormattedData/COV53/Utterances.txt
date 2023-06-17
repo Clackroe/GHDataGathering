@@ -1,0 +1,100 @@
+ROOT +++$+++ SP110683 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-11-30T09:56:16Z +++$+++ Add Stories to Windows Terminal  <!-- 
+🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
+
+I ACKNOWLEDGE THE FOLLOWING BEFORE PROCEEDING:
+1. If I delete this entire template and go my own path, the core team may close my issue without further explanation or engagement.
+2. If I list multiple bugs/concerns in this one issue, the core team may close my issue without further explanation or engagement.
+3. If I write an issue that has many duplicates, the core team may close my issue without further explanation or engagement (and without necessarily spending time to find the exact duplicate ID number).
+4. If I leave the title incomplete when filing the issue, the core team may close my issue without further explanation or engagement.
+5. If I file something completely blank in the body, the core team may close my issue without further explanation or engagement.
+
+All good? Then proceed!
+-->
+
+# Add a “Stories” Feature to Windows Terminal
+Stories are the new hotness. Snapchat invented Stories but the paradigm of ephemeral updates has since been adopted by Instagram, WhatsApp, Facebook, LinkedIn, Twitter, and most recently, Spotify. There is even a VS Code extension that adds this feature. 
+
+Why should LinkedIn get all the fun?! Windows Terminal might be a singular experience (but with user profiles, is it really), but that doesn’t mean we shouldn’t create an ephemeral social layer into it. 
+
+Windows Terminal “Stories” could be in gist form (a la GitHub) or scripts in your favorite shell language (PWSH or BASH or ZSH, in da clurb we all fam), they could also be print screens of your current terminal session. Because who doesn’t want to show off their latest Neofetch/winfetch ASCII art! 
+
+As a longterm goal, there could even be a way to share a gist/link to your config file to share your specific terminal preferences and font/color information. 
+
+# Proposed technical implementation details (optional)
+In order to see Stories from others (assuming we don’t want to focus just on local users), we would need to run some sort of web server that ties into some type of social network for followers/displays. GitHub would probably be ideal for that. 
+
+Having said all this, as good of a feature as I believe Stories would be, it would probably require a lot of resources and overhead, not to mention possible performance concerns. Perhaps this is a better request for Hyper, since it is Electron and basically running a web browser anyway. (No shade to Hyper — Hyper is great and beautiful and I’m just teasing out of love!)
+
+In fact, the more I write about this. Maybe it’s a bad idea. 
+ +++$+++ 139 +++$+++ 41
+COM0 +++$+++ SP2900833 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-11-30T09:57:45Z +++$+++ You got my support on this @filmgirl. +1 +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP49960482 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-11-30T10:00:34Z +++$+++ rooting for you @filmgirl 🎉 +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP19581968 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-11-30T10:03:33Z +++$+++ 11/10, want to see this happen! 💜 +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP3131504 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-11-30T10:05:41Z +++$+++ Knowing that this is possible my life will not be the same without it +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP34346399 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-11-30T10:09:26Z +++$+++ We need this.  +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP8294041 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-11-30T10:46:04Z +++$+++ I guess probably something could be hacked together with Cowsay and Fortune. This would get closer to feature parity with a real Linux machine. 😏 +++$+++ 5 +++$+++ 0
+COM6 +++$+++ SP1258456 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-11-30T11:11:45Z +++$+++ I can't believe it hasn't already been implemented, this is a must have feature. +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP170147 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-11-30T11:18:29Z +++$+++ This needs a kickstarter campaign  +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-11-30T11:19:28Z +++$+++ Can this be integrated with #469? +++$+++ 3 +++$+++ 0
+COM9 +++$+++ SP8355305 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-11-30T12:07:20Z +++$+++ > most recently, Twitter
+
+I think Spotify was more recent +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP110683 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-11-30T12:08:04Z +++$+++ > > most recently, Twitter
+> 
+> I think Spotify was more recent
+
+Right you are! I’ve updated the issue accordingly.  +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM10 +++$+++ 2020-11-30T12:21:11Z +++$+++ I haven't seen any feature request in this repo having this much reactions (and upvotes) in such short amount of time. 🤯  +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP4016293 +++$+++ ROOT +++$+++ COM11 +++$+++ 2020-11-30T12:34:24Z +++$+++ This has my full support \o/ +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP3441599 +++$+++ ROOT +++$+++ COM12 +++$+++ 2020-11-30T12:35:21Z +++$+++ I would love to see this happen.  +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP334958 +++$+++ ROOT +++$+++ COM13 +++$+++ 2020-11-30T12:38:58Z +++$+++ How have I been using Terminal without this feature for so long? I'm using plain old terminal until we have it!  +++$+++ 1 +++$+++ 0
+COM15 +++$+++ SP4639110 +++$+++ ROOT +++$+++ COM14 +++$+++ 2020-11-30T12:51:38Z +++$+++ Wondering if Terminal users are mentally prepared to such amount of social activity in their lives.. switching from 0 social life to this directly might be... overwhelming 😄 +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM15 +++$+++ 2020-11-30T12:59:39Z +++$+++ > Wondering if Terminal users are mentally prepared to such amount of social activity in their lives.. switching from 0 social life to this directly might be... overwhelming 😄
+
+@Don-Vito Are you talking about me? 😄  +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP4639110 +++$+++ ROOT +++$+++ COM16 +++$+++ 2020-11-30T13:17:52Z +++$+++ > 
+> 
+> > Wondering if Terminal users are mentally prepared to such amount of social activity in their lives.. switching from 0 social life to this directly might be... overwhelming 😄
+> 
+> @Don-Vito Are you talking about me? 😄
+
+About myself actually 😄  +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP5918811 +++$+++ ROOT +++$+++ COM17 +++$+++ 2020-11-30T13:52:23Z +++$+++ Doesn't it look cool?   https://twitter.com/kose__suat/status/1329514405818732545 +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP18356694 +++$+++ ROOT +++$+++ COM18 +++$+++ 2020-11-30T14:31:43Z +++$+++ Well this thread was a good hilarious read to start my week. Thanks for that 🤣 
+
+I know that this is [90% a meme post from twitter](https://twitter.com/cinnamon_msft/status/1333341760848740352), but this is also our actual work tracker, so I've gotta be at least 5% serious here:
+
+I don't believe the Terminal is the place to implement most of this. 
+* We've already got a commandline ecosystem problem of users just executing random scripts that they download with `curl` - if we're letting users install scripts that they saw on someone's story, then i can guarantee you there'll be scripts like "Run Graphical Applications in WSL!!!" that actually just `rm -rf /mnt/c`. I don't want to be held responsible for contributing to that problem.
+* I think GitHub gists are already better suited for a lot of this - they've already got syntax highlighting for different languages, they've already got accounts set up, and authentication, and hey, they've already got a web-scale website that can host all this, and frankly I'm not prepared, nor is anyone on the team, to build that ourselves.
+* We've also already got #469 on the backlog for recording Terminal output to the asciinema format, for sharing on https://asciinema.org. Again, that's another site that's probably better suited for hosting recordings of terminal sessions, rather than us standing this up on our own. 
+
+So those are reasons why _I_ would reject this feature request. However, this thread is definitely @cinnamon-msft's responsibility, so I'll let them handle it.
+
+<hr>
+
+As far as the following is concerned:
+>  there could even be a way to share a gist/link to your config file to share your specific terminal preferences and font/color information.
+
+I believe there's been discussion about that in the past, and that I'm on board with. "Stories", not so much.  +++$+++ 24 +++$+++ 0
+COM20 +++$+++ SP502396 +++$+++ ROOT +++$+++ COM19 +++$+++ 2020-11-30T16:42:26Z +++$+++ +1 this is a vital feature. pls ship @cinnamon-msft 🙏🏻  +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP48369326 +++$+++ ROOT +++$+++ COM20 +++$+++ 2020-11-30T17:42:55Z +++$+++ This definitely was a fun read, but I agree with @zadjii-msft that this doesn't really make sense for Terminal. Kudos to @filmgirl for writing such an entertaining feature request, however I will have to close this issue since we aren't planning to implement it. 😄 +++$+++ 9 +++$+++ 0
+COM22 +++$+++ SP4639110 +++$+++ ROOT +++$+++ COM21 +++$+++ 2020-11-30T19:30:42Z +++$+++ On the other hand a native support for twitter could prevent us from missing the meme post:
+![image](https://user-images.githubusercontent.com/4639110/100654756-f8d55f00-3352-11eb-98e6-ddc9a8cedce3.png)
+
+![image](https://user-images.githubusercontent.com/4639110/100654937-3f2abe00-3353-11eb-8671-8ac3a09f75b0.png)
+ +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP50586094 +++$+++ ROOT +++$+++ COM22 +++$+++ 2020-11-30T21:45:14Z +++$+++ Command + Story = Cory? +++$+++ 1 +++$+++ 0
+COM24 +++$+++ SP19805594 +++$+++ ROOT +++$+++ COM23 +++$+++ 2020-11-30T21:59:31Z +++$+++ No. Just no. This isn't social media this is for code  +++$+++ 2 +++$+++ 0
+COM25 +++$+++ SP2387743 +++$+++ ROOT +++$+++ COM24 +++$+++ 2020-11-30T22:14:09Z +++$+++ @Darth4212 but is it really ? +++$+++ 3 +++$+++ 0
+COM26 +++$+++ SP59186190 +++$+++ ROOT +++$+++ COM25 +++$+++ 2020-11-30T22:58:43Z +++$+++ @Darth4212 You use the terminal for coding? +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP22717474 +++$+++ ROOT +++$+++ COM26 +++$+++ 2020-11-30T23:33:28Z +++$+++ @Supesu Terminal? Coding? You must be insane, that is impossible! The terminal exists only for `cmatrix`
+
+ +++$+++ 1 +++$+++ 0
+COM28 +++$+++ SP4639110 +++$+++ ROOT +++$+++ COM27 +++$+++ 2020-11-30T23:41:04Z +++$+++ > 
+> 
+> @Supesu Terminal? Coding? You must be insane, that is impossible! The terminal exists only for `cmatrix`
+
+@Finermeerkat137 - you should try it. I recently switched to Terminal from VS 2019 and am really happy since then: same level of code completion and refactoring with almost twice less memory! +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP4380333 +++$+++ ROOT +++$+++ COM28 +++$+++ 2020-11-30T23:54:44Z +++$+++ ![200 (1)](https://user-images.githubusercontent.com/4380333/100679379-3ff82b80-3324-11eb-8895-a9ec1f075fc6.gif)
+ +++$+++ 7 +++$+++ 0

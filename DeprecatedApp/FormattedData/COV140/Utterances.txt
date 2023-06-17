@@ -1,0 +1,79 @@
+ROOT +++$+++ SP22155288 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-03-07T19:47:41Z +++$+++ Night mode doesnt work by me. **Looking forward for reporting a security issue:**
+Please report security issues by sending an email to `security@freecodecamp.org` instead of raising a GitHub issue.
+
+**Describe the bug**
+A clear and concise description of what the bug is.
+
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Go to '...' https://www.freecodecamp.org/settings
+2. click on night mode ON
+4. See error: Something is not quite right. A report has been generated and the freeCodeCamp.org team have been notified.
+
+**Expected behavior**
+Night mode 
+
+**Screenshots**
+no
+
+**Desktop (please complete the following information):**
+ - OS: [] win 10 pro 64b 18262.657
+ - Browser [ chrome, ]
+ - Version [] Version 80.0.3987.132 (Official Build) (64-bit)
+
+
+
+**Additional context**
+i tried to log in from microsoft edge and torch browser but it failed. should i open one more bug report? +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP5313213 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-03-07T20:19:28Z +++$+++ @rocnogu Are you logged into your account when this happens? +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP22155288 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-03-07T23:32:32Z +++$+++ @RandellDawson  
+bot or something? your comments look absolutely random with quite zero connection to the reality. either a bot or ... very unintelligent person. which is fine by me as long as you keep a distance from me. so, if you don't know a solution, DO NOT POST ANY COMMENTS.
+it says: Member of freeCodeCamp.org but that means you actually know the system. do you?
+can you go to https://www.freecodecamp.org/settings without logging in?
+
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Go to '...' https://www.freecodecamp.org/settings
+2. click on night mode ON
+4. See error: Something is not quite right. A report has been generated and the freeCodeCamp.org team have been notified.
+
+and again
+ if you don't know a solution, DO NOT POST ANY COMMENTS. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP28780271 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-03-08T01:16:35Z +++$+++ @rocnogu There is no need for personal insults or caps. You may want to go over the [Contribution Guidelines](https://github.com/freeCodeCamp/freeCodeCamp/blob/master/CONTRIBUTING.md) and read the [Code of Conduct](https://www.freecodecamp.org/news/code-of-conduct/).
+
+1. Do you get any error messages in the console when you try to switch modes?
+
+2. Can you try in [Incognito mode](https://support.google.com/chrome/answer/95464) and/or in Firefox just to test?
+
+I can't reproduce it. So we need something more to go on. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP22155288 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-03-08T02:40:30Z +++$+++ @lasjorg
+i dint yet started the insults. its called personal observation. look it up.
+
+1 what consoles and what modes? (did you actually read the ''To Reproduce'' ????? i have the feeling you didnt)
+
+2 i don't have firefox at all. never had. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP22155288 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-03-08T02:55:01Z +++$+++ @lasjorg
+after bit thinking...
+console is the settings page?
+modes is night/light modes?
+
+regardless firefox, ill just repeat my self:
+i tried to log in from microsoft edge and torch browser but it failed. should i open one more bug report?
+
+now i have the feeling you didn't read anything at all.
+did you try to do this from ANY other browser? or you just assume that if it works for you work for absolutely everyone? +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP22155288 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-03-08T03:18:48Z +++$+++ firefox give the same error +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP5313213 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-03-08T03:47:07Z +++$+++ @ronaldcs I am closing this issue as you keep throwing out insults when we are only trying to help.  +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP1884376 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-03-08T10:34:54Z +++$+++ Hi @rocnogu 
+
+I am from the freeCodeCamp.org Staff.
+
+I would like to draw your attention that freeCodeCamp is safe place for all. You are currently in violation of our [code of conduct](https://www.freecodecamp.org/news/code-of-conduct/), with comments.
+
+We sure understand that you would like to report something is broken or not working, but we absolutely do not tolerate any violation of the CoC.
+
+We have gone ahead and banned your account from posting comments on freeCodeCamp.org
+
+If you wish to get this re-instated please let us know, why we should do that. Have a great day ahead.
+
+Thanks. +++$+++ 0 +++$+++ 0

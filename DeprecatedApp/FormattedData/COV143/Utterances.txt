@@ -1,0 +1,129 @@
+ROOT +++$+++ SP13432626 +++$+++ ROOT +++$+++ ROOT +++$+++ 2015-12-20T14:52:31Z +++$+++ RTL text selection When trying to select a RTL substring, the highlighted text seems to be current but if you just press delete button, It will delete another part of the text instead of highlighted.
+
+also double clicking on the text will highlight another word/part of text. 
+
+It behaves like the position of the mouse is horizontally invert on the RTL text.
+
+Simulate it:
+First Test:
+این یک متن فارسی است
+Select این With mouse down and mouse up and Press Delete button, and it will delete است instead of این:
+این یک متن فارسی 
+
+Second Test:
+این یک متن فارسی است
+Double click on رسی
+رسی will be Highlighted but if you press delete, این will be deleted.
+ +++$+++ 20 +++$+++ 0
+COM0 +++$+++ SP833473 +++$+++ ROOT +++$+++ ROOT +++$+++ 2016-06-01T09:52:35Z +++$+++ To devs, consider reading [1](https://github.com/atom/atom/issues/1849#issuecomment-158680023) and [2](https://github.com/atom/atom/issues/1849#issuecomment-102712443) for getting some context.
+ +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP1592974 +++$+++ ROOT +++$+++ COM0 +++$+++ 2016-07-17T13:06:25Z +++$+++ Any updates on this issue? 
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP13432626 +++$+++ ROOT +++$+++ COM1 +++$+++ 2016-08-04T05:07:34Z +++$+++ @mohataher I Installed yesterday and problem still exists.
+
+@Majid-Kaffash I think its not a good idea to change the Editors entire direction for every time you want to edit a none English word or sentence. even with text-align:left
+ +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP5641425 +++$+++ ROOT +++$+++ COM2 +++$+++ 2016-08-04T13:57:31Z +++$+++ @salar90 I'm agree with you . But in this situation the only thing that you can do is this :)
+ +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP19984935 +++$+++ ROOT +++$+++ COM3 +++$+++ 2016-09-06T14:02:19Z +++$+++ Although @Majid-Kaffash solution isn't perfect, but it works until there's a better solution. Is there anyway I can make a keybind that toggles this edit in the stylesheet?
+ +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP13432626 +++$+++ ROOT +++$+++ COM4 +++$+++ 2016-09-07T05:44:02Z +++$+++ Microsoft's Visual Studio Code works perfectly in this case. Maybe Developers can inspire from its opensource codes?
+
+https://github.com/Microsoft/vscode
+ +++$+++ 5 +++$+++ 0
+COM6 +++$+++ SP8377185 +++$+++ ROOT +++$+++ COM5 +++$+++ 2016-11-03T20:47:10Z +++$+++ Brackets works too with RTL language. I think atom and brackets are based on electron ?
+Maybe it can help developers : 
+[https://github.com/adobe/brackets/](https://github.com/adobe/brackets/)
+I really want this feature in atom 👍 
+ +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP273688 +++$+++ ROOT +++$+++ COM6 +++$+++ 2016-11-04T00:12:48Z +++$+++ Brackets is based on CodeMirror.
+CodeMirror has bidi support with mild bugs; the main constraint is all
+lines are left-aligned with LTR base direction:
+https://codemirror.net/demo/bidi.html
+There was a GSoC leading to experimental branch improving things,
+including per-line direction, but it hasn't landed:
+https://discuss.codemirror.net/t/two-new-experimental-branches-open-for-testing-mobile-and-direction/74
+https://rawgit.com/codemirror/CodeMirror/direction/demo/bidi.html
+
+Atom does not use CodeMirror, IIUC atom implemented their own editor
+using electron.
+ +++$+++ 1 +++$+++ 0
+COM8 +++$+++ SP150598 +++$+++ ROOT +++$+++ COM7 +++$+++ 2016-12-19T16:19:52Z +++$+++ Not a solution for "actual" RTL support (it probably even makes it very hard to read RTL text), but this way at least bidirectionality doesn't destroy the text (and selection) flow, so it's at least possible to work with files with bidirectional text:
+
+~~`/* Bidirectional text is broken, so let's pretend it doesn't exist. */`~~
+~~`atom-text-editor::shadow {`~~
+~~`	.line {`~~
+~~`		unicode-bidi: bidi-override;`~~
+~~`	}`~~
+~~`}`~~
+
+**Edit 2017-01-12:**
+Small update, because of the shadow DOM changes in 1.13.0, the following code should be added to the atom stylesheet instead:
+
+```less
+/* Bidirectional text is broken, so let's pretend it doesn't exist. */
+atom-text-editor .line {
+	unicode-bidi: bidi-override;
+}
+``` +++$+++ 4 +++$+++ 2
+COM9 +++$+++ SP3328211 +++$+++ ROOT +++$+++ COM8 +++$+++ 2016-12-27T21:52:19Z +++$+++ Every update is making it even worse. I was solving this problem in a tricking way by inverse selecting words. For example, previously to select `این` in `این یک متن فارسی است`, I double-clicked on `است` and `این` was being selected.
+
+But now in latest version `1.12.7`, even this trick isn't working. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP8377185 +++$+++ ROOT +++$+++ COM9 +++$+++ 2016-12-28T04:28:30Z +++$+++ @timwienk Thanks, at least we can edit lines containing Arabic text when adding your code to atom stylesheet +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP19228730 +++$+++ ROOT +++$+++ COM10 +++$+++ 2017-02-04T02:29:04Z +++$+++ I have the same problem when I try to write in Arabic, it's really confusing for highlighted text. 
+Any solutions? +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP8377185 +++$+++ ROOT +++$+++ COM11 +++$+++ 2017-02-04T05:10:03Z +++$+++ I switched to vscode  because of
+this issue. It supports arabic very well, is open source,  have a lot of
+plugins too and is very fast.
+
+https://github.com/Microsoft/vscode
+
+I did love atom but I really need arabic
+
+ +++$+++ 7 +++$+++ 0
+COM13 +++$+++ SP3328211 +++$+++ ROOT +++$+++ COM12 +++$+++ 2017-04-14T13:16:35Z +++$+++ Fortunately version 1.15 optimized it. Now updated to 1.16 and this bug still is annoying. I'm really thinking to switch to VSCode. Is there any plan to work on this issue?
+
+ +++$+++ 1 +++$+++ 0
+COM14 +++$+++ SP2766036 +++$+++ ROOT +++$+++ COM13 +++$+++ 2017-04-15T02:30:14Z +++$+++ I can ask around and try to get back to you.
+(If I don't respond in a week, ping me again) +++$+++ 2 +++$+++ 0
+COM15 +++$+++ SP8377185 +++$+++ ROOT +++$+++ COM14 +++$+++ 2017-04-27T21:24:32Z +++$+++ @50Wliu ping +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP1038121 +++$+++ ROOT +++$+++ COM15 +++$+++ 2017-04-28T02:45:34Z +++$+++ We do plan to work on this issue but we don't have an ETA for when we'll be able to get to it. If people would like to help this happen sooner than we can get to it, we would be very interested in a well-written pull request. +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP8377185 +++$+++ ROOT +++$+++ COM16 +++$+++ 2017-04-28T05:31:19Z +++$+++ Can you give indications on where the changes should happen and other
+indications?
+I am a bit lost in the source code
+
+On Apr 28, 2017 05:46, "Lee Dohm" <notifications@github.com> wrote:
+
+> We do plan to work on this issue but we don't have an ETA for when we'll
+> be able to get to it. If people would like to help this happen sooner than
+> we can get to it, we would be very interested in a well-written pull
+> request.
+>
+> —
+> You are receiving this because you commented.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/atom/atom/issues/10132#issuecomment-297892801>, or mute
+> the thread
+> <https://github.com/notifications/unsubscribe-auth/AH_TYeucefckiO-Zo6EF4Rabkiuwbbi_ks5r0VL0gaJpZM4G41pi>
+> .
+>
+ +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP1038121 +++$+++ ROOT +++$+++ COM17 +++$+++ 2017-04-28T16:31:17Z +++$+++ @abumalick I would start with the code governing selections and drill in from there: https://github.com/atom/atom/blob/master/src/selection.coffee +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP6501140 +++$+++ ROOT +++$+++ COM18 +++$+++ 2017-07-31T14:56:41Z +++$+++ please fix the problemmm +++$+++ 1 +++$+++ 0
+COM20 +++$+++ SP16887332 +++$+++ ROOT +++$+++ COM19 +++$+++ 2017-07-31T15:40:29Z +++$+++ just use [vs code](https://code.visualstudio.com/) +++$+++ 1 +++$+++ 0
+COM21 +++$+++ SP11720735 +++$+++ ROOT +++$+++ COM20 +++$+++ 2017-08-01T06:04:09Z +++$+++ @yeganemehr  Did VS code support RTL label now?  But I didn't  find the way in it's home  page +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP16887332 +++$+++ ROOT +++$+++ COM21 +++$+++ 2017-08-01T06:22:46Z +++$+++ @Canon0223 We used in VS code in past 6 months and now I can say It's better than atom even if Microsoft developing it.
+It's have way way more efficiency about typescript and tslint and as I can tell uses less resource in my ubuntu in compare to atom.
+And finally as a Persian we have much better experience with VS code.
+
+I hope atom's team don't mind about my comment, they have good product and I used it over a year but It's good for themselves (LTR languages runs on computers with giant resources) not for me! +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP6501140 +++$+++ ROOT +++$+++ COM22 +++$+++ 2017-08-01T06:36:43Z +++$+++ vscode is good but i think its ftp plugins are not efficient in the comparison of atom... +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP1038121 +++$+++ ROOT +++$+++ COM23 +++$+++ 2017-08-01T13:53:55Z +++$+++ In general, we don't mind the odd comment about other tools that might be better for some people's uses. The back-and-forth conversation about things that aren't Atom is off-topic though and should be taken elsewhere. +++$+++ 3 +++$+++ 0
+COM25 +++$+++ SP14325414 +++$+++ ROOT +++$+++ COM24 +++$+++ 2017-08-20T09:10:03Z +++$+++ When this ability will be added to Atom? +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP9424637 +++$+++ ROOT +++$+++ COM25 +++$+++ 2017-11-03T20:08:54Z +++$+++ We need this to be fixed, coding shouldn't be just for ltr languages. I'm just surprised that this is overlooked still after 4 years.
+
+<img width="109" alt="screen shot 2017-11-03 at 4 03 20 pm" src="https://user-images.githubusercontent.com/9424637/32393678-dd3c2d04-c0b0-11e7-81b2-d4b51f138821.png">
+ +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP1038121 +++$+++ ROOT +++$+++ COM26 +++$+++ 2017-11-03T20:36:41Z +++$+++ @lajmikhalil as [I stated above](https://github.com/atom/atom/issues/10132#issuecomment-297892801), if people want to help speed up the process we would definitely welcome the help. The reality is that our resources are finite and there will be things that we can't get to as quickly as some would want. The awesome part about open source is that everyone can work on the bits of functionality that are important to them and the whole system gets better. +++$+++ 3 +++$+++ 0
+COM28 +++$+++ SP15319886 +++$+++ ROOT +++$+++ COM27 +++$+++ 2017-11-17T14:04:11Z +++$+++ does anyone know which source files are related to this issue? If someone wants to help, he/she will need some context. +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP2766036 +++$+++ ROOT +++$+++ COM28 +++$+++ 2017-11-17T14:11:51Z +++$+++ @iamsoorena since this is happening in text editors, I would start by looking at [text-editor-component.js](https://github.com/atom/atom/blob/master/src/text-editor-component.js) and [text-editor.js](https://github.com/atom/atom/blob/master/src/text-editor.js). +++$+++ 1 +++$+++ 0

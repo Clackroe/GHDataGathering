@@ -1,0 +1,369 @@
+ROOT +++$+++ SP4751797 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-06-28T08:33:57Z +++$+++ [Feature] Allow custom publish subdirectory <!--- Provide a general summary of the issue in the Title above -->
+Many libraries in the Angular ecosystem publish to NPM from a subdirectory that was cooked during the build process. The process is usually as followed:
+- build the library in a subdirectory (i.e `dist` directory)
+- copy package.json, license and readme to the `dist` directory
+- do some package.json cleanups in the `dist` directory (delete devDepedencies, move dependencies to peerDependencies, remove scripts...)
+- npm publish from the `dist` directory.
+
+I understand that it is not a common technique for node.js package developers but i think it is common for web package developers and my libraries uses the same technique..
+
+While embedding `lerna` into our shared packages monorepo - [kaltura-ng](https://github.com/kaltura/kaltura-ng) I read a lot of issues in lerna and googled about this topic. I read carefully the conversation of issue #91 and even used the same subject with my issue. Unless I missed new issues that address this feature it was marked as 'wontfix' with a recommendation to use the 'package.json:files' array instead.
+
+The reasons for using this approach instead of `package.json:files` array are:
+- Many known libraries in the Angular ecosystem does it ([angular/angular](https://github.com/angular/angular), [ReactiveX/rxjs](https://github.com/ReactiveX/rxjs), [cyclejs/cyclejs](https://github.com/cyclejs/cyclejs)) so they must have a reason.
+- There is a lot of hoo-ha/complexity with the way node.js resolve modules  for the **web projects** since during the bundling process you **must** refer to the same instance of the library. Unless the bundler (typescript, webpack etc...) provide a hack/workaround/solution to force the library to use its' own node_modules, it will not work. Publishing from sub-directory works just because the `dist/node_modules` not exists.
+- During development if the symlink is done against the root, when you import nested class which was not exported in the main index, you will need to refer to the `dist` as part of the path `import { something } from 'my-package/dist/something`. but once you publish from `dist` folder directly, you should somehow fix the pass by removing the `dist` during the tranpiling which is not a valid option.
+- The libraries being used as dependencies during development should be assigned as peerDependencies at runtime because you want the application to provide them.
+
+so to recap, we cannot just publish the package with a `dist` folder, we need to publish from `dist` directly
+
+There are some caveats that I could think about with my suggested approach:
+1. The dist folder must exists with a package.json inplace before the `lerna bootstrap` process symlink the folders. 
+2. The build process should not delete the 'dist' folder, instead it should just clear its content otherwise the symlink of dependent libraries will be broken.
+
+IMO those two caveats are manageable as:
+1. we can use a preinstall script to create the folder and a simple package.json file (with at least 'id','name').
+2. the build scripts should clear the folder content instead of `rm -rf` the folder itself.
+ 
+## Expected Behavior
+<!--- If you're describing a bug, tell us what should happen -->
+<!--- If you're suggesting a change/improvement, tell us how it should work -->
+when bootstrapping/publishing a package the package.json is being queried for the following config:
+
+```
+"config" : {
+	"npmDistDirectory" : "dist"
+},
+```
+
+if this config exists, it will symlink to that folder during bootstrap command and will publish from that folder during  publish command
+
+using the 'config' attribute allow using the same configuration both in `lerna` and in other [node scripts](https://docs.npmjs.com/files/package.json#config).
+ 
+I already modified the 'bootstrap' command in a fork [esakal/lerna](https://github.com/esakal/lerna). I didn't create a PR yet because I'm missing the 'publish' command. I will be happy to continue my work if you are going to consider this feature.
+
+You can see it in action in our repo -  [kaltura-ng](https://github.com/kaltura/kaltura-ng) :
+```
+$ git clone https://github.com/kaltura/kaltura-ng.git
+$ yarn
+$ npm run setup
+$ cd kaltura-ui/node_modules/@kaltura-ng
+$ ll # you should see a symlink to kaltura-common/dist and kaltura-client/dist
+```
+**NOTE** - your yarn version should be 0.24.6 and above
+
+## Current Behavior
+<!--- If describing a bug, tell us what happens instead of the expected behavior -->
+<!--- If suggesting a change/improvement, explain the difference from current behavior -->
+n/a
+
+
+## Your Environment
+<!--- Include as many relevant details about the environment you experienced the bug in -->
+
+| Executable | Version |
+| ---: | :--- |
+| `lerna --version` | 2.0.0-rc.5 |
+| `yarn --version` |  v0.24.6 |
+
+| OS | Version |
+| --- | --- |
+| macOS El Capitan | 10.11.6 |
+<!-- For example:
+| macOS Sierra | 10.12.3 |
+| Windows 10 | 1607 |
+| Ubuntu | 16.10 |
+-->
+ +++$+++ 18 +++$+++ 0
+COM0 +++$+++ SP13783395 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-07-08T09:11:41Z +++$+++ Hi,
+
+I have a same problem in a project developed with a lot of Angular 4 libraries.
+If dist folder cant' be symlinked directly, the services don't be injected correctly.
+
+I dislike this way proposed by angular (define a package in dist). But if customization of package dir can't be defined, Lerna can't be used with an angular project. +++$+++ 3 +++$+++ 0
+COM1 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM0 +++$+++ 2017-09-16T10:41:11Z +++$+++ up +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP189873 +++$+++ ROOT +++$+++ COM1 +++$+++ 2017-11-22T16:01:24Z +++$+++ I recently tried using Lerna for the first time and immediately ran into this issue. Any heavy Typescript development is going to get hamstrung by the omission of this NPM feature. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP17563226 +++$+++ ROOT +++$+++ COM2 +++$+++ 2017-12-04T17:13:51Z +++$+++ Same issue here I ran into this problem, when developing its fine however I want to publish only contents under a sub directory. would love to get this feature, I am even ready to do a PR.
+
+@evocateur any thoughts? +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP886464 +++$+++ ROOT +++$+++ COM3 +++$+++ 2017-12-08T23:40:45Z +++$+++ As far as I know this is the only way to accomplish "flat" package structure (without the `/dist` or `/lib` section in the import path) unless skipping `src`/`dist` directories entirely, which isn't practicable if your source requires transpilation.
+
+Let's say I want to import only the `tinyUtil` module from the `utils` namespace inside my `big-obese-package`, what I would like it to look like is:
+```javascript
+import tinyUtil from 'big-obese-package/utils/tiny-util';
+```
+If the source is ts/jsx/esnext etc, the recommended way of distributing the package is to transpile it to a `dist` directory ("npmDistDirectory" in @esakal's proposal), include `package.json` and publish. This doesn't seem to be possible with lerna at this moment, which is a pity. 
+
+Instead I will need to transpile it to `./dist`, reference it from the `files` prop in `package.json` and then accept the following import:
+```javascript
+import tinyUtil from 'big-obese-package/dist/utils/tiny-util';
+```
+After spending precious time on your API design, naming convention etc, this is a bitter tradeoff. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP5605 +++$+++ ROOT +++$+++ COM4 +++$+++ 2017-12-09T00:09:21Z +++$+++ I don’t understand why this “flat” package structure is better than just another npm package. “big-obese-monolith” packages are an anti-pattern in npm. If you want to expose submodules directly, extract them into a separate package. *Literally* the reason Lerna was created in the first place.
+
+> On Dec 8, 2017, at 15:40, Andreas Brantmo <notifications@github.com> wrote:
+> 
+> As far as I know this is the only way to accomplish "flat" package structure (without the /dist or /lib section in the import path) unless skipping src/dist directories entirely, which isn't practicable if your source requires transpilation.
+> 
+> Let's say I want to import only the tinyUtil module from the utils namespace inside my big-obese-package, what I would like it to look like is:
+> 
+> import tinyUtil from 'big-obese-package/utils/tiny-util';
+> If the source is ts/jsx/esnext etc, the recommended way of distributing the package is to transpile it to a dist directory ("npmDistDirectory" in @esakal's proposal), include package.json and publish. This doesn't seem to be possible with lerna at this moment, which is a pity.
+> 
+> Instead I will need to transpile it to ./dist, reference it from the files prop in package.json and then accept the following import:
+> 
+> import tinyUtil from 'big-obese-package/dist/utils/tiny-util';
+> After spending precious time on your API design, naming convention etc, this is a bitter tradeoff.
+> 
+> —
+> You are receiving this because you were mentioned.
+> Reply to this email directly, view it on GitHub, or mute the thread.
+> 
+ +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP886464 +++$+++ ROOT +++$+++ COM5 +++$+++ 2017-12-09T01:06:03Z +++$+++ @evocateur: I will not go into argument whether x is better than y - most often I am wrong. But if we ignore my poor choice of lorem-ipsum name (we can call it something else, such as "tiny-lodash"), I can't really see why lerna should hinder the author from using a nested structure within a package and at the same time provide "semantic imports". 
+
+I came here to evaluate lerna as _a tool for managing JavaScript projects with multiple packages_, not as a tool to limit me on how to structure the internals of my packages (whether good or bad). +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP5605 +++$+++ ROOT +++$+++ COM6 +++$+++ 2017-12-09T04:34:22Z +++$+++ In my experience, as well as observation of community packages over many years, coupling consumption of a given export to the literal directory structure of a tarball is an extremely hostile anti-pattern. Especially nowadays with ES module exports and whatnot combined with tree-shaking module bundlers, there’s really no fundamental _necessity_ for false-basedir publishing.
+
+Lerna is designed around the way npm works. Packages are published from the same directory as the package.json, and construct their tarball from metadata contained therein. Publishing from a different directory with a modified dependency tree is not idiomatic npm, and lerna will not support it.
+
+> On Dec 8, 2017, at 17:06, Andreas Brantmo <notifications@github.com> wrote:
+> 
+> @evocateur: I will not go into argument whether x is better than y - most often I am wrong. But if we ignore my poor choice of lorem-ipsum name (we can call it something else, such as "tiny-lodash"), I can't really see why lerna should hinder the author from using a nested structure within a package and at the same time provide "semantic imports".
+> 
+> I came here to evaluate lerna as a tool for managing JavaScript projects with multiple packages, not as a tool to limit me on how to structure the internals of my packages (whether good or bad).
+> 
+> —
+> You are receiving this because you were mentioned.
+> Reply to this email directly, view it on GitHub, or mute the thread.
+> 
+ +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP17563226 +++$+++ ROOT +++$+++ COM7 +++$+++ 2017-12-09T08:33:17Z +++$+++ This will be a major limitation for TypeScript and Angular developers, and in fact some people using lerna with typescript had to do their own publish, or patch the existing implementation.  I myself want to publish from a subdirectory which does contain a `package.json` for several reasons;
+
+1) I don't want to transpile my TS in the `src` folder because I'll end up having a messy file system. `.ts`, `.metadata.json`, `.js`, `.d.ts` all next to each other, and than to `clean` after build will be a total mess.
+2) I want to following Google's Angular Package format https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview
+3) Seperation of concerns, why should I have my `dist` files within the same folder of the `src`?
+
+My folder structure
+```bash
+-- my-lib
+---- package.json
+---- src
+------ index.ts
+----dist
+------ package.json
+------ index.d.ts
+------ index.metadata.json
+------ esm2015
+-------- index.js
+------ esm5
+-------- index.js
+------ bundles
+-------- index.js
+```
+So in reality i can publish from a subfolder as I do have a `package.json` +++$+++ 4 +++$+++ 0
+COM9 +++$+++ SP3168135 +++$+++ ROOT +++$+++ COM8 +++$+++ 2017-12-29T05:58:15Z +++$+++ Author of several typescript modules here who has hit the exact same issue, all my modules publish from a `dist` folder. Wish I'd known this before starting to use lerna! Would love this feature to be implemented, but will probably have to switch to something else instead now. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP5605 +++$+++ ROOT +++$+++ COM9 +++$+++ 2017-12-29T15:45:43Z +++$+++ I fail to see what typescript has to do with this non-idiomatic subdirectory pattern. You can publish npm modules with transpiled code and typings under `dist` just fine, no mangling of package.json required.
+
+> On Dec 28, 2017, at 21:58, Joe Woodhouse <notifications@github.com> wrote:
+> 
+> Author of several typescript modules here who has hit the exact same issue, all my modules publish from a dist folder. Wish I'd known this before starting to use lerna! Would love this feature to be implemented, but will probably have to switch to something else instead now.
+> 
+> —
+> You are receiving this because you modified the open/close state.
+> Reply to this email directly, view it on GitHub, or mute the thread.
+> 
+ +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP17563226 +++$+++ ROOT +++$+++ COM10 +++$+++ 2017-12-29T16:08:53Z +++$+++ That won’t  work if you’d need secondary entry points like
+@scope/my-lib/testing
+
+
+
+
+On Fri, 29 Dec 2017 at 16:45, Daniel Stockman <notifications@github.com>
+wrote:
+
+> I fail to see what typescript has to do with this non-idiomatic
+> subdirectory pattern. You can publish npm modules with transpiled code and
+> typings under `dist` just fine, no mangling of package.json required.
+>
+> > On Dec 28, 2017, at 21:58, Joe Woodhouse <notifications@github.com>
+> wrote:
+> >
+> > Author of several typescript modules here who has hit the exact same
+> issue, all my modules publish from a dist folder. Wish I'd known this
+> before starting to use lerna! Would love this feature to be implemented,
+> but will probably have to switch to something else instead now.
+> >
+> > —
+> > You are receiving this because you modified the open/close state.
+> > Reply to this email directly, view it on GitHub, or mute the thread.
+> >
+>
+> —
+> You are receiving this because you commented.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/lerna/lerna/issues/901#issuecomment-354461926>, or mute
+> the thread
+> <https://github.com/notifications/unsubscribe-auth/AQv-Wvv5lUEqgM_8TBbmjFtE3rTZ3C1Nks5tFQkqgaJpZM4OHpyp>
+> .
+>
+ +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP4030377 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-01-10T20:24:42Z +++$+++ For those that are still trying to get "flat-pack" imports working: `import Bar from 'foo/Bar'` 
+
+I was able to solve it by leveraging the `preversion`, `version`, and `postversion` scripts that were added in https://github.com/lerna/lerna/issues/774
+
+For me I got it working by:
+- Disabling NPM publishing during the lerna publish command
+  - `lerna publish --skip-npm`
+- Performing my linting and build during the `preversion` NPM script (or before) which would be built into a `dist` folder
+- Copy necessary files into the `dist` folder during the `postversion` NPM script and then call `npm publish dist`. This is handled in a gulp file but I've simplified below.
+  - The `package.json` version has been bumped prior to the `postversion` script being called
+  - `postversion` is only called if you do not include the `--skip-git` command to lerna publish
+  - `"postversion": "cp package.json dist && npm publish dist"`
+
+I still think a config option for `npmDistDirectory` could be beneficial since it would allow a consumer to leverage the `prepublish` lifecycle-hook which seems a little more intuitive. +++$+++ 4 +++$+++ 0
+COM13 +++$+++ SP22189661 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-01-17T11:33:40Z +++$+++ that's why angular repos not using lerna +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP4237280 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-02-01T10:20:03Z +++$+++ @austin94 that is painful 💔 
+
+ +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP4237280 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-02-04T15:24:39Z +++$+++ @evocateur in my case is not because of Angular or because I want to have a fat package but the fact that I can't just export everything throw a single file (pkg.main) because that will work as long as you do not have any naming collision.
+
+I would be great if  in the deployment at least I could specify which folder to actually publish to npm. For the simple reason that you will no need to be adding `/lib` or `/dist` or what have you.
+
+It is not necessary this to be agains anything related to `npm` but the lack of changes on npm itself. 2018 most of the packages uses specific folder for the compiled version of the package, webpack does it, babel community suggest it, parcel does it, rollup community suggest it.
+
+So why could just see the need of this? 
+
+Why we couldn't have specific folder where you will have the final npm package `package.json + code` and we could avoid any weird name on the file path of the package? +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP4237280 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-02-04T15:38:32Z +++$+++ @evocateur btw, I do not see this related to Typescript only but any package that requires a build process and normally they will put the final package inside specific folder.
+
+Also, https://docs.npmjs.com/cli/publish the command already allow you to specify a folder so it should be the matter of adding the config and use for run the `npm publish` with the configured path ❤️ 
+ +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP5605 +++$+++ ROOT +++$+++ COM16 +++$+++ 2018-02-04T17:13:29Z +++$+++ That’s literally what the `main` field is for. If you transpile into `dist`, and you have `index.js` as your entry, `”main”: “dist/index.js”` works perfectly fine in your package.json file.
+
+> On Feb 4, 2018, at 07:38, Yordis Prieto <notifications@github.com> wrote:
+> 
+> @evocateur btw, I do not see this related to Typescript only but any package that requires a build process and normally they will put the final package inside specific folder.
+> 
+> —
+> You are receiving this because you were mentioned.
+> Reply to this email directly, view it on GitHub, or mute the thread.
+> 
+ +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP5605 +++$+++ ROOT +++$+++ COM17 +++$+++ 2018-02-04T17:16:13Z +++$+++ > I can't just export everything [through] a single file (pkg.main) because that will work as long as you do not have any naming collision.
+
+Your packages are too big if that is the case. Embrace the patterns of the npm ecosystem.
+ +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP1084847 +++$+++ ROOT +++$+++ COM18 +++$+++ 2018-02-04T19:06:35Z +++$+++ @yordis 
+
+"I would be great if in the deployment at least I could specify which folder to actually publish to npm"
+
+You can tell npm what folders/files to put inside a package via the [files](https://docs.npmjs.com/files/package.json#files) param. I never tried it for sub-directories, but if I got what you are aiming at this could be enough to solve the mentioned problem right? +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP4237280 +++$+++ ROOT +++$+++ COM19 +++$+++ 2018-02-04T19:21:57Z +++$+++ > Your packages are too big if that is the case. Embrace the patterns of the npm ecosystem.
+
+Based on what you can say that?
+
+```js
+// factory1.js
+
+export const perform = () => {
+  return 'factory1'
+}
+```
+
+```js
+// factory2.js
+
+export const perform = () => {
+  return 'factory2'
+}
+```
+
+```js
+// pkg.main: main.js
+
+export * from './factory1'
+export * from './factory2'
+```
+
+because you can't do the previous example you will end up requiring specific file
+
+```js
+// somefile.js
+
+import * as Something from 'libname/factory2'
+
+console.log(
+  Something.perform()
+)
+```
+
+So, based on what you can assume that you are right saying that the package is too big? 
+
+What will be your argument that I have to pay attention to re-exporting on the main file?
+
+Well, I wouldn't re-export anything if that is your case, the whole point of having files that behave as a module scope in NodeJS.
+
+Could you show me how to resolve this issue please?
+
+Also, I am trying to prevent to add `libnam/lib/factory2` so it is a flat package. +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP4237280 +++$+++ ROOT +++$+++ COM20 +++$+++ 2018-02-04T19:25:13Z +++$+++ > Embrace the patterns of the npm ecosystem.
+
+What do you mean by that? What is the npm ecosystem?
+
+
+Having one function package so you will end up with 100 dependencies when they can live all together in the same package? 
+
+Before Tree-shaking exists, probably makes sense because you didn't want to export the whole thing but now the tooling is advance enough. +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP4030377 +++$+++ ROOT +++$+++ COM21 +++$+++ 2018-02-04T19:36:29Z +++$+++ Hi @yordis :wave: I think there might be a few different conversations going on at once here.
+
+> I would be great if in the deployment at least I could specify which folder to actually publish to npm
+
+Expanding on what @noherczeg mentioned, this is possible with the `main` and/or `files` options within `package.json`
+
+```
+// example package.json
+...
+main: 'dist/index.js',
+files: ['dist'],
+...
+```
+
+Let say your files were all under a `dist` folder. A consumer could retrieve the files in the following way:
+
+```
+import * as Everything from 'package';
+import * as FactoryOne from 'package/dist/FactoryOne';
+import * as FactoryTwo from 'package/dist/FactoryTwo';
+etc.
+```
+
+There is no _technical_ difference between the code above and 
+
+```
+import * as Everything from 'package';
+import * as FactoryOne from 'package/FactoryOne';
+import * as FactoryTwo from 'package/FactoryTwo';
+```
+
+which is what I was looking for. The only reason I was looking for this was to have a "cleaner" import structure. +++$+++ 1 +++$+++ 0
+COM23 +++$+++ SP4237280 +++$+++ ROOT +++$+++ COM22 +++$+++ 2018-02-04T19:42:24Z +++$+++ @austin94 right now what I am trying to do is removing `dist` from the path indeed. +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP4237280 +++$+++ ROOT +++$+++ COM23 +++$+++ 2018-02-04T20:41:19Z +++$+++ @austin94 
+
+> Expanding on what @noherczeg mentioned, this is possible with the main and/or files options within package.json
+
+Yes, I am aware of that but that but when you use a folder it will just copy the file inside the folder name so `files: ["lib"]` it will put the files inside `lib`
+
+> There is no technical difference between the code above and
+
+Ones comes from `lib` and the other comes from the root of the project. 
+
+Ideologically, yes you are right, there is not differences (maybe, who knows, this is based on the situation).
+
+Technically,
+
+There is a different indeed, in fact, I could have `package/FactoryOne` and `package/lib/FactoryOne` in the same project and have for whatever reason differences between each other.
+
+But I am seeking the same you are seeking, have a clear importing structure. +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP5605 +++$+++ ROOT +++$+++ COM24 +++$+++ 2018-02-04T23:05:54Z +++$+++ If anyone wants this, fork lerna and do it yourself. This conversation is over. +++$+++ 0 +++$+++ 0

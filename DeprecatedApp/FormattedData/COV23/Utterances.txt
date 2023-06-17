@@ -1,0 +1,36 @@
+ROOT +++$+++ SP827996 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-04-20T12:58:13Z +++$+++ encrypt is decrypting wrong I'm trying to use encrypted variables and I've followed the encrypted vars page on travis-ci.com as well as various blogs and I always seem to get the wrong export values.
+
+I tried to do the following (I'm already logged in):
+```
+travis encrypt DOCKERHUB_USERNAME="xxxxxx"
+```
+
+It gave me a piece of text like:
+
+```
+secure: "<really long string>"
+```
+
+So I copied it into the .travis-ci.yml like this:
+
+```
+env:
+  global:
+    - secure: "<really long string>"
+```
+
+then in the build log I see something like this:
+```
+Setting environment variables from .travis.yml
+$ export ppfBdhkSGyo0sky15G4PwHch7PCI=[secure]
+```
+
+I've also just now found a blog which gave the idea that I should wrap the entire X=Y into a single quoted string, like this:
+```
+travis encrypt 'DOCKERHUB_USERNAME="xxxx"'
+```
+
+But that also doesn't work. So how is this supposed to work? What exactly am I doing wrong here? +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP39689386 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-04-20T12:58:14Z +++$+++ Please post on https://travis-ci.community instead. Thank you! +++$+++ 0 +++$+++ 1
+COM1 +++$+++ SP827996 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-04-20T13:16:29Z +++$+++ Why would I post this on the community site? I'm experiencing this problem on the travis-ci.com website?? +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP149366 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-04-20T18:16:00Z +++$+++ @christhomas The community site is where we are moving conversations about problems happening on travis-ci.com or travis-ci.org. Thanks in advance for posting your questions over there. +++$+++ 0 +++$+++ 0

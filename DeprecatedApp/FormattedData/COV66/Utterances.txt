@@ -1,0 +1,89 @@
+ROOT +++$+++ SP4095570 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-12-26T10:33:26Z +++$+++ Please remove Scottish Gaelic from the Google translate block Since my suggestion to remove the Google Translate block was shot down, could you please at least remove Scottish Gaelic (Gàidhlig) from the language list?
+
+In order to produce intelligible results, Google Translate needs a huge bilingual corpus to run their statistic algorithms on. No such corpus exists for Scottish Gaelic, and we can't expect such a corpus to exist in the near future.
+
+I am not only worried about teaching people really really bad Gaelic, but we can expect misunderstandings and accidental NSFW content too.
+
+See https://github.com/LLK/scratch-blocks/issues/1615 for more info about the difficulties that minority languages have with machine translation. +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP1532629 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-12-26T12:32:49Z +++$+++ I agree, this is a terrible idea - at best, this should be a per-locale **opt-IN**. For many locales, especially the smaller ones, machine translation produces nothing but gibberish.
+Machine translation is intended as a gisting tool, by and large, and for some language combos (mostly large ones with huge corpora) it may function as a translation aid but for most, it's useless at best, an extra time cost at worst.
+It will overall reduce the attractiveness of Scratch to educational establishments. There is no quick fix for localization. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP4095570 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-12-29T06:52:58Z +++$+++ I think that a disclaimer would also be really helpful for those languages that will keep the translate block - it could act as a teaching opportunity. Something like this:
+
+> Translating to another language is difficult, and computers haven't quite mastered it yet. Only use this extension when trying to understand a project that was created in another language - you can remix it and add the translate block to your remix. We recommend that you do not publish such remixes. Do not use the translate block inside of _join_ blocks, because it will result in the wrong word order for some languages and you'll sound like Yoda. Please be aware that machine translation can produce offensive content by accident and that it will often contain grammar errors.
+
+A similar disclaimer could be added to published projects that contain translate blocks, to prevent misunderstandings.
+
+You should also be aware that grammar errors in machine translation results can be detrimental to foreign language learning, because the grammar errors will imprint themselves on students' visual memories and these memory imprints are very hard to get rid of. For example, although I have been called "as fluent as a Bard" by native speakers, I still have difficulty with vowel length after over a decade of learning Gaelic, because I have seen too many texts where the accents on the vowels were missing.
+
+Here's a real-life example of machine translation grammar errors from the English -> German language pair. I have left the airport a note and they have now corrected it.
+
+![nach flugsteig gehen](https://user-images.githubusercontent.com/4095570/50534508-eb4b4500-0b3d-11e9-8d1c-ceb86a285b7d.jpg)
+![bitte warten an flugsteig](https://user-images.githubusercontent.com/4095570/50534509-eb4b4500-0b3d-11e9-9eb0-b5424a8fcc74.jpg)
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP28599280 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-12-29T08:56:32Z +++$+++ @gunchleoc I appreciate the sentiment, but you're getting a little extreme. Let's look over your proposed disclaimer:
+>Translating to another language is difficult, and computers haven't quite mastered it yet. Only use this extension when trying to understand a project that was created in another language
+
+Right off the bat, this is already very extreme. Why shouldn't you use the translate extension for a purpose other than this? Computers haven't quite mastered it, sure - but they're already very good, and 99% of the time translation errors are caused by GIGO rather than actual mistranslation.
+>you can remix it and add the translate block to your remix. We recommend that you do not publish such remixes.
+
+Why not?? What's wrong with sharing your attempt at understanding another language?
+>Do not use the translate block inside of join blocks, because it will result in the wrong word order for some languages and you'll sound like Yoda.
+
+Good recommendation, but the "you'll sound like Yoda" is too informal for a disclaimer. And in many languages word order isn't as significant (e.g. Latin) and grammar is mostly determined by word endings, rather than order. Nothing wrong with using join blocks with languages like that. I think this should read something more like "Pay attention to what language you're translating when putting the translate block inside join blocks. Sentences in some languages may have completely different meanings based on word order."
+> Please be aware that machine translation can produce offensive content by accident and that it will often contain grammar errors.
+
+Can produce offensive content by accident: yes. Often contain grammar errors: no. At least for Google Translate (which is, I believe, the API that the translate blocks run on), the grammar errors are few and far between. Most issues with machine translation are with prosidy and not syntax. Better to say that "machine translation can contain grammar errors or offensive content by accident".
+
+As for your real-life examples: Scratch isn't going to be used in airport displays (if they are, I'd be quite shocked) and the "an"/"am" problem looks to be a transcription error rather than an error of the machine itself (like somebody said to the person typing, "am Flugsteig" but the "m" sounded like an "n").
+
+Don't get me wrong - I do agree that some languages should not be in here as there is too little to base machine translations on, and Scottish Gaelic fits that description - I just think your disclaimer is a little too strong, a little too scary, and a little inaccurate. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP4095570 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-12-30T09:30:39Z +++$+++ The disclaimer is just a first draft collecting some ideas - of course, it can be further refined and rephrased.  I added it as a first basis for discussion and I am not expecting anybody to implementing it just like that verbatim. I do think it is important that we do add some form of disclaimer though ;)
+
+> Why not?? What's wrong with sharing your attempt at understanding another language?
+
+Because other children will assume that it is correct language and learn the mistakes. Such mistakes are very difficult to unlearn. Chances are very high that a child will create a language teaching project using the translate block for languages that the child doesn't speak, just because it's fun. We can't expect the child to understand the implications without any explanation, because in my experience even many adults don't.
+
+You're thinking in terms of teaching computing, but we need to look at the bigger picture here and think about the consequences for language teaching too. I just told a language teacher I know about the translate block and she immediately started verbally pulling her hair out before I even had a chance to finish explaining how it's used. She immediately brought up the point that mistakes that have been learned are very hard to unlearn. So, I am not the only person on the planet who is concerned about this.
+
+> "Pay attention to what language you're translating when putting the translate block inside join blocks. Sentences in some languages may have completely different meanings based on word order."
+
++1, a lot better than what I wrote :)
+
+>  the grammar errors are few and far between
+
+Judging from the real-life airport example, the grammar error rate there is ~50%. I would not call that "few and far between" - and this is for 2 very closely related languages. Of course, your mileage will vary with language pair used and content translated. There will probably be a lot less errors when translating German -> English than translating English -> German because English has less grammar markers. For example, German "Kopie" and "Kopieren" both translate as "Copy" into English.
+
+> Scratch isn't going to be used in airport displays
+
+Of course not! But both are using Google Translate, which still produce identical output, no matter whether somebody sticks it on an airport sign or into Scratch.
+
+>  the "an"/"am" problem looks to be a transcription error
+
+It might look like that for non-German speakers, but it is not. It is a Dative/Accusative case distinction. Any German teacher would mark this as a grammar error and never as a typo.
+
+> I do agree that some languages should not be in here as there is too little to base machine translations on, and Scottish Gaelic fits that description
+
+Thanks :)
+ 
+> I just think your disclaimer is a little too strong, a little too scary, and a little inaccurate.
+
+It's just a first draft, and suggestions for improvements like you made are very welcome in my book!
+
+And don't get me wrong, Google Translate itself is a very useful tool, and it will only become harmful if misused. So, I think we do have the responsibility to teach children how to use it properly, since we're offering them the tool directly. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP16651092 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-12-31T10:32:56Z +++$+++ I support the idea that Google Translate should be an opt-in and have an explicit warning about how correct the translation would be. It could be very embarrassing for a student to get it very wrong!
+Google Translate is pretty good for English to Welsh from my experience, it's correct about 60-70% of the time. That means that there is plenty of scope for errors, howlers and embarrassment in using machine translation.  Try some of these: https://www.flickr.com/groups/scymraeg/
+Google Translate, like Microsoft Translate seems to be better with longer sentences and in Welsh because it's based on formal, bureaucratic documents it's in a more formal style than would be appropriate for Scratch.
+I would be very cautious about encouraging it's use with students who are not fluent in their use of the translated language. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP28599280 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-01-01T08:51:28Z +++$+++ Google Translate *is* an opt-in by virtue of the fact that it's an extension! If you don't explicitly include the extension, you can't use the blocks and have therefore not opted in. By including the extension, you are obviously showing that you are opting in to using the extension. A disclaimer is necessary but should not be obtrusive. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP4095570 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-01-01T10:17:33Z +++$+++ This is a different type of opt-in though. We should not shift the hard decision making to the children, that's not fair on them. The responsibility is ours, not theirs.
+
+By all means, keep the block with a disclaimer for those language pairs where the error rate is extremely low. I'd still like to have my locale removed though, because gibberish translations are no use to everybody, and we will be unintentionally teaching this gibberish.
+
+The disclaimer should also be short ( a lot shorter than my draft) to make it easy to read. Otherwise, kids will just go tl;dr on it. +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP1532629 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-01-29T23:30:50Z +++$+++ > but they're already very good, and 99% of the time translation errors are caused by GIGO rather than actual mistranslation.
+
+Eh, sorry but where are you getting these figures from? Even for a language pair like German <> English for which Google must have a lot of data aren't even close to 99%, that's just a figure you made up to make it sound like a good idea. To begin with, you cannot make a blanket statement about how accurate MT translation is without specifying the language pair you're talking about. I don't know what your language skills are but it's a common mistake by English speakers to assume that because GT does an ok job INTO English, the reverse is also true. It isn't. English happens to be a fairly uninflected language with little morphology, which makes it relatively easy for MT. But try going FROM English to something like German with 4 cases and 3 genders, it gets a whole lot harder straight away.
+
+Secondly, the quality of MT depends hugely on the domain. For instance, for medical stuff, German <> English is pretty good. Put in a novel, you get vastly different results. If you look at the research, even for something fairly simply as medical texts accuracy has been measured as low as [45-46%](https://cedar.wwu.edu/cgi/viewcontent.cgi?article=1060&context=wwu_honors) (into African and Asian languages). So no, not even close to 99%. Making up figures is not good form. +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP747641 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-01-29T23:39:33Z +++$+++ Thanks for all the feedback on this folks. We are working on developing landing pages for each extension and will add some information that clarifies the accuracy of machine translation on the "Translate" extension page based on all of your feedback. Thanks. +++$+++ 0 +++$+++ 0

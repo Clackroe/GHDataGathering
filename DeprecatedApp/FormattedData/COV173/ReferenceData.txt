@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/OpenRA/OpenRA/issues/18235
+Number of Comments: 16

@@ -1,0 +1,209 @@
+ROOT +++$+++ SP129629 +++$+++ ROOT +++$+++ ROOT +++$+++ 2015-02-11T00:12:16Z +++$+++ Vagrant box downloads extremely slow When relying on vagrant to download a box I frequently see connection speeds like this:
+
+```
+default: Downloading: http://boxes.example.com/vagrant/boxes/c6/packer_c6_2.5.2_virtualbox.box
+default: Progress: 20% (Rate: 179k/s, Estimated time remaining: 0:41:37)
+```
+
+(Rate: **179k/s**)
+
+Yet when I use wget to the same URL:
+
+```
+wget http://boxes.example.com/vagrant/boxes/c6/packer_c6_2.5.2_virtualbox.box
+--2015-02-10 09:52:12--  http://boxes.example.com/vagrant/boxes/c6/packer_c6_2.5.2_virtualbox.box
+Resolving boxes.example.com... 10.1.0.17
+Connecting to boxes.example.com|10.1.0.17|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 830674320 (792M) [text/plain]
+Saving to: 'packer_c6_2.5.2_virtualbox.box'
+
+packer_c6_2.5.2_virtualbox.bo   0%[                                                         ]   7.12M   696KB/s   eta 19m 50s
+```
+
+(Rate: **696KB/s**) or often higher.
+
+This particular example was pulled when on Wifi and connected to an IPSEC VPN.
+ +++$+++ 14 +++$+++ 0
+COM0 +++$+++ SP408570 +++$+++ ROOT +++$+++ ROOT +++$+++ 2015-02-11T01:16:30Z +++$+++ Hi @spkane 
+
+Some boxes are hosted on Atlas and sometimes Atlas is just acting as a proxy to a user-hosted box. If you give more information on the specific box(es) you're downloading, we can do some research.
+ +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP129629 +++$+++ ROOT +++$+++ COM0 +++$+++ 2015-02-12T03:17:26Z +++$+++ @sethvargo This box is actually a box I built using packer and it is hosted on a remote server. I'm trying to understand why the download in significantly slower using vagrant then using wget to the exact same URL.
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP408570 +++$+++ ROOT +++$+++ COM1 +++$+++ 2015-02-12T15:22:55Z +++$+++ @spkane sorry - I misread your original issue.
+
+I would suspect (and maybe @mitchellh could elaborate more) a few things:
+1. Ruby is slow and somehow throttling the subprocess
+2. Wget is faster than curl (which is what Vagrant is using)
+3. Vagrant is also allocating time to unpack the box
+4. Wget is allowing for some type of compressed download
+
+It would be helpful if you could benchmark this with curl for reference.
+ +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP1299 +++$+++ ROOT +++$+++ COM2 +++$+++ 2015-02-24T18:40:57Z +++$+++ I really can't explain this. Vagrant doesn't do anything during the subprocess Ruby-wise: it subprocesses to `curl`. It doesn't even do the download in Ruby. Perhaps wget is using multiple connections to download multiple parts? I really don't know, but unless we get more information I have to assume that Vagrant is fine here. 
+
+Is `curl` just as slow? Vagrant is just subprocessing to curl until it completes.
+ +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP5209820 +++$+++ ROOT +++$+++ COM3 +++$+++ 2015-12-01T20:52:31Z +++$+++ I'm experience the same slow experience. Anyone can try aria - http://aria2.sourceforge.net/ and http://stackoverflow.com/questions/3430810/wget-download-with-multiple-simultaneous-connections
+
+It's seems a little bit faster, but, man, you can set this up using default vagrant download mechanism and take a walk or make yourself a sandwich. Get way from screen for a little bit.
+ +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP3980984 +++$+++ ROOT +++$+++ COM4 +++$+++ 2016-01-26T20:31:56Z +++$+++ Having the same problem here:
+1. Upload a box manually to atlas
+2. Create a new Vagrantfile with just `vm_cfg.vm.box_url = <user>/box-name`
+3. `vagrant up` - box downloads slowly
+4. wget box url from atlas (see `vagrant up` output) - box downloads lightening fast
+ +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP1070185 +++$+++ ROOT +++$+++ COM5 +++$+++ 2016-02-01T18:26:29Z +++$+++ I wish there was just a +1 for this. Me too. Same connection for all 3 attempts. VPN turned off.
+- `vagrant up` took 25+ minutes.
+- `wget` took 3 minutes.
+- `curl` took 4 minutes. 
+ +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP660997 +++$+++ ROOT +++$+++ COM6 +++$+++ 2016-02-02T21:13:55Z +++$+++ Ubuntu vivid64 is downloading at ~56kbps. I'm on a 100mbit symmetric connection.
+edit: it timed out before it could finish.
+edit2: I can confirm that https://atlas.hashicorp.com/ubuntu/boxes/vivid64/versions/20160128.0.0/providers/virtualbox.box downloads dramatically faster over wget than via "vagrant up".
+ +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM7 +++$+++ 2016-02-06T07:41:08Z +++$+++ I'm trying to download the scotch/box and current download speeds using vagrant are less than 10kbps.
+
+default: Progress: 0% (Rate: 2603/s, Estimated time remaining: 33:17:38)
+
+However just as bad using wget.
+ +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP398237 +++$+++ ROOT +++$+++ COM8 +++$+++ 2016-02-15T16:28:42Z +++$+++ ditto; some popular boxes are very slow to download - i'm updating ubuntu/trusty64 as we speak and it's dropping below 1Kb/s. Been seeing this for a couple wks now.
+ +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP2024145 +++$+++ ROOT +++$+++ COM9 +++$+++ 2016-03-07T17:54:37Z +++$+++ +1 -- exact same as last comment
+ +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP304958 +++$+++ ROOT +++$+++ COM10 +++$+++ 2016-03-09T02:25:51Z +++$+++ Same here:
+
+```
+$ vagrant box add lazygray/heroku-cedar-14
+==> box: Loading metadata for box 'lazygray/heroku-cedar-14'
+    box: URL: https://atlas.hashicorp.com/lazygray/heroku-cedar-14
+==> box: Adding box 'lazygray/heroku-cedar-14' (v1.0.6) for provider: virtualbox
+    box: Downloading: https://atlas.hashicorp.com/lazygray/boxes/heroku-cedar-14/versions/1.0.6/providers/virtualbox.box
+==> box: Box download is resuming from prior download progress
+    box: Progress: 3% (Rate: 281k/s, ...
+```
+ +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP3443226 +++$+++ ROOT +++$+++ COM11 +++$+++ 2016-03-13T21:57:57Z +++$+++ same here
+
+```
+vagrant box update
+==> default: Checking for updates to 'laravel/homestead'
+    default: Latest installed version: 0.4.1
+    default: Version constraints: >= 0
+    default: Provider: vmware_desktop
+==> default: Updating 'laravel/homestead' with provider 'vmware_desktop' from version
+==> default: '0.4.1' to '0.4.2'...
+==> default: Loading metadata for box 'https://atlas.hashicorp.com/laravel/homestead'
+==> default: Adding box 'laravel/homestead' (v0.4.2) for provider: vmware_desktop
+    default: Downloading: https://atlas.hashicorp.com/laravel/boxes/homestead/versions/0.4.2/providers/vmware_desktop.box
+    default: Progress: 0% (Rate: 42210/s, Estimated time remaining: 6:10:54))
+```
+ +++$+++ 4 +++$+++ 0
+COM13 +++$+++ SP5149834 +++$+++ ROOT +++$+++ COM12 +++$+++ 2016-03-14T10:23:23Z +++$+++ Is there any way to use something like axel to stream downloads in quicker?
+ +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP304958 +++$+++ ROOT +++$+++ COM13 +++$+++ 2016-03-16T10:32:10Z +++$+++ I guess there's nothing preventing people from sharing boxes via torrent.  For example, below is a magnet link for the heroku-cedar-14 box:
+
+> magnet:?xt=urn:btih:5bb1480d5316f229bb71be55b56b06278de41a67&dn=heroku-cedar-14.box&tr=http%3A%2F%2F9.rarbg.com%3A2710%2Fannounce&tr=http%3A%2F%2Fannounce.torrentsmd.com%3A6969%2Fannounce&tr=http%3A%2F%2Fbt.careland.com.cn%3A6969%2Fannounce&tr=http%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=http%3A%2F%2Fmgtracker.org%3A2710%2Fannounce&tr=http%3A%2F%2Ftracker.tfile.me%2Fannounce&tr=http%3A%2F%2Ftracker.torrenty.org%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.trackerfix.com%2Fannounce&tr=http%3A%2F%2Fwww.mvgroup.org%3A2710%2Fannounce&tr=udp%3A%2F%2F9.rarbg.com%3A2710%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2710%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.glotorrents.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.publicbt.com%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker4.piratux.com%3A6969%2Fannounce
+
+Anyone know a good website where one can search for torrents of vagrant boxes?
+ +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP398237 +++$+++ ROOT +++$+++ COM14 +++$+++ 2016-03-16T15:03:39Z +++$+++ @wkretzsch - I personally don't know at the moment about any torrent sites - but for me I wouldn't want to trust torrent links as the source for my infrastructure testing. It's a possible option but security is also important. For me official vagrant boxes from folks like puppetlabs hosted on Atlas are so slow to download at times that I wish this issue could be resolved. For internal vagrant boxes that I build for my company we have the option to host on S3 or Artifactory or private Atlas org.
+
+@mitchellh - yes - curl is just as slow (for me). I don't think it is a Vagrant issue - but a backed server hosting issue. Granted - not a Vagrant issue per se. 
+ +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP7142025 +++$+++ ROOT +++$+++ COM15 +++$+++ 2016-03-17T07:06:42Z +++$+++ ![screenshot from 2016-03-17 14-04-58](https://cloud.githubusercontent.com/assets/7142025/13838783/486408ba-ec49-11e5-9903-19cc1e031395.png)
+
+Yes, this is because curl can only use one of my 3 connections at the same time.  No, that's not the connection's rated speed.  The rated speed is 45mbps.  Yes, bittorrent does perform better.  Just sayin-- your rationale for not supporting bittorrent is kinda thin here.  
+ +++$+++ 1 +++$+++ 0
+COM17 +++$+++ SP304958 +++$+++ ROOT +++$+++ COM16 +++$+++ 2016-03-17T12:01:38Z +++$+++ @tehmaspc surely there must be a way for a website to publish the hash of their box along with a torrent link?  
+ +++$+++ 1 +++$+++ 0
+COM18 +++$+++ SP7537882 +++$+++ ROOT +++$+++ COM17 +++$+++ 2016-03-21T22:28:33Z +++$+++ I wish in general, there was a way to have incremental images, like docker images, with vagrant boxes.  For the provisioners, which bootstrap (cfengine, chef, salt, puppet, docker, etc) by downloading their platform, I wish there was a way to download a packaged up installer, so that other fresh images that use that provisioner, e.g. ubuntu + docker, would not need to download the goods again.  Box updates and provisioner downloads were already painful, but recently, have been beyond notoriously slow.
+ +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP1664812 +++$+++ ROOT +++$+++ COM18 +++$+++ 2016-04-09T23:31:46Z +++$+++ Just went to update my box for the first time (trusty64 - noticed the warning on my vagrant up command output), and it's going to take my 1.5 hours on a 150MBps connection - pathetic. It's 2016 - I don't know the specifics of what's going on here, but surely we can fix this, like, by the end of next week? The tech that goes into modern technologies like vagrant is amazing, something this basic should be overcome in mere hours.
+ +++$+++ 1 +++$+++ 0
+COM20 +++$+++ SP7142025 +++$+++ ROOT +++$+++ COM19 +++$+++ 2016-04-10T01:53:28Z +++$+++ Amen, Matt, Amen.  This is about UX.
+
+There should be a recognition that line speed != line speed and practical
+steps can be taken to overcome the daunting issue of line speed != line
+speed.
+
+Jacob Gadikian
+E-mail: faddat@gmail.com
+SKYPE: faddat
+Phone/SMS: +84 167 789 6421
+
+On Sun, Apr 10, 2016 at 6:32 AM, Matt Porter notifications@github.com
+wrote:
+
+> Just went to update my box for the first time (noticed the warning on my
+> vagrant up command output), and it's going to take my 1.5 hours on a
+> 150MBps connection - pathetic. It's 2016 - I don't know the specifics of
+> what's going on here, but surely we can fix this, like, by the end of next
+> week? The tech that goes into modern technologies like vagrant is amazing,
+> something this basic should be overcome in mere hours.
+> 
+> —
+> You are receiving this because you commented.
+> Reply to this email directly or view it on GitHub
+> https://github.com/mitchellh/vagrant/issues/5319#issuecomment-207881297
+ +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP32032 +++$+++ ROOT +++$+++ COM20 +++$+++ 2016-04-12T04:58:02Z +++$+++ I just tried asking Vagrant to download ubuntu/trusty64, and was getting speeds of <= 5 KiB/sec. I killed it and tried again using the exact same command, and got 29 MiB/sec. 
+
+I think @mitchellh is correct in that this doesn't really seem like a Vagrant issue. If anything, it seems more like an Atlas issue (so possibly the ELB and/or whatever's sitting behind it). I highly doubt it has anything to do with the routes or hops between end-users and the ELB VIPs -- you wouldn't typically see such a polarizing set of speeds in that case, especially considering both VIPs terminate in us-east-1.
+
+If for no other reason, it'd be highly desirable to see these made available through a CDN rather than a centrally-located ELB. Then again, I'm just one guy (who isn't paying for this service), so take that for what it's worth. Pretty thankful it's there either way.
+ +++$+++ 1 +++$+++ 0
+COM22 +++$+++ SP3980984 +++$+++ ROOT +++$+++ COM21 +++$+++ 2016-04-14T14:36:16Z +++$+++ It's not just an Atlas issue. I have boxes and metadata.json on S3, with a Fastly CDN in front and regularly have the exact same issue: sometimes vagrant downloads at 100kbps and sometimes it downloads at > 5mbps. You can cancel a slow download and half the time a retry gets you the faster speeds. 
+ +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP660997 +++$+++ ROOT +++$+++ COM22 +++$+++ 2016-04-15T18:29:28Z +++$+++ I contacted support about this around the same time I chimed in here initially. Their response is that Vagrant uses curl to download things so they don't see this as a Vagrant problem. IMO that's an unprofessional cop-out because they chose to use curl, know that there are problems and aren't considering swapping out with an alternative to eliminate the problem for their users.
+ +++$+++ 21 +++$+++ 0
+COM24 +++$+++ SP6270048 +++$+++ ROOT +++$+++ COM23 +++$+++ 2016-04-22T06:41:30Z +++$+++ I can confirm that this is still an issue. All my peers also report times of >1h, while the connection here for other connections is around 200MB/s.
+
+```
+vagrant up
+Bringing machine 'default' up with 'virtualbox' provider...
+==> default: Box 'ubuntu/trusty32' could not be found. Attempting to find and install...
+    default: Box Provider: virtualbox
+    default: Box Version: >= 0
+==> default: Loading metadata for box 'ubuntu/trusty32'
+    default: URL: https://atlas.hashicorp.com/ubuntu/trusty32
+==> default: Adding box 'ubuntu/trusty32' (v20160406.0.0) for provider: virtualbox
+    default: Downloading: https://atlas.hashicorp.com/ubuntu/boxes/trusty32/versions/20160406.0.0/providers/virtualbox.box
+    default: Progress: 11% (Rate: 43801/s, Estimated time remaining: 1:36:50)
+```
+ +++$+++ 1 +++$+++ 0
+COM25 +++$+++ SP7142025 +++$+++ ROOT +++$+++ COM24 +++$+++ 2016-04-22T23:03:20Z +++$+++ While I am unsure of the origin of the problem, I really do wish that Hashicorp would get back to its unrelenting focus on user experience with this one.  **Muli-hour downloads (that should take 1-10 minutes)==bad ux.**
+ +++$+++ 2 +++$+++ 0
+COM26 +++$+++ SP10047844 +++$+++ ROOT +++$+++ COM25 +++$+++ 2016-04-25T20:34:51Z +++$+++ Currently downloading an image for the 5th time (@13Xk/s, even with `wget`). Keep disconnecting me while around 50-90%. But it ALWAYS downloads at full speed either early morning / late night EST.  Assuming it is a traffic  issue, but regardless very bad UX.
+
+```
+    box: Progress: 47% (Rate: 106k/s, Estimated time remaining: 0:14:50)
+```
+ +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP6499340 +++$+++ ROOT +++$+++ COM26 +++$+++ 2016-04-29T18:04:31Z +++$+++ I have been trying for 2 day's now and still can not get it to download... its a shame.. it is really not impressing new comers to  laravel .. i can only get 34ks speed.........
+ +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP5149834 +++$+++ ROOT +++$+++ COM27 +++$+++ 2016-05-03T11:42:46Z +++$+++ Speeds ok from the UK:
+
+```
+Bringing machine 'default' up with 'virtualbox' provider...
+==> default: Box 'bento/centos-7.2' could not be found. Attempting to find and install...
+    default: Box Provider: virtualbox
+    default: Box Version: >= 0
+==> default: Loading metadata for box 'bento/centos-7.2'
+    default: URL: https://atlas.hashicorp.com/bento/centos-7.2
+==> default: Adding box 'bento/centos-7.2' (v2.2.6) for provider: virtualbox
+    default: Downloading: https://atlas.hashicorp.com/bento/boxes/centos-7.2/versions/2.2.6/providers/virtualbox.box
+    default: Progress: 11% (Rate: 7728k/s, Estimated time remaining: 0:01:19)
+```
+
+What is your location?
+ +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP5149834 +++$+++ ROOT +++$+++ COM28 +++$+++ 2016-05-03T11:47:35Z +++$+++ Also, https://atlas.hashicorp.com/ URL's are delivered from Amazon Web Services (atlas-frontend-atlas-230110478.us-east-1.elb.amazonaws.com) so I doubt they are tight for bandwidth ;-)
+
+Are the slow downloads being made from locations a long distance away from the AWS us-east-1 DC, perhaps thats the root cause of the issue?
+
+Maybe the AWS CDN could be used to cache files around the world?
+ +++$+++ 0 +++$+++ 0

@@ -1,0 +1,234 @@
+ROOT +++$+++ SP6632315 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-03-17T13:28:22Z +++$+++ ETA for UWP support? Is there an ETA for when this library might support UWP? +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP3548 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-03-17T13:30:02Z +++$+++ No. You might be the first person to express an interest in this. I'm surprised if it doesn't work. Are you thinking specifically about .NET Native support?
+What failures are you seeing? +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP6632315 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-03-17T13:41:39Z +++$+++ As you already know, MessagePack bombs when compiled for .Net Native.  You yourself closed that issue here.  I'm now wondering whether there is an ETA for addressing this?  I don't want the ETA issue to get lost in the mix because we need a means of tracking how long it takes to sort out .Net Native problems.  Some of them can be addressed by design choices Microsoft makes.  Since Microsoft promoted UWP, a degree of accountability is required just so we all have visibility to what's at stake. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP3548 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-03-18T04:11:52Z +++$+++ If the only failure in UWP happens when using this library with MessagePack, and the failure is within MessagePack itself, we should close this issue since it isn't a bug in StreamJsonRpc.  +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP6632315 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-03-18T05:56:01Z +++$+++ So now I'm going to reply exactly the way Microsoft replies to me.
+
+@MichalStrehovsky correctly stated that "since ~.NET Framework 1.0", the .Net Native compiler has had certain documented behaviors in the way it generates its code.   The implication being that an understanding of .Net Native characteristics requires different design choices.
+
+It's a very convenient way of saying that the bug I had in my code was a bug with my design rather than the .Net Native compiler even though my code did/should work in any given .Net runtime context, but .Net Native is special, thus requiring special design considerations.
+
+@AArnott, before you close this issue you will have to adjust where you point the finger.  The problem isn't with MessagePack, according to @MichalStrehovsky the problem is your design choice since you, being on the inside of Microsoft, have an even better understanding of the way the .Net Native compiler works.
+
+Or, the problem is the .Net Native compiler documentation because even Microsoft staff are not aware of the design considerations they have to employ to build products that support Microsoft tech.
+
+Or, the problem is the way Microsoft operates internally because you folks are prepared to ignore each other and go off to build tooling that your customers are unable to use.
+
+Or, the problem is Microsoft knows what the future holds, and dumps technology support for its existing tech knowing that that tech is about to be invalidated by what comes next.
+
+There are several other logical or cases.  You get the point.
+
+This issue is not related to MessagePack.  I don't want it swept under the rug because either Microsoft is here to support the developers using its tech, or Microsoft does as it pleases regardless of how it affects the developers it has convinced to use its tech.
+
+@AArnott, I suggest you run this by your bosses.  Either you made a mistake, or the entire organization has.
+ +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP13110571 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-03-18T07:30:06Z +++$+++ > "since ~.NET Framework 1.0", the .Net Native compiler has had certain documented behaviors in the way it generates its code
+
+@noemata are you referring to this issue: https://github.com/grpc/grpc/issues/18188#issuecomment-542712813 where you interacted with me? That comment is specifically to the behavior of the `Assembly.Location` API that returns the documented value when there's no filesytem location for the loaded assembly. .NET Native compiles apps into a single file and the original assemblies are gone. It has no choice but to return the only possible documented value. It could also throw, but that won't help in grpc's case either.
+
+I'm afraid you're sidetracking this discussion in a way that won't help you get a resolution in streamjsonrpc. I don't see `Assembly.Location` being called within this repo. Do you have an error message or a repro so that we can act on this? +++$+++ 1 +++$+++ 0
+COM5 +++$+++ SP6632315 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-03-18T08:25:45Z +++$+++ Thank you for chiming in @MichalStrehovsky.  Both the comment you make and the way @AArnott initiated the closure of this issue was disingenuous.  You folks are well aware of the .Net Native problems and design considerations.  The developer of MessagePack and @AArnott's contributions to that code base are not at fault here.  @AArnott is a very smart fellow as are you @MichalStrehovsky.
+
+It may be a PITA to have .Net Native issues surfaced this way.  However, that's the real problem and characterizing it any other way is also a problem.  Sadly, I'm not expecting Microsoft to do anything other than replace the .Net Native compiler with whatever the new .Net Core AOT strategy will be.  Until that happens, you folks need to own up to where things are really headed.
+
+It's obvious the reboot is well on the way.  Just say so and stop pretending that any of the .Net Native compiler problems will actually be addressed.  A year went by on the gRPC issue.  A year with no resolution!  I'd even be ok with a form of admission and a statement along the lines that we need to resolve these issues ourselves.   At least that way, time wouldn't be wasted on false expectations.
+
+This library is a nice piece of work.  I'd like to be able to use it. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP13110571 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-03-18T08:40:09Z +++$+++ The `Assembly.Location` problem is headed into .NET Core proper: https://github.com/dotnet/designs/pull/90#discussion_r375120319. GRPC will have to fix it's bugs. More developers use .NET Core proper, so hopefully they'll be more incentivized to fix the problem. I'm sorry that you're ending up being a hostage to them ignoring the problem. Single file compilation greatly improves startup time of apps and simplifies the distribution a lot - that's why a of users are asking for that mode and we're going to add it outside .NET Native too. But some APIs simply don't make sense in that mode. `Assembly.Location` is one of those.
+
+As I said, if you can get me the error message or repro for the streamjsonrpc issue I might be able to help you make progress on that one. For GRPC, the ball is really in their court. +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP6632315 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-03-18T09:02:18Z +++$+++ Starting bottom up, MessagePack bombs on code like this:
+
+```
+using System;
+using System.Linq;
+using MessagePack;
+
+// This example code shows how you could implement the required main function for a 
+// Console UWP Application. You can replace all the code inside Main with your own custom code.
+
+// You should also change the Alias value in the AppExecutionAlias Extension in the 
+// Package.appxmanifest to a value that you define. To edit this file manually, right-click
+// it in Solution Explorer and select View Code, or open it with the XML Editor.
+
+namespace Tester
+{
+	[MessagePackObject]
+	public class Model
+	{
+		[Key(0)]
+		public bool? Bool { get; set; }
+
+		[Key(1)]
+		public byte? Byte { get; set; }
+
+		[Key(2)]
+		public sbyte? SByte { get; set; }
+
+		[Key(3)]
+		public short? Short { get; set; }
+
+		[Key(4)]
+		public ushort? UShort { get; set; }
+
+		[Key(5)]
+		public int? Int { get; set; }
+
+		[Key(6)]
+		public uint? UInt { get; set; }
+
+		[Key(7)]
+		public long? Long { get; set; }
+
+		[Key(8)]
+		public ulong? ULong { get; set; }
+
+		[Key(9)]
+		public float? Float { get; set; }
+
+		[Key(10)]
+		public double? Double { get; set; }
+
+		[Key(11)]
+		public decimal? Decimal { get; set; }
+
+		[Key(12)]
+		public string String { get; set; }
+
+		[Key(13)]
+		public DateTime? DateTime { get; set; }
+	}
+
+	class Program
+    {
+
+		static void Main(string[] args)
+        {
+			Random rnd = new Random();
+
+			Model[] datarange;
+
+			datarange = Enumerable.Repeat(
+				new Model
+				{
+					Bool = rnd.Next(0, 1) == 0 ? false : true,
+					Byte = (byte)rnd.Next(0, 0xFF),
+					SByte = (sbyte)rnd.Next(0, 0xFF),
+					Short = (short)rnd.Next(-1, 1),
+					UShort = 1,
+					Int = -1,
+					UInt = 1,
+					Long = -1L,
+					ULong = 1UL,
+					Float = 1.0f,
+					Double = 1.0,
+					Decimal = 1m,
+					String = "a string",
+					DateTime = new DateTime(2020, 1, 1)
+				},
+				10).ToArray();
+
+			byte[] testbinary = MessagePackSerializer.Serialize(datarange);
+
+			// Crash here: "A type initializer threw an exception."
+			Model[] testdata = MessagePackSerializer.Deserialize<Model []>(testbinary);
+
+			Console.WriteLine("Press a key to continue: ");
+            Console.ReadLine();
+        }
+    }
+}
+```
+https://github.com/neuecc/MessagePack-CSharp/issues/840
+
+So fixing MessagePack should fix streamjsonrpc.
+
+I wouldn't be too quick to blame gRPC, since Microsoft is using it and endorsing it as a replacement for WCF.  The current "flaw" in the gRPC code base is the way it makes use of Assembly.Location, which is used in a similar manner in many other libs.  Remove this bug and gRPC works in a UWP Release build as well as any other context.
+
+ +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP13110571 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-03-18T09:24:20Z +++$+++ Thanks! This is failing with the following stack trace (if you check the checkbox next to "Common Language Runtime Exceptions" in the Visual Studio's Exception window:
+
+```
+ 	System.Private.CoreLib.dll!System.Reflection.Emit.TypeBuilder.GetMethod(System.Type type, System.Reflection.MethodInfo method) Line 11	C#
+ 	MessagePack.dll!MessagePack.Internal.DynamicAssembly.DynamicAssembly(string moduleName)	Unknown
+ 	MessagePack.dll!MessagePack.Resolvers.DynamicEnumResolver.DynamicEnumResolver()	Unknown
+ 	System.Private.CoreLib.dll!System.Runtime.CompilerServices.ClassConstructorRunner.EnsureClassConstructorRun(System.Runtime.CompilerServices.StaticClassConstructionContext* pContext) Line 104	C#
+ 	System.Private.CoreLib.dll!System.Runtime.CompilerServices.ClassConstructorRunner.CheckStaticClassConstruction(void* returnValue, System.Runtime.CompilerServices.StaticClassConstructionContext* pContext) Line 38	C#
+ 	MessagePack.dll!MessagePack.Internal.StandardResolverHelper.StandardResolverHelper()	Unknown
+ 	System.Private.CoreLib.dll!System.Runtime.CompilerServices.ClassConstructorRunner.EnsureClassConstructorRun(System.Runtime.CompilerServices.StaticClassConstructionContext* pContext) Line 104	C#
+ 	System.Private.CoreLib.dll!System.Runtime.CompilerServices.ClassConstructorRunner.CheckStaticClassConstruction(void* returnValue, System.Runtime.CompilerServices.StaticClassConstructionContext* pContext) Line 38	C#
+ 	MessagePack.dll!MessagePack.Resolvers.StandardResolver.StandardResolver()	Unknown
+ 	System.Private.CoreLib.dll!System.Runtime.CompilerServices.ClassConstructorRunner.EnsureClassConstructorRun(System.Runtime.CompilerServices.StaticClassConstructionContext* pContext) Line 104	C#
+ 	System.Private.CoreLib.dll!System.Runtime.CompilerServices.ClassConstructorRunner.CheckStaticClassConstruction(void* returnValue, System.Runtime.CompilerServices.StaticClassConstructionContext* pContext) Line 38	C#
+ 	MessagePack.dll!MessagePack.MessagePackSerializerOptions.MessagePackSerializerOptionsDefaultSettingsLazyInitializationHelper.MessagePackSerializerOptionsDefaultSettingsLazyInitializationHelper()	Unknown
+ 	System.Private.CoreLib.dll!System.Runtime.CompilerServices.ClassConstructorRunner.EnsureClassConstructorRun(System.Runtime.CompilerServices.StaticClassConstructionContext* pContext) Line 104	C#
+ 	System.Private.CoreLib.dll!System.Runtime.CompilerServices.ClassConstructorRunner.CheckStaticClassConstruction(void* returnValue, System.Runtime.CompilerServices.StaticClassConstructionContext* pContext) Line 38	C#
+ 	MessagePack.dll!MessagePack.MessagePackSerializerOptions.Standard.get()	Unknown
+ 	MessagePack.dll!MessagePack.MessagePackSerializer.MessagePackSerializer()	Unknown
+ 	System.Private.CoreLib.dll!System.Runtime.CompilerServices.ClassConstructorRunner.EnsureClassConstructorRun(System.Runtime.CompilerServices.StaticClassConstructionContext* pContext) Line 104	C#
+ 	System.Private.CoreLib.dll!System.Runtime.CompilerServices.ClassConstructorRunner.CheckStaticClassConstruction(void* returnValue, System.Runtime.CompilerServices.StaticClassConstructionContext* pContext) Line 38	C#
+ 	MessagePack.dll!MessagePack.MessagePackSerializer.Serialize<System.__Canon>(System.__Canon value, MessagePack.MessagePackSerializerOptions options, System.Threading.CancellationToken cancellationToken)	Unknown
+>	MessPack.exe!MessPack.MainPage.OnNavigatedTo(Windows.UI.Xaml.Navigation.NavigationEventArgs e) Line 107	C#
+```
+
+MessagePack relies on Reflection.Emit that is not supported by .NET Native.
+
+There was a NuGet package created that makes it appear NetStandard supports reflection emit, but creating that NuGet package was a big mistake, because that API only works on two out of 4 implementation of NetStandard: https://github.com/dotnet/runtime/issues/26007. This created a situation that some NetStandard libraries can't work on all NetStandard runtimes. People in charge tried to fix the issue by unpublishing the package (so that we don't have a broken ecosystem), but had to roll that back because of outcry from users. This mistake is still haunting us years later, unfortunately. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP6632315 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-03-18T09:48:11Z +++$+++ So then the question is, why use MessagePack for streamjsonrpc?  If, as you say, only 2 out of 4 implementations of .Net Standard support it, why is Microsoft breaking parts of their own eco system?
+
+By the way, I'm ok with your answer @MichalStrehovsky, you've essentially confirmed that @AArnott needs to either fix the way MessagePack uses reflection, or not use MessagePack within streamjsonrpc or any other .Net Lib that has Microsoft's name on it, else yet another piece of tooling from Microsoft is compromised in where it can be used and becomes a source of confusion and needless frustration.
+
+That said, I would not want to see an endless timeline for such fixes, hence the ETA query at the very start of this thread.  It might be simpler to make proper design choices in the first place, and communicate broadly what those should be.
+ +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP6632315 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-03-18T10:12:41Z +++$+++ I have one other suggestion, make Debug build enforce some of the limitations one sees on a Release build.  Especially things like Assembly.Location; these should all behave in Debug just as they do in Release.  Lots of problems will disappear in a hurry because most devs spend most of their life in Debug.  Throw in a flag on a per project basis to turn this off for instances where it's not appropriate.  That way the folks turning off the flag will likely know why they're doing so. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP6632315 +++$+++ ROOT +++$+++ COM10 +++$+++ 2020-03-18T10:16:43Z +++$+++ [x] Enable Release Build Behavior +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP6632315 +++$+++ ROOT +++$+++ COM11 +++$+++ 2020-03-18T11:16:38Z +++$+++ I read the discussion here: https://github.com/dotnet/designs/pull/90#discussion_r375120319
+
+ERBB, an "Enable Release Build Behavior" flag mentioned above, takes away a lot of needless hoop jumping and allows current approaches to be preserved.  Not sure how much this would affect Debug tooling, but it would pre-emptively preclude poor design choices. +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP3548 +++$+++ ROOT +++$+++ COM12 +++$+++ 2020-03-18T13:11:07Z +++$+++ @noemata You're wasting a lot of our time slandering our competence and I will likely lock this issue and you may be banned for violating our [code of conduct](https://opensource.microsoft.com/codeofconduct/) if you continue. Please consider yourself warned. Please read that code of conduct before submitting anything further to this or other Microsoft OSS repos.
+
+By publishing and sharing StreamJsonRpc with the world, Microsoft hasn't committed to supporting it in every use case. Microsoft Support is something agreed upon between Microsoft and individual customers on a per-product basis. StreamJsonRpc is only officially supported in contexts where it ships with Microsoft products that are under support agreements. In other words, we are not obligated to make it work for you in .NET Native and have never made a promise that we would do so.
+
+Just because Microsoft makes two technologies does not guarantee that those technologies can work together. And just because I work at Microsoft doesn't mean I have any deeper understanding of the .NET Native toolchain than you do. Microsoft is a big place and one team rarely has unique insights into what another team/product is doing.
+
+Further, you have yet to share any evidence that this is a StreamJsonRpc flaw at all. MessagePack clearly has issues on .NET Native, but StreamJsonRpc's support for MessagePack *as an option* hardly means that we're responsible to make MessagePack (a 3rd party OSS library) work under every possible Microsoft runtime. I expect you can use StreamJsonRpc on UWP just fine in its default configuration, although I haven't tested that nor are we promising support for that. 
+
+Now if MessagePack proclaims support for .NET Native, and StreamJsonRpc *still* doesn't work on that platform, then re-opening an issue on this repo with the specific error you're seeing is welcome and subject to our limited capacity to offer free OSS support we may take a look at the problem and suggest how you can make it work or possibly offer a fix.
+
+It's not just design choices -- there are simply features that .NET Native doesn't support. Some of these reasons I understand and some I don't. But this library does not nor I imagine ever will limit its feature set to what's available on the least capable of Microsoft platforms. For example we support dynamically generated client proxies, which is a great feature that I don't know if it can be used with .NET Native (even without MessagePack). Given dozens of applications and millions of users benefit from this feature, we wouldn't remove it or have suppressed its development just because it can't ever work on a platform that no one even asked for support for before now.
+
+So as I stated before, I'm closing this issue because there's no reason to believe a fix is required in this repo. We will keep the .NET Native issue on messagepack open because we expect code fixes are required in that repo. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP6632315 +++$+++ ROOT +++$+++ COM13 +++$+++ 2020-03-18T15:05:40Z +++$+++ The .Net Native compiler is a bit of an engineering marvel.  I'd like to see it persist.  It's sad that I have to use such a long winded approach to try and defend its future and get certain parts of Microsoft to cooperate with other parts.  If there is something fundamentally false in anything I'm expressing, please do highlight my error(s).
+
+If any of your work is not intended to support UWP, @AArnott, then just add an exclusionary note, or say so in your opening remarks to such queries and I'll be happy to disappear.  I also don't want to waste my time.  I have merely pointed out that your design choices, not your competence, or your intellect, are at issue here.  And I had to go through a long winded process to make the point clear.
+
+You can censor me if you like.  Just because you have the power to do so doesn't make that choice right either.
+
+When you stated "I'm surprised if it doesn't work." You gave yourself away.  If I'm wrong in thinking that you knew it didn't work, then I apologize, because you closed the very issue that you had identified as the point of failure.  You see, I'm assuming you are quite bright @AArnott based on the high quality of your work.  The quality of your personal choices, in that realm, we obviously have a difference of opinion. +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP3548 +++$+++ ROOT +++$+++ COM14 +++$+++ 2020-03-19T00:46:43Z +++$+++ > If there is something fundamentally false in anything I'm expressing, please do highlight my error(s).
+
+Sure: essentially the whole of the part of this comment you addressed to me: https://github.com/microsoft/vs-streamjsonrpc/issues/432#issuecomment-600439129. You presented several alternatives and said it was one of those. They were all jaded, and none of them reflect reality.
+
+> If any of your work is not intended to support UWP, @AArnott, then just add an exclusionary note, or say so in your opening remarks to such queries and I'll be happy to disappear. 
+
+I guess I could have been clearer in my very first comment on this issue that UWP isn't a supported scenario. We haven't tested it. But most code does Just Work on .NET Native, so my surprise that I expressed in my first comment was mild surprise that StreamJsonRpc wasn't among those things that Just Work. But it wasn't intended to express our current support for UWP.
+
+> When you stated "I'm surprised if it doesn't work." You gave yourself away. 
+
+What do you mean? "You gave yourself away" makes it sounds like you're saying I accidentally revealed something. I don't feel that way. The intent of all my interactions on this issue should have conveyed:
+
+1. We don't support UWP, but it might just work
+1. We don't keep open issues on a repo for which no code defects are present, or to support scenarios that we don't intend to support.
+
+At some point, we might add UWP tests to this repo in which case we'll claim to support UWP. But even then, we might scope the supported feature set down to those that actually work on .NET Native. 
+
+> because you closed the very issue that you had identified as the point of failure.
+
+Which issue was that?
+You opened this one, and two over at MessagePack that I'm aware of:
+https://github.com/neuecc/MessagePack-CSharp/issues/840
+https://github.com/neuecc/MessagePack-CSharp/issues/839
+
+I closed the above two because we already have an active issue tracking UWP support in MessagePack (https://github.com/neuecc/MessagePack-CSharp/issues/563). We only need one per repo with a defect.
+I closed *this* vs-streamjsonrpc issue because there's no bug here AFAIK, as the only issues I've seen are actually failures in MessagePack to support UWP, which we can discuss over at https://github.com/neuecc/MessagePack-CSharp/issues/563. +++$+++ 0 +++$+++ 0

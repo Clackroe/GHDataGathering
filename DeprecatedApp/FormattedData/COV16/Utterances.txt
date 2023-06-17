@@ -1,0 +1,309 @@
+ROOT +++$+++ SP14953974 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-06-21T08:10:57Z +++$+++ Terminal shows an empty window and then crashes Hi!  
+I'm trying to run this new Windows Terminal.
+
+After some difficulties and a few attempts I was able to build and deploy the project locally.  
+*«Great! Finally!»* I said to myself, just before clicking on the `Windows Terminal (Dev Build)` in the Start menu...
+
+This was the result: an empty window.
+> ![image](https://user-images.githubusercontent.com/14953974/59504305-f5ba8a80-8ea2-11e9-929f-4a56104b77b9.png)
+
+After a few seconds, it simply disappeared and then...  
+Well... Nothing more!
+
+---
+
+Here are some useful (hopefully) information about my current system:
+>  Windows 10 1903 Build 18362.175
+>  x64 architecture
+>  `Developer mode` enabled
+>  Repo version built: v0.2.1715.0 (66cb7c4b58b0e41ffaeb952ef27f1a8c67e90db8)
+>  Build with Visual Studio 2019
+>  Built and deployed for x64 architecture
+
+---
+
+Some time ago, I commented already here (https://github.com/microsoft/terminal/issues/489#issuecomment-502067642) explaining the same issue...  
+But, nobody could help me.
+
+Maybe opening a Issue I will be luckier...
+>  Sorry for the "duplicate"... 😔 +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP14316954 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-06-21T17:29:48Z +++$+++ From another comment on the same issue,
+> if you are seeing a blank screen, make sure you are targeting the right architecture. you cannot run windows terminal x86 on an x64 machine. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP14316954 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-06-21T17:30:15Z +++$+++ Admittedly, I could have read "built and deployed for x64 architecture" and figured that out.
+Can you share the build log? +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP11341342 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-06-22T02:28:55Z +++$+++ I think the Terminal was so impressed with your desktop image it didn't want to render on top of it. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP1423520 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-06-22T05:32:43Z +++$+++ FWIW, I'm receiving the same behavior on my x86 tablet after installing the *MS Store* version. Previous copies compiled by me worked, so I'm left scratching my head as to why this is occurring now. I hadn't yet tested on my x64 laptop however, so I am unsure if it's the same there..
+
+Update: After looking at event viewer, I'm receiving an appcrash. I have pulled the events into an evtx if needed.
+```
+Faulting application name: WindowsTerminal.exe, version: 1.0.1906.20005, time stamp: 0x5d0c1506
+Faulting module name: Windows.UI.Xaml.dll, version: 10.0.18922.1000, time stamp: 0xf1c7f3c3
+Exception code: 0xc0000005
+Fault offset: 0x007d208e
+Faulting process id: 0x2238
+Faulting application start time: 0x01d528c0b2bc30da
+Faulting application path: C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_0.2.1715.0_x86__8wekyb3d8bbwe\WindowsTerminal.exe
+Faulting module path: C:\Windows\System32\Windows.UI.Xaml.dll
+Report Id: 61ba7cc9-da7a-4bfb-8a43-b375251ebb66
+Faulting package full name: Microsoft.WindowsTerminal_0.2.1715.0_x86__8wekyb3d8bbwe
+Faulting package-relative application ID: App
+``` +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP20713561 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-06-22T22:39:21Z +++$+++ I just installed from MS Store and experience the same issue. 64-bit OS here.
+```
+Nombre de la aplicación con errores: WindowsTerminal.exe, versión: 1.0.1906.20005, marca de tiempo: 0x5d0c1459
+Nombre del módulo con errores: TerminalApp.dll, versión: 1.0.1906.20005, marca de tiempo: 0x5d0c140d
+Código de excepción: 0xc0000005
+Desplazamiento de errores: 0x000000000003a539
+Identificador del proceso con errores: 0x1d48
+Hora de inicio de la aplicación con errores: 0x01d52949ad9a3604
+Ruta de acceso de la aplicación con errores: C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_0.2.1715.0_x64__8wekyb3d8bbwe\WindowsTerminal.exe
+Ruta de acceso del módulo con errores: C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_0.2.1715.0_x64__8wekyb3d8bbwe\TerminalApp.dll
+Identificador del informe: a7d6acc0-650b-40e3-a36b-2280d62e8ea9
+Nombre completo del paquete con errores: Microsoft.WindowsTerminal_0.2.1715.0_x64__8wekyb3d8bbwe
+Identificador de aplicación relativa del paquete con errores: App
+```
+I wonder if it can be ran from the command line and see if it prints any error messages.
+EDIT: No, it doesn't. (`wt.exe`) +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP1423520 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-06-23T07:19:38Z +++$+++ So I attempted to build it on my own, and I am receiving the same behavior on my latest build. I did happen to try the x64 version on my laptop and it worked fine, but x86 is still not working. Sadly my x86 tablet doesn't have enough storage to be able to install VS onto it and VS won't let me set up a remote debugging profile for x86 (says Debug|x86 is missing from the project manifest when I even attempt to open the properties) so at the moment, my attempts to get to the bottom of why have stalled...
+
+I may need to set up a x86 VM just to debug with :/ assuming the behavior persists there as well.
+
+Now I'm just trying to grab myself an older copy of my build, just so I can at least use the new Terminal, even if it isn't as up to date.. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP23501700 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-06-23T11:52:50Z +++$+++ I'm facing the same issue, don't think that there is any compatibility issues here
+ +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP14953974 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-06-23T15:47:14Z +++$+++ Ok...  
+I think I found out why this is happening... 🤔
+
+A couple of minutes ago I tried to run again the Terminal on my PC to log any errors to attach here...  
+Well... It runs (and it's **great**)! 🤩
+
+> «So? Why now runs? What's the difference?»
+
+---
+
+Today I was using my notebook on my legs (without any devices connected).  
+Usually, I use my notebook connected to this [Universal Dock](https://www.dell.com/en-us/shop/dell-universal-dock-d6000/apd/452-bcyt/pc-accessories).
+
+These kind of devices ([DisplayLink](https://www.displaylink.com/) docks) are seen by the OS as external video cards without extended support for hardware acceleration...  
+In facts, you can't run video games or 3D graphics in general even if your GPU is the best one you can buy!
+
+---
+
+So, I think, if the video card you're trying to render the Terminal on isn't compatible with hardware acceleration (or something like that) it, simply, crashes badly.
+
+It could be also your case @ShadowEO, @magiblot and @tanayagar?  
+Maybe something like:
+
+- Cheap hardware?
+- Integrated video cards?
+- Virtual machines?
+- *... and so on?* +++$+++ 1 +++$+++ 0
+COM8 +++$+++ SP48139394 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-06-23T16:48:18Z +++$+++ I have similar issue.  After installing the Terminal, selecting the top pane dropdown, then <Settings> (while the Widows Powershell is auto-selected),  the terminal loads Visual Studio blank page & crashes.  
+I also have my (Lenovo W541) notebook on a docking station and am using Win 10 Pro x64b, Nightly, vers 1903, OS Build 18922.1000 +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP20713561 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-06-23T17:34:08Z +++$+++ @Byloth 
+> So, I think, if the video card you're trying to render the Terminal on isn't compatible with hardware acceleration (or something like that) it, simply, crashes badly.
+> 
+> It could be also your case @ShadowEO, @magiblot and @tanayagar?
+> Maybe something like:
+> 
+>     * Cheap hardware?
+> 
+>     * Integrated video cards?
+> 
+>     * Virtual machines?
+> 
+>     * _... and so on?_
+
+Yes, I do have an Intel GPU (HD Graphics 520) but drivers and harware acceleration are in order. I don't use a docking station or VM, altough I do have this laptop connected to an external display through VGA/DP. But unplugging it changed nothing. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP1423520 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-06-23T20:03:19Z +++$+++ That's a novel idea, but previous builds worked fine, for instance, I can reinstall one of my older dev builds and it opens and runs fine.
+
+Yes, I am on cheap hardware for this device, it's a TMAX TM101W635L. Using an Intel HD Graphics (I am unsure of the exact model atm, as I am away from the machine.)
+
+Virtual Machines work fine on the device, but they aren't in active use (on 2 GBs of non-expandable RAM, you can see why).
+
+My tests are all done on device itself, so no docking stations, no external hardware at all.
+
+I'm planning on setting up a 32-bit VS2019 VM on my main laptop tonight to see if the issue occurs there, and if so, to debug it as well. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP1331777 +++$+++ ROOT +++$+++ COM10 +++$+++ 2019-06-23T20:11:45Z +++$+++ > * Cheap hardware?
+> * Integrated video cards?
+> * Virtual machines?
+> * _... and so on?_
+
+i5-9600K, RTX-2070, 32Gb RAM, Host OS - blank window and crash.
+Into debug, crash here:
+
+> >	WindowsTerminal.exe!winrt::get_activation_factory<winrt::Windows::Foundation::IActivationFactory>(const winrt::param::hstring & name)Line 5222	C++
+WindowsTerminal.exe!winrt::impl::factory_cache_entry<winrt::TerminalApp::App,winrt::Windows::Foundation::IActivationFactory>::call<<lambda_7763f00f6aca3060375b844bec98aa5c> &>(winrt::TerminalApp::App::<lambda_7763f00f6aca3060375b844bec98aa5c> & callback)Line 5420	C++
+WindowsTerminal.exe!winrt::impl::call_factory<winrt::TerminalApp::App,winrt::Windows::Foundation::IActivationFactory,<lambda_7763f00f6aca3060375b844bec98aa5c> >(winrt::TerminalApp::App::<lambda_7763f00f6aca3060375b844bec98aa5c> && callback)Line 5501	C++
+ 	WindowsTerminal.exe!winrt::TerminalApp::App::App()Line 952	C++
+ 	WindowsTerminal.exe!AppHost::AppHost()Line 30	C++
+ 	WindowsTerminal.exe!wWinMain(HINSTANCE__ * __formal, HINSTANCE__ * __formal, wchar_t * __formal, int __formal)Line 35	C++
+
+ +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP11259414 +++$+++ ROOT +++$+++ COM11 +++$+++ 2019-06-23T21:34:36Z +++$+++ crashing here , I also have a displaylink device 4k, hooked up to a mini displayport  port. and getting this error:
+
+```powershell
+Faulting application name: WindowsTerminal.exe, version: 1.0.1906.20005, time stamp: 0x5d0c1459
+Faulting module name: unknown, version: 0.0.0.0, time stamp: 0x00000000
+Exception code: 0xc0000005
+Fault offset: 0x0000000000000000
+Faulting process id: 0x2ee4
+Faulting application start time: 0x01d52a090c39d27d
+Faulting application path: C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_0.2.1715.0_x64__8wekyb3d8bbwe\WindowsTerminal.exe
+Faulting module path: unknown
+Report Id: 51227091-efa4-43dc-bc7a-61696a519a8f
+Faulting package full name: Microsoft.WindowsTerminal_0.2.1715.0_x64__8wekyb3d8bbwe
+Faulting package-relative application ID: App
+```
+ +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP23501700 +++$+++ ROOT +++$+++ COM12 +++$+++ 2019-06-24T05:07:16Z +++$+++ > @Byloth
+> 
+> > So, I think, if the video card you're trying to render the Terminal on isn't compatible with hardware acceleration (or something like that) it, simply, crashes badly.
+> > It could be also your case @ShadowEO, @magiblot and @tanayagar?
+> > Maybe something like:
+> > ```
+> > * Cheap hardware?
+> > 
+> > * Integrated video cards?
+> > 
+> > * Virtual machines?
+> > 
+> > * _... and so on?_
+> > ```
+> 
+> Yes, I do have an Intel GPU (HD Graphics 520) but drivers and harware acceleration are in order. I don't use a docking station or VM, altough I do have this laptop connected to an external display through VGA/DP. But unplugging it changed nothing.
+
+I have an integrated Intel card ( Intel HD graphics 620). As for cheap hardware and vms, my answer would be no. Any way to fix? +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP238842 +++$+++ ROOT +++$+++ COM13 +++$+++ 2019-06-24T06:10:08Z +++$+++ Hi, I have the same issue and my graphic card is a NVIDIA GeForce GTX 1060  +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP20636874 +++$+++ ROOT +++$+++ COM14 +++$+++ 2019-06-25T08:42:48Z +++$+++ In my case, I was able to fix it by forcing the app to use the Intel HD Graphics 630 graphics card instead of the GTX 1050 card in the NVIDIA control panel. +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP238842 +++$+++ ROOT +++$+++ COM15 +++$+++ 2019-06-25T08:50:29Z +++$+++ Thanks for the tip. May I ask you how you did that ? +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP14953974 +++$+++ ROOT +++$+++ COM16 +++$+++ 2019-06-25T09:21:18Z +++$+++ > In my case, I was able to fix it by forcing the app to use the Intel HD Graphics 630 graphics card instead of the GTX 1050 card in the NVIDIA control panel.
+
+Mmmh... Strange! 🤔  
+I tried it too but, actually, it continues to run on the integrated video card (even if I choose the dedicated video card).
+
+But, yeah... Probably, I did something wrong! 😅
+
+![image](https://user-images.githubusercontent.com/14953974/60086068-b90c5000-973a-11e9-8368-ce621e97fe10.png)
+
+> I dragged the Terminal around the screen
+
+
+---
+
+I also tried on another computer equipped with an NVidia GTX 970 and it worked well.
+
+I did some other tests and, for some reason, when I run the Terminal on the external monitor connected through the docking station in crashes (as I said before)...  
+But, if I run it on the internal monitor (works fine, of course) and then I drag the window onto the external monitor, it continues to run without any problems. 😵
+
+---
+
+Here is my event log (I hope it can be useful):
+
+```
+Nome dell'applicazione che ha generato l'errore: WindowsTerminal.exe, versione: 1.0.1906.20005, timestamp: 0x5d0c1459
+Nome del modulo che ha generato l'errore: ucrtbase.dll, versione: 10.0.18362.1, timestamp: 0x5cbddb81
+Codice eccezione: 0xc0000409
+Offset errore 0x000000000006d3be
+ID processo che ha generato l'errore: 0x4208
+Ora di avvio dell'applicazione che ha generato l'errore: 0x01d52b2e6735c3fe
+Percorso dell'applicazione che ha generato l'errore: C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_0.2.1715.0_x64__8wekyb3d8bbwe\WindowsTerminal.exe
+Percorso del modulo che ha generato l'errore: C:\WINDOWS\System32\ucrtbase.dll
+ID segnalazione: e5cd7755-bd3d-487c-a658-fbce95b3f982
+Nome completo pacchetto che ha generato l'errore: Microsoft.WindowsTerminal_0.2.1715.0_x64__8wekyb3d8bbwe
+ID applicazione relativo al pacchetto che ha generato l'errore: App
+``` +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP20636874 +++$+++ ROOT +++$+++ COM17 +++$+++ 2019-06-25T09:35:47Z +++$+++ > 
+> 
+> Thanks for the tip. May I ask you how you did that ?
+
+I opened the NVIDIA Control Panel, under Manage 3D Settings select the Program Settings tab. At step one, the Windows Terminal is listed as "microsoft.windowsterminal_[id]". At step two I selected the integrated graphics (sorry for the poor drawing skills :)):
+
+![afbeelding](https://user-images.githubusercontent.com/20636874/60087344-215c3100-973d-11e9-8ac2-a563ed9819a2.png) +++$+++ 1 +++$+++ 0
+COM19 +++$+++ SP44852729 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-06-25T19:33:02Z +++$+++ I have an NVIDIA GeForce GTX 1080 Ti card here with onboard Intel UHD 630, though somehow, suddenly, today the app is working again. I have no idea why or how. +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP18221333 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-06-25T21:00:33Z +++$+++ From anyone in this thread, I need a crash dump. I tried searching every Report ID you all posted, and none of them are coming through.
+
+I suspect that the issues related to not being able to use hardware rendering might be solved with #1263.
+
+There's probably also some robustness to be added to the DX renderer so it sets itself up correctly. If any of you are building from source, it would be nice to have you check if conhost.exe built from the same sources crashes when the key at `HKCU\Console` `UseDx` `REG_DWORD` `0x1` is set (create it if it isn't there.) That will confirm if a crash is isolated to the DX renderer or Terminal startup specific.
+
+I also have the theory that you are all experiencing like 4 different issues here, so we might have to split them up if I try to fix one and it isn't fixed for all of you.
+
+Lastly, we don't readily have access to this type of hardware around here. I'll see what we can do, but if I can get some close assistance, that's the best.
+
+  +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP1423520 +++$+++ ROOT +++$+++ COM20 +++$+++ 2019-06-25T21:44:01Z +++$+++ @miniksa Certainly! How can I go about getting a crash dump of it from the affected machine?
+
+I also went to my development station (x64) and attempted the `UseDx` change you requested. I can confirm that conhost fails to start with `UseDx` set to `0x1` on a machine where the same source build does work properly. Toggling `UseDx` back off results in a working console again.
+
+Interestingly, I did this test on the affected tablet (once again with same sources), and conhost works in both scenarios on it, I get a command prompt as normal.. however Cascadia still fails. +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP937871 +++$+++ ROOT +++$+++ COM21 +++$+++ 2019-06-28T08:13:00Z +++$+++ I tried out eight of the Azure Pipelines `master` builds from here: https://dev.azure.com/ms/Terminal/_build?definitionId=136&_a=summary to try and determine where things started breaking.
+
+In reverse chronological sequence, i.e. newest build last:
+
+- #1374 update link to public preview: WORKS
+- #1512 fix punct readme: WORKS
+- #1452 about dialog contents selectable: WORKS
+- #1314 set default startup proj: WINDOW STAYS BLANK
+- #1263 fallback swren: WINDOW STAYS BLANK
+- #1093 connect clipboard func to keybindings: WINDOW STAYS BLANK
+- #929 Apply a GDI region to the top level Island window to allow dragging with a single Island: BLANK THEN CRASH
+- #1436 altgr: BLANK THEN CRASH
+
+In other words, between the subsequent merges of #1452 and #1314 (both on 2019-06-24) terminal went from working to blank window at startup (but no crash), and then between the subsequent merges of #1093 and #929 (both on 2019-06-25), terminal went from blank window no crash to blank window and then crash.
+
+(How #1314, which seems to be only a re-ordering in the OpenConsole solution file, can break terminal like this is surprising. However, uninstalling-reinstalling the builds here only confirms the working / non-working status.) +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP937871 +++$+++ ROOT +++$+++ COM22 +++$+++ 2019-06-28T08:45:21Z +++$+++ @miniksa here is a crash dump of the #1436 PR Azure Pipelines build crashing.
+
+[WindowsTerminal.exe.12900.zip](https://github.com/microsoft/terminal/files/3338327/WindowsTerminal.exe.12900.zip)
+ +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP14316954 +++$+++ ROOT +++$+++ COM23 +++$+++ 2019-06-28T17:34:52Z +++$+++ Thanks for doing a rough bisect for us!
+
+This doesn't look safe _at all_.
+
+```
+.  0  Id: 3264.2748 Suspend: 0 Teb: 0000001b`495e5000 Unfrozen
+ # Child-SP          RetAddr           Call Site
+00 0000001b`496fe530 00007ffd`df6acaff ucrtbase!abort+0x4e
+01 0000001b`496fe560 00007ff6`2e9a952b ucrtbase!terminate+0x1f
+02 0000001b`496fe590 00000000`00002000 WindowsTerminal!__scrt_unhandled_exception_filter+0x37 [d:\agent\_work\2\s\src\vctools\crt\vcstartup\src\utility\utility_desktop.cpp @ 91] 
+03 0000001b`496fe598 00000020`00001000 0x2000
+04 0000001b`496fe5a0 00000000`01000000 0x00000020`00001000
+05 0000001b`496fe5a8 00000000`00000000 0x1000000  
+```
+
+I'm really glad our build pipelines hold on to symbols. :smile: +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP18221333 +++$+++ ROOT +++$+++ COM24 +++$+++ 2019-06-28T18:46:18Z +++$+++ > @miniksa Michael Niksa FTE Certainly! How can I go about getting a crash dump of it from the affected machine?
+> 
+> I also went to my development station (x64) and attempted the `UseDx` change you requested. I can confirm that conhost fails to start with `UseDx` set to `0x1` on a machine where the same source build does work properly. Toggling `UseDx` back off results in a working console again.
+> 
+> Interestingly, I did this test on the affected tablet (once again with same sources), and conhost works in both scenarios on it, I get a command prompt as normal.. however Cascadia still fails.
+
+You can technically right click a process in the Details page of Task Manager and create a dump and attach it somewhere online, but be warned, it may contain personally identifiable information as it dumps the entire memory space.
+
+You can also try using the Feedback Hub and choosing the Windows Terminal app and submitting that way.
+
+Or if it crashes, you can try getting the Windows Error Reporting information from the event viewer and give me all of that so I can try to look up the IDs with the WER service. +++$+++ 1 +++$+++ 0
+COM26 +++$+++ SP1423520 +++$+++ ROOT +++$+++ COM25 +++$+++ 2019-06-28T20:56:29Z +++$+++ > it may contain personally identifiable information
+
+That's fine, the tablet it's on gets very light usage. The only real identifiable information on the device may be my real name (which is fine) or the user profile directory, which only contains part of my Github username.
+
+Here is a OneDrive shared folder containing the evtx file (with both Windows Error Reporting event and Application Crash event) and for extra measure, a process dump for you! https://1drv.ms/u/s!AqACoL07fxpWoOIwO6InGCb8fvsZJg?e=ot9XoI
+
+Let me know if you can't get that, and I'll upload it somewhere else, that process dump was larger than I expected for something taking only 5MB of RAM at that time lol.
+
+(TIL I can easily create process dumps, that's a cool feature!) +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP14953974 +++$+++ ROOT +++$+++ COM26 +++$+++ 2019-07-01T08:04:56Z +++$+++ > [...] if it crashes, you can try getting the Windows Error Reporting information from the event viewer and give me all of that so I can try to look up the IDs with the WER service.
+
+---
+
+Here's a ZIP with some files extracted directly from the Event Viewer...  
+I hope this is what you're looking for, @miniksa... 😅
+
+> [📦 Windows Terminal crash.zip](https://github.com/microsoft/terminal/files/3344460/Windows.Terminal.crash.zip)
+ +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP1423520 +++$+++ ROOT +++$+++ COM27 +++$+++ 2019-07-04T00:04:57Z +++$+++ Saw the store version was updated recently. Let the affected PC update and am still experiencing the issue. +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP1039862 +++$+++ ROOT +++$+++ COM28 +++$+++ 2019-07-04T00:05:28Z +++$+++ As it happens, I also have the problem of recent versions of Windows Terminal crashing on startup with an empty window - and I too have an interesting crash dump! I also got a Time Travel Debugging trace in case that proves useful.
+
+Link - sorry, it's Microsoft-internal-only because of my concerns re my private information:
+https://aka.ms/AA5ix7s +++$+++ 0 +++$+++ 0

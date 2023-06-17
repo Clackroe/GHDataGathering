@@ -1,0 +1,5054 @@
+{
+    "acoutts": {
+        "id": "SP9597207",
+        "role": "NONE (AUTHOR)"
+    },
+    "bierbaumtim": {
+        "id": "SP40519580",
+        "role": "NONE"
+    },
+    "Ufuk94": {
+        "id": "SP19354637",
+        "role": "NONE"
+    },
+    "bluemix": {
+        "id": "SP3332274",
+        "role": "NONE"
+    },
+    "liyuqian": {
+        "id": "SP22987568",
+        "role": "CONTRIBUTOR"
+    },
+    "trighomautumnatg": {
+        "id": "SP67159891",
+        "role": "NONE"
+    },
+    "bobandrew": {
+        "id": "SP4517015",
+        "role": "NONE"
+    },
+    "wellbranding": {
+        "id": "SP31806066",
+        "role": "NONE"
+    },
+    "Hixie": {
+        "id": "SP551196",
+        "role": "MEMBER"
+    },
+    "kf6gpe": {
+        "id": "SP1435716",
+        "role": "CONTRIBUTOR"
+    },
+    "petro-i": {
+        "id": "SP42652300",
+        "role": "NONE"
+    },
+    "atrope": {
+        "id": "SP2945478",
+        "role": "MEMBER"
+    },
+    "m-j-g": {
+        "id": "SP10711395",
+        "role": "NONE"
+    },
+    "scaraux": {
+        "id": "SP26309761",
+        "role": "NONE"
+    },
+    "erf": {
+        "id": "SP1562523",
+        "role": "NONE"
+    },
+    "adamdougal": {
+        "id": "SP1589887",
+        "role": "NONE (AUTHOR)"
+    },
+    "slandelle": {
+        "id": "SP849197",
+        "role": "MEMBER"
+    },
+    "balooo": {
+        "id": "SP1058534",
+        "role": "NONE"
+    },
+    "akopchinskiy": {
+        "id": "SP39277134",
+        "role": "NONE (AUTHOR)"
+    },
+    "vicb": {
+        "id": "SP248818",
+        "role": "CONTRIBUTOR"
+    },
+    "splincode": {
+        "id": "SP12021443",
+        "role": "CONTRIBUTOR"
+    },
+    "Borzilov": {
+        "id": "SP15954932",
+        "role": "NONE"
+    },
+    "jasonaden": {
+        "id": "SP516168",
+        "role": "CONTRIBUTOR"
+    },
+    "Alacritous": {
+        "id": "SP1443724",
+        "role": "NONE (AUTHOR)"
+    },
+    "DHowett-MSFT": {
+        "id": "SP14316954",
+        "role": "CONTRIBUTOR"
+    },
+    "MartijnDekkers": {
+        "id": "SP44741536",
+        "role": "NONE"
+    },
+    "zadjii-msft": {
+        "id": "SP18356694",
+        "role": "MEMBER"
+    },
+    "Alexhuszagh": {
+        "id": "SP9440903",
+        "role": "NONE (AUTHOR)"
+    },
+    "ghemawat": {
+        "id": "SP8096977",
+        "role": "CONTRIBUTOR"
+    },
+    "pwnall": {
+        "id": "SP11460",
+        "role": "MEMBER"
+    },
+    "andschwa": {
+        "id": "SP2226434",
+        "role": "NONE"
+    },
+    "jenokizm": {
+        "id": "SP11296510",
+        "role": "NONE"
+    },
+    "chrismorfos": {
+        "id": "SP38893989",
+        "role": "NONE"
+    },
+    "ketnoimai": {
+        "id": "SP35536724",
+        "role": "NONE"
+    },
+    "thomasjm": {
+        "id": "SP1634990",
+        "role": "NONE"
+    },
+    "felipecrv": {
+        "id": "SP207795",
+        "role": "CONTRIBUTOR"
+    },
+    "amervitz": {
+        "id": "SP10599498",
+        "role": "NONE (AUTHOR)"
+    },
+    "marc-mueller": {
+        "id": "SP13311299",
+        "role": "NONE"
+    },
+    "rajeeshmenoth": {
+        "id": "SP8437883",
+        "role": "NONE"
+    },
+    "khouzam": {
+        "id": "SP6656040",
+        "role": "CONTRIBUTOR"
+    },
+    "Purus": {
+        "id": "SP1077735",
+        "role": "NONE"
+    },
+    "eykh": {
+        "id": "SP6820539",
+        "role": "NONE"
+    },
+    "ramezah": {
+        "id": "SP1126062",
+        "role": "NONE"
+    },
+    "Taldren76": {
+        "id": "SP49918312",
+        "role": "NONE"
+    },
+    "peteferraro": {
+        "id": "SP55091211",
+        "role": "NONE"
+    },
+    "vkuppa1": {
+        "id": "SP24926449",
+        "role": "NONE"
+    },
+    "douniwan5788": {
+        "id": "SP3118816",
+        "role": "NONE"
+    },
+    "DHowett": {
+        "id": "SP189190",
+        "role": "MEMBER"
+    },
+    "amorenew": {
+        "id": "SP2842459",
+        "role": "NONE (AUTHOR)"
+    },
+    "jonahwilliams": {
+        "id": "SP8975114",
+        "role": "MEMBER"
+    },
+    "krunaldarji": {
+        "id": "SP648505",
+        "role": "NONE"
+    },
+    "amreniouinnovent": {
+        "id": "SP52191652",
+        "role": "NONE"
+    },
+    "MOlechowski": {
+        "id": "SP20713225",
+        "role": "NONE"
+    },
+    "MohsinKhanSerpro": {
+        "id": "SP61649073",
+        "role": "NONE"
+    },
+    "deakjahn": {
+        "id": "SP2234271",
+        "role": "NONE"
+    },
+    "BesartLaci": {
+        "id": "SP32385936",
+        "role": "NONE"
+    },
+    "vyvee": {
+        "id": "SP10971123",
+        "role": "NONE"
+    },
+    "JaiMistry": {
+        "id": "SP33847544",
+        "role": "NONE"
+    },
+    "devDeejay": {
+        "id": "SP18122922",
+        "role": "NONE"
+    },
+    "jaggzh": {
+        "id": "SP20318973",
+        "role": "NONE"
+    },
+    "BrendonW": {
+        "id": "SP373786",
+        "role": "NONE"
+    },
+    "jeansebastienZ": {
+        "id": "SP65148275",
+        "role": "NONE"
+    },
+    "mateusfccp": {
+        "id": "SP4605213",
+        "role": "CONTRIBUTOR"
+    },
+    "arcanis": {
+        "id": "SP1037931",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "bnb": {
+        "id": "SP502396",
+        "role": "CONTRIBUTOR"
+    },
+    "mhdawson": {
+        "id": "SP9373002",
+        "role": "MEMBER"
+    },
+    "mmarchini": {
+        "id": "SP4048656",
+        "role": "CONTRIBUTOR"
+    },
+    "targos": {
+        "id": "SP2352663",
+        "role": "MEMBER"
+    },
+    "ert78gb": {
+        "id": "SP496775",
+        "role": "NONE"
+    },
+    "jasnell": {
+        "id": "SP439929",
+        "role": "MEMBER"
+    },
+    "jamiebuilds": {
+        "id": "SP952783",
+        "role": "CONTRIBUTOR"
+    },
+    "iarna": {
+        "id": "SP983798",
+        "role": "MEMBER"
+    },
+    "ljharb": {
+        "id": "SP45469",
+        "role": "MEMBER"
+    },
+    "archenemies": {
+        "id": "SP12960503",
+        "role": "NONE (AUTHOR)"
+    },
+    "michaelrsweet": {
+        "id": "SP488103",
+        "role": "COLLABORATOR"
+    },
+    "Asgoret": {
+        "id": "SP30697011",
+        "role": "NONE (AUTHOR)"
+    },
+    "virgiliu": {
+        "id": "SP426097",
+        "role": "NONE"
+    },
+    "appgurueu": {
+        "id": "SP34514239",
+        "role": "NONE"
+    },
+    "chrisdias": {
+        "id": "SP1487073",
+        "role": "MEMBER"
+    },
+    "Avamander": {
+        "id": "SP5392141",
+        "role": "NONE (AUTHOR)"
+    },
+    "adamroyjones": {
+        "id": "SP10088591",
+        "role": "NONE"
+    },
+    "Carreau": {
+        "id": "SP335567",
+        "role": "MEMBER"
+    },
+    "bk2204": {
+        "id": "SP497054",
+        "role": "NONE (AUTHOR)"
+    },
+    "dmitshur": {
+        "id": "SP1924134",
+        "role": "CONTRIBUTOR"
+    },
+    "alexbrainman": {
+        "id": "SP9796621",
+        "role": "MEMBER"
+    },
+    "networkimprov": {
+        "id": "SP458838",
+        "role": "NONE"
+    },
+    "ianlancetaylor": {
+        "id": "SP3194333",
+        "role": "CONTRIBUTOR"
+    },
+    "rsc": {
+        "id": "SP104030",
+        "role": "CONTRIBUTOR"
+    },
+    "ericwj": {
+        "id": "SP9473119",
+        "role": "NONE"
+    },
+    "Trott": {
+        "id": "SP718899",
+        "role": "MEMBER"
+    },
+    "bolds07": {
+        "id": "SP19866062",
+        "role": "NONE (AUTHOR)"
+    },
+    "google-oss-bot": {
+        "id": "SP26440463",
+        "role": "CONTRIBUTOR"
+    },
+    "ashwinraghav": {
+        "id": "SP211174",
+        "role": "CONTRIBUTOR"
+    },
+    "danasilver": {
+        "id": "SP3270544",
+        "role": "CONTRIBUTOR"
+    },
+    "samtstern": {
+        "id": "SP8466666",
+        "role": "CONTRIBUTOR"
+    },
+    "brodybits": {
+        "id": "SP1559888",
+        "role": "NONE (AUTHOR)"
+    },
+    "levithomason": {
+        "id": "SP5067638",
+        "role": "MEMBER"
+    },
+    "danatemple": {
+        "id": "SP11148387",
+        "role": "NONE"
+    },
+    "y0hami": {
+        "id": "SP11588822",
+        "role": "MEMBER"
+    },
+    "jlukic": {
+        "id": "SP23123",
+        "role": "MEMBER"
+    },
+    "douglasg14b": {
+        "id": "SP1400380",
+        "role": "NONE"
+    },
+    "ivantcholakov": {
+        "id": "SP1438104",
+        "role": "NONE"
+    },
+    "prudho": {
+        "id": "SP7557689",
+        "role": "NONE"
+    },
+    "donaggio": {
+        "id": "SP14308532",
+        "role": "NONE"
+    },
+    "arjarn": {
+        "id": "SP35603194",
+        "role": "NONE"
+    },
+    "peterrobertz": {
+        "id": "SP1990166",
+        "role": "NONE"
+    },
+    "Atulin": {
+        "id": "SP11233299",
+        "role": "NONE"
+    },
+    "dreaming-augustin": {
+        "id": "SP1203641",
+        "role": "NONE"
+    },
+    "davegson": {
+        "id": "SP3080765",
+        "role": "NONE"
+    },
+    "bwateratmsft": {
+        "id": "SP36966225",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "karolz-ms": {
+        "id": "SP15271049",
+        "role": "CONTRIBUTOR"
+    },
+    "Byloth": {
+        "id": "SP14953974",
+        "role": "NONE (AUTHOR)"
+    },
+    "yodurr": {
+        "id": "SP11341342",
+        "role": "NONE"
+    },
+    "ShadowEO": {
+        "id": "SP1423520",
+        "role": "NONE"
+    },
+    "magiblot": {
+        "id": "SP20713561",
+        "role": "NONE"
+    },
+    "tanayagar": {
+        "id": "SP23501700",
+        "role": "NONE"
+    },
+    "gfbearsfan": {
+        "id": "SP48139394",
+        "role": "NONE"
+    },
+    "andreili": {
+        "id": "SP1331777",
+        "role": "NONE"
+    },
+    "corganfuzz": {
+        "id": "SP11259414",
+        "role": "NONE"
+    },
+    "vRITHNER": {
+        "id": "SP238842",
+        "role": "NONE"
+    },
+    "MrR0bert": {
+        "id": "SP20636874",
+        "role": "NONE"
+    },
+    "8thHalfHour": {
+        "id": "SP44852729",
+        "role": "NONE"
+    },
+    "miniksa": {
+        "id": "SP18221333",
+        "role": "MEMBER"
+    },
+    "cpbotha": {
+        "id": "SP937871",
+        "role": "NONE"
+    },
+    "metathinker": {
+        "id": "SP1039862",
+        "role": "CONTRIBUTOR"
+    },
+    "c3ph3us": {
+        "id": "SP10565704",
+        "role": "NONE (AUTHOR)"
+    },
+    "oehme": {
+        "id": "SP1191797",
+        "role": "CONTRIBUTOR"
+    },
+    "cbazza": {
+        "id": "SP13589599",
+        "role": "NONE (AUTHOR)"
+    },
+    "sethladd": {
+        "id": "SP5479",
+        "role": "CONTRIBUTOR"
+    },
+    "HansMuller": {
+        "id": "SP1377460",
+        "role": "CONTRIBUTOR"
+    },
+    "branflake2267": {
+        "id": "SP1326504",
+        "role": "NONE"
+    },
+    "InMatrix": {
+        "id": "SP348942",
+        "role": "NONE"
+    },
+    "nsuper": {
+        "id": "SP6463915",
+        "role": "NONE"
+    },
+    "birkir": {
+        "id": "SP180773",
+        "role": "NONE"
+    },
+    "zoechi": {
+        "id": "SP405837",
+        "role": "CONTRIBUTOR"
+    },
+    "ceet2016": {
+        "id": "SP29434060",
+        "role": "NONE (AUTHOR)"
+    },
+    "GammaGames": {
+        "id": "SP7832163",
+        "role": "CONTRIBUTOR"
+    },
+    "fudanglp": {
+        "id": "SP9070188",
+        "role": "NONE"
+    },
+    "joseph1125": {
+        "id": "SP8279406",
+        "role": "NONE"
+    },
+    "helloroy": {
+        "id": "SP2213000",
+        "role": "NONE"
+    },
+    "Gary50613": {
+        "id": "SP33802653",
+        "role": "NONE"
+    },
+    "windowsed1225": {
+        "id": "SP47655623",
+        "role": "NONE"
+    },
+    "cemo": {
+        "id": "SP44156",
+        "role": "NONE (AUTHOR)"
+    },
+    "hiranya911": {
+        "id": "SP2375201",
+        "role": "CONTRIBUTOR"
+    },
+    "avishalom": {
+        "id": "SP4755574",
+        "role": "CONTRIBUTOR"
+    },
+    "esprehn": {
+        "id": "SP415779",
+        "role": "NONE"
+    },
+    "adam-hurwitz": {
+        "id": "SP3938076",
+        "role": "NONE"
+    },
+    "rromanchuk": {
+        "id": "SP102188",
+        "role": "NONE"
+    },
+    "nightrise": {
+        "id": "SP3489182",
+        "role": "NONE"
+    },
+    "namanyayg": {
+        "id": "SP2727051",
+        "role": "NONE"
+    },
+    "dabramovici": {
+        "id": "SP7241357",
+        "role": "NONE"
+    },
+    "andvalsol": {
+        "id": "SP39138572",
+        "role": "NONE"
+    },
+    "samdozor": {
+        "id": "SP1761038",
+        "role": "NONE"
+    },
+    "ToddKerpelman": {
+        "id": "SP4397978",
+        "role": "NONE"
+    },
+    "stari4ek": {
+        "id": "SP327778",
+        "role": "NONE"
+    },
+    "lauri3new": {
+        "id": "SP22150857",
+        "role": "NONE"
+    },
+    "n-sviridenko": {
+        "id": "SP9335422",
+        "role": "NONE"
+    },
+    "Energy0124": {
+        "id": "SP2107535",
+        "role": "NONE"
+    },
+    "copilots-app": {
+        "id": "SP13032789",
+        "role": "NONE"
+    },
+    "puf": {
+        "id": "SP913631",
+        "role": "NONE"
+    },
+    "voxelbusters": {
+        "id": "SP11584944",
+        "role": "NONE"
+    },
+    "mmilowski": {
+        "id": "SP56365321",
+        "role": "NONE"
+    },
+    "Legoless": {
+        "id": "SP1434530",
+        "role": "NONE"
+    },
+    "baakind": {
+        "id": "SP1138614",
+        "role": "NONE"
+    },
+    "kopfnick": {
+        "id": "SP13811487",
+        "role": "NONE"
+    },
+    "chinmaygarde": {
+        "id": "SP44085",
+        "role": "MEMBER (AUTHOR)"
+    },
+    "flutter-dashboard[bot]": {
+        "id": "SP65097588",
+        "role": "NONE"
+    },
+    "escamoteur": {
+        "id": "SP16635729",
+        "role": "NONE"
+    },
+    "huvi8161": {
+        "id": "SP75162557",
+        "role": "NONE"
+    },
+    "dnfield": {
+        "id": "SP8620741",
+        "role": "MEMBER"
+    },
+    "KrillioSokolov": {
+        "id": "SP23337273",
+        "role": "NONE"
+    },
+    "aliakhtar": {
+        "id": "SP5325112",
+        "role": "NONE"
+    },
+    "omchiii": {
+        "id": "SP53796452",
+        "role": "NONE"
+    },
+    "chrisrlong": {
+        "id": "SP21359676",
+        "role": "NONE (AUTHOR)"
+    },
+    "stack72": {
+        "id": "SP227823",
+        "role": "CONTRIBUTOR"
+    },
+    "mitchellh": {
+        "id": "SP1299",
+        "role": "MEMBER"
+    },
+    "sheerun": {
+        "id": "SP292365",
+        "role": "CONTRIBUTOR"
+    },
+    "shantanugadgil": {
+        "id": "SP2508915",
+        "role": "NONE"
+    },
+    "arehmandev": {
+        "id": "SP19910529",
+        "role": "CONTRIBUTOR"
+    },
+    "vladimir-kozyrev": {
+        "id": "SP7099677",
+        "role": "NONE"
+    },
+    "prog893": {
+        "id": "SP10016756",
+        "role": "NONE"
+    },
+    "avatar4d": {
+        "id": "SP1661326",
+        "role": "NONE"
+    },
+    "panmanphil": {
+        "id": "SP2211089",
+        "role": "NONE"
+    },
+    "shoelessrob": {
+        "id": "SP1547547",
+        "role": "NONE"
+    },
+    "mschenck": {
+        "id": "SP220566",
+        "role": "NONE"
+    },
+    "cpanayides": {
+        "id": "SP2413361",
+        "role": "NONE"
+    },
+    "derBroBro": {
+        "id": "SP7687780",
+        "role": "CONTRIBUTOR"
+    },
+    "waffleshop": {
+        "id": "SP11324092",
+        "role": "NONE"
+    },
+    "laiph": {
+        "id": "SP10996883",
+        "role": "NONE"
+    },
+    "mqasim1983": {
+        "id": "SP24323193",
+        "role": "NONE"
+    },
+    "seyeda": {
+        "id": "SP22669322",
+        "role": "NONE"
+    },
+    "AirbornePorcine": {
+        "id": "SP7409186",
+        "role": "NONE"
+    },
+    "jacobwgillespie": {
+        "id": "SP130874",
+        "role": "NONE"
+    },
+    "b-dean": {
+        "id": "SP3189231",
+        "role": "NONE"
+    },
+    "eedwardsdisco": {
+        "id": "SP12733397",
+        "role": "NONE"
+    },
+    "sbatchu0108": {
+        "id": "SP10048340",
+        "role": "NONE"
+    },
+    "awebneck": {
+        "id": "SP153561",
+        "role": "NONE"
+    },
+    "artrunde": {
+        "id": "SP25717908",
+        "role": "NONE"
+    },
+    "Wenzil": {
+        "id": "SP1967006",
+        "role": "NONE"
+    },
+    "christhomas": {
+        "id": "SP827996",
+        "role": "NONE (AUTHOR)"
+    },
+    "close-issue-app[bot]": {
+        "id": "SP39689386",
+        "role": "NONE"
+    },
+    "cotsog": {
+        "id": "SP149366",
+        "role": "NONE"
+    },
+    "ChuckJonas": {
+        "id": "SP5217568",
+        "role": "NONE (AUTHOR)"
+    },
+    "eamodio": {
+        "id": "SP641685",
+        "role": "CONTRIBUTOR"
+    },
+    "jrieken": {
+        "id": "SP1794099",
+        "role": "MEMBER"
+    },
+    "lukebatchelor": {
+        "id": "SP18694878",
+        "role": "NONE"
+    },
+    "loligans": {
+        "id": "SP3218210",
+        "role": "NONE"
+    },
+    "Gruntfuggly": {
+        "id": "SP376658",
+        "role": "NONE"
+    },
+    "DanTup": {
+        "id": "SP1078012",
+        "role": "CONTRIBUTOR"
+    },
+    "jpoon": {
+        "id": "SP85374",
+        "role": "NONE"
+    },
+    "c10b10": {
+        "id": "SP306633",
+        "role": "NONE"
+    },
+    "kylesalter": {
+        "id": "SP2950467",
+        "role": "NONE"
+    },
+    "Divni": {
+        "id": "SP34585078",
+        "role": "NONE"
+    },
+    "Samox": {
+        "id": "SP6906559",
+        "role": "NONE"
+    },
+    "KamasamaK": {
+        "id": "SP22951521",
+        "role": "NONE"
+    },
+    "Yzrsah": {
+        "id": "SP43947786",
+        "role": "NONE"
+    },
+    "mabenson00": {
+        "id": "SP22816934",
+        "role": "NONE"
+    },
+    "PiotrKarczmarz": {
+        "id": "SP8102322",
+        "role": "NONE"
+    },
+    "noppa": {
+        "id": "SP11232111",
+        "role": "NONE"
+    },
+    "CitrusWire": {
+        "id": "SP72134064",
+        "role": "NONE (AUTHOR)"
+    },
+    "YuriSizov": {
+        "id": "SP11782833",
+        "role": "CONTRIBUTOR"
+    },
+    "akien-mga": {
+        "id": "SP4701338",
+        "role": "MEMBER"
+    },
+    "dalexeev": {
+        "id": "SP47700418",
+        "role": "CONTRIBUTOR"
+    },
+    "name-here": {
+        "id": "SP26884090",
+        "role": "NONE"
+    },
+    "cjcenizal": {
+        "id": "SP1238659",
+        "role": "NONE (AUTHOR)"
+    },
+    "infodusha": {
+        "id": "SP5677047",
+        "role": "NONE"
+    },
+    "gaearon": {
+        "id": "SP810438",
+        "role": "MEMBER"
+    },
+    "micha149": {
+        "id": "SP298880",
+        "role": "NONE"
+    },
+    "rpearce": {
+        "id": "SP592876",
+        "role": "NONE"
+    },
+    "jtiscione": {
+        "id": "SP5413726",
+        "role": "NONE"
+    },
+    "cpatte7372": {
+        "id": "SP24607961",
+        "role": "NONE (AUTHOR)"
+    },
+    "ansibot": {
+        "id": "SP6585283",
+        "role": "CONTRIBUTOR"
+    },
+    "yokee99": {
+        "id": "SP23135436",
+        "role": "NONE"
+    },
+    "bcoca": {
+        "id": "SP836171",
+        "role": "MEMBER"
+    },
+    "varshadhamal": {
+        "id": "SP31721343",
+        "role": "NONE"
+    },
+    "rm-rf-etc": {
+        "id": "SP5067463",
+        "role": "NONE"
+    },
+    "creotiv": {
+        "id": "SP250125",
+        "role": "NONE (AUTHOR)"
+    },
+    "lol768": {
+        "id": "SP2552726",
+        "role": "NONE"
+    },
+    "DavidDeSloovere": {
+        "id": "SP352626",
+        "role": "NONE"
+    },
+    "LauraWebdev": {
+        "id": "SP7365286",
+        "role": "NONE"
+    },
+    "ZgblKylin": {
+        "id": "SP13114351",
+        "role": "NONE"
+    },
+    "cjim8889": {
+        "id": "SP43540548",
+        "role": "NONE"
+    },
+    "wayheming": {
+        "id": "SP31981892",
+        "role": "NONE"
+    },
+    "scottbilas": {
+        "id": "SP964720",
+        "role": "NONE"
+    },
+    "GreenMan36": {
+        "id": "SP5887406",
+        "role": "NONE"
+    },
+    "glen-84": {
+        "id": "SP261509",
+        "role": "NONE"
+    },
+    "warpdesign": {
+        "id": "SP199648",
+        "role": "NONE"
+    },
+    "notmike101": {
+        "id": "SP7198316",
+        "role": "NONE"
+    },
+    "PLQin": {
+        "id": "SP24371471",
+        "role": "NONE"
+    },
+    "crquan": {
+        "id": "SP45689",
+        "role": "NONE (AUTHOR)"
+    },
+    "lee-dohm": {
+        "id": "SP1038121",
+        "role": "CONTRIBUTOR"
+    },
+    "anaisbetts": {
+        "id": "SP1396",
+        "role": "CONTRIBUTOR"
+    },
+    "Zireael07": {
+        "id": "SP4525388",
+        "role": "NONE"
+    },
+    "thedaniel": {
+        "id": "SP1476",
+        "role": "CONTRIBUTOR"
+    },
+    "qcq": {
+        "id": "SP8703631",
+        "role": "NONE"
+    },
+    "texelate": {
+        "id": "SP3746519",
+        "role": "NONE"
+    },
+    "fenec": {
+        "id": "SP614253",
+        "role": "NONE"
+    },
+    "brndd": {
+        "id": "SP5822375",
+        "role": "NONE"
+    },
+    "johnlanz": {
+        "id": "SP601899",
+        "role": "NONE"
+    },
+    "mathieu-jobin": {
+        "id": "SP1834185",
+        "role": "NONE"
+    },
+    "ShalokShalom": {
+        "id": "SP6344099",
+        "role": "NONE"
+    },
+    "50Wliu": {
+        "id": "SP2766036",
+        "role": "CONTRIBUTOR"
+    },
+    "CallmeNezha": {
+        "id": "SP9884235",
+        "role": "NONE"
+    },
+    "MichaelMacha": {
+        "id": "SP7585255",
+        "role": "NONE"
+    },
+    "vitobotta": {
+        "id": "SP283811",
+        "role": "NONE"
+    },
+    "csotiriou": {
+        "id": "SP1228484",
+        "role": "NONE (AUTHOR)"
+    },
+    "fire": {
+        "id": "SP32321",
+        "role": "MEMBER"
+    },
+    "ghost": {
+        "id": "SP10137",
+        "role": "NONE"
+    },
+    "reduz": {
+        "id": "SP6265307",
+        "role": "MEMBER"
+    },
+    "bkaradzic": {
+        "id": "SP814772",
+        "role": "NONE"
+    },
+    "Alan-FGR": {
+        "id": "SP8399299",
+        "role": "NONE"
+    },
+    "jimon": {
+        "id": "SP1333661",
+        "role": "NONE"
+    },
+    "neikeq": {
+        "id": "SP7718100",
+        "role": "MEMBER"
+    },
+    "Qix-": {
+        "id": "SP885648",
+        "role": "NONE"
+    },
+    "cui-colin": {
+        "id": "SP14314760",
+        "role": "NONE (AUTHOR)"
+    },
+    "rchiodo": {
+        "id": "SP19672699",
+        "role": "CONTRIBUTOR"
+    },
+    "butterkaffee": {
+        "id": "SP10497301",
+        "role": "NONE"
+    },
+    "CyrusNajmabadi": {
+        "id": "SP4564579",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "AdamSpeight2008": {
+        "id": "SP900107",
+        "role": "CONTRIBUTOR"
+    },
+    "paul1956": {
+        "id": "SP12789369",
+        "role": "CONTRIBUTOR"
+    },
+    "VBAndCs": {
+        "id": "SP48354902",
+        "role": "NONE"
+    },
+    "Nukepayload2": {
+        "id": "SP10798596",
+        "role": "NONE"
+    },
+    "DzonnyDZ": {
+        "id": "SP2221259",
+        "role": "NONE"
+    },
+    "Padanian": {
+        "id": "SP7769348",
+        "role": "NONE"
+    },
+    "dagwieers": {
+        "id": "SP388198",
+        "role": "MEMBER (AUTHOR)"
+    },
+    "mkrizek": {
+        "id": "SP1215518",
+        "role": "CONTRIBUTOR"
+    },
+    "sivel": {
+        "id": "SP39340",
+        "role": "MEMBER"
+    },
+    "dreamcat4": {
+        "id": "SP63074",
+        "role": "CONTRIBUTOR"
+    },
+    "deatheros": {
+        "id": "SP12375795",
+        "role": "NONE"
+    },
+    "ramon-garcia": {
+        "id": "SP1418033",
+        "role": "NONE"
+    },
+    "Freeze": {
+        "id": "SP14332693",
+        "role": "NONE"
+    },
+    "lucasbasquerotto": {
+        "id": "SP19873627",
+        "role": "NONE"
+    },
+    "efazenda": {
+        "id": "SP2209728",
+        "role": "NONE"
+    },
+    "woopstar": {
+        "id": "SP2997782",
+        "role": "NONE"
+    },
+    "wahab-icp": {
+        "id": "SP21317549",
+        "role": "NONE"
+    },
+    "matanbaru": {
+        "id": "SP42803777",
+        "role": "NONE"
+    },
+    "Ovski4": {
+        "id": "SP1218714",
+        "role": "NONE"
+    },
+    "frsauvage": {
+        "id": "SP23147820",
+        "role": "NONE"
+    },
+    "chris93111": {
+        "id": "SP27526373",
+        "role": "CONTRIBUTOR"
+    },
+    "karolyi": {
+        "id": "SP987055",
+        "role": "NONE"
+    },
+    "Danielx64": {
+        "id": "SP289220",
+        "role": "NONE (AUTHOR)"
+    },
+    "vscodebot[bot]": {
+        "id": "SP28792856",
+        "role": "NONE"
+    },
+    "arkadiuszwojcik": {
+        "id": "SP2368976",
+        "role": "NONE"
+    },
+    "MaKiPL": {
+        "id": "SP7060605",
+        "role": "NONE"
+    },
+    "prometheus61": {
+        "id": "SP21369706",
+        "role": "NONE"
+    },
+    "Hissvard": {
+        "id": "SP19749322",
+        "role": "NONE"
+    },
+    "Phillipus": {
+        "id": "SP600504",
+        "role": "NONE"
+    },
+    "leonardodelfinodev": {
+        "id": "SP52699069",
+        "role": "NONE"
+    },
+    "ip413": {
+        "id": "SP6553887",
+        "role": "NONE"
+    },
+    "wolfensg": {
+        "id": "SP27346831",
+        "role": "NONE"
+    },
+    "dioptryk": {
+        "id": "SP12067166",
+        "role": "NONE"
+    },
+    "shakeyourbunny": {
+        "id": "SP5352403",
+        "role": "NONE"
+    },
+    "dbaeumer": {
+        "id": "SP1931590",
+        "role": "MEMBER"
+    },
+    "Glamhoth": {
+        "id": "SP5027115",
+        "role": "NONE"
+    },
+    "jedenastka": {
+        "id": "SP33988779",
+        "role": "NONE"
+    },
+    "DaniilAnichin": {
+        "id": "SP11097395",
+        "role": "NONE (AUTHOR)"
+    },
+    "benwu95": {
+        "id": "SP10265739",
+        "role": "NONE"
+    },
+    "davidhalter": {
+        "id": "SP748594",
+        "role": "NONE"
+    },
+    "jkryanchou": {
+        "id": "SP1206342",
+        "role": "NONE"
+    },
+    "SamuelDSR": {
+        "id": "SP2304703",
+        "role": "NONE"
+    },
+    "digglife": {
+        "id": "SP1468378",
+        "role": "NONE"
+    },
+    "yurzo": {
+        "id": "SP25695763",
+        "role": "NONE"
+    },
+    "bremme": {
+        "id": "SP6715707",
+        "role": "NONE"
+    },
+    "aprilahijriyan": {
+        "id": "SP37798612",
+        "role": "NONE"
+    },
+    "tik9": {
+        "id": "SP3178925",
+        "role": "NONE"
+    },
+    "NeilGirdhar": {
+        "id": "SP730137",
+        "role": "NONE"
+    },
+    "omarish": {
+        "id": "SP104550",
+        "role": "NONE"
+    },
+    "stefanschlipfi": {
+        "id": "SP34534823",
+        "role": "NONE"
+    },
+    "nicksama88": {
+        "id": "SP50895411",
+        "role": "NONE"
+    },
+    "bl-ue": {
+        "id": "SP54780737",
+        "role": "NONE"
+    },
+    "ABODFTW": {
+        "id": "SP32599041",
+        "role": "NONE"
+    },
+    "BallsyWalnuts": {
+        "id": "SP19918901",
+        "role": "NONE"
+    },
+    "gabrielebndn": {
+        "id": "SP7643149",
+        "role": "NONE"
+    },
+    "HosseinDahaei": {
+        "id": "SP47916989",
+        "role": "NONE"
+    },
+    "LuanComputacao": {
+        "id": "SP6576768",
+        "role": "NONE"
+    },
+    "mostealth": {
+        "id": "SP50870910",
+        "role": "NONE"
+    },
+    "violet4": {
+        "id": "SP7075901",
+        "role": "NONE"
+    },
+    "gapster": {
+        "id": "SP15945736",
+        "role": "NONE"
+    },
+    "marvinbernhardt": {
+        "id": "SP25516935",
+        "role": "NONE"
+    },
+    "dowenk": {
+        "id": "SP9634782",
+        "role": "NONE"
+    },
+    "DartBot": {
+        "id": "SP8958862",
+        "role": "NONE (AUTHOR)"
+    },
+    "kasperl": {
+        "id": "SP2156198",
+        "role": "NONE"
+    },
+    "iposva-google": {
+        "id": "SP5449880",
+        "role": "CONTRIBUTOR"
+    },
+    "sgjesse": {
+        "id": "SP1343914",
+        "role": "CONTRIBUTOR"
+    },
+    "mulander": {
+        "id": "SP107247",
+        "role": "NONE"
+    },
+    "whesse": {
+        "id": "SP4905639",
+        "role": "MEMBER"
+    },
+    "pbgc": {
+        "id": "SP180825",
+        "role": "NONE"
+    },
+    "krytarowski": {
+        "id": "SP6665730",
+        "role": "NONE"
+    },
+    "mezoni": {
+        "id": "SP2311549",
+        "role": "NONE"
+    },
+    "dazinator": {
+        "id": "SP3176632",
+        "role": "NONE (AUTHOR)"
+    },
+    "loganmancuso": {
+        "id": "SP18329590",
+        "role": "NONE"
+    },
+    "drk-mtr": {
+        "id": "SP40315783",
+        "role": "NONE"
+    },
+    "jherrera123": {
+        "id": "SP1208947",
+        "role": "NONE"
+    },
+    "nimocat": {
+        "id": "SP22885633",
+        "role": "NONE"
+    },
+    "andrp92": {
+        "id": "SP28060986",
+        "role": "NONE"
+    },
+    "atruskie": {
+        "id": "SP1452968",
+        "role": "NONE"
+    },
+    "Panzerbjrn": {
+        "id": "SP10132417",
+        "role": "NONE"
+    },
+    "congjinruo": {
+        "id": "SP18540738",
+        "role": "NONE"
+    },
+    "CobusKruger": {
+        "id": "SP10893522",
+        "role": "NONE"
+    },
+    "Devligue": {
+        "id": "SP12434847",
+        "role": "NONE (AUTHOR)"
+    },
+    "rsese": {
+        "id": "SP734194",
+        "role": "CONTRIBUTOR"
+    },
+    "cutephoton": {
+        "id": "SP19512121",
+        "role": "NONE"
+    },
+    "yodatak": {
+        "id": "SP704477",
+        "role": "NONE"
+    },
+    "no-response[bot]": {
+        "id": "SP32965360",
+        "role": "NONE"
+    },
+    "mkungla": {
+        "id": "SP15878458",
+        "role": "NONE"
+    },
+    "mh-cbon": {
+        "id": "SP17096799",
+        "role": "NONE"
+    },
+    "cristianlivella": {
+        "id": "SP27968888",
+        "role": "NONE"
+    },
+    "edlefebvre": {
+        "id": "SP1556109",
+        "role": "NONE"
+    },
+    "olegjs": {
+        "id": "SP681067",
+        "role": "NONE"
+    },
+    "shivdhar": {
+        "id": "SP8958906",
+        "role": "NONE"
+    },
+    "histamineblkr": {
+        "id": "SP5628330",
+        "role": "NONE"
+    },
+    "den-is": {
+        "id": "SP5287237",
+        "role": "NONE"
+    },
+    "abudawud": {
+        "id": "SP15796342",
+        "role": "NONE"
+    },
+    "nelson6e65": {
+        "id": "SP9272498",
+        "role": "NONE"
+    },
+    "dhh": {
+        "id": "SP2741",
+        "role": "MEMBER (AUTHOR)"
+    },
+    "shalvah": {
+        "id": "SP14361073",
+        "role": "CONTRIBUTOR"
+    },
+    "glaszig": {
+        "id": "SP201135",
+        "role": "CONTRIBUTOR"
+    },
+    "Alamoz": {
+        "id": "SP905505",
+        "role": "NONE"
+    },
+    "minaslater": {
+        "id": "SP19339870",
+        "role": "CONTRIBUTOR"
+    },
+    "cbarton": {
+        "id": "SP396486",
+        "role": "NONE"
+    },
+    "justizin": {
+        "id": "SP526479",
+        "role": "NONE"
+    },
+    "9jaswag": {
+        "id": "SP8125356",
+        "role": "NONE"
+    },
+    "rafaelfranca": {
+        "id": "SP47848",
+        "role": "MEMBER"
+    },
+    "dincamihai": {
+        "id": "SP1615643",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "cachedout": {
+        "id": "SP111616",
+        "role": "CONTRIBUTOR"
+    },
+    "isbm": {
+        "id": "SP1073714",
+        "role": "COLLABORATOR"
+    },
+    "terminalmage": {
+        "id": "SP328598",
+        "role": "COLLABORATOR"
+    },
+    "donny-dont": {
+        "id": "SP666297",
+        "role": "NONE (AUTHOR)"
+    },
+    "kevmoo": {
+        "id": "SP17034",
+        "role": "MEMBER"
+    },
+    "kulshekhar": {
+        "id": "SP10780624",
+        "role": "CONTRIBUTOR"
+    },
+    "eukreign": {
+        "id": "SP69960",
+        "role": "CONTRIBUTOR"
+    },
+    "matanlurey": {
+        "id": "SP168174",
+        "role": "CONTRIBUTOR"
+    },
+    "elmcrest": {
+        "id": "SP931919",
+        "role": "NONE"
+    },
+    "duyanghao": {
+        "id": "SP12867714",
+        "role": "NONE (AUTHOR)"
+    },
+    "k8s-ci-robot": {
+        "id": "SP20407524",
+        "role": "CONTRIBUTOR"
+    },
+    "lavalamp": {
+        "id": "SP647318",
+        "role": "MEMBER"
+    },
+    "warmchang": {
+        "id": "SP13084624",
+        "role": "CONTRIBUTOR"
+    },
+    "aojea": {
+        "id": "SP6450081",
+        "role": "MEMBER"
+    },
+    "aramase": {
+        "id": "SP10608509",
+        "role": "MEMBER"
+    },
+    "fisherxu": {
+        "id": "SP28776356",
+        "role": "MEMBER"
+    },
+    "dims": {
+        "id": "SP23304",
+        "role": "MEMBER"
+    },
+    "povsister": {
+        "id": "SP11040951",
+        "role": "CONTRIBUTOR"
+    },
+    "JensErat": {
+        "id": "SP628441",
+        "role": "NONE"
+    },
+    "liggitt": {
+        "id": "SP980082",
+        "role": "MEMBER"
+    },
+    "emergy": {
+        "id": "SP814013",
+        "role": "NONE (AUTHOR)"
+    },
+    "iavael": {
+        "id": "SP905853",
+        "role": "NONE"
+    },
+    "kevinreddot": {
+        "id": "SP305871",
+        "role": "NONE"
+    },
+    "duke66": {
+        "id": "SP18294365",
+        "role": "NONE"
+    },
+    "reverofevil": {
+        "id": "SP2983969",
+        "role": "NONE"
+    },
+    "Akasurde": {
+        "id": "SP633765",
+        "role": "MEMBER"
+    },
+    "webknjaz": {
+        "id": "SP578543",
+        "role": "MEMBER"
+    },
+    "enragedginger": {
+        "id": "SP2838551",
+        "role": "NONE (AUTHOR)"
+    },
+    "neolit123": {
+        "id": "SP331852",
+        "role": "MEMBER"
+    },
+    "smarterclayton": {
+        "id": "SP1163175",
+        "role": "CONTRIBUTOR"
+    },
+    "timothysc": {
+        "id": "SP169553",
+        "role": "MEMBER"
+    },
+    "ericmorand": {
+        "id": "SP125664",
+        "role": "NONE (AUTHOR)"
+    },
+    "ashmaroli": {
+        "id": "SP12479464",
+        "role": "MEMBER"
+    },
+    "pathawks": {
+        "id": "SP251545",
+        "role": "MEMBER"
+    },
+    "jekyllbot": {
+        "id": "SP6166343",
+        "role": "CONTRIBUTOR"
+    },
+    "esakal": {
+        "id": "SP4751797",
+        "role": "NONE (AUTHOR)"
+    },
+    "mickaelvalmier": {
+        "id": "SP13783395",
+        "role": "NONE"
+    },
+    "xealot": {
+        "id": "SP189873",
+        "role": "NONE"
+    },
+    "alan-agius4": {
+        "id": "SP17563226",
+        "role": "CONTRIBUTOR"
+    },
+    "Bratn": {
+        "id": "SP886464",
+        "role": "NONE"
+    },
+    "evocateur": {
+        "id": "SP5605",
+        "role": "MEMBER"
+    },
+    "joewoodhouse": {
+        "id": "SP3168135",
+        "role": "NONE"
+    },
+    "austingreendev": {
+        "id": "SP4030377",
+        "role": "NONE"
+    },
+    "sandangel": {
+        "id": "SP22189661",
+        "role": "NONE"
+    },
+    "yordis": {
+        "id": "SP4237280",
+        "role": "NONE"
+    },
+    "noherczeg": {
+        "id": "SP1084847",
+        "role": "COLLABORATOR"
+    },
+    "ExpensiveKoala": {
+        "id": "SP1550003",
+        "role": "NONE (AUTHOR)"
+    },
+    "CLAassistant": {
+        "id": "SP11571300",
+        "role": "NONE"
+    },
+    "HenryLoenwind": {
+        "id": "SP1485873",
+        "role": "NONE"
+    },
+    "LexManos": {
+        "id": "SP702211",
+        "role": "MEMBER"
+    },
+    "elifoster": {
+        "id": "SP4176124",
+        "role": "NONE"
+    },
+    "fabiospampinato": {
+        "id": "SP1812093",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "joaomoreno": {
+        "id": "SP22350",
+        "role": "MEMBER"
+    },
+    "gaurav42": {
+        "id": "SP13743203",
+        "role": "NONE"
+    },
+    "Almenon": {
+        "id": "SP13080965",
+        "role": "NONE"
+    },
+    "pkuma-msft": {
+        "id": "SP13727302",
+        "role": "NONE"
+    },
+    "octref": {
+        "id": "SP4033249",
+        "role": "CONTRIBUTOR"
+    },
+    "bardware": {
+        "id": "SP802702",
+        "role": "NONE"
+    },
+    "jeff-hykin": {
+        "id": "SP17692058",
+        "role": "NONE"
+    },
+    "fasterfish": {
+        "id": "SP18389889",
+        "role": "NONE (AUTHOR)"
+    },
+    "krzysztof-magosa": {
+        "id": "SP6112411",
+        "role": "CONTRIBUTOR"
+    },
+    "yfoelling": {
+        "id": "SP13945870",
+        "role": "NONE"
+    },
+    "lordkret": {
+        "id": "SP9572344",
+        "role": "NONE"
+    },
+    "realhawker": {
+        "id": "SP4715835",
+        "role": "NONE"
+    },
+    "nikita-b": {
+        "id": "SP7251577",
+        "role": "CONTRIBUTOR"
+    },
+    "chaitu-tk": {
+        "id": "SP3714737",
+        "role": "NONE"
+    },
+    "viane": {
+        "id": "SP4284629",
+        "role": "NONE"
+    },
+    "Felx-B": {
+        "id": "SP18530681",
+        "role": "NONE (AUTHOR)"
+    },
+    "adhayward": {
+        "id": "SP18305551",
+        "role": "NONE"
+    },
+    "patrickhlauke": {
+        "id": "SP895831",
+        "role": "MEMBER"
+    },
+    "MartijnCuppens": {
+        "id": "SP11559216",
+        "role": "MEMBER"
+    },
+    "mdo": {
+        "id": "SP98681",
+        "role": "MEMBER"
+    },
+    "piernik": {
+        "id": "SP420691",
+        "role": "NONE"
+    },
+    "guledali": {
+        "id": "SP20647282",
+        "role": "NONE"
+    },
+    "feross": {
+        "id": "SP121766",
+        "role": "MEMBER (AUTHOR)"
+    },
+    "billiegoose": {
+        "id": "SP587740",
+        "role": "NONE"
+    },
+    "evantahler": {
+        "id": "SP303226",
+        "role": "NONE"
+    },
+    "mixmix": {
+        "id": "SP2665886",
+        "role": "NONE"
+    },
+    "zoeyTM": {
+        "id": "SP14796043",
+        "role": "NONE"
+    },
+    "mhogerheijde": {
+        "id": "SP1466140",
+        "role": "NONE"
+    },
+    "ckipp01": {
+        "id": "SP13974112",
+        "role": "NONE"
+    },
+    "vweevers": {
+        "id": "SP3055345",
+        "role": "CONTRIBUTOR"
+    },
+    "ArcanisCz": {
+        "id": "SP8430123",
+        "role": "NONE"
+    },
+    "tommck": {
+        "id": "SP981957",
+        "role": "NONE"
+    },
+    "CalinLeafshade": {
+        "id": "SP3149669",
+        "role": "NONE"
+    },
+    "ljosberinn": {
+        "id": "SP29307652",
+        "role": "NONE"
+    },
+    "bunchopunch": {
+        "id": "SP8526819",
+        "role": "NONE"
+    },
+    "Vpet95": {
+        "id": "SP6632738",
+        "role": "NONE"
+    },
+    "lightswitch05": {
+        "id": "SP598803",
+        "role": "NONE"
+    },
+    "FirstWhack": {
+        "id": "SP4481831",
+        "role": "NONE"
+    },
+    "mzzfederico": {
+        "id": "SP16427849",
+        "role": "NONE"
+    },
+    "kinow": {
+        "id": "SP304786",
+        "role": "NONE"
+    },
+    "steve-perkins": {
+        "id": "SP3734297",
+        "role": "NONE"
+    },
+    "osmarks": {
+        "id": "SP10486993",
+        "role": "NONE"
+    },
+    "rubyFeedback": {
+        "id": "SP46686565",
+        "role": "NONE"
+    },
+    "chriscarver": {
+        "id": "SP5349389",
+        "role": "NONE"
+    },
+    "NuroDev": {
+        "id": "SP4991309",
+        "role": "NONE"
+    },
+    "filmgirl": {
+        "id": "SP110683",
+        "role": "MEMBER (AUTHOR)"
+    },
+    "estruyf": {
+        "id": "SP2900833",
+        "role": "NONE"
+    },
+    "LuiseFreese": {
+        "id": "SP49960482",
+        "role": "NONE"
+    },
+    "girlgerms": {
+        "id": "SP19581968",
+        "role": "NONE"
+    },
+    "pandom": {
+        "id": "SP3131504",
+        "role": "NONE"
+    },
+    "GossiTheDog": {
+        "id": "SP34346399",
+        "role": "NONE"
+    },
+    "Lazza": {
+        "id": "SP8294041",
+        "role": "NONE"
+    },
+    "mvandemar": {
+        "id": "SP1258456",
+        "role": "NONE"
+    },
+    "okms": {
+        "id": "SP170147",
+        "role": "NONE"
+    },
+    "leo60228": {
+        "id": "SP8355305",
+        "role": "NONE"
+    },
+    "snickler": {
+        "id": "SP4016293",
+        "role": "NONE"
+    },
+    "kylesethgray": {
+        "id": "SP3441599",
+        "role": "NONE"
+    },
+    "giggio": {
+        "id": "SP334958",
+        "role": "NONE"
+    },
+    "Don-Vito": {
+        "id": "SP4639110",
+        "role": "CONTRIBUTOR"
+    },
+    "suadev": {
+        "id": "SP5918811",
+        "role": "NONE"
+    },
+    "cinnamon-msft": {
+        "id": "SP48369326",
+        "role": "CONTRIBUTOR"
+    },
+    "trylaarsdam": {
+        "id": "SP50586094",
+        "role": "NONE"
+    },
+    "Darth4212": {
+        "id": "SP19805594",
+        "role": "NONE"
+    },
+    "Spriithy": {
+        "id": "SP2387743",
+        "role": "NONE"
+    },
+    "Supesu": {
+        "id": "SP59186190",
+        "role": "NONE"
+    },
+    "sunflsks": {
+        "id": "SP22717474",
+        "role": "NONE"
+    },
+    "tkore": {
+        "id": "SP4380333",
+        "role": "NONE"
+    },
+    "FoxSamu": {
+        "id": "SP11669132",
+        "role": "NONE (AUTHOR)"
+    },
+    "diesieben07": {
+        "id": "SP1915984",
+        "role": "CONTRIBUTOR"
+    },
+    "TheCurle": {
+        "id": "SP42079760",
+        "role": "MEMBER"
+    },
+    "gigaherz": {
+        "id": "SP685851",
+        "role": "COLLABORATOR"
+    },
+    "NathanWarden": {
+        "id": "SP629422",
+        "role": "CONTRIBUTOR"
+    },
+    "yarwelp": {
+        "id": "SP385688",
+        "role": "NONE"
+    },
+    "googlebot": {
+        "id": "SP5384588",
+        "role": "COLLABORATOR"
+    },
+    "tikue": {
+        "id": "SP2915777",
+        "role": "COLLABORATOR"
+    },
+    "vorot93": {
+        "id": "SP240364",
+        "role": "COLLABORATOR"
+    },
+    "Joshua-Ashton": {
+        "id": "SP21316711",
+        "role": "NONE"
+    },
+    "ChaseFlorell": {
+        "id": "SP471626",
+        "role": "NONE"
+    },
+    "Hual": {
+        "id": "SP1867646",
+        "role": "NONE"
+    },
+    "andrewBezerra": {
+        "id": "SP7824898",
+        "role": "NONE"
+    },
+    "legistek": {
+        "id": "SP13384523",
+        "role": "CONTRIBUTOR"
+    },
+    "davidortinau": {
+        "id": "SP41873",
+        "role": "CONTRIBUTOR"
+    },
+    "laukstein": {
+        "id": "SP183966",
+        "role": "NONE"
+    },
+    "geraldb": {
+        "id": "SP53281",
+        "role": "NONE"
+    },
+    "letrastudio": {
+        "id": "SP4627002",
+        "role": "NONE"
+    },
+    "mbrav": {
+        "id": "SP7410291",
+        "role": "NONE"
+    },
+    "DirtyF": {
+        "id": "SP103008",
+        "role": "MEMBER"
+    },
+    "asipple1": {
+        "id": "SP4413018",
+        "role": "NONE"
+    },
+    "nativerez": {
+        "id": "SP4135530",
+        "role": "NONE"
+    },
+    "rjachuthan": {
+        "id": "SP7797813",
+        "role": "NONE"
+    },
+    "hosnas": {
+        "id": "SP26921196",
+        "role": "NONE"
+    },
+    "cmhelmer": {
+        "id": "SP32698567",
+        "role": "NONE"
+    },
+    "BerkhanBerkdemir": {
+        "id": "SP24360355",
+        "role": "NONE"
+    },
+    "shivajivarma": {
+        "id": "SP1388742",
+        "role": "NONE"
+    },
+    "charlesrocket": {
+        "id": "SP26132682",
+        "role": "NONE"
+    },
+    "heydojo": {
+        "id": "SP186629",
+        "role": "CONTRIBUTOR"
+    },
+    "Rastaban": {
+        "id": "SP6538528",
+        "role": "CONTRIBUTOR"
+    },
+    "Gibson85": {
+        "id": "SP40324644",
+        "role": "NONE (AUTHOR)"
+    },
+    "Randshot": {
+        "id": "SP7832423",
+        "role": "CONTRIBUTOR"
+    },
+    "neilogd": {
+        "id": "SP354581",
+        "role": "NONE"
+    },
+    "vector-of-bool": {
+        "id": "SP17038621",
+        "role": "CONTRIBUTOR"
+    },
+    "gitstashapply": {
+        "id": "SP20091329",
+        "role": "NONE (AUTHOR)"
+    },
+    "hugmouse": {
+        "id": "SP44648612",
+        "role": "NONE"
+    },
+    "ivanpopelyshev": {
+        "id": "SP695831",
+        "role": "NONE"
+    },
+    "hckr": {
+        "id": "SP1078650",
+        "role": "NONE"
+    },
+    "kieferrm": {
+        "id": "SP4674940",
+        "role": "MEMBER"
+    },
+    "google-shaderc-autoroll": {
+        "id": "SP51417492",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "gregwebs": {
+        "id": "SP1183",
+        "role": "NONE (AUTHOR)"
+    },
+    "PeterRK": {
+        "id": "SP4464013",
+        "role": "NONE"
+    },
+    "deanveloper": {
+        "id": "SP3196327",
+        "role": "NONE"
+    },
+    "Azareal": {
+        "id": "SP5985165",
+        "role": "NONE"
+    },
+    "gubenkovalik": {
+        "id": "SP5104168",
+        "role": "NONE (AUTHOR)"
+    },
+    "mlc-mlapis": {
+        "id": "SP5693835",
+        "role": "CONTRIBUTOR"
+    },
+    "ocombe": {
+        "id": "SP265378",
+        "role": "CONTRIBUTOR"
+    },
+    "gunchleoc": {
+        "id": "SP4095570",
+        "role": "NONE (AUTHOR)"
+    },
+    "akerbeltz": {
+        "id": "SP1532629",
+        "role": "NONE"
+    },
+    "Kenny2github": {
+        "id": "SP28599280",
+        "role": "CONTRIBUTOR"
+    },
+    "rprys": {
+        "id": "SP16651092",
+        "role": "NONE"
+    },
+    "thisandagain": {
+        "id": "SP747641",
+        "role": "CONTRIBUTOR"
+    },
+    "hannahhoward": {
+        "id": "SP1450680",
+        "role": "NONE (AUTHOR)"
+    },
+    "shushugah": {
+        "id": "SP7111514",
+        "role": "NONE"
+    },
+    "benwiley4000": {
+        "id": "SP13558253",
+        "role": "NONE"
+    },
+    "nls0": {
+        "id": "SP41541662",
+        "role": "NONE"
+    },
+    "darthtrevino": {
+        "id": "SP113544",
+        "role": "NONE"
+    },
+    "hallister": {
+        "id": "SP950773",
+        "role": "NONE"
+    },
+    "mAAdhaTTah": {
+        "id": "SP4371429",
+        "role": "NONE"
+    },
+    "jwietelmann": {
+        "id": "SP550889",
+        "role": "NONE"
+    },
+    "TheLarkInn": {
+        "id": "SP3408176",
+        "role": "CONTRIBUTOR"
+    },
+    "goderbauer": {
+        "id": "SP1227763",
+        "role": "MEMBER"
+    },
+    "maheshmnj": {
+        "id": "SP31410839",
+        "role": "MEMBER"
+    },
+    "Humberd": {
+        "id": "SP10242142",
+        "role": "NONE (AUTHOR)"
+    },
+    "Shusek": {
+        "id": "SP3973833",
+        "role": "NONE"
+    },
+    "ludo237": {
+        "id": "SP921500",
+        "role": "NONE"
+    },
+    "Kegelcizer": {
+        "id": "SP7473719",
+        "role": "NONE"
+    },
+    "wattengard": {
+        "id": "SP46117",
+        "role": "NONE"
+    },
+    "anterokarttunen": {
+        "id": "SP11390969",
+        "role": "NONE"
+    },
+    "pokonski": {
+        "id": "SP135402",
+        "role": "NONE"
+    },
+    "IainNZ": {
+        "id": "SP692635",
+        "role": "MEMBER (AUTHOR)"
+    },
+    "jekbradbury": {
+        "id": "SP11729078",
+        "role": "CONTRIBUTOR"
+    },
+    "KristofferC": {
+        "id": "SP1282691",
+        "role": "MEMBER"
+    },
+    "StefanKarpinski": {
+        "id": "SP153596",
+        "role": "MEMBER"
+    },
+    "piever": {
+        "id": "SP6333339",
+        "role": "CONTRIBUTOR"
+    },
+    "mlubin": {
+        "id": "SP1733683",
+        "role": "MEMBER"
+    },
+    "rickhg12hs": {
+        "id": "SP6000188",
+        "role": "CONTRIBUTOR"
+    },
+    "ChrisRackauckas": {
+        "id": "SP1814174",
+        "role": "MEMBER"
+    },
+    "ExpandingMan": {
+        "id": "SP11379353",
+        "role": "CONTRIBUTOR"
+    },
+    "stevengj": {
+        "id": "SP2913679",
+        "role": "MEMBER"
+    },
+    "JeffBezanson": {
+        "id": "SP744556",
+        "role": "MEMBER"
+    },
+    "mauro3": {
+        "id": "SP4098145",
+        "role": "CONTRIBUTOR"
+    },
+    "dawbarton": {
+        "id": "SP1260244",
+        "role": "NONE"
+    },
+    "IdanCo": {
+        "id": "SP10364499",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "cr101": {
+        "id": "SP4064582",
+        "role": "NONE"
+    },
+    "mselerin": {
+        "id": "SP377734",
+        "role": "NONE"
+    },
+    "Mioleris": {
+        "id": "SP15182121",
+        "role": "NONE"
+    },
+    "bbottema": {
+        "id": "SP2115718",
+        "role": "NONE"
+    },
+    "bparanj": {
+        "id": "SP12740",
+        "role": "NONE"
+    },
+    "petrpacas": {
+        "id": "SP7289816",
+        "role": "NONE"
+    },
+    "ajthinking": {
+        "id": "SP3457668",
+        "role": "NONE"
+    },
+    "Johann-S": {
+        "id": "SP1689750",
+        "role": "MEMBER"
+    },
+    "cebartling": {
+        "id": "SP33961",
+        "role": "NONE"
+    },
+    "Alex1sz": {
+        "id": "SP6518259",
+        "role": "NONE"
+    },
+    "connelhooley": {
+        "id": "SP1859799",
+        "role": "NONE"
+    },
+    "marcosleonel": {
+        "id": "SP8678852",
+        "role": "NONE"
+    },
+    "Ruud-cb": {
+        "id": "SP10037514",
+        "role": "NONE"
+    },
+    "InfoLibre": {
+        "id": "SP3955499",
+        "role": "NONE (AUTHOR)"
+    },
+    "lard": {
+        "id": "SP531187",
+        "role": "NONE"
+    },
+    "JAremko": {
+        "id": "SP1898905",
+        "role": "NONE"
+    },
+    "jdschuitemaker": {
+        "id": "SP2353413",
+        "role": "NONE"
+    },
+    "mozo78": {
+        "id": "SP38666396",
+        "role": "NONE"
+    },
+    "jonkoops": {
+        "id": "SP695720",
+        "role": "NONE"
+    },
+    "Injazz": {
+        "id": "SP43905364",
+        "role": "NONE"
+    },
+    "glouw": {
+        "id": "SP7000616",
+        "role": "NONE"
+    },
+    "techtheory": {
+        "id": "SP5377261",
+        "role": "NONE"
+    },
+    "MicrosoftIssueBot": {
+        "id": "SP47541839",
+        "role": "COLLABORATOR"
+    },
+    "mcooley": {
+        "id": "SP296848",
+        "role": "MEMBER"
+    },
+    "insidewhy": {
+        "id": "SP97685",
+        "role": "NONE (AUTHOR)"
+    },
+    "sizebot": {
+        "id": "SP43185848",
+        "role": "NONE"
+    },
+    "bdwain": {
+        "id": "SP3982094",
+        "role": "NONE"
+    },
+    "euroclydon37": {
+        "id": "SP9101935",
+        "role": "NONE"
+    },
+    "ssunday": {
+        "id": "SP3252602",
+        "role": "NONE"
+    },
+    "nommuna": {
+        "id": "SP11933705",
+        "role": "NONE"
+    },
+    "Joonpark13": {
+        "id": "SP7915735",
+        "role": "NONE"
+    },
+    "roy-law": {
+        "id": "SP12499472",
+        "role": "NONE"
+    },
+    "davidmfoley": {
+        "id": "SP128350",
+        "role": "NONE"
+    },
+    "kumar303": {
+        "id": "SP55398",
+        "role": "NONE"
+    },
+    "thedanchez": {
+        "id": "SP4277756",
+        "role": "NONE"
+    },
+    "davidmarkclements": {
+        "id": "SP1190716",
+        "role": "NONE"
+    },
+    "Jackarunda": {
+        "id": "SP25396595",
+        "role": "NONE (AUTHOR)"
+    },
+    "PierreRambaud": {
+        "id": "SP1462701",
+        "role": "NONE"
+    },
+    "Piorys": {
+        "id": "SP18083987",
+        "role": "NONE"
+    },
+    "galimba": {
+        "id": "SP5059808",
+        "role": "NONE"
+    },
+    "jackbond": {
+        "id": "SP2799232",
+        "role": "NONE (AUTHOR)"
+    },
+    "masnider": {
+        "id": "SP10968331",
+        "role": "MEMBER"
+    },
+    "jamescassell": {
+        "id": "SP5522890",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "mz0": {
+        "id": "SP3733047",
+        "role": "CONTRIBUTOR"
+    },
+    "ChristianCiach": {
+        "id": "SP19341644",
+        "role": "NONE"
+    },
+    "dbilling": {
+        "id": "SP11949638",
+        "role": "NONE"
+    },
+    "s-hertel": {
+        "id": "SP19572925",
+        "role": "CONTRIBUTOR"
+    },
+    "nitrohorse": {
+        "id": "SP1514352",
+        "role": "NONE"
+    },
+    "jepler": {
+        "id": "SP1517291",
+        "role": "NONE"
+    },
+    "akatechis": {
+        "id": "SP1058931",
+        "role": "NONE"
+    },
+    "leibwiht": {
+        "id": "SP41707455",
+        "role": "NONE"
+    },
+    "tjdownes": {
+        "id": "SP273720",
+        "role": "NONE"
+    },
+    "benbrittain": {
+        "id": "SP207432",
+        "role": "NONE"
+    },
+    "jwcrawley": {
+        "id": "SP8072617",
+        "role": "NONE"
+    },
+    "exogen": {
+        "id": "SP53522",
+        "role": "NONE"
+    },
+    "zeusk": {
+        "id": "SP1236202",
+        "role": "NONE"
+    },
+    "sebmck": {
+        "id": "SP853712",
+        "role": "CONTRIBUTOR"
+    },
+    "jan-johansson-mr": {
+        "id": "SP11595208",
+        "role": "NONE (AUTHOR)"
+    },
+    "guybar": {
+        "id": "SP6783301",
+        "role": "NONE"
+    },
+    "menaheme": {
+        "id": "SP5694495",
+        "role": "NONE"
+    },
+    "reifnir": {
+        "id": "SP1839359",
+        "role": "NONE"
+    },
+    "dotnetchris": {
+        "id": "SP116135",
+        "role": "NONE"
+    },
+    "kscelfo": {
+        "id": "SP7327695",
+        "role": "NONE"
+    },
+    "EricaMo": {
+        "id": "SP17440086",
+        "role": "NONE"
+    },
+    "olilanz": {
+        "id": "SP1510891",
+        "role": "NONE"
+    },
+    "niplar": {
+        "id": "SP2247805",
+        "role": "NONE"
+    },
+    "fefedimoraes": {
+        "id": "SP1682707",
+        "role": "NONE"
+    },
+    "Suriman": {
+        "id": "SP3469909",
+        "role": "NONE"
+    },
+    "websitewill": {
+        "id": "SP19608705",
+        "role": "NONE"
+    },
+    "tpkurilla": {
+        "id": "SP3711024",
+        "role": "NONE"
+    },
+    "paulharker": {
+        "id": "SP707049",
+        "role": "NONE"
+    },
+    "escherrer": {
+        "id": "SP431456",
+        "role": "NONE"
+    },
+    "holthopkins": {
+        "id": "SP9703490",
+        "role": "NONE"
+    },
+    "mjpandian": {
+        "id": "SP2063115",
+        "role": "NONE"
+    },
+    "billyweisberg": {
+        "id": "SP9979211",
+        "role": "NONE"
+    },
+    "vercruysb": {
+        "id": "SP499068",
+        "role": "NONE"
+    },
+    "davojc": {
+        "id": "SP2539779",
+        "role": "NONE"
+    },
+    "joychak": {
+        "id": "SP3778219",
+        "role": "NONE"
+    },
+    "roncain": {
+        "id": "SP3913124",
+        "role": "CONTRIBUTOR"
+    },
+    "SergeyZa": {
+        "id": "SP5660584",
+        "role": "NONE"
+    },
+    "willblackie": {
+        "id": "SP2966817",
+        "role": "NONE"
+    },
+    "oldkord": {
+        "id": "SP15092667",
+        "role": "NONE"
+    },
+    "scotthurlbert": {
+        "id": "SP1720082",
+        "role": "NONE"
+    },
+    "joerglang": {
+        "id": "SP1741260",
+        "role": "NONE"
+    },
+    "jbgraug": {
+        "id": "SP12108584",
+        "role": "NONE (AUTHOR)"
+    },
+    "mhegazy": {
+        "id": "SP8000722",
+        "role": "CONTRIBUTOR"
+    },
+    "RyanCavanaugh": {
+        "id": "SP6685088",
+        "role": "MEMBER"
+    },
+    "niieani": {
+        "id": "SP563469",
+        "role": "NONE"
+    },
+    "BenSayers": {
+        "id": "SP1734851",
+        "role": "NONE"
+    },
+    "aluanhaddad": {
+        "id": "SP5034656",
+        "role": "CONTRIBUTOR"
+    },
+    "gcnew": {
+        "id": "SP4066840",
+        "role": "CONTRIBUTOR"
+    },
+    "eddieajau": {
+        "id": "SP700871",
+        "role": "NONE"
+    },
+    "daprahamian": {
+        "id": "SP7957497",
+        "role": "NONE"
+    },
+    "DynConcepts": {
+        "id": "SP9969889",
+        "role": "NONE"
+    },
+    "jsamr": {
+        "id": "SP3646758",
+        "role": "NONE"
+    },
+    "FranklinYu": {
+        "id": "SP3153452",
+        "role": "NONE"
+    },
+    "calidion": {
+        "id": "SP131776",
+        "role": "NONE"
+    },
+    "eps1lon": {
+        "id": "SP12292047",
+        "role": "CONTRIBUTOR"
+    },
+    "justinfagnani": {
+        "id": "SP522948",
+        "role": "NONE"
+    },
+    "treshugart": {
+        "id": "SP136556",
+        "role": "NONE"
+    },
+    "jermowery": {
+        "id": "SP5343243",
+        "role": "NONE (AUTHOR)"
+    },
+    "spock123": {
+        "id": "SP1267316",
+        "role": "NONE"
+    },
+    "CodeLiam": {
+        "id": "SP36745510",
+        "role": "NONE"
+    },
+    "ericmartinezr": {
+        "id": "SP13039652",
+        "role": "CONTRIBUTOR"
+    },
+    "mgechev": {
+        "id": "SP455023",
+        "role": "MEMBER"
+    },
+    "JoostK": {
+        "id": "SP123679",
+        "role": "MEMBER"
+    },
+    "jhkrischel": {
+        "id": "SP2132602",
+        "role": "NONE (AUTHOR)"
+    },
+    "gundalow": {
+        "id": "SP940557",
+        "role": "CONTRIBUTOR"
+    },
+    "alikins": {
+        "id": "SP15162",
+        "role": "CONTRIBUTOR"
+    },
+    "andrunah": {
+        "id": "SP17752048",
+        "role": "NONE"
+    },
+    "csillab": {
+        "id": "SP19914339",
+        "role": "CONTRIBUTOR"
+    },
+    "gail-b-stewart": {
+        "id": "SP7386929",
+        "role": "NONE"
+    },
+    "MarkusTeufelberger": {
+        "id": "SP950561",
+        "role": "CONTRIBUTOR"
+    },
+    "brianguy": {
+        "id": "SP5423285",
+        "role": "NONE"
+    },
+    "varac": {
+        "id": "SP488213",
+        "role": "NONE"
+    },
+    "Goobaroo": {
+        "id": "SP112187",
+        "role": "NONE"
+    },
+    "geerlingguy": {
+        "id": "SP481677",
+        "role": "CONTRIBUTOR"
+    },
+    "boormat": {
+        "id": "SP1361780",
+        "role": "NONE"
+    },
+    "steffann": {
+        "id": "SP509689",
+        "role": "CONTRIBUTOR"
+    },
+    "fzink": {
+        "id": "SP36764136",
+        "role": "NONE"
+    },
+    "joeto0": {
+        "id": "SP12090299",
+        "role": "NONE"
+    },
+    "tom0010": {
+        "id": "SP41154665",
+        "role": "NONE"
+    },
+    "martincermak": {
+        "id": "SP50200552",
+        "role": "NONE"
+    },
+    "whirlwin": {
+        "id": "SP740323",
+        "role": "NONE"
+    },
+    "romulo-dbts": {
+        "id": "SP57633461",
+        "role": "NONE"
+    },
+    "drewhemm": {
+        "id": "SP4614943",
+        "role": "NONE"
+    },
+    "jKittyj": {
+        "id": "SP48388055",
+        "role": "NONE (AUTHOR)"
+    },
+    "lazarljubenovic": {
+        "id": "SP7661457",
+        "role": "CONTRIBUTOR"
+    },
+    "Airblader": {
+        "id": "SP2392216",
+        "role": "CONTRIBUTOR"
+    },
+    "Splaktar": {
+        "id": "SP3506071",
+        "role": "MEMBER"
+    },
+    "jorroll": {
+        "id": "SP12599934",
+        "role": "CONTRIBUTOR"
+    },
+    "IgorMinar": {
+        "id": "SP216296",
+        "role": "CONTRIBUTOR"
+    },
+    "jknapp25": {
+        "id": "SP3934326",
+        "role": "NONE (AUTHOR)"
+    },
+    "jeremylt": {
+        "id": "SP25011573",
+        "role": "MEMBER"
+    },
+    "jsdisco": {
+        "id": "SP53656529",
+        "role": "NONE"
+    },
+    "raisedadead": {
+        "id": "SP1884376",
+        "role": "MEMBER"
+    },
+    "ShaunSHamilton": {
+        "id": "SP51722130",
+        "role": "MEMBER"
+    },
+    "naomi-lgbt": {
+        "id": "SP63889819",
+        "role": "MEMBER"
+    },
+    "baslr": {
+        "id": "SP1494154",
+        "role": "NONE"
+    },
+    "solarblueberry": {
+        "id": "SP78904980",
+        "role": "NONE"
+    },
+    "foreignmeloman": {
+        "id": "SP11769352",
+        "role": "NONE"
+    },
+    "chrmarti": {
+        "id": "SP9205389",
+        "role": "NONE"
+    },
+    "philliphoff": {
+        "id": "SP6402946",
+        "role": "CONTRIBUTOR"
+    },
+    "zifik": {
+        "id": "SP2372529",
+        "role": "NONE"
+    },
+    "Joebeazelman": {
+        "id": "SP1863566",
+        "role": "NONE (AUTHOR)"
+    },
+    "hirre": {
+        "id": "SP4263674",
+        "role": "NONE"
+    },
+    "JoeGruffins": {
+        "id": "SP34998433",
+        "role": "NONE (AUTHOR)"
+    },
+    "mvdan": {
+        "id": "SP3576549",
+        "role": "MEMBER"
+    },
+    "cybercrypt13": {
+        "id": "SP1696829",
+        "role": "NONE"
+    },
+    "JohnMH": {
+        "id": "SP2576152",
+        "role": "NONE (AUTHOR)"
+    },
+    "MaurogDark": {
+        "id": "SP6270689",
+        "role": "NONE"
+    },
+    "egamma": {
+        "id": "SP172399",
+        "role": "MEMBER"
+    },
+    "jsalado": {
+        "id": "SP12932925",
+        "role": "NONE (AUTHOR)"
+    },
+    "DerGary": {
+        "id": "SP4302467",
+        "role": "NONE"
+    },
+    "bryanmacfarlane": {
+        "id": "SP919564",
+        "role": "CONTRIBUTOR"
+    },
+    "ChrisLGardner": {
+        "id": "SP16837142",
+        "role": "NONE"
+    },
+    "dmitryserbin": {
+        "id": "SP30379061",
+        "role": "NONE"
+    },
+    "damccorm": {
+        "id": "SP42773683",
+        "role": "NONE"
+    },
+    "samswork": {
+        "id": "SP13007450",
+        "role": "NONE"
+    },
+    "sandersaares": {
+        "id": "SP9914262",
+        "role": "MEMBER"
+    },
+    "gogbg": {
+        "id": "SP18483384",
+        "role": "NONE"
+    },
+    "Kasea": {
+        "id": "SP11725952",
+        "role": "NONE (AUTHOR)"
+    },
+    "bhack": {
+        "id": "SP1710528",
+        "role": "NONE"
+    },
+    "braindigitalis": {
+        "id": "SP1556794",
+        "role": "NONE"
+    },
+    "SaltyMonkey": {
+        "id": "SP1570693",
+        "role": "NONE"
+    },
+    "ChronoTempus": {
+        "id": "SP58554773",
+        "role": "NONE"
+    },
+    "SimonGrn": {
+        "id": "SP49909275",
+        "role": "NONE"
+    },
+    "matthieu-rolland": {
+        "id": "SP1784781",
+        "role": "NONE"
+    },
+    "ioquatix": {
+        "id": "SP30030",
+        "role": "NONE"
+    },
+    "pgawlowski": {
+        "id": "SP9845024",
+        "role": "NONE"
+    },
+    "cy6erGn0m": {
+        "id": "SP762598",
+        "role": "NONE"
+    },
+    "cristaloleg": {
+        "id": "SP366002",
+        "role": "NONE"
+    },
+    "Yobilat": {
+        "id": "SP1817322",
+        "role": "NONE"
+    },
+    "kenyon": {
+        "id": "SP68514",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "Oloremo": {
+        "id": "SP4280480",
+        "role": "NONE"
+    },
+    "timflannagan": {
+        "id": "SP9899409",
+        "role": "NONE"
+    },
+    "thaumos": {
+        "id": "SP891871",
+        "role": "CONTRIBUTOR"
+    },
+    "zem": {
+        "id": "SP197972",
+        "role": "NONE"
+    },
+    "kevinburke": {
+        "id": "SP234019",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "venilnoronha": {
+        "id": "SP1722758",
+        "role": "CONTRIBUTOR"
+    },
+    "techmexdev": {
+        "id": "SP10700721",
+        "role": "CONTRIBUTOR"
+    },
+    "ianzapolsky": {
+        "id": "SP1755679",
+        "role": "CONTRIBUTOR"
+    },
+    "drewvanstone": {
+        "id": "SP811297",
+        "role": "CONTRIBUTOR"
+    },
+    "waits": {
+        "id": "SP972475",
+        "role": "CONTRIBUTOR"
+    },
+    "MaerF0x0": {
+        "id": "SP247846",
+        "role": "NONE"
+    },
+    "gopherbot": {
+        "id": "SP8566911",
+        "role": "NONE"
+    },
+    "mfrw": {
+        "id": "SP4929861",
+        "role": "CONTRIBUTOR"
+    },
+    "andriisoldatenko": {
+        "id": "SP1374633",
+        "role": "CONTRIBUTOR"
+    },
+    "wfernandes": {
+        "id": "SP2303039",
+        "role": "CONTRIBUTOR"
+    },
+    "robpike": {
+        "id": "SP4324516",
+        "role": "CONTRIBUTOR"
+    },
+    "bmeh": {
+        "id": "SP35892409",
+        "role": "NONE"
+    },
+    "kgignatyev-inspur": {
+        "id": "SP27866311",
+        "role": "NONE (AUTHOR)"
+    },
+    "MLefebvreICO": {
+        "id": "SP17457252",
+        "role": "NONE"
+    },
+    "aaomidi": {
+        "id": "SP1465785",
+        "role": "NONE"
+    },
+    "vp2177": {
+        "id": "SP451903",
+        "role": "CONTRIBUTOR"
+    },
+    "jlk": {
+        "id": "SP146853",
+        "role": "NONE"
+    },
+    "wwahammy": {
+        "id": "SP94169",
+        "role": "NONE"
+    },
+    "ExE-Boss": {
+        "id": "SP3889017",
+        "role": "CONTRIBUTOR"
+    },
+    "mahen23": {
+        "id": "SP514986",
+        "role": "NONE"
+    },
+    "kpetrow": {
+        "id": "SP18248938",
+        "role": "NONE (AUTHOR)"
+    },
+    "Mugen87": {
+        "id": "SP12612165",
+        "role": "COLLABORATOR"
+    },
+    "arpu": {
+        "id": "SP14173",
+        "role": "NONE"
+    },
+    "sciecode": {
+        "id": "SP3927951",
+        "role": "COLLABORATOR"
+    },
+    "makc": {
+        "id": "SP242577",
+        "role": "CONTRIBUTOR"
+    },
+    "WestLangley": {
+        "id": "SP1000017",
+        "role": "COLLABORATOR"
+    },
+    "mrdoob": {
+        "id": "SP97088",
+        "role": "OWNER"
+    },
+    "kzu": {
+        "id": "SP169707",
+        "role": "NONE (AUTHOR)"
+    },
+    "KirillOsenkov": {
+        "id": "SP679326",
+        "role": "MEMBER"
+    },
+    "ealsur": {
+        "id": "SP1633401",
+        "role": "NONE"
+    },
+    "pedroreys": {
+        "id": "SP130238",
+        "role": "NONE"
+    },
+    "bradwilson": {
+        "id": "SP16944",
+        "role": "NONE"
+    },
+    "sgreenmsft": {
+        "id": "SP20691252",
+        "role": "MEMBER"
+    },
+    "impguard": {
+        "id": "SP1912284",
+        "role": "NONE"
+    },
+    "durack1": {
+        "id": "SP3229632",
+        "role": "NONE"
+    },
+    "wleepang": {
+        "id": "SP361574",
+        "role": "NONE"
+    },
+    "gdamore": {
+        "id": "SP1295229",
+        "role": "NONE"
+    },
+    "regs01": {
+        "id": "SP10468217",
+        "role": "NONE"
+    },
+    "eidylon": {
+        "id": "SP5951045",
+        "role": "NONE"
+    },
+    "shtirlic": {
+        "id": "SP74080",
+        "role": "NONE"
+    },
+    "randomascii": {
+        "id": "SP10800041",
+        "role": "NONE"
+    },
+    "msftbot[bot]": {
+        "id": "SP48340428",
+        "role": "CONTRIBUTOR"
+    },
+    "vadimkantorov": {
+        "id": "SP1041752",
+        "role": "NONE"
+    },
+    "rbreaves": {
+        "id": "SP10969616",
+        "role": "NONE"
+    },
+    "stewSquared": {
+        "id": "SP4022813",
+        "role": "NONE"
+    },
+    "lll000111": {
+        "id": "SP25476357",
+        "role": "NONE (AUTHOR)"
+    },
+    "AnyhowStep": {
+        "id": "SP5655961",
+        "role": "CONTRIBUTOR"
+    },
+    "fatcerberus": {
+        "id": "SP4097841",
+        "role": "NONE"
+    },
+    "kitsonk": {
+        "id": "SP1282577",
+        "role": "CONTRIBUTOR"
+    },
+    "zpdDG4gta8XKpMCd": {
+        "id": "SP937933",
+        "role": "NONE"
+    },
+    "DanielRosenwasser": {
+        "id": "SP972891",
+        "role": "MEMBER"
+    },
+    "macengr": {
+        "id": "SP8150967",
+        "role": "NONE (AUTHOR)"
+    },
+    "nandumoura": {
+        "id": "SP3390120",
+        "role": "NONE"
+    },
+    "thecodingaviator": {
+        "id": "SP34807532",
+        "role": "CONTRIBUTOR"
+    },
+    "moT01": {
+        "id": "SP20648924",
+        "role": "MEMBER"
+    },
+    "RandellDawson": {
+        "id": "SP5313213",
+        "role": "MEMBER"
+    },
+    "broregard": {
+        "id": "SP11634920",
+        "role": "NONE"
+    },
+    "stevejh1": {
+        "id": "SP57095224",
+        "role": "NONE"
+    },
+    "kelsiegosser": {
+        "id": "SP23170565",
+        "role": "NONE"
+    },
+    "ojeytonwilliams": {
+        "id": "SP15801806",
+        "role": "CONTRIBUTOR"
+    },
+    "ahmadabdolsaheb": {
+        "id": "SP4591597",
+        "role": "MEMBER"
+    },
+    "brianignacio5": {
+        "id": "SP6033246",
+        "role": "NONE"
+    },
+    "MadsTorgersen": {
+        "id": "SP6677272",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "HaloFour": {
+        "id": "SP10102290",
+        "role": "CONTRIBUTOR"
+    },
+    "orthoxerox": {
+        "id": "SP8640149",
+        "role": "NONE"
+    },
+    "amdav": {
+        "id": "SP55229438",
+        "role": "NONE"
+    },
+    "YairHalberstadt": {
+        "id": "SP29174528",
+        "role": "CONTRIBUTOR"
+    },
+    "fitdev": {
+        "id": "SP8166847",
+        "role": "NONE"
+    },
+    "svick": {
+        "id": "SP287848",
+        "role": "CONTRIBUTOR"
+    },
+    "Thaina": {
+        "id": "SP1042507",
+        "role": "NONE"
+    },
+    "DavidArno": {
+        "id": "SP196899",
+        "role": "NONE"
+    },
+    "MgSam": {
+        "id": "SP1965570",
+        "role": "NONE"
+    },
+    "genlu": {
+        "id": "SP788783",
+        "role": "MEMBER"
+    },
+    "eyalalonn": {
+        "id": "SP3756641",
+        "role": "CONTRIBUTOR"
+    },
+    "AlgorithmsAreCool": {
+        "id": "SP10837869",
+        "role": "NONE"
+    },
+    "ErikSchierboom": {
+        "id": "SP135246",
+        "role": "CONTRIBUTOR"
+    },
+    "wolfy1339": {
+        "id": "SP4595477",
+        "role": "CONTRIBUTOR"
+    },
+    "vladimirmartsul": {
+        "id": "SP2290081",
+        "role": "NONE"
+    },
+    "andresgalante": {
+        "id": "SP1832037",
+        "role": "COLLABORATOR"
+    },
+    "XhmikosR": {
+        "id": "SP349621",
+        "role": "MEMBER"
+    },
+    "planetoftheweb": {
+        "id": "SP216426",
+        "role": "CONTRIBUTOR"
+    },
+    "weilinzung": {
+        "id": "SP7368063",
+        "role": "NONE"
+    },
+    "MartinLion": {
+        "id": "SP9435135",
+        "role": "NONE (AUTHOR)"
+    },
+    "AlexanderFabisch": {
+        "id": "SP869592",
+        "role": "MEMBER"
+    },
+    "jnothman": {
+        "id": "SP78827",
+        "role": "MEMBER"
+    },
+    "MechCoder": {
+        "id": "SP1867024",
+        "role": "MEMBER"
+    },
+    "afzal": {
+        "id": "SP358737",
+        "role": "NONE"
+    },
+    "davidavdav": {
+        "id": "SP5497303",
+        "role": "NONE"
+    },
+    "raghavrv": {
+        "id": "SP9487348",
+        "role": "MEMBER"
+    },
+    "GaelVaroquaux": {
+        "id": "SP208217",
+        "role": "MEMBER"
+    },
+    "emmanuelle": {
+        "id": "SP263366",
+        "role": "CONTRIBUTOR"
+    },
+    "amueller": {
+        "id": "SP449558",
+        "role": "MEMBER"
+    },
+    "matti": {
+        "id": "SP3893",
+        "role": "NONE (AUTHOR)"
+    },
+    "devtools-bot": {
+        "id": "SP24444246",
+        "role": "NONE"
+    },
+    "patrickhulce": {
+        "id": "SP2301202",
+        "role": "COLLABORATOR"
+    },
+    "hooligani": {
+        "id": "SP63258136",
+        "role": "NONE"
+    },
+    "metaphoricalsasquash": {
+        "id": "SP43533832",
+        "role": "NONE (AUTHOR)"
+    },
+    "mrcdk": {
+        "id": "SP483531",
+        "role": "CONTRIBUTOR"
+    },
+    "opleks": {
+        "id": "SP12021793",
+        "role": "NONE"
+    },
+    "golddotasksquestions": {
+        "id": "SP47016402",
+        "role": "NONE"
+    },
+    "groud": {
+        "id": "SP6093119",
+        "role": "MEMBER"
+    },
+    "jaacko-torus": {
+        "id": "SP28635807",
+        "role": "NONE"
+    },
+    "MichaelJCole": {
+        "id": "SP1504790",
+        "role": "NONE (AUTHOR)"
+    },
+    "bnoordhuis": {
+        "id": "SP275871",
+        "role": "MEMBER"
+    },
+    "ryanmurakami": {
+        "id": "SP767105",
+        "role": "MEMBER"
+    },
+    "mihaimaruseac": {
+        "id": "SP323199",
+        "role": "COLLABORATOR (AUTHOR)"
+    },
+    "steffanjensen": {
+        "id": "SP13394970",
+        "role": "NONE"
+    },
+    "husligc": {
+        "id": "SP35070583",
+        "role": "NONE"
+    },
+    "Oyetomi": {
+        "id": "SP21218962",
+        "role": "NONE"
+    },
+    "gunan": {
+        "id": "SP7946809",
+        "role": "CONTRIBUTOR"
+    },
+    "mikedn": {
+        "id": "SP9973420",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "tannergooding": {
+        "id": "SP10487869",
+        "role": "MEMBER"
+    },
+    "sandreenko": {
+        "id": "SP22642771",
+        "role": "CONTRIBUTOR"
+    },
+    "CarolEidt": {
+        "id": "SP2973870",
+        "role": "CONTRIBUTOR"
+    },
+    "briansull": {
+        "id": "SP11621884",
+        "role": "CONTRIBUTOR"
+    },
+    "richlander": {
+        "id": "SP2608468",
+        "role": "MEMBER"
+    },
+    "terrajobst": {
+        "id": "SP5169960",
+        "role": "MEMBER"
+    },
+    "drieseng": {
+        "id": "SP312863",
+        "role": "CONTRIBUTOR"
+    },
+    "Mikotochan": {
+        "id": "SP30191661",
+        "role": "NONE (AUTHOR)"
+    },
+    "Hamdullah-gif": {
+        "id": "SP59052006",
+        "role": "NONE"
+    },
+    "jablpiotrek": {
+        "id": "SP25666892",
+        "role": "NONE"
+    },
+    "matks": {
+        "id": "SP3830050",
+        "role": "NONE"
+    },
+    "ttoine": {
+        "id": "SP4619685",
+        "role": "NONE"
+    },
+    "s9w": {
+        "id": "SP6044318",
+        "role": "NONE"
+    },
+    "normano": {
+        "id": "SP964776",
+        "role": "NONE"
+    },
+    "TheRishabhB": {
+        "id": "SP33183390",
+        "role": "NONE"
+    },
+    "TimWelter": {
+        "id": "SP33954336",
+        "role": "NONE"
+    },
+    "Roguezilla": {
+        "id": "SP23708759",
+        "role": "NONE"
+    },
+    "pmosko": {
+        "id": "SP29561906",
+        "role": "NONE"
+    },
+    "Sunscratch": {
+        "id": "SP21058716",
+        "role": "NONE"
+    },
+    "kpucynski": {
+        "id": "SP9209870",
+        "role": "NONE"
+    },
+    "nitnelave": {
+        "id": "SP796633",
+        "role": "NONE"
+    },
+    "mjscosta": {
+        "id": "SP10870489",
+        "role": "NONE (AUTHOR)"
+    },
+    "HughDevlin": {
+        "id": "SP1030450",
+        "role": "NONE"
+    },
+    "mkArtakMSFT": {
+        "id": "SP34246760",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "boukenka": {
+        "id": "SP16502423",
+        "role": "NONE"
+    },
+    "Julien-Marpault": {
+        "id": "SP23618436",
+        "role": "NONE"
+    },
+    "glararan": {
+        "id": "SP281441",
+        "role": "NONE"
+    },
+    "199621616": {
+        "id": "SP25498672",
+        "role": "NONE"
+    },
+    "rogihee": {
+        "id": "SP4984486",
+        "role": "CONTRIBUTOR"
+    },
+    "expcat": {
+        "id": "SP4289694",
+        "role": "NONE"
+    },
+    "papyr": {
+        "id": "SP12733414",
+        "role": "NONE"
+    },
+    "gulshan": {
+        "id": "SP751732",
+        "role": "NONE"
+    },
+    "mnmr": {
+        "id": "SP1616137",
+        "role": "NONE"
+    },
+    "3GDXC": {
+        "id": "SP48260620",
+        "role": "NONE"
+    },
+    "seangwright": {
+        "id": "SP1382768",
+        "role": "CONTRIBUTOR"
+    },
+    "saint4eva": {
+        "id": "SP3264826",
+        "role": "NONE"
+    },
+    "valeriob": {
+        "id": "SP1522516",
+        "role": "NONE"
+    },
+    "mrpmorris": {
+        "id": "SP3111981",
+        "role": "NONE"
+    },
+    "mnn": {
+        "id": "SP1975567",
+        "role": "NONE (AUTHOR)"
+    },
+    "Chaosus": {
+        "id": "SP3036176",
+        "role": "MEMBER"
+    },
+    "Mystic8b": {
+        "id": "SP35394377",
+        "role": "NONE (AUTHOR)"
+    },
+    "benhillis": {
+        "id": "SP17727402",
+        "role": "MEMBER"
+    },
+    "therealkenc": {
+        "id": "SP7049700",
+        "role": "COLLABORATOR"
+    },
+    "NebelNidas": {
+        "id": "SP48808497",
+        "role": "NONE (AUTHOR)"
+    },
+    "MichaelCurrin": {
+        "id": "SP18750745",
+        "role": "CONTRIBUTOR"
+    },
+    "nicknabdullah": {
+        "id": "SP13465486",
+        "role": "NONE (AUTHOR)"
+    },
+    "cinziaa": {
+        "id": "SP2600927",
+        "role": "NONE"
+    },
+    "nikolayval": {
+        "id": "SP61242764",
+        "role": "NONE (AUTHOR)"
+    },
+    "blainekasten": {
+        "id": "SP2916023",
+        "role": "CONTRIBUTOR"
+    },
+    "pvdz": {
+        "id": "SP209817",
+        "role": "CONTRIBUTOR"
+    },
+    "DSchau": {
+        "id": "SP3924690",
+        "role": "CONTRIBUTOR"
+    },
+    "nkkollaw": {
+        "id": "SP999994",
+        "role": "NONE (AUTHOR)"
+    },
+    "tyber-io": {
+        "id": "SP55183700",
+        "role": "NONE"
+    },
+    "brlebtag": {
+        "id": "SP7052344",
+        "role": "NONE"
+    },
+    "Noemata": {
+        "id": "SP6632315",
+        "role": "NONE (AUTHOR)"
+    },
+    "AArnott": {
+        "id": "SP3548",
+        "role": "MEMBER"
+    },
+    "MichalStrehovsky": {
+        "id": "SP13110571",
+        "role": "MEMBER"
+    },
+    "ORESoftware": {
+        "id": "SP11139560",
+        "role": "NONE (AUTHOR)"
+    },
+    "OtherCrashOverride": {
+        "id": "SP3499273",
+        "role": "NONE (AUTHOR)"
+    },
+    "omariom": {
+        "id": "SP1781701",
+        "role": "CONTRIBUTOR"
+    },
+    "linquize": {
+        "id": "SP791115",
+        "role": "CONTRIBUTOR"
+    },
+    "CrshOverride": {
+        "id": "SP791698",
+        "role": "NONE"
+    },
+    "outlace": {
+        "id": "SP3196399",
+        "role": "NONE (AUTHOR)"
+    },
+    "nmabhinandan": {
+        "id": "SP1548848",
+        "role": "NONE"
+    },
+    "ebrevdo": {
+        "id": "SP1794715",
+        "role": "CONTRIBUTOR"
+    },
+    "jamesliu96": {
+        "id": "SP2211002",
+        "role": "NONE"
+    },
+    "alexatknit": {
+        "id": "SP15474222",
+        "role": "NONE"
+    },
+    "dhess": {
+        "id": "SP2438",
+        "role": "NONE"
+    },
+    "gujunli": {
+        "id": "SP87486",
+        "role": "NONE"
+    },
+    "sasadep": {
+        "id": "SP6840238",
+        "role": "NONE"
+    },
+    "ankdesh": {
+        "id": "SP15871819",
+        "role": "NONE"
+    },
+    "lukeiwanski": {
+        "id": "SP8373795",
+        "role": "NONE"
+    },
+    "jszuppe": {
+        "id": "SP2720260",
+        "role": "NONE"
+    },
+    "ieee8023": {
+        "id": "SP446367",
+        "role": "NONE"
+    },
+    "armish": {
+        "id": "SP7809",
+        "role": "NONE"
+    },
+    "gongzg": {
+        "id": "SP782918",
+        "role": "NONE"
+    },
+    "ZirconCode": {
+        "id": "SP309379",
+        "role": "NONE"
+    },
+    "DanMcLaughlin": {
+        "id": "SP4943582",
+        "role": "NONE"
+    },
+    "martinwicke": {
+        "id": "SP577277",
+        "role": "MEMBER"
+    },
+    "MikalaiDrabovich": {
+        "id": "SP953399",
+        "role": "CONTRIBUTOR"
+    },
+    "hsaputra": {
+        "id": "SP105434",
+        "role": "CONTRIBUTOR"
+    },
+    "pakkpl": {
+        "id": "SP13785488",
+        "role": "NONE (AUTHOR)"
+    },
+    "ncrawlins": {
+        "id": "SP291462",
+        "role": "NONE"
+    },
+    "thecp": {
+        "id": "SP6319976",
+        "role": "CONTRIBUTOR"
+    },
+    "djleonskennedy": {
+        "id": "SP8366455",
+        "role": "NONE"
+    },
+    "Achilles1515": {
+        "id": "SP23387905",
+        "role": "NONE"
+    },
+    "robinbastien": {
+        "id": "SP2096859",
+        "role": "NONE"
+    },
+    "patelh": {
+        "id": "SP297178",
+        "role": "NONE (AUTHOR)"
+    },
+    "phpillet": {
+        "id": "SP16597878",
+        "role": "NONE"
+    },
+    "penn5": {
+        "id": "SP5600962",
+        "role": "NONE (AUTHOR)"
+    },
+    "vBlackOut": {
+        "id": "SP26262208",
+        "role": "NONE"
+    },
+    "caffeinatedMike": {
+        "id": "SP22151742",
+        "role": "NONE"
+    },
+    "fahhem": {
+        "id": "SP306100",
+        "role": "CONTRIBUTOR"
+    },
+    "shika-blyat": {
+        "id": "SP54486529",
+        "role": "NONE"
+    },
+    "phpnode": {
+        "id": "SP363611",
+        "role": "NONE (AUTHOR)"
+    },
+    "siziyman": {
+        "id": "SP6911540",
+        "role": "NONE"
+    },
+    "Porkechebure": {
+        "id": "SP3466040",
+        "role": "NONE (AUTHOR)"
+    },
+    "sarunint": {
+        "id": "SP3850197",
+        "role": "CONTRIBUTOR"
+    },
+    "petebacondarwin": {
+        "id": "SP15655",
+        "role": "MEMBER"
+    },
+    "fedebongio": {
+        "id": "SP3780986",
+        "role": "CONTRIBUTOR"
+    },
+    "powercode": {
+        "id": "SP3505151",
+        "role": "NONE (AUTHOR)"
+    },
+    "IISResetMe": {
+        "id": "SP7413755",
+        "role": "NONE"
+    },
+    "bitcrazed": {
+        "id": "SP961950",
+        "role": "CONTRIBUTOR"
+    },
+    "mixmastamyk": {
+        "id": "SP767039",
+        "role": "NONE"
+    },
+    "levicki": {
+        "id": "SP16415478",
+        "role": "NONE"
+    },
+    "prikhodkoalexey": {
+        "id": "SP36811399",
+        "role": "NONE (AUTHOR)"
+    },
+    "probonopd": {
+        "id": "SP2480569",
+        "role": "NONE (AUTHOR)"
+    },
+    "dansiegel": {
+        "id": "SP3860573",
+        "role": "CONTRIBUTOR"
+    },
+    "veggero": {
+        "id": "SP29999254",
+        "role": "NONE"
+    },
+    "IlyaBizyaev": {
+        "id": "SP11175213",
+        "role": "NONE"
+    },
+    "ptdave20": {
+        "id": "SP439874",
+        "role": "NONE"
+    },
+    "TheAssassin": {
+        "id": "SP4503202",
+        "role": "NONE"
+    },
+    "mirkobrombin": {
+        "id": "SP9479903",
+        "role": "NONE"
+    },
+    "UriHerrera": {
+        "id": "SP3053525",
+        "role": "NONE"
+    },
+    "Manueljlin": {
+        "id": "SP11275573",
+        "role": "NONE"
+    },
+    "boingo-00": {
+        "id": "SP10793815",
+        "role": "NONE"
+    },
+    "PrzemyslawPolrolniczak": {
+        "id": "SP24530850",
+        "role": "NONE (AUTHOR)"
+    },
+    "Vallek": {
+        "id": "SP22982571",
+        "role": "NONE"
+    },
+    "Segfaultd": {
+        "id": "SP5221072",
+        "role": "NONE"
+    },
+    "doylemark": {
+        "id": "SP39464373",
+        "role": "NONE"
+    },
+    "laurentb": {
+        "id": "SP65053",
+        "role": "NONE"
+    },
+    "quasis": {
+        "id": "SP35543887",
+        "role": "NONE (AUTHOR)"
+    },
+    "addaleax": {
+        "id": "SP899444",
+        "role": "MEMBER"
+    },
+    "othiym23": {
+        "id": "SP418097",
+        "role": "CONTRIBUTOR"
+    },
+    "joyeecheung": {
+        "id": "SP4299420",
+        "role": "MEMBER"
+    },
+    "r1k0": {
+        "id": "SP238676",
+        "role": "NONE (AUTHOR)"
+    },
+    "trishnaguha": {
+        "id": "SP13337039",
+        "role": "MEMBER"
+    },
+    "realtebo": {
+        "id": "SP1268699",
+        "role": "NONE (AUTHOR)"
+    },
+    "daviddarnes": {
+        "id": "SP1177460",
+        "role": "MEMBER"
+    },
+    "jpasholk": {
+        "id": "SP28698431",
+        "role": "CONTRIBUTOR"
+    },
+    "relrod": {
+        "id": "SP43930",
+        "role": "MEMBER (AUTHOR)"
+    },
+    "SophieDeBenedetto": {
+        "id": "SP8999596",
+        "role": "NONE"
+    },
+    "zxiiro": {
+        "id": "SP150177",
+        "role": "NONE"
+    },
+    "quhsi": {
+        "id": "SP66925589",
+        "role": "NONE"
+    },
+    "mikerev": {
+        "id": "SP10117960",
+        "role": "NONE"
+    },
+    "DWSR": {
+        "id": "SP11413",
+        "role": "NONE"
+    },
+    "RemusMar": {
+        "id": "SP11772787",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "looeee": {
+        "id": "SP5307958",
+        "role": "COLLABORATOR"
+    },
+    "pailhead": {
+        "id": "SP4681282",
+        "role": "CONTRIBUTOR"
+    },
+    "donmccurdy": {
+        "id": "SP1848368",
+        "role": "COLLABORATOR"
+    },
+    "reyjrar": {
+        "id": "SP99365",
+        "role": "NONE (AUTHOR)"
+    },
+    "MarSik": {
+        "id": "SP171090",
+        "role": "NONE"
+    },
+    "TonyApuzzo": {
+        "id": "SP341037",
+        "role": "NONE"
+    },
+    "ssbarnea": {
+        "id": "SP102495",
+        "role": "MEMBER"
+    },
+    "user140547": {
+        "id": "SP22767209",
+        "role": "NONE"
+    },
+    "watsonb": {
+        "id": "SP1863643",
+        "role": "NONE"
+    },
+    "gunbo13": {
+        "id": "SP23485244",
+        "role": "NONE"
+    },
+    "davedittrich": {
+        "id": "SP1874225",
+        "role": "NONE"
+    },
+    "DanyC97": {
+        "id": "SP7383422",
+        "role": "NONE"
+    },
+    "tonk": {
+        "id": "SP390197",
+        "role": "MEMBER"
+    },
+    "ivovangeel": {
+        "id": "SP17454073",
+        "role": "CONTRIBUTOR"
+    },
+    "SDerksen": {
+        "id": "SP6311058",
+        "role": "NONE"
+    },
+    "sebastiaanluca": {
+        "id": "SP711940",
+        "role": "NONE"
+    },
+    "rfjschutte": {
+        "id": "SP30902622",
+        "role": "NONE"
+    },
+    "amarao": {
+        "id": "SP652496",
+        "role": "NONE"
+    },
+    "brotaxt": {
+        "id": "SP25477935",
+        "role": "NONE"
+    },
+    "Kriechi": {
+        "id": "SP114300",
+        "role": "NONE"
+    },
+    "decet": {
+        "id": "SP45837141",
+        "role": "NONE"
+    },
+    "rocnogu": {
+        "id": "SP22155288",
+        "role": "NONE (AUTHOR)"
+    },
+    "lasjorg": {
+        "id": "SP28780271",
+        "role": "CONTRIBUTOR"
+    },
+    "ryanolsonx": {
+        "id": "SP238929",
+        "role": "NONE (AUTHOR)"
+    },
+    "OfficerHalf": {
+        "id": "SP4851889",
+        "role": "NONE"
+    },
+    "gitDylanHub": {
+        "id": "SP6307474",
+        "role": "NONE"
+    },
+    "abmagil": {
+        "id": "SP2807766",
+        "role": "NONE"
+    },
+    "maddes": {
+        "id": "SP1455722",
+        "role": "NONE"
+    },
+    "mcleary": {
+        "id": "SP1537712",
+        "role": "NONE"
+    },
+    "LouieK22": {
+        "id": "SP10765258",
+        "role": "NONE"
+    },
+    "alvarofelipe12": {
+        "id": "SP14237692",
+        "role": "NONE"
+    },
+    "scragly": {
+        "id": "SP29337040",
+        "role": "NONE"
+    },
+    "SaintPeter": {
+        "id": "SP553494",
+        "role": "MEMBER (AUTHOR)"
+    },
+    "Maarondesigns": {
+        "id": "SP40376601",
+        "role": "NONE"
+    },
+    "RenaudGagne": {
+        "id": "SP14856170",
+        "role": "NONE"
+    },
+    "nathanhannig": {
+        "id": "SP8210763",
+        "role": "MEMBER"
+    },
+    "quinn-codes-synthesis": {
+        "id": "SP39616456",
+        "role": "CONTRIBUTOR"
+    },
+    "chiliphrosting": {
+        "id": "SP43098131",
+        "role": "NONE"
+    },
+    "kunzler": {
+        "id": "SP21000400",
+        "role": "NONE"
+    },
+    "75cent": {
+        "id": "SP17366195",
+        "role": "NONE"
+    },
+    "Darrenliiu": {
+        "id": "SP6634256",
+        "role": "NONE"
+    },
+    "afefdrissi": {
+        "id": "SP44037676",
+        "role": "NONE"
+    },
+    "ziaongit": {
+        "id": "SP6294965",
+        "role": "NONE"
+    },
+    "tommyprevatt": {
+        "id": "SP35042471",
+        "role": "NONE"
+    },
+    "scissorsneedfoodtoo": {
+        "id": "SP2051070",
+        "role": "CONTRIBUTOR"
+    },
+    "bartlomiej-przymus": {
+        "id": "SP43916409",
+        "role": "NONE"
+    },
+    "chrisdel101": {
+        "id": "SP14151974",
+        "role": "CONTRIBUTOR"
+    },
+    "MoonCWang": {
+        "id": "SP43686956",
+        "role": "NONE"
+    },
+    "Mr-Henderson": {
+        "id": "SP25509838",
+        "role": "NONE"
+    },
+    "imburtonh": {
+        "id": "SP48323657",
+        "role": "NONE"
+    },
+    "IssamAth": {
+        "id": "SP49134454",
+        "role": "NONE"
+    },
+    "salar90": {
+        "id": "SP13432626",
+        "role": "NONE (AUTHOR)"
+    },
+    "ebraminio": {
+        "id": "SP833473",
+        "role": "NONE"
+    },
+    "mohataher": {
+        "id": "SP1592974",
+        "role": "NONE"
+    },
+    "Majidkn": {
+        "id": "SP5641425",
+        "role": "NONE"
+    },
+    "AbdelrahmanHafez": {
+        "id": "SP19984935",
+        "role": "NONE"
+    },
+    "abumalick": {
+        "id": "SP8377185",
+        "role": "NONE"
+    },
+    "cben": {
+        "id": "SP273688",
+        "role": "NONE"
+    },
+    "timwienk": {
+        "id": "SP150598",
+        "role": "NONE"
+    },
+    "amraei": {
+        "id": "SP3328211",
+        "role": "NONE"
+    },
+    "jalal246": {
+        "id": "SP19228730",
+        "role": "NONE"
+    },
+    "mostafamemariani": {
+        "id": "SP6501140",
+        "role": "NONE"
+    },
+    "yeganemehr": {
+        "id": "SP16887332",
+        "role": "NONE"
+    },
+    "Canon0223": {
+        "id": "SP11720735",
+        "role": "NONE"
+    },
+    "WISTFUL12": {
+        "id": "SP14325414",
+        "role": "NONE"
+    },
+    "lajmikhalil": {
+        "id": "SP9424637",
+        "role": "NONE"
+    },
+    "iamsoorena": {
+        "id": "SP15319886",
+        "role": "NONE"
+    },
+    "amandle": {
+        "id": "SP879468",
+        "role": "CONTRIBUTOR"
+    },
+    "nikahmadz": {
+        "id": "SP7868782",
+        "role": "NONE"
+    },
+    "maillouxc": {
+        "id": "SP12475394",
+        "role": "NONE"
+    },
+    "TeunVR": {
+        "id": "SP69744",
+        "role": "NONE"
+    },
+    "jackz314": {
+        "id": "SP18280101",
+        "role": "NONE"
+    },
+    "Heldenkrieger01": {
+        "id": "SP6423282",
+        "role": "NONE"
+    },
+    "katowulf": {
+        "id": "SP959972",
+        "role": "NONE"
+    },
+    "shengxinjing": {
+        "id": "SP1905176",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "facebook-github-bot": {
+        "id": "SP6422482",
+        "role": "NONE"
+    },
+    "codesandbox-ci[bot]": {
+        "id": "SP54081388",
+        "role": "NONE"
+    },
+    "pingfengafei": {
+        "id": "SP6243826",
+        "role": "NONE"
+    },
+    "vsTianhao": {
+        "id": "SP32083528",
+        "role": "NONE"
+    },
+    "acdlite": {
+        "id": "SP3624098",
+        "role": "COLLABORATOR"
+    },
+    "SIkebe": {
+        "id": "SP17608272",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "blowdart": {
+        "id": "SP796298",
+        "role": "CONTRIBUTOR"
+    },
+    "Aaronontheweb": {
+        "id": "SP326939",
+        "role": "NONE"
+    },
+    "weedkiller": {
+        "id": "SP21086190",
+        "role": "NONE"
+    },
+    "isaacabraham": {
+        "id": "SP1781813",
+        "role": "NONE"
+    },
+    "citizenmatt": {
+        "id": "SP222659",
+        "role": "NONE"
+    },
+    "hhariri": {
+        "id": "SP108107",
+        "role": "NONE"
+    },
+    "bladefist": {
+        "id": "SP1520456",
+        "role": "NONE"
+    },
+    "adamhathcock": {
+        "id": "SP527620",
+        "role": "NONE"
+    },
+    "pollumi": {
+        "id": "SP72297387",
+        "role": "NONE"
+    },
+    "robertwt7": {
+        "id": "SP15647967",
+        "role": "NONE"
+    },
+    "jbogard": {
+        "id": "SP104498",
+        "role": "CONTRIBUTOR"
+    },
+    "leastprivilege": {
+        "id": "SP1454075",
+        "role": "CONTRIBUTOR"
+    },
+    "HassanHashemi": {
+        "id": "SP6805984",
+        "role": "CONTRIBUTOR"
+    },
+    "poke": {
+        "id": "SP132240",
+        "role": "CONTRIBUTOR"
+    },
+    "clooge": {
+        "id": "SP746722",
+        "role": "NONE"
+    },
+    "hallidev": {
+        "id": "SP16142069",
+        "role": "NONE"
+    },
+    "Skoti": {
+        "id": "SP1700160",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "fastlane-bot": {
+        "id": "SP17056452",
+        "role": "NONE"
+    },
+    "janpio": {
+        "id": "SP183673",
+        "role": "MEMBER"
+    },
+    "revolter": {
+        "id": "SP5748627",
+        "role": "COLLABORATOR"
+    },
+    "KrauseFx": {
+        "id": "SP869950",
+        "role": "MEMBER"
+    },
+    "sneak": {
+        "id": "SP408977",
+        "role": "NONE (AUTHOR)"
+    },
+    "Arcanemagus": {
+        "id": "SP427137",
+        "role": "CONTRIBUTOR"
+    },
+    "ryanisnan": {
+        "id": "SP504281",
+        "role": "NONE"
+    },
+    "blordpluto": {
+        "id": "SP56004345",
+        "role": "NONE"
+    },
+    "neilpanchal": {
+        "id": "SP8161031",
+        "role": "NONE"
+    },
+    "spkane": {
+        "id": "SP129629",
+        "role": "NONE (AUTHOR)"
+    },
+    "sethvargo": {
+        "id": "SP408570",
+        "role": "CONTRIBUTOR"
+    },
+    "keeprock": {
+        "id": "SP5209820",
+        "role": "NONE"
+    },
+    "karlkfi": {
+        "id": "SP3980984",
+        "role": "NONE"
+    },
+    "clakeb": {
+        "id": "SP1070185",
+        "role": "NONE"
+    },
+    "milhaus": {
+        "id": "SP660997",
+        "role": "NONE"
+    },
+    "tehmaspc": {
+        "id": "SP398237",
+        "role": "NONE"
+    },
+    "JasonTheAdams": {
+        "id": "SP2024145",
+        "role": "NONE"
+    },
+    "winni2k": {
+        "id": "SP304958",
+        "role": "NONE"
+    },
+    "k1ng440": {
+        "id": "SP3443226",
+        "role": "NONE"
+    },
+    "richard-scott": {
+        "id": "SP5149834",
+        "role": "NONE"
+    },
+    "faddat": {
+        "id": "SP7142025",
+        "role": "NONE"
+    },
+    "darkn3rd": {
+        "id": "SP7537882",
+        "role": "NONE"
+    },
+    "PorterBytes": {
+        "id": "SP1664812",
+        "role": "NONE"
+    },
+    "briancline": {
+        "id": "SP32032",
+        "role": "NONE"
+    },
+    "Haroenv": {
+        "id": "SP6270048",
+        "role": "NONE"
+    },
+    "dacodekid": {
+        "id": "SP10047844",
+        "role": "NONE"
+    },
+    "brazitech": {
+        "id": "SP6499340",
+        "role": "NONE"
+    },
+    "AckerApple": {
+        "id": "SP7964429",
+        "role": "NONE"
+    },
+    "sod": {
+        "id": "SP905328",
+        "role": "CONTRIBUTOR"
+    },
+    "AlexDaSoul": {
+        "id": "SP1850022",
+        "role": "NONE"
+    },
+    "StephenFluin": {
+        "id": "SP165056",
+        "role": "CONTRIBUTOR"
+    },
+    "jotatoledo": {
+        "id": "SP20740204",
+        "role": "CONTRIBUTOR"
+    },
+    "andremarcondesteixeira": {
+        "id": "SP4294962",
+        "role": "NONE"
+    },
+    "taoso": {
+        "id": "SP2030591",
+        "role": "NONE (AUTHOR)"
+    },
+    "nickspoons": {
+        "id": "SP5274565",
+        "role": "NONE"
+    },
+    "k-takata": {
+        "id": "SP840186",
+        "role": "MEMBER"
+    },
+    "trusktr": {
+        "id": "SP297678",
+        "role": "NONE"
+    },
+    "chrisbra": {
+        "id": "SP244927",
+        "role": "MEMBER"
+    },
+    "Shane-XB-Qian": {
+        "id": "SP13550529",
+        "role": "CONTRIBUTOR"
+    },
+    "felipec": {
+        "id": "SP8358",
+        "role": "NONE"
+    },
+    "vim-ml": {
+        "id": "SP11653528",
+        "role": "NONE"
+    },
+    "aguatno": {
+        "id": "SP56451054",
+        "role": "NONE"
+    },
+    "schmidt-sebastian": {
+        "id": "SP19397744",
+        "role": "CONTRIBUTOR"
+    },
+    "augusto-nc": {
+        "id": "SP16231546",
+        "role": "NONE"
+    },
+    "honorianos": {
+        "id": "SP38480730",
+        "role": "NONE"
+    },
+    "derrickrc": {
+        "id": "SP46724607",
+        "role": "NONE"
+    },
+    "korva": {
+        "id": "SP1794792",
+        "role": "NONE"
+    },
+    "giovanny1307": {
+        "id": "SP12603675",
+        "role": "NONE"
+    },
+    "The-Fireplace": {
+        "id": "SP5914284",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "thesmalleyes": {
+        "id": "SP32892647",
+        "role": "NONE (AUTHOR)"
+    },
+    "jason-simmons": {
+        "id": "SP14226037",
+        "role": "MEMBER"
+    },
+    "tvolkert": {
+        "id": "SP15253456",
+        "role": "CONTRIBUTOR"
+    },
+    "timsneath": {
+        "id": "SP2319867",
+        "role": "MEMBER"
+    },
+    "blasten": {
+        "id": "SP1410613",
+        "role": "NONE"
+    },
+    "ajinasokan": {
+        "id": "SP10473719",
+        "role": "NONE"
+    },
+    "bpillon": {
+        "id": "SP1941660",
+        "role": "NONE"
+    },
+    "gofur": {
+        "id": "SP2025287",
+        "role": "NONE"
+    },
+    "HeorhiiKhrushch": {
+        "id": "SP23216320",
+        "role": "NONE"
+    },
+    "psovit": {
+        "id": "SP10192997",
+        "role": "NONE"
+    },
+    "codxse": {
+        "id": "SP5813694",
+        "role": "NONE"
+    },
+    "sroddy": {
+        "id": "SP729934",
+        "role": "CONTRIBUTOR"
+    },
+    "carljbowman": {
+        "id": "SP3409578",
+        "role": "NONE"
+    },
+    "tifDev": {
+        "id": "SP39730484",
+        "role": "NONE (AUTHOR)"
+    },
+    "vscode-triage-bot": {
+        "id": "SP62039782",
+        "role": "NONE"
+    },
+    "Tyriar": {
+        "id": "SP2193314",
+        "role": "MEMBER"
+    },
+    "phil-opp": {
+        "id": "SP1131315",
+        "role": "NONE"
+    },
+    "tn": {
+        "id": "SP6479637",
+        "role": "NONE (AUTHOR)"
+    },
+    "CoachGodzup": {
+        "id": "SP1683048",
+        "role": "NONE"
+    },
+    "tom-adsfund": {
+        "id": "SP3634745",
+        "role": "NONE (AUTHOR)"
+    },
+    "raver119": {
+        "id": "SP12250879",
+        "role": "CONTRIBUTOR"
+    },
+    "agibsonccc": {
+        "id": "SP1144306",
+        "role": "CONTRIBUTOR"
+    },
+    "AlexDBlack": {
+        "id": "SP2360237",
+        "role": "CONTRIBUTOR"
+    },
+    "saudet": {
+        "id": "SP3328023",
+        "role": "CONTRIBUTOR"
+    },
+    "tovine": {
+        "id": "SP8265757",
+        "role": "NONE (AUTHOR)"
+    },
+    "mg-christian-axelsson": {
+        "id": "SP55701070",
+        "role": "NONE"
+    },
+    "int3l": {
+        "id": "SP1278836",
+        "role": "NONE"
+    },
+    "CaptFrankSolo": {
+        "id": "SP30556883",
+        "role": "NONE"
+    },
+    "emusgrave": {
+        "id": "SP11773297",
+        "role": "NONE"
+    },
+    "sba923": {
+        "id": "SP12860484",
+        "role": "NONE"
+    },
+    "jsejcksn": {
+        "id": "SP868251",
+        "role": "NONE"
+    },
+    "RowdyChildren": {
+        "id": "SP6248391",
+        "role": "MEMBER"
+    },
+    "aaroneg": {
+        "id": "SP1396671",
+        "role": "NONE"
+    },
+    "trivikr": {
+        "id": "SP16024985",
+        "role": "MEMBER (AUTHOR)"
+    },
+    "devsnek": {
+        "id": "SP5952481",
+        "role": "MEMBER"
+    },
+    "ronag": {
+        "id": "SP3065230",
+        "role": "MEMBER"
+    },
+    "Gallardo994": {
+        "id": "SP7792608",
+        "role": "NONE"
+    },
+    "benjamingr": {
+        "id": "SP1315533",
+        "role": "MEMBER"
+    },
+    "MylesBorins": {
+        "id": "SP498775",
+        "role": "MEMBER"
+    },
+    "AshCripps": {
+        "id": "SP26796102",
+        "role": "MEMBER"
+    },
+    "ARitz-Cracker": {
+        "id": "SP5233816",
+        "role": "NONE"
+    },
+    "mscdex": {
+        "id": "SP54666",
+        "role": "CONTRIBUTOR"
+    },
+    "gabrieledarrigo": {
+        "id": "SP1985555",
+        "role": "NONE"
+    },
+    "gireeshpunathil": {
+        "id": "SP6447530",
+        "role": "MEMBER"
+    },
+    "uncleramsay": {
+        "id": "SP10271207",
+        "role": "NONE (AUTHOR)"
+    },
+    "tkissing-work": {
+        "id": "SP29962557",
+        "role": "NONE"
+    },
+    "mlavina": {
+        "id": "SP5084505",
+        "role": "CONTRIBUTOR"
+    },
+    "varun-av": {
+        "id": "SP66850243",
+        "role": "NONE (AUTHOR)"
+    },
+    "gkalpak": {
+        "id": "SP8604205",
+        "role": "MEMBER"
+    },
+    "veganaize": {
+        "id": "SP7102064",
+        "role": "NONE (AUTHOR)"
+    },
+    "dimo414": {
+        "id": "SP1885701",
+        "role": "CONTRIBUTOR"
+    },
+    "votdev": {
+        "id": "SP1897962",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "the-Arioch": {
+        "id": "SP937774",
+        "role": "NONE"
+    },
+    "vsfeedback": {
+        "id": "SP32854332",
+        "role": "NONE (AUTHOR)"
+    },
+    "jcoutch": {
+        "id": "SP386545",
+        "role": "NONE"
+    },
+    "FlorianHaupt": {
+        "id": "SP18165738",
+        "role": "NONE"
+    },
+    "elliott-beach": {
+        "id": "SP13651458",
+        "role": "NONE"
+    },
+    "sharwell": {
+        "id": "SP1408396",
+        "role": "MEMBER"
+    },
+    "kendrahavens": {
+        "id": "SP8293542",
+        "role": "CONTRIBUTOR"
+    },
+    "Edgs": {
+        "id": "SP10948591",
+        "role": "NONE"
+    },
+    "jinujoseph": {
+        "id": "SP12449387",
+        "role": "CONTRIBUTOR"
+    },
+    "verelpode": {
+        "id": "SP32857007",
+        "role": "NONE"
+    },
+    "dibarbet": {
+        "id": "SP5749229",
+        "role": "MEMBER"
+    },
+    "HappyNomad": {
+        "id": "SP3721251",
+        "role": "NONE"
+    },
+    "jcouv": {
+        "id": "SP12466233",
+        "role": "MEMBER"
+    },
+    "WangJincheng4869": {
+        "id": "SP41162158",
+        "role": "NONE (AUTHOR)"
+    },
+    "skyline75489": {
+        "id": "SP4710575",
+        "role": "COLLABORATOR"
+    },
+    "castiel652": {
+        "id": "SP14009719",
+        "role": "NONE"
+    },
+    "yhmtsai": {
+        "id": "SP19565938",
+        "role": "NONE"
+    },
+    "KeyuanHuang": {
+        "id": "SP60381489",
+        "role": "NONE"
+    },
+    "whytewolf": {
+        "id": "SP1143644",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "gtmanfred": {
+        "id": "SP732321",
+        "role": "CONTRIBUTOR"
+    },
+    "rhaig": {
+        "id": "SP4682646",
+        "role": "NONE"
+    },
+    "worl4125": {
+        "id": "SP19894000",
+        "role": "NONE (AUTHOR)"
+    },
+    "LuosRestil": {
+        "id": "SP52840821",
+        "role": "NONE"
+    },
+    "mikehaart": {
+        "id": "SP17619758",
+        "role": "NONE"
+    },
+    "WrongBit": {
+        "id": "SP15650524",
+        "role": "NONE (AUTHOR)"
+    },
+    "mdtauk": {
+        "id": "SP7389110",
+        "role": "CONTRIBUTOR"
+    },
+    "kmgallahan": {
+        "id": "SP5379488",
+        "role": "CONTRIBUTOR"
+    },
+    "maxkatz6": {
+        "id": "SP3163374",
+        "role": "CONTRIBUTOR"
+    },
+    "jevansaks": {
+        "id": "SP20667023",
+        "role": "MEMBER"
+    },
+    "x1024": {
+        "id": "SP113459",
+        "role": "NONE (AUTHOR)"
+    },
+    "robertodormepoco": {
+        "id": "SP1553083",
+        "role": "NONE"
+    },
+    "pietrodellanotte": {
+        "id": "SP54886974",
+        "role": "NONE"
+    },
+    "Xispeo": {
+        "id": "SP31275185",
+        "role": "NONE (AUTHOR)"
+    },
+    "StephenHodgson": {
+        "id": "SP13334553",
+        "role": "CONTRIBUTOR"
+    },
+    "TinyTangS": {
+        "id": "SP28380770",
+        "role": "NONE"
+    },
+    "SinSeitan": {
+        "id": "SP33959610",
+        "role": "NONE"
+    },
+    "Yara-smurf": {
+        "id": "SP65908293",
+        "role": "NONE (AUTHOR)"
+    },
+    "PunkPun": {
+        "id": "SP37534529",
+        "role": "MEMBER"
+    },
+    "pchote": {
+        "id": "SP167819",
+        "role": "MEMBER"
+    },
+    "netnazgul": {
+        "id": "SP1614714",
+        "role": "CONTRIBUTOR"
+    },
+    "dragunoff": {
+        "id": "SP1355810",
+        "role": "CONTRIBUTOR"
+    },
+    "abcdefg30": {
+        "id": "SP7704140",
+        "role": "MEMBER"
+    },
+    "Mailaender": {
+        "id": "SP756669",
+        "role": "MEMBER"
+    },
+    "MlemandPurrs": {
+        "id": "SP48881353",
+        "role": "NONE"
+    },
+    "deleted-user-1": {
+        "id": "SP59416324",
+        "role": "CONTRIBUTOR"
+    },
+    "youfeed": {
+        "id": "SP22223510",
+        "role": "NONE (AUTHOR)"
+    },
+    "Abhishek01039": {
+        "id": "SP56479665",
+        "role": "CONTRIBUTOR"
+    },
+    "cbracken": {
+        "id": "SP351029",
+        "role": "MEMBER"
+    },
+    "zerocarbthirty": {
+        "id": "SP16668354",
+        "role": "NONE (AUTHOR)"
+    },
+    "bill-long": {
+        "id": "SP4518572",
+        "role": "MEMBER"
+    }
+}

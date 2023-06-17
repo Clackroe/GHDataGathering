@@ -1,0 +1,58 @@
+{
+    "kevinburke": {
+        "id": "SP234019",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "venilnoronha": {
+        "id": "SP1722758",
+        "role": "CONTRIBUTOR"
+    },
+    "techmexdev": {
+        "id": "SP10700721",
+        "role": "CONTRIBUTOR"
+    },
+    "ianzapolsky": {
+        "id": "SP1755679",
+        "role": "CONTRIBUTOR"
+    },
+    "drewvanstone": {
+        "id": "SP811297",
+        "role": "CONTRIBUTOR"
+    },
+    "waits": {
+        "id": "SP972475",
+        "role": "CONTRIBUTOR"
+    },
+    "MaerF0x0": {
+        "id": "SP247846",
+        "role": "NONE"
+    },
+    "gopherbot": {
+        "id": "SP8566911",
+        "role": "NONE"
+    },
+    "mfrw": {
+        "id": "SP4929861",
+        "role": "CONTRIBUTOR"
+    },
+    "andriisoldatenko": {
+        "id": "SP1374633",
+        "role": "CONTRIBUTOR"
+    },
+    "wfernandes": {
+        "id": "SP2303039",
+        "role": "CONTRIBUTOR"
+    },
+    "robpike": {
+        "id": "SP4324516",
+        "role": "CONTRIBUTOR"
+    },
+    "bmeh": {
+        "id": "SP35892409",
+        "role": "NONE"
+    },
+    "ianlancetaylor": {
+        "id": "SP3194333",
+        "role": "CONTRIBUTOR"
+    }
+}

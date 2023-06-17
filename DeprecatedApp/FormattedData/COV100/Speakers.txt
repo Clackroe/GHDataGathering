@@ -1,0 +1,9 @@
+SP11559216 +++$+++ MartijnCuppens +++$+++ MEMBER (AUTHOR)
+SP98681 +++$+++ mdo +++$+++ MEMBER
+SP4595477 +++$+++ wolfy1339 +++$+++ CONTRIBUTOR
+SP895831 +++$+++ patrickhlauke +++$+++ MEMBER
+SP2290081 +++$+++ vladimirmartsul +++$+++ NONE
+SP1832037 +++$+++ andresgalante +++$+++ COLLABORATOR
+SP349621 +++$+++ XhmikosR +++$+++ MEMBER
+SP216426 +++$+++ planetoftheweb +++$+++ CONTRIBUTOR
+SP7368063 +++$+++ weilinzung +++$+++ NONE

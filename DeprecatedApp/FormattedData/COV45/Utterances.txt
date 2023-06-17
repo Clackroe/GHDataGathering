@@ -1,0 +1,24 @@
+ROOT +++$+++ SP2838551 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-01-29T16:42:45Z +++$+++ Rename "taint" to something less vulgar **What would you like to be added**:
+Rename "taint" to something less vulgar.
+
+**Why is this needed**:
+In common English, a taint is an area in the nether regions of the human body. This makes discussing Kubernetes "taints" very difficult in a professional or public setting, especially if anyone who doesn't already know of Kubernetes "taints" is present.
+
+We should rename "taint" to be either "perineum", the official name for the taint, or something more fitting like "restriction" or "stigma." +++$+++ 1 +++$+++ 0
+COM0 +++$+++ SP2838551 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-01-29T16:51:08Z +++$+++ /sig docs +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP331852 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-01-29T20:48:43Z +++$+++ it might be too late for this one, without breaking thousands of users.
+but "taint" in general is already used in computing and i don't think many people have a problem with that.
+
+/sig architecture node
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP2838551 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-01-29T23:57:10Z +++$+++ I don't agree with that rationale. I think we can all agree that we should avoid using vulgarities in our code, documentation, and general professional communication. Regardless of whether or not the word was once accepted in computation, it is now a common vulgarity. Therefore, we should move away from it. Doing so will only increase the appeal of Kubernetes by making it appear more mature and forward thinking. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP1163175 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-01-30T00:38:43Z +++$+++ Thanks for the feedback.  Since these issues historically attract a lot of unhelpful arguments and attacks in the threads, I'm going to lock this issue for now and when we add this to sig-architecture agenda I'll update with details for discussion there. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP1163175 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-01-30T18:36:43Z +++$+++ I'll bring this up at the sig-arch meeting today, however as neolit noted 
+
+* our API guarantees prevent these sorts of renames on short time scales (we might introduce a new name, but the old name would be preserved effectively for the rest of the v1 lifetime)
+* the term is well established in both having common descriptive usage (outside of the less-common vulgar usage)
+
+so I think it's unlikely we would change this.  Will update after the meeting. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP169553 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-01-30T19:07:28Z +++$+++ I'm opposed to the change at this stage due to the overall impact it would have, there is plenty of history and literature that does not pertain to the urban-dictionary definition.  +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP980082 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-01-30T19:14:36Z +++$+++ Agreed. A rename at this point is not practical due to API compatibility guarantees, and the term as used corresponds to the legitimate and inoffensive definition of the word. +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP169553 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-01-30T19:16:37Z +++$+++ We discussed this issue on the SIG-arch call of 20200130, and have unanimously agreed that we will keep the current naming for the aforementioned reasons.  +++$+++ 0 +++$+++ 0

@@ -1,0 +1,13 @@
+SP692635 +++$+++ IainNZ +++$+++ MEMBER (AUTHOR)
+SP11729078 +++$+++ jekbradbury +++$+++ CONTRIBUTOR
+SP1282691 +++$+++ KristofferC +++$+++ MEMBER
+SP153596 +++$+++ StefanKarpinski +++$+++ MEMBER
+SP6333339 +++$+++ piever +++$+++ CONTRIBUTOR
+SP1733683 +++$+++ mlubin +++$+++ MEMBER
+SP6000188 +++$+++ rickhg12hs +++$+++ CONTRIBUTOR
+SP1814174 +++$+++ ChrisRackauckas +++$+++ MEMBER
+SP11379353 +++$+++ ExpandingMan +++$+++ CONTRIBUTOR
+SP2913679 +++$+++ stevengj +++$+++ MEMBER
+SP744556 +++$+++ JeffBezanson +++$+++ MEMBER
+SP4098145 +++$+++ mauro3 +++$+++ CONTRIBUTOR
+SP1260244 +++$+++ dawbarton +++$+++ NONE

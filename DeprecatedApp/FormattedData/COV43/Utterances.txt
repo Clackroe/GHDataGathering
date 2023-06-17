@@ -1,0 +1,163 @@
+ROOT +++$+++ SP12867714 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-09-17T02:27:28Z +++$+++ add http2 health check for SetTransportDefaults Signed-off-by: duyanghao <1294057873@qq.com>
+
+**What type of PR is this?**
+/kind bug
+
+**What this PR does / why we need it**:
+
+Fixes [Client should expose a mechanism to close underlying TCP connections](https://github.com/kubernetes/client-go/issues/374).
+
+This PR should be merged after [add http2 health check parameters for ConfigureTransport](https://github.com/golang/net/pull/84) merged. +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP20407524 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-09-17T02:27:29Z +++$+++ @duyanghao: Adding the "do-not-merge/release-note-label-needed" label because no release-note block was detected, please follow our [release note process](https://git.k8s.io/community/contributors/guide/release-notes.md) to remove it.
+
+<details>
+
+Instructions for interacting with me using PR comments are available [here](https://git.k8s.io/community/contributors/guide/pull-requests.md).  If you have questions or suggestions related to my behavior, please file an issue against the [kubernetes/test-infra](https://github.com/kubernetes/test-infra/issues/new?title=Prow%20issue:) repository.
+</details> +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP20407524 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-09-17T02:27:36Z +++$+++ Hi @duyanghao. Thanks for your PR.
+
+I'm waiting for a [kubernetes](https://github.com/orgs/kubernetes/people) member to verify that this patch is reasonable to test. If it is, they should reply with `/ok-to-test` on its own line. Until that is done, I will not automatically test new commits in this PR, but the usual testing commands by org members will still work. Regular contributors should [join the org](https://git.k8s.io/community/community-membership.md#member) to skip this step.
+
+Once the patch is verified, the new status will be reflected by the `ok-to-test` label.
+
+I understand the commands that are listed [here](https://go.k8s.io/bot-commands?repo=kubernetes%2Fkubernetes).
+
+<details>
+
+Instructions for interacting with me using PR comments are available [here](https://git.k8s.io/community/contributors/guide/pull-requests.md).  If you have questions or suggestions related to my behavior, please file an issue against the [kubernetes/test-infra](https://github.com/kubernetes/test-infra/issues/new?title=Prow%20issue:) repository.
+</details>
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP12867714 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-09-17T02:30:35Z +++$+++ /assign @caesarxuchao +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP647318 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-09-17T15:34:53Z +++$+++ /ok-to-test
+/approve
+/lgtm +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP13084624 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-09-17T15:42:35Z +++$+++ /retest +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP12867714 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-09-18T03:20:28Z +++$+++ @lavalamp This PR requires [add http2 health check parameters for ConfigureTransport](https://github.com/golang/net/pull/84) merged, and I'm doing this currently. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP6450081 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-09-21T11:56:48Z +++$+++ /cc +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP10608509 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-09-22T06:29:58Z +++$+++ /cc +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP28776356 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-10-27T07:28:05Z +++$+++ Looks like it should be based on this change in golang. https://github.com/golang/net/commit/08b38378de702b893ee869b94b32f833e2933bd2 +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP20407524 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-10-27T08:41:18Z +++$+++ New changes are detected. LGTM label has been removed. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP20407524 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-10-27T08:46:38Z +++$+++ @duyanghao: Adding label `do-not-merge/contains-merge-commits` because PR contains merge commits, which are not allowed in this repository.
+Use `git rebase` to reapply your commits on top of the target branch. Detailed instructions for doing so can be found [here](https://git.k8s.io/community/contributors/guide/github-workflow.md#4-keep-your-branch-in-sync).
+
+<details>
+
+Instructions for interacting with me using PR comments are available [here](https://git.k8s.io/community/contributors/guide/pull-requests.md).  If you have questions or suggestions related to my behavior, please file an issue against the [kubernetes/test-infra](https://github.com/kubernetes/test-infra/issues/new?title=Prow%20issue:) repository.
+</details> +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP12867714 +++$+++ ROOT +++$+++ COM10 +++$+++ 2020-10-27T08:47:30Z +++$+++ > Looks like it should be based on this change in golang. [golang/net@08b3837](https://github.com/golang/net/commit/08b38378de702b893ee869b94b32f833e2933bd2)
+
+Yeah, I have update this PR using the latest http2.ConfigureTransports method. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP12867714 +++$+++ ROOT +++$+++ COM11 +++$+++ 2020-10-27T08:49:20Z +++$+++ /retest +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP6450081 +++$+++ ROOT +++$+++ COM12 +++$+++ 2020-10-27T09:13:02Z +++$+++ @duyanghao have you run `hack/update-vendor.sh`? +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP12867714 +++$+++ ROOT +++$+++ COM13 +++$+++ 2020-10-27T09:34:41Z +++$+++ > @duyanghao have you run `hack/update-vendor.sh`?
+
+Not yet, I will have a try. +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP20407524 +++$+++ ROOT +++$+++ COM14 +++$+++ 2020-10-27T09:40:40Z +++$+++ [APPROVALNOTIFIER] This PR is **APPROVED**
+
+This pull-request has been approved by: *<a href="https://github.com/kubernetes/kubernetes/pull/94844#" title="Author self-approved">duyanghao</a>*, *<a href="https://github.com/kubernetes/kubernetes/pull/94844#issuecomment-694316787" title="LGTM">lavalamp</a>*
+
+The full list of commands accepted by this bot can be found [here](https://go.k8s.io/bot-commands?repo=kubernetes%2Fkubernetes).
+
+The pull request process is described [here](https://git.k8s.io/community/contributors/guide/owners.md#the-code-review-process)
+
+<details >
+Needs approval from an approver in each of these files:
+
+- ~~[OWNERS](https://github.com/kubernetes/kubernetes/blob/master/OWNERS)~~ [lavalamp]
+- ~~[staging/src/k8s.io/api/OWNERS](https://github.com/kubernetes/kubernetes/blob/master/staging/src/k8s.io/api/OWNERS)~~ [lavalamp]
+
+Approvers can indicate their approval by writing `/approve` in a comment
+Approvers can cancel approval by writing `/approve cancel` in a comment
+</details>
+<!-- META={"approvers":[]} --> +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP6450081 +++$+++ ROOT +++$+++ COM15 +++$+++ 2020-10-27T09:48:20Z +++$+++ @duyanghao can you squash all the commits please? +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP6450081 +++$+++ ROOT +++$+++ COM16 +++$+++ 2020-10-27T09:50:19Z +++$+++ it also fails with the following error
+```
+Vendor Verify failed.
+If you're seeing this locally, run the below command to fix your directories:
+hack/update-vendor.sh
+These modules are pinned to versions different than the minimal preferred version.
+That means that without replace directives, a different version would be selected,
+which breaks consumers of our published modules.
+1. Use hack/pin-dependency.sh to switch to the preferred version for each module
+2. Run hack/update-vendor.sh to rebuild the vendor directory
+3. Run hack/lint-dependencies.sh to verify no additional changes are required
+
+golang.org/x/sys
+    pinned:    v0.0.0-20200622214017-ed371f2e16b4
+    preferred: v0.0.0-20200930185726-fdedc70b468f
+    hack/pin-dependency.sh golang.org/x/sys v0.0.0-20200930185726-fdedc70b468f
+All pinned versions of checked dependencies match their preferred version.
+```
+you can check it in the `pull-kubernetes-dependencies` , I think that you can run `make verify` local to verify it +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP23304 +++$+++ ROOT +++$+++ COM17 +++$+++ 2020-10-27T10:47:07Z +++$+++ /retest
+ +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP12867714 +++$+++ ROOT +++$+++ COM18 +++$+++ 2020-10-27T11:54:39Z +++$+++ /retest +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP11040951 +++$+++ ROOT +++$+++ COM19 +++$+++ 2020-10-27T13:00:42Z +++$+++ I may have opposition to hard-coding those Timeout values.
+Internally, there are several ways to detect dead connections. For example: error on `readLoop`, connection idle timeout .. etc.
+
+Most of detections kick-in during the `readLoop` except the one referred here.  The http2 Transport health check will kick-in when the `readLoop` is completely idle for `ReadIdleTimeout` seconds. 
+It aims to do an additional health check when there is no incoming traffic for amount of time, but before `IdleConnTimeout` triggers idle connection recycling.
+Thus, I think the `ReadIdleTimeout ` should be smaller than `IdleConnTimeout` to achieve it's designed purpose.
+
+In addition, I suggest keep the minimum `PingTimeout` value to default 15s. 
+[From the source code in golang.org/x/net/http2/transport.go](https://github.com/golang/net/blob/08b38378de702b893ee869b94b32f833e2933bd2/http2/transport.go#L1806-L1816), It uses `time.AfterFunc()`, not `time.Ticker()`, to trigger health check, and only `Reset()` the timer when the next `readLoop` kicks-in.
+It means that the health check will be performed ONLY ONCE when the `readLoop` blocks for amout of time. In such situation, there should be only one PingFrame on the fly, so the `PingTimeout` does not matter much.
+But setting the `PingTimeout` too low (eg: 2s in this PR) may lead to incorrect connection recycling during a network jitter or system load spike.
+
+Meanwhile, as the wide acceptance of http2, Kubernetes may have more additional default http2 Transport options to apply in the future. I suggest making a independent and well-commented helper function for the future configuration.
+
+What I described above has already been done in my PR https://github.com/kubernetes/kubernetes/pull/95898
+Please consider my solution against this PR.
+
+To be honest(just technically, no offence), this PR looks nasty. It needs rebase&squash, and more comments in the code to describe the purpose of configuration and those "magic number". +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP20407524 +++$+++ ROOT +++$+++ COM20 +++$+++ 2020-10-27T13:06:47Z +++$+++ @duyanghao: The following tests **failed**, say `/retest` to rerun all failed tests:
+
+Test name | Commit | Details | Rerun command
+--- | --- | --- | ---
+pull-kubernetes-dependencies | bf2bd4792f2284a8753dc439aa2ec53a34aea7d2 | [link](https://prow.k8s.io/view/gs/kubernetes-jenkins/pr-logs/pull/94844/pull-kubernetes-dependencies/1321057783335882752) | `/test pull-kubernetes-dependencies`
+pull-kubernetes-e2e-azure-disk-windows | bf2bd4792f2284a8753dc439aa2ec53a34aea7d2 | [link](https://prow.k8s.io/view/gs/kubernetes-jenkins/pr-logs/pull/94844/pull-kubernetes-e2e-azure-disk-windows/1321056204989927424) | `/test pull-kubernetes-e2e-azure-disk-windows`
+
+[Full PR test history](https://prow.k8s.io/pr-history?org=kubernetes&repo=kubernetes&pr=94844). [Your PR dashboard](https://prow.k8s.io/pr?query=is%3Apr%20state%3Aopen%20author%3Aduyanghao). Please help us cut down on flakes by [linking to](https://git.k8s.io/community/contributors/devel/sig-testing/flaky-tests.md#filing-issues-for-flaky-tests) an [open issue](https://github.com/kubernetes/kubernetes/issues?q=is:issue+is:open) when you hit one in your PR.
+
+<details>
+
+Instructions for interacting with me using PR comments are available [here](https://git.k8s.io/community/contributors/guide/pull-requests.md).  If you have questions or suggestions related to my behavior, please file an issue against the [kubernetes/test-infra](https://github.com/kubernetes/test-infra/issues/new?title=Prow%20issue:) repository. I understand the commands that are listed [here](https://go.k8s.io/bot-commands).
+</details>
+<!-- test report --> +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP12867714 +++$+++ ROOT +++$+++ COM21 +++$+++ 2020-10-27T13:55:11Z +++$+++ > I may have opposition to hard-coding those Timeout values.
+> Internally, there are several ways to detect dead connections. For example: error on `readLoop`, connection idle timeout .. etc.
+> 
+> Most of detections kick-in during the `readLoop` except the one referred here. The http2 Transport health check will kick-in when the `readLoop` is completely idle for `ReadIdleTimeout` seconds.
+> It aims to do an additional health check when there is no incoming traffic for amount of time, but before `IdleConnTimeout` triggers idle connection recycling.
+> Thus, I think the `ReadIdleTimeout ` should be smaller than `IdleConnTimeout` to achieve it's designed purpose.
+> 
+> In addition, I suggest keep the minimum `PingTimeout` value to default 15s.
+> [From the source code in golang.org/x/net/http2/transport.go](https://github.com/golang/net/blob/08b38378de702b893ee869b94b32f833e2933bd2/http2/transport.go#L1806-L1816), It uses `time.AfterFunc()`, not `time.Ticker()`, to trigger health check, and only `Reset()` the timer when the next `readLoop` kicks-in.
+> It means that the health check will be performed ONLY ONCE when the `readLoop` blocks for amout of time. In such situation, there should be only one PingFrame on the fly, so the `PingTimeout` does not matter much.
+> But setting the `PingTimeout` too low (eg: 2s in this PR) may lead to incorrect connection recycling during a network jitter or system load spike.
+> 
+> Meanwhile, as the wide acceptance of http2, Kubernetes may have more additional default http2 Transport options to apply in the future. I suggest making a independent and well-commented helper function for the future configuration.
+> 
+> What I described above has already been done in my PR #95898
+> Please consider my solution against this PR.
+> 
+> To be honest(just technically, no offence), this PR looks nasty. It needs rebase&squash, and more comments in the code to describe the purpose of configuration and those "magic number".
+
+@povsister I'm open to any reasonable suggestions, and I also want to share my opinions:
+First of all, I do think users should not care much about the http2 health check, and it's not something Kubernetes even want users to notice, therefore I still suggest to set it by some reasonable default values. Besides, in your ‘proud’ PR, the http2 Transport `ReadIdleTimeout` is configured as the half of http Transport `IdleConnTimeout`, Is this reasonable and not nasty?
+Secondly, there's never a 'law' against the PR which needs rebase and squash. +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP628441 +++$+++ ROOT +++$+++ COM22 +++$+++ 2020-10-27T20:52:11Z +++$+++ Just adding a [reference to my comments on #95898)](https://github.com/kubernetes/kubernetes/pull/95898#pullrequestreview-518105901), which in the end is discussing both approaches.
+
+Jens Erat <jens.erat@daimler.com>, Daimler TSS GmbH, [Imprint](https://github.com/Daimler/daimler-foss/blob/master/LEGAL_IMPRINT.md) +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP12867714 +++$+++ ROOT +++$+++ COM23 +++$+++ 2020-10-28T13:22:01Z +++$+++ @JensErat @aojea Since there is no need for uses to configure http2 health check, I do think we should add http2 health check by some reasonable default values, and if you guys think pingTimeout=2s is two short, we can tune it larger, maybe default 15s is a good option.
+Besides I can't find any significance that setting http2 Transport ReadIdleTimeout as the half of http Transport IdleConnTimeout, Is there any relationship between these two configurations? 
+PR #95898 looks pretty but unnecessary, again, I insist my way to fix this problem, which is no doubt the most simple and efficient approach to this problem.
+And I don't care about which PR will be merged finally, but I do care about the most reasonable solution for this problem.
+If you guys could give reasons for setting http2 Transport ReadIdleTimeout as the half of http Transport IdleConnTimeout instead of some reasonable defaults, I'll be happy to close this PR ASAP. +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP980082 +++$+++ ROOT +++$+++ COM24 +++$+++ 2020-10-28T13:35:12Z +++$+++ See https://github.com/kubernetes/kubernetes/pull/95898#issuecomment-717934741 for context on locking.
+
+@caesarxuchao, can you take a look at this and #95898 and give feedback on the best way to configure the PingTimeout/ReadIdleTimeout options? +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP647318 +++$+++ ROOT +++$+++ COM25 +++$+++ 2020-10-28T22:20:26Z +++$+++ This isn't how we have technical disagreements. No amount of technical correctness can make up for treating other people poorly; please don't repeat that behavior. I will close both of these PRs. I'm available via slack or email if more explanation is needed. (additional note: please seek assistance rather than escalating.)
+
+Instead, I've asked @caesarxuchao to send a fix for the issue in question. +++$+++ 0 +++$+++ 0

@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/microsoft/vscode/issues/98475
+Number of Comments: 8

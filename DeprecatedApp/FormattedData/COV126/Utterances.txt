@@ -1,0 +1,39 @@
+ROOT +++$+++ SP363611 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-08-29T17:08:04Z +++$+++ Bump major version before releasing license change. A polite and hopefully unnecessary reminder that when the license change is released it should be a major version bump. I'm imagining the fall out that would occur if this were released as a patch version and it wouldn't be pretty. 
+
+> Note: Arguments for / against the license change are happening in other issues, let's please keep them out of this one.
+ +++$+++ 37 +++$+++ 0
+COM0 +++$+++ SP952783 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-08-29T18:07:59Z +++$+++ maybe +++$+++ 0 +++$+++ 68
+COM1 +++$+++ SP950773 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-08-29T18:11:25Z +++$+++ You're going to introduce a major license change, refuse to change the license name and do it in a minor version bump? What the actual hell is your goal here?  +++$+++ 19 +++$+++ 0
+COM2 +++$+++ SP952783 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-08-29T18:17:02Z +++$+++ To screw with companies that support ICE, was that not clear? +++$+++ 3 +++$+++ 72
+COM3 +++$+++ SP950773 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-08-29T18:27:50Z +++$+++ By releasing a major license change as a minor version bump and using an incorrect license in the license field? You're screwing Lerna, not the companies listed. Ignoring you politicizing something that has no business being political (especially as a former Facebook employee... come on), literally every company listed is going to update their packages to pull from https://github.com/LernaOpenSource/LernaOpenSource and go back to work. Meanwhile you're getting massive community backlash that's only going to continue if you decide to be a child and inappropriately release this as a minor version bump or with the MIT license.
+
+The best thing feasible for Lerna at this point is you leaving the project. But since that's not going to happen since you apparently enjoy your soap box, the second best thing is everyone moving to a fork of the project without a politician having any control. 
+
+The irony is I 100% agree with your politics, but this is not the place to express them.  +++$+++ 61 +++$+++ 0
+COM4 +++$+++ SP363611 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-08-29T18:28:29Z +++$+++ @jamiebuilds i would personally appreciate some certainty around this, because if you're likely to release this under a patch version I now need to go through all my clients' repos to make sure they're using lock files, fixed versions or a fork. Not because my clients are Microsoft et al but because they have contractually approved lists of licenses that we can use and this license will not qualify. 
+
+> To screw with companies that support ICE, was that not clear?
+
+The intent is pretty clear, but the unfortunate side effect is that it also screws with many developers who use this tool. I know this wasn't your intention but it sucks if I have to spend my evening checking a bunch of old repos because you'll _maybe_ release this as a patch.  +++$+++ 1 +++$+++ 0
+COM5 +++$+++ SP952783 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-08-29T18:32:44Z +++$+++ > The best thing feasible for Lerna at this point is you leaving the project.
+
+I left the Lerna project a long time ago, I've gone as far as to replace Lerna with a new tool called Bolt.
+
+> The irony is I 100% agree with your politics, but this is not the place to express them.
+
+All technology is political, open source is especially political. It would not exist if not for political reasons. Open sourcing something is in itself a political act.
+
+> I know this wasn't your intention but it sucks if I have to spend my evening checking a bunch of old repos because you'll maybe release this as a patch.
+
+We'll release it as major
+
+
+
+ +++$+++ 0 +++$+++ 9
+COM6 +++$+++ SP952783 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-08-29T18:34:26Z +++$+++ > especially as a former Facebook employee... come on
+
+Once upon a time I thought I had to go work for those big corporations that I hate in order to do the kind of open source work I want to do. That turned out to be incredibly false. So I fucked off and told them to eat shit. +++$+++ 2 +++$+++ 40
+COM7 +++$+++ SP6911540 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-08-29T18:38:57Z +++$+++ > I left the Lerna project a long time ago, 
+
+As long as you're maintaining the repository and represent it in the face of other contributors and open source community members - no, you did not. Maintainer is a part of a project. +++$+++ 2 +++$+++ 0
+COM8 +++$+++ SP952783 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-08-29T18:39:58Z +++$+++ Cool story +++$+++ 0 +++$+++ 63

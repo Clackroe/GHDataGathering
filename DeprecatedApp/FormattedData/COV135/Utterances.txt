@@ -1,0 +1,49 @@
+ROOT +++$+++ SP1268699 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-12-22T15:23:14Z +++$+++ docs: Add a theme step to Step by Step Tutorial Plase, add a step on the Step by Step Tutorial to demonstrate how to theme the just finished demo app.
+
+## Motivation
+
+1. Theming is not an obvious task for a newbie like me. Also, doc speaks about gem based and 'regular' file themes. It's confusin  a bit.
+2. At the end of demo app it's more beautiful to leave in the han of the user a well looking demo
+
+## Idea
+
+Please include istructions on 
+- how to enable default gem base theme
+- how to customized if possible a gem theme
+- how to switch to a regular file based theme
+- idem, how to customize it
+
+... or ...
+
+Create a guide on how to start theming AND then include previous steps into the new tutorial.
+
+Thanks for this excellent piece of software !!!! +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP103008 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-12-22T16:31:30Z +++$+++ On how to start theming for Jekyll, I'd recommend @daviddarnes articles:
+
+1. https://www.siteleaf.com/blog/making-your-first-jekyll-theme-part-1/
+2. https://www.siteleaf.com/blog/making-your-first-jekyll-theme-part-2/ +++$+++ 0 +++$+++ 1
+COM1 +++$+++ SP1268699 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-12-24T18:51:08Z +++$+++ Thanks, but it's better have an official doc, and not links to external resources. IMHO +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP1177460 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-12-26T21:36:33Z +++$+++ If it's validation you're looking for then I can 100% endorse these tutorials ✨. However if you want this set in stone then maybe we could link to these tutorials in the official docs? Maybe in https://jekyllrb.com/tutorials/home/ or https://jekyllrb.com/resources/. What do you day @DirtyF? +++$+++ 2 +++$+++ 0
+COM3 +++$+++ SP28698431 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-12-27T18:49:58Z +++$+++ Oooh, I like @desiredpersona’s idea. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP12479464 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-12-27T19:06:28Z +++$+++ IMHO, Documentation is one thing and a (sponsored) community blog is an entirely different league altogether. They should not be intermingled.
+Documentation is translating "the code base" into layman lingo. (*Point-of-View: Maintainers -> Users*)
+Community blog is about sharing experience with the code base. (*Point-of-View: One User -> Other Users*)
+Bringing the sponsors into the mix, is just complicating things, unnecessarily......... +++$+++ 2 +++$+++ 0
+COM5 +++$+++ SP1268699 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-12-27T21:46:45Z +++$+++ Sorry but ... To rest in topic... A simple step added to main step by step intro is so wrong? +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP1177460 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-12-28T17:40:59Z +++$+++ I don’t see what is wrong with referring to a tutorial on another site? Yes the tutorial was paid for, but tutorials of that size take time to create. Maybe we could add some more detail on the points people are getting stuck on in the docs? +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP1268699 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-12-28T19:20:18Z +++$+++ If I see a tutorial on an external website it soon or later will become obsolete.
+
+If I see a tutorial on main site I think that must be ok, tested, and updated. 
+
+Simply. Close this issue
+
+A company that does not understand the need of a full doc do not will offer a serious support in the long time
+
+Bye bye. +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP103008 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-12-28T19:44:12Z +++$+++ > A company that does not understand the need of a full doc do not will offer a serious support in the long time
+
+Jekyll is an open-source project **freely maintained by volunteers**, it has been around for 10 years now and powers hundred of thousands of websites around the world. 
+
+Jekyll has a great [community](https://talk.jekyllrb.com/) and docs are continuously improved with the help of the contributors.
+
+Jekyll themes _are_ [documented](https://jekyllrb.com/docs/themes/#understanding-gem-based-themes). I'll see if I can add some links to point to theming at the end of the step-by-step guide. +++$+++ 0 +++$+++ 0

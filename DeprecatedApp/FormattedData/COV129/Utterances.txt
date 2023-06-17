@@ -1,0 +1,181 @@
+ROOT +++$+++ SP3505151 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-03-30T10:34:14Z +++$+++ Weird slowness scolling text in the console When outputting text from PowerShell on a Dell XPS 15, the rendering speed is amazingly slow.
+
+~~I have not come across this on any other machine.~~
+
+Attached a short windows performance recording of this. 
+conhost.exe (1608) and pwsh.exe (19432) are the relevant processes.
+
+[STAFFANX15.03-30-2018.11-25-22.zip](https://github.com/Microsoft/console/files/1863382/STAFFANX15.03-30-2018.11-25-22.zip)
+
+Hopefully someone more well versed in this domain can help figure out what is going on. +++$+++ 2 +++$+++ 0
+COM0 +++$+++ SP7413755 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-03-30T11:41:01Z +++$+++ It's caused by `conhost.exe` excessively hammering the registry to query the following two values:
+
+    HKCU\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell\TabletMode
+    HKCU\Software\Microsoft\Windows\DWM\ColorPrevalence
+
+Having previously reported this issue through Feedback Hub (to no avail), let me offer my observations from debugging this issue:
+
+ - It's not specific to Dell's XPS series - I've been able to reproduce on any Windows 10 installation from version 1703 and up
+ - It only occurs when the console application writes output that causes the console to *scroll*
+ - It only occurs when the console application in question is in foreground/focus
+ - Each reg value mentioned above is queried 6 times, per scroll!!!
+
+An easy way of show the resulting difference in speed is to compare to anything piped to `Out-String`:
+
+    $WindowHeight = $Host.UI.RawUI.WindowSize.Height
+    Clear-Host
+    $StopWatch = [Diagnostics.Stopwatch]::StartNew()
+    &{
+        1..($WindowHeight * 2)|ForEach-Object{
+            Write-Output "test"
+        }
+    }
+    $MultiString = $StopWatch.Elapsed
+    Clear-Host
+    $StopWatch = [Diagnostics.Stopwatch]::StartNew()
+    &{
+        1..($WindowHeight * 2)|ForEach-Object{
+            Write-Output "test"
+        }
+    } | Out-String
+    $SingleString = $StopWatch.Elapsed
+
+Even though we add overhead from `Out-String`, and the number of lines that the console host eventually need to write to the screen buffer are exactly the same, you'll find that the `$MultiString` measurement is significantly larger that `$SingleString`, presumably because the former caused the console host to scroll `$WindowsHeight` where as the latter only had to cause a single scroll. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP18356694 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-03-30T15:45:05Z +++$+++ So I've definitely noticed this from time to time on my own laptop, which is an HP something or other - though it's definitely not something I've found to be consistently reproducible. 
+
+I also know that conhost isn't the one doing this - at least not directly. From the sounds of it, DWM is getting involved during our paint and slowing us down, but I wouldn't have the faintest clue how to start debugging that. 
+
+@bitcrazed anyone on the DWM, or composition, or something team that we can forward this issue to to have them take a look? +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP3505151 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-03-31T07:09:05Z +++$+++ ![image](https://user-images.githubusercontent.com/3505151/38160780-2155300e-34c3-11e8-805c-b67a1dedabb5.png)
+
+It is not obviously DWM. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP3505151 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-04-01T15:18:16Z +++$+++ It is correlated to font size. Almost grinds to a halt with font size set to 36.
+ +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP7413755 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-04-01T15:37:50Z +++$+++ Interestingly enough, I updated my Win10 Pro 1709 Friday night, and now (build **10.0.16299.309**) `conhost.exe` is no longer querying the registry keys mentioned above, but DWM queries this value:
+
+    HKCU\Software\Microsoft\Windows\DWM\ColorPrevalence
+
+10 times per scroll. Still digging +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP3505151 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-04-03T20:12:57Z +++$+++ fontdrvhost.exe shows up in the traces on machines where this is slow. On machines where this isn't slow, fontdrvhost.exe uses no CPU at all. 
+
+And it seems related to scrolling. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP3505151 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-04-03T21:25:16Z +++$+++ ![image](https://user-images.githubusercontent.com/3505151/38276632-ded3fb2c-3795-11e8-96b2-5f22c2e93fb3.png)
+
+There is some ping-pong between `conhost.exe` and `fontdrvhost.exe`.
+ +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP3505151 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-04-03T21:33:01Z +++$+++ 
+
+[conhost_fontdrvhost.zip](https://github.com/Microsoft/console/files/1873451/conhost_fontdrvhost.zip)
+
+A less noisy ETW trace.
+ +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP3505151 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-04-03T23:18:41Z +++$+++ The machines where you have seen it being slow, did they all have touch screens?
+
+See the `IncDevice!vector scalar destructor` in the call stack. That doesn't show up on my machines where this is a lot faster. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP961950 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-04-04T17:35:01Z +++$+++ Thanks all. Have reached out to the DWM team. Let's see what they say. +++$+++ 6 +++$+++ 0
+COM10 +++$+++ SP3505151 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-04-19T10:27:02Z +++$+++ @bitcrazed Any news? +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP961950 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-04-19T22:08:39Z +++$+++ We are looking into this. Sorry for the delay - Build prep is eating up a lot of people x hours right now ;) +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP961950 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-04-19T22:45:23Z +++$+++ @powercode - Okay, we have some suspicions as to what's happening here (thanks CD for your help with this 😀) 
+
+Could we ask:
+1. What is the size & resolution of your screen?  15.6" @ 3200 x 1800?
+1. What DPI scaling factor are you using?
+1. What is the font face & size of your affected Console(s)?
+1. Does this problem disappear if you decrease your Console font size to ~12pt when running at 200% DPI?
+
+BTW - MANY thanks for capturing traces - they've been ENORMOUSLY helpful! +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP3505151 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-04-20T05:45:35Z +++$+++ Resolution 3840x2160.
+Scaling 250. Both the recommended setup.
+
+I have tried different fonts but have not stumbled upon any that worked, but have not on the other hand made exhaustive tests. Consolas is affected, as is Deja Vu Sans Mono for PowerLine, and several other PowerLine fonts. 
+
+Wow! Setting the resolution scaling to 200% improves perf  a lot.
+```
+Duration         CommandLine
+--------         -----------
+00:00:15.4034821 ls -recurse   # 250%, 36 pt
+00:00:03.1567607 ls -recurse   # 200%, 36 pt
+00:00:00.2825821 ls -recurse   # 200%, 12 pt
+``` +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP3505151 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-04-20T06:18:09Z +++$+++ And @bitcrazed, thank you, and Microsoft, for making it so easy to both gather and look at perf recordings. It is a game changer for me! +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP961950 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-04-20T17:16:04Z +++$+++ Ahhhh! Yeah, you're getting hit by the known issue! Anyone else seeing this, you'll likely see perf return to normal if you keep scaling <= 200% and your font <24pt., though not guarantees. 
+
+I found the dev owner yesterday and he was literally working on fix for this issue that surfaced elsewhere but is the same root cause!
+
+Re. XPerf/WPA - **I KNOW, RIGHT**!! I was talking with aforementioned dev and was recalling how hard it was, back in the dark ages, to diagnose issues like these without the benefit of detailed perf traces!!
+
+Thank goodness for progress ;) +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP3505151 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-04-21T12:39:28Z +++$+++ Yes! Thank goodness for progress, and @randomascii, for his incredibly helpful blog posts on analysing the data. Learned so much from him! Huge props! +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP10800041 +++$+++ ROOT +++$+++ COM16 +++$+++ 2018-04-23T09:15:57Z +++$+++ I'm always glad to hear when my blog posts are useful. +++$+++ 2 +++$+++ 0
+COM18 +++$+++ SP3505151 +++$+++ ROOT +++$+++ COM17 +++$+++ 2018-08-08T06:33:45Z +++$+++ Any update?  +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP961950 +++$+++ ROOT +++$+++ COM18 +++$+++ 2018-08-08T17:17:43Z +++$+++ Are you still seeing this issue on recent Insider builds? +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP3505151 +++$+++ ROOT +++$+++ COM19 +++$+++ 2018-08-08T17:24:00Z +++$+++ That machine is not on insider builds :( +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP961950 +++$+++ ROOT +++$+++ COM20 +++$+++ 2018-08-09T17:07:37Z +++$+++ Just checked with the engineer who worked on this: The specific issue you're seeing has been mitigated which should result in you no longer seeing it's effect. A more comprehensive fix is on the backlog and will be triaged into a future release.
+
+To test / confirm, you'll need to install a recent RS5 Insider build, or wait until RS5 ships later this year. Once you do get onto RS5, please update this thread with your findings and close this issue if it's resolved.
+
+Many thanks again for filing and your help in diagnosing this issue. +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP3505151 +++$+++ ROOT +++$+++ COM21 +++$+++ 2018-08-12T19:28:05Z +++$+++ Installed RS5 - Issue still present.
+
+11 seconds to dir a folder with fondsize 36. 1.8 on size 14. Both horribly slow. +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP3505151 +++$+++ ROOT +++$+++ COM22 +++$+++ 2018-08-12T19:41:12Z +++$+++ [STAFFANX15.08-12-2018.21-38-27.etl.7z.zip](https://github.com/Microsoft/console/files/2281268/STAFFANX15.08-12-2018.21-38-27.etl.7z.zip)
+
+Uploaded trace. It's a 7z archive with an added zip extension to allow the upload. +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP961950 +++$+++ ROOT +++$+++ COM23 +++$+++ 2018-08-13T20:40:26Z +++$+++ Thanks. Will take a look. +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP961950 +++$+++ ROOT +++$+++ COM24 +++$+++ 2018-08-13T23:48:55Z +++$+++ Hey @Powercode - any chance you could share repro steps - we'd like to see, trace, and measure the perf issue you're seeing. +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP3505151 +++$+++ ROOT +++$+++ COM25 +++$+++ 2018-08-14T06:45:29Z +++$+++ Start powershell.
+Set font size to 36.
+Run ls.
+
+Still on a computer with high resolution (3840x2160) and scaling on 200%. +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP961950 +++$+++ ROOT +++$+++ COM26 +++$+++ 2018-08-14T22:11:01Z +++$+++ Hey @powercode. I've been doing some repro'ing on my SP4 with an external 4K 28" screen:
+
+| Font @ 18pt, Console @ 81x25 chars | Font @ 36pt, Console @ 81x25 chars |
+|:-|:-|
+| Command:  dir C:\Windows\System32\ -recurse | Command:  dir C:\Windows\System32\ -recurse | 
+| Start:   12:50:21.47 | Start:   12:52:04.63 |
+| End:     12:50:23.52 | End:     12:52:09.44 |
+| Elapsed: 00:00:02.05 | Elapsed: 00:00:04.81 |
+
+> FWIW, I used my [timing script](https://github.com/bitcrazed/PowerRazzle/blob/master/TimedRun.cmd) to measure the elapsed time to execute and render the recursive listing command above.
+
+With the font set at 36pt, there is indeed a marked slow-down, but remember:
+1. Console currently uses GDI to draw text which uses your CPU to render text glyphs
+1. GDI generates and caches glyphs, and then BLITs them onto the screen
+1. The larger the glyph, the fewer can be cached
+1. At 18pt, the client area is 1053x675. At 36pt, the client area is 2025x1350 and the resulting glyphs are 4x bigger ... that's a lot of LARGE bitmaps to BLIT
+1. And since scrolling often results in significant text changes between iterations of the render loop, the entire client area can end up being "dirtied", resulting in the full Console client area having to be fully re-rendered each time! 2025x1350 x 4bytes each pixel == 10MB per frame x 60 fps == 656MB/s we have to force from your CPU to the GPU's frame buffer every second!. 
+
+That's a lot of data by anyone's measure, and it makes one's machine do a lot of work:
+
+![recursive-dir](https://user-images.githubusercontent.com/961950/44121072-5daffba8-9fd3-11e8-9831-49e00faa5233.png)
+
+Now, can we go faster? HELLS YEAH! 😜
+
+The GDI team recently improved their glyph caching mechanism, with more improvements planned for future releases, but increased the Glyph Cache buffer to mitigate the above factors until those improvements can be made.
+
+Also, Console plans on replacing our GDI renderer to DirectWrite at some point in the future which should eliminate this issue anyhow. 
+
+_Also_ we have some other tricks up our sleeves that we hope will noticeably improve text rendering perf, esp. while scrolling. Bear with us ;)
+
+I'll leave this issue open for now, and we'll update it when we have any solid perf improvements to share. +++$+++ 1 +++$+++ 0
+COM28 +++$+++ SP767039 +++$+++ ROOT +++$+++ COM27 +++$+++ 2018-10-07T00:43:16Z +++$+++ Hi, understood that there is a lot of graphics to push around on 4k.  However, what about the issue mentioned above with querying the registry 10x per scroll?  Might be an easy fix to cache that value:
+
+    HKCU\Software\Microsoft\Windows\DWM\ColorPrevalence +++$+++ 1 +++$+++ 0
+COM29 +++$+++ SP16415478 +++$+++ ROOT +++$+++ COM28 +++$+++ 2018-11-09T10:23:25Z +++$+++ Hello, I would like to point out that poor console performance in Windows 10 is still present in 1809.
+
+Resolution is 1920x1080, scaling is 100%, console font size is 16pt Consolas.
+
+In my case, running IDA Pro interactive disassembler (idaw.exe) in the console results in a totally absurd situation where conhost.exe is using more CPU than the program itself:
+
+![image](https://user-images.githubusercontent.com/16415478/48256712-bb6ea380-e410-11e8-99b6-26c2fd7bd8ce.png)
+
+Looking at the threads of conhost.exe the culprits are obvious:
+![image](https://user-images.githubusercontent.com/16415478/48256869-3041dd80-e411-11e8-831d-e56a73bcd0a7.png)
+
+The only part of the console window being updated is highlighted:
+![image](https://user-images.githubusercontent.com/16415478/48256955-654e3000-e411-11e8-9a21-6959e58a5115.png)
+
+Why is drawing 8 characters at a fixed position using 10% of the 3.2 GHz quad-core CPU, and what is more important, why is this slowing down the console program so much that something which took minutes in Windows XP takes hours in Windows 10?
+
+People were drawing full screen graphics on 1 MHz Motorola 6502 CPU 3 decades ago without dedicated graphics hardware, this is how far modern programmers have fallen. +++$+++ 0 +++$+++ 0

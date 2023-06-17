@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/rails/rails/issues/33677
+Number of Comments: 11

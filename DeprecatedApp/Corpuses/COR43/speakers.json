@@ -1,0 +1,46 @@
+{
+    "duyanghao": {
+        "id": "SP12867714",
+        "role": "NONE (AUTHOR)"
+    },
+    "k8s-ci-robot": {
+        "id": "SP20407524",
+        "role": "CONTRIBUTOR"
+    },
+    "lavalamp": {
+        "id": "SP647318",
+        "role": "MEMBER"
+    },
+    "warmchang": {
+        "id": "SP13084624",
+        "role": "CONTRIBUTOR"
+    },
+    "aojea": {
+        "id": "SP6450081",
+        "role": "MEMBER"
+    },
+    "aramase": {
+        "id": "SP10608509",
+        "role": "MEMBER"
+    },
+    "fisherxu": {
+        "id": "SP28776356",
+        "role": "MEMBER"
+    },
+    "dims": {
+        "id": "SP23304",
+        "role": "MEMBER"
+    },
+    "povsister": {
+        "id": "SP11040951",
+        "role": "CONTRIBUTOR"
+    },
+    "JensErat": {
+        "id": "SP628441",
+        "role": "NONE"
+    },
+    "liggitt": {
+        "id": "SP980082",
+        "role": "MEMBER"
+    }
+}

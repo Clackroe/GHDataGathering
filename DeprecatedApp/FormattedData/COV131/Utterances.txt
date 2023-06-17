@@ -1,0 +1,191 @@
+ROOT +++$+++ SP2480569 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-05-19T19:10:14Z +++$+++ [Bug] Name clash with Maui Linux and MauiKit ### Description
+
+A multi-platform app UI toolkit with the name of __maui__ was introduced by Microsoft on May 19th, 2020 according to https://devblogs.microsoft.com/dotnet/introducing-net-multi-platform-app-ui/:
+
+> **MAUI** simplifies the choices for .NET developers, providing a single stack that supports all modern workloads: Android, iOS, macOS, and Windows. The native features of each platform and UI control are within reach in a simple, cross-platform API for you to deliver no-compromise user experiences while sharing even more code than before.
+
+There has been https://mauilinux.org/ for a long time:
+
+> Fast and easy to use, yet powerful for computer users of all levels, **Maui** is a part-rolling distribution based on KDE Neon/Ubuntu. Maui features its own managed repositories and backport channels and ships with the following software components and applications for day-to-day use
+
+According to [Wikipedia](https://fr.wikipedia.org/wiki/Maui_Linux), Maui Linux has been around sine 2016.
+
+Also, there has been [**Maui**Kit](https://mauikit.org/) for a long time:
+
+> **MauiKit**, a free and modular front-end framework for developing fast and compelling user experiences
+
+There is clearly a name clash.
+
+### Steps to Reproduce
+
+1.  Visit https://mauilinux.org/ and https://fr.wikipedia.org/wiki/Maui_Linux
+2. Visit https://mauikit.org//
+3. Visit https://devblogs.microsoft.com/dotnet/introducing-net-multi-platform-app-ui/
+
+### Expected Behavior
+
+Microsoft chooses names not already used in the Linux community.
+
+### Actual Behavior
+
+Microsoft chooses names already used in the Linux community.
+
+### Screenshots
+
+![](https://user-images.githubusercontent.com/2480569/82367816-effaec80-9a03-11ea-9887-9d5675f11698.png) +++$+++ 33 +++$+++ 2
+COM0 +++$+++ SP3860573 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-05-19T19:16:05Z +++$+++ Perhaps the Linux project should change its name as they've conflicted with a city in Hawaii which existed long before. Look again, the name isn't Maui, the name is Multi-platform App UI which abbreviates to M.A.U.I.  +++$+++ 3 +++$+++ 45
+COM1 +++$+++ SP29999254 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-05-19T19:17:12Z +++$+++ I feel like there's much less confusion between a city in Hawaii and a multi platform app framework both called Maui than a multi platform app framework and a multi platform app framework both called Maui.  +++$+++ 29 +++$+++ 2
+COM2 +++$+++ SP11175213 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-05-19T19:24:15Z +++$+++ So you think of a Hawaian city when reading "Maui", but not when reading "MAUI"? Really? +++$+++ 12 +++$+++ 0
+COM3 +++$+++ SP3860573 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-05-19T19:25:22Z +++$+++ You find the comparison between a city in Hawaii and MauiKit ridiculous just like I find your comparison between an the Maui abbreviation and MauiKit ridiculous +++$+++ 2 +++$+++ 28
+COM4 +++$+++ SP11175213 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-05-19T19:27:06Z +++$+++ > You find the comparison between a city in Hawaii and MauiKit ridiculous just like I find your comparison between an the Maui abbreviation and MauiKit ridiculous
+
+The project is called Maui, has been called that for a long time, and is even stylized as "MAUI" on https://mauikit.org. So yeah, there's an obvious naming clash here. +++$+++ 26 +++$+++ 0
+COM5 +++$+++ SP439874 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-05-19T19:27:55Z +++$+++ This is a non issue.
+
+On Tue, May 19, 2020, 3:25 PM Dan Siegel <notifications@github.com> wrote:
+
+> You find the comparison between a city in Hawaii and MauiKit ridiculous
+> just like I find your comparison between an the Maui abbreviation and
+> MauiKit ridiculous
+>
+> —
+> You are receiving this because you are subscribed to this thread.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/dotnet/maui/issues/35#issuecomment-631032369>, or
+> unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/AADLMQT5NYLHCA2IPY67BHDRSLMLFANCNFSM4NFIXXSQ>
+> .
+>
+ +++$+++ 5 +++$+++ 32
+COM6 +++$+++ SP29999254 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-05-19T19:30:23Z +++$+++ How is having two product with the same name and same basic scope (multi platform framework) a non issue? +++$+++ 16 +++$+++ 0
+COM7 +++$+++ SP3860573 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-05-19T19:30:49Z +++$+++ You can be mad all you want, but let's be realistic here... this project you're fighting for so passionately, doesn't have as many stars as I have thumbs down for telling you that you'e being ridiculous 
+
+![image](https://user-images.githubusercontent.com/3860573/82369702-4b10ed00-99cc-11ea-8090-18139fe8d746.png)
+ +++$+++ 2 +++$+++ 31
+COM8 +++$+++ SP11175213 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-05-19T19:31:43Z +++$+++ That's because GitHub stars are not a currency in which you measure a project that is not even developed on GitHub. +++$+++ 25 +++$+++ 0
+COM9 +++$+++ SP29999254 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-05-19T19:32:01Z +++$+++ That's because it's a mirror. The actual project is developed in KDE gitlab instance. +++$+++ 7 +++$+++ 0
+COM10 +++$+++ SP4503202 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-05-19T19:32:13Z +++$+++ They even refer _themselves_ to Hawaii. Check https://github.com/dotnet/maui/commit/c7e2c55ace3ec55a0858f1c4bb55476375ea72f8, its commit message says, "Aloha fix".
+
+I don't think they took into account either confusion with the "Linux project" *nor with the Hawaiian island*.
+
+(By the way, is it seriously necessary to mention that when there's an obvious name conflict with some other free software project in the exactly same domain (UI toolkit)? Come on, get over this "Linux vs. Windows" mantra you still seem to follow.)
+
+Edit: yes, this was half sarcasm, half serious comment. I think you can figure out which half's which. +++$+++ 19 +++$+++ 0
+COM11 +++$+++ SP9479903 +++$+++ ROOT +++$+++ COM10 +++$+++ 2020-05-19T19:36:22Z +++$+++ > You can be mad all you want, but let's be realistic here... this project you're fighting for so passionately, doesn't have as many stars as I have thumbs down for telling you that you'e being ridiculous
+> 
+> ![image](https://user-images.githubusercontent.com/3860573/82369702-4b10ed00-99cc-11ea-8090-18139fe8d746.png)
+
+Let's pretend that this is not a mirror but the official repository (not so).. can a project name be stolen because it has less fame?  +++$+++ 22 +++$+++ 0
+COM12 +++$+++ SP439874 +++$+++ ROOT +++$+++ COM11 +++$+++ 2020-05-19T19:41:56Z +++$+++ It's a non issue because things are allowed to have the same or similar
+names. To be honest, I never heard of the others except for the location.
+
+No matter the name, there is probably someone or something using it.
+
+On Tue, May 19, 2020, 3:32 PM TheAssassin <notifications@github.com> wrote:
+
+> They even refer *themselves* to Hawaii. Check c7e2c55
+> <https://github.com/dotnet/maui/commit/c7e2c55ace3ec55a0858f1c4bb55476375ea72f8>,
+> its commit message says, "Aloha fix".
+>
+> I don't think they took into account either confusion with the "Linux
+> project" *nor with the Hawaiian island*.
+>
+> (By the way, is it seriously necessary to mention that when there's an
+> obvious name conflict with some other free software project in the exactly
+> same domain (UI toolkit)? Come on, get over this "Linux vs. Windows" mantra
+> you still seem to follow.)
+>
+> —
+> You are receiving this because you commented.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/dotnet/maui/issues/35#issuecomment-631035738>, or
+> unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/AADLMQUXWUEQOZ73GC33W33RSLNEZANCNFSM4NFIXXSQ>
+> .
+>
+ +++$+++ 2 +++$+++ 20
+COM13 +++$+++ SP2480569 +++$+++ ROOT +++$+++ COM12 +++$+++ 2020-05-19T19:43:16Z +++$+++ https://en.wikipedia.org/wiki/Confusing_similarity +++$+++ 11 +++$+++ 0
+COM14 +++$+++ SP29999254 +++$+++ ROOT +++$+++ COM13 +++$+++ 2020-05-19T19:46:19Z +++$+++ And this is not even a confusing _similarity_.
+We are talking about a multi platform framework called MAUI, and a multi platform framework called MAUI. You could've at least googled the name you were giving to your product before doing so, or choose one that's used from a product with a different scope.
+
+KDE is one of the very biggest community in linux. Maui is part of KDE. So much for Microsoft ❤️ Linux. +++$+++ 20 +++$+++ 0
+COM15 +++$+++ SP11175213 +++$+++ ROOT +++$+++ COM14 +++$+++ 2020-05-19T19:47:33Z +++$+++ > No matter the name, there is probably someone or something using it.
+
+Somehow all other cross-platform frameworks I can think of have managed to choose a name that would not conflict with other similar projects. I wonder what's so different here that would prevent Microsoft from finding a scope-unique name. +++$+++ 9 +++$+++ 0
+COM16 +++$+++ SP3860573 +++$+++ ROOT +++$+++ COM15 +++$+++ 2020-05-19T19:47:46Z +++$+++ @probonopd @mirkobrombin so you like this cute little side project... but let's be honest here when it comes to being a serious project it's not one. There isn't major support for MauiKit, the likelihood is that most people probably never heard of it before today, and there is no widespread adoption of it. Can you name 10 large companies that have adopted it?
+
+Your attitude is as if Microsoft is being some big evil corporation. The reality is I highly doubt anybody heard of MauiKit, and frankly nobody cares.
+
+> Let's pretend that this is not a mirror but the official repository (not so).. can a project name be stolen because it has less fame?
+
+Ok let's look at kde... there are 10 open issues... are you seriously going to tell me that a serious cross platform framework has 10 open issues... that's not realistic in any shape way or form. So again your complaints are just being ridiculous. +++$+++ 1 +++$+++ 23
+COM17 +++$+++ SP3053525 +++$+++ ROOT +++$+++ COM16 +++$+++ 2020-05-19T19:49:21Z +++$+++ @dansiegel Are you an _official_ Microsoft or Xamarin representative, and if so, is this the official position of your company?. +++$+++ 1 +++$+++ 0
+COM18 +++$+++ SP11175213 +++$+++ ROOT +++$+++ COM17 +++$+++ 2020-05-19T19:49:31Z +++$+++ > ridiculous
+> cute little side project
+> nobody cares
+> anybody heard of
+
+I hope this is not Microsoft's general attitude towards open source projects these days... +++$+++ 20 +++$+++ 0
+COM19 +++$+++ SP29999254 +++$+++ ROOT +++$+++ COM18 +++$+++ 2020-05-19T19:51:44Z +++$+++ > Your attitude is as if Microsoft is being some big evil corporation. The reality is I highly doubt anybody heard of MauiKit, and frankly nobody cares.
+
+Because it's a recent project. It has been under development for two years, but it's public. It was - until today - literally the first result when searching for "maui framework". 
+
+> Ok let's look at kde... there are 10 open issues... are you seriously going to tell me that a serious cross platform framework has 10 open issues... that's not realistic in any shape way or form. So again your complaints are just being ridiculous.
+
+Microsoft's Maui has 21 issues. 10 issues bad, 21 issues good?
+
+ +++$+++ 14 +++$+++ 0
+COM20 +++$+++ SP4503202 +++$+++ ROOT +++$+++ COM19 +++$+++ 2020-05-19T19:53:52Z +++$+++ What do you expect, providing some real arguments against nonsense or offending replies like "you're all mad" or "it's the others' fault, they need to rename" (aka "we are Microsoft (related), we are bigger, you need to comply" or, my favorite, "same name is not a problem at all", pretending that confusion was not an issue...
+
+@dansiegel great strategy, being offending once you run out of arguments! Really! Is that how Microsoft's unpaid marketers aka "Microsoft MVP" are chosen? How can you seriously accuse others of like, thinking in this old "it's a big evil company" way (which nobody really has), while yourself being extremely off-putting towards the open-source community? It makes no sense...
+
+Remember, Microsoft recently admitted [they've been on the wrong side of history with regard to open source](https://www.theregister.co.uk/2020/05/15/microsoft_brad_smith_open_source/). You have *zero* reason to belittle this or _any_ other open-source project. Especially since this one's also open-source. +++$+++ 14 +++$+++ 0
+COM21 +++$+++ SP11275573 +++$+++ ROOT +++$+++ COM20 +++$+++ 2020-05-19T19:55:00Z +++$+++ Imagine trying to put up a façade with ms❤️linux, then turning stuff into a dick size competition with repo stars and other stats because you know you messed up and don't want to admit it lmfao +++$+++ 13 +++$+++ 0
+COM22 +++$+++ SP471626 +++$+++ ROOT +++$+++ COM21 +++$+++ 2020-05-19T19:55:04Z +++$+++ > @dansiegel Are you an official Microsoft or Xamarin representative, and if so, is this the official position of your company?.
+
+He is not affiliated with MS at all, but he definitely has done more for the .NET Ecosystem than anyone else in these comments. [>3 million downloads](https://www.nuget.org/packages/Prism.Core/) +++$+++ 2 +++$+++ 0
+COM23 +++$+++ SP11175213 +++$+++ ROOT +++$+++ COM22 +++$+++ 2020-05-19T19:56:30Z +++$+++ > he definitely has done more for the .NET Ecosystem than anyone else in these comments
+
+How much has he done for the Qt Ecosystem though? ;) +++$+++ 16 +++$+++ 0
+COM24 +++$+++ SP3860573 +++$+++ ROOT +++$+++ COM23 +++$+++ 2020-05-19T19:56:58Z +++$+++ @UriHerrera you can see my profile.. I am a member of the Xamarin developer community, I do not work for Microsoft. And if you don't like it nobody is forcing you to use it, use MauiKit if that's what you love, but developers who actually use this tech think you're being ridiculous.
+
+> Microsoft's Maui has 21 issues. 10 issues bad, 21 issues good?
+
+Maui was just created... and is a port of Xamarin.Forms so yeah you want to see what a real Open Source application framework looks like I suggest you start taking notes. 
+
+@TheAssassin - bro I am an Open Source author and maintainer so don't try lecturing me about being against "off-putting towards the open-source community" +++$+++ 1 +++$+++ 19
+COM25 +++$+++ SP10793815 +++$+++ ROOT +++$+++ COM24 +++$+++ 2020-05-19T19:57:33Z +++$+++ > there are 10 open issues
+
+This is a tiny amount, big projects have bigger issue count, and this is OK
+Why you even pointing on this? It is unethical, you are don't have any arguments?
+_P.S. replying in epic thread_ +++$+++ 7 +++$+++ 0
+COM26 +++$+++ SP3053525 +++$+++ ROOT +++$+++ COM25 +++$+++ 2020-05-19T19:58:55Z +++$+++ > > @dansiegel Are you an official Microsoft or Xamarin representative, and if so, is this the official position of your company?.
+> 
+> He is not affiliated with MS at all, but he definitely has done more for the .NET Ecosystem than anyone else in these comments. [>3 million downloads](https://www.nuget.org/packages/Prism.Core/)
+
+That is great, but I did not ask that. If no representative wants to even _talk_  about this, so be it. I'll take that as Microsoft and Xamarin's official position regarding this issue. +++$+++ 8 +++$+++ 0
+COM27 +++$+++ SP9479903 +++$+++ ROOT +++$+++ COM26 +++$+++ 2020-05-19T20:00:32Z +++$+++ > @probonopd @mirkobrombin so you like this cute little side project... but let's be honest here when it comes to being a serious project it's not one. There isn't major support for MauiKit, the likelihood is that most people probably never heard of it before today, and there is no widespread adoption of it. Can you name 10 large companies that have adopted it?
+> 
+> Your attitude is as if Microsoft is being some big evil corporation. The reality is I highly doubt anybody heard of MauiKit, and frankly nobody cares.
+> 
+> > Let's pretend that this is not a mirror but the official repository (not so).. can a project name be stolen because it has less fame?
+> 
+> Ok let's look at kde... there are 10 open issues... are you seriously going to tell me that a serious cross platform framework has 10 open issues... that's not realistic in any shape way or form. So again your complaints are just being ridiculous.
+
+So a project has value based on open issues?
+
+I have nothing against Microsoft, here we talk about a name and who chose it before (in the same context). 
+
+I don't know how you can question the seriousness of one of the biggest communities that drive open source principles many years before Microsoft fell in love with open source.
+
+  +++$+++ 9 +++$+++ 0
+COM28 +++$+++ SP471626 +++$+++ ROOT +++$+++ COM27 +++$+++ 2020-05-19T20:00:34Z +++$+++ >  If no representative wants to even talk about this
+
+Since the issue was opened a mere 60 minutes ago 😂 +++$+++ 6 +++$+++ 0
+COM29 +++$+++ SP11175213 +++$+++ ROOT +++$+++ COM28 +++$+++ 2020-05-19T20:02:10Z +++$+++ > you want to see what a real Open Source application framework looks like I suggest you start taking notes
+
+There appear to be more passive-aggressive comments towards another project in this thread from you alone than there are from all other people towards this .NET repository. That's not because others really love .NET, but because they try to stay constructive here.
+
+> I am an Open Source author and maintainer so don't try lecturing me
+
+I am afraid this is not how most open source maintainers respond in a community. +++$+++ 9 +++$+++ 0

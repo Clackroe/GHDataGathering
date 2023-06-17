@@ -1,0 +1,44 @@
+ROOT +++$+++ SP3893 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-09-03T20:22:01Z +++$+++ cnn.com time to interactive is 11s-22s screenshot from pagespeed, which says 11s, my own i9 macbook16 says 22s with lighthouse
+
+<img width="1354" alt="image" src="https://user-images.githubusercontent.com/3893/92163261-0bb3c280-ee3c-11ea-94e6-9318eccbf30e.png">
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP24444246 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-09-03T20:27:13Z +++$+++ Thanks! Appreciate you filing this bug. :clap:
+
+This is a known issue, most well described in #10657. So, **we'll automatically close this as a duplicate**.
+
+:robot: Beep beep boop.  +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP3893 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-09-03T20:31:55Z +++$+++ @patrickhulce how is a clearly wrong result due to variability? anyone can see that cnn time to interactive is not 11s-22s +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP2301202 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-09-03T20:38:28Z +++$+++ Ah, from your bug report it appeared as though you were asking why it's 11s in one environment and 22s in another, which is an extremely common question answered by the linked documentation :)
+
+> anyone can see that cnn time to interactive is not 11s-22s
+
+I think there's a misunderstanding with what the "Time to Interactive" metric measures then. Have you read through [the TTI docs](https://web.dev/tti/)? CNN definitely has a ton of main-thread work and is one of the canonical examples of a high TTI. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP3893 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-09-03T20:50:01Z +++$+++ So the docs say:
+
+> Measuring TTI is important because some sites optimize content visibility at the expense of interactivity. This can create a frustrating user experience: the site appears to be ready, but when the user tries to interact with it, nothing happens.
+
+But this is simply not true, it does not take 11s for CNN to be interactive. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP63258136 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-09-03T20:51:22Z +++$+++ from web.dev
+
+```
+TTI measures how long it takes a page to become fully interactive. A page is considered fully interactive when:
+
+The page displays useful content, which is measured by the First Contentful Paint,
+Event handlers are registered for most visible page elements, and
+The page responds to user interactions within 50 milliseconds.
+```
+
+Just open a browser to cnn.com and you can start clicking interacting with it after 1 second latest. No frustration from the user.
+
+Just making the case if TTI or LCP even try to model the REAL user experience or have we given up on that already.
+ +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP2301202 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-09-03T21:12:48Z +++$+++ > The page responds to user interactions within 50 milliseconds.
+
+That is the root factor at play here. Lighthouse computes this value faithfully in the case of CNN because holy crap look at that main-thread (16" Macbook i9).
+
+![image](https://user-images.githubusercontent.com/2301202/92168554-4c8de600-ee00-11ea-8773-aaf1c4377046.png)
+
+
+It sounds like you disagree that this 50ms task limit is a reasonable condition to have in an interactivity metric, but that's not really something that's up for debate. That's the metric definition after years of work by a Chrome team dedicated to metrics and dozens of evaluated alternatives you're free to read about if you wish. 
+
+If it helps, the weight of TTI in the overall score has been steadily declining over the past 2 years and is unlikely to increase in the near future. It does, however, capture an important moment when the page is actually done loading all of its stuff, and it won't be disappearing anytime soon. +++$+++ 0 +++$+++ 0

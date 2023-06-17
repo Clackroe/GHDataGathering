@@ -1,0 +1,23 @@
+SP2132602 +++$+++ jhkrischel +++$+++ NONE (AUTHOR)
+SP940557 +++$+++ gundalow +++$+++ CONTRIBUTOR
+SP6112411 +++$+++ krzysztof-magosa +++$+++ CONTRIBUTOR
+SP15162 +++$+++ alikins +++$+++ CONTRIBUTOR
+SP6585283 +++$+++ ansibot +++$+++ CONTRIBUTOR
+SP17752048 +++$+++ andrunah +++$+++ NONE
+SP19914339 +++$+++ csillab +++$+++ CONTRIBUTOR
+SP7386929 +++$+++ gail-b-stewart +++$+++ NONE
+SP950561 +++$+++ MarkusTeufelberger +++$+++ CONTRIBUTOR
+SP10137 +++$+++ ghost +++$+++ NONE
+SP5423285 +++$+++ brianguy +++$+++ NONE
+SP488213 +++$+++ varac +++$+++ NONE
+SP112187 +++$+++ Goobaroo +++$+++ NONE
+SP481677 +++$+++ geerlingguy +++$+++ CONTRIBUTOR
+SP1361780 +++$+++ boormat +++$+++ NONE
+SP509689 +++$+++ steffann +++$+++ CONTRIBUTOR
+SP36764136 +++$+++ fzink +++$+++ NONE
+SP12090299 +++$+++ joeto0 +++$+++ NONE
+SP41154665 +++$+++ tom0010 +++$+++ NONE
+SP50200552 +++$+++ martincermak +++$+++ NONE
+SP740323 +++$+++ whirlwin +++$+++ NONE
+SP57633461 +++$+++ romulo-dbts +++$+++ NONE
+SP4614943 +++$+++ drewhemm +++$+++ NONE

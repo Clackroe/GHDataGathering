@@ -1,0 +1,31 @@
+ROOT +++$+++ SP3499273 +++$+++ ROOT +++$+++ ROOT +++$+++ 2015-08-29T10:09:56Z +++$+++ Add Facebook, Twitter, and XBoxLive leader board support to System.Exception Current exceptions are not very helpful in assisting the developer.  We should add social networking features to facilitate a better debugging experience. 
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP10137 +++$+++ ROOT +++$+++ ROOT +++$+++ 2015-08-29T11:27:42Z +++$+++ Aww.. Here, have a beer on me: :beer:
+ +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP1781701 +++$+++ ROOT +++$+++ COM0 +++$+++ 2015-08-29T11:48:49Z +++$+++ ![](https://avatars2.githubusercontent.com/u/1781701) 
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP3499273 +++$+++ ROOT +++$+++ COM1 +++$+++ 2015-08-29T11:49:37Z +++$+++ There is also room now to put Google Ads in the exception messages. 
+ +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM2 +++$+++ 2015-08-29T11:50:29Z +++$+++ Don't forget about those instagals! :dancer: 
+ +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP3499273 +++$+++ ROOT +++$+++ COM3 +++$+++ 2015-08-29T12:15:54Z +++$+++ If you guys were young and open to new things like me, you would understand how mindblowingly game changing this is! :+1:  :+1:  :+1:  :+1: 
+
+We can now query StackOverflow when an exception happens and also include the top 10 suggestions in the exception!  Additionally, others that have the same exception can follow you to see if you come up with an answer.  Also!!!!111!!!!!1 We should include ILSPY in CoreCLR, so that you can get a decompiled listing of the code where the exception occurred
+
+I am going to start prototyping this soon!!!! :100:  :100: :100: 
+ +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP791115 +++$+++ ROOT +++$+++ COM4 +++$+++ 2015-08-29T12:28:55Z +++$+++ coreclr is not a GUI program. I cannot imagine integrating such services.
+ +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP3499273 +++$+++ ROOT +++$+++ COM5 +++$+++ 2015-08-29T12:48:53Z +++$+++ >  I cannot imagine integrating such services.
+
+i was skyping with others and we decided we are going to change `System.Exception.Message` to a new and improved JSON format.  This will make integration with the services and DNX easier.
+
+[Edit]
+NuGet make its super simple to deploy this to everyone.
+ +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP791698 +++$+++ ROOT +++$+++ COM6 +++$+++ 2015-08-29T20:32:37Z +++$+++ I'm so glad these suggestions are being made by the OTHER CrashOverride rather than myself...
+ +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP5169960 +++$+++ ROOT +++$+++ COM7 +++$+++ 2015-08-29T20:52:52Z +++$+++ ![images](https://cloud.githubusercontent.com/assets/5169960/9564217/093c563a-4e54-11e5-8d85-b5b54130006b.jpg)
+
+OK, point taken and your feedback is being discussed in https://github.com/dotnet/corefx/issues/1187.
+ +++$+++ 0 +++$+++ 0

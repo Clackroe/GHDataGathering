@@ -1,0 +1,42 @@
+ROOT +++$+++ SP502396 +++$+++ ROOT +++$+++ ROOT +++$+++ 2021-05-06T18:48:22Z +++$+++ Rename Node-API to something less confusing/misleading <!--
+Thank you for suggesting an idea to make Node.js better.
+
+Please fill in as much of the template below as you're able.
+-->
+
+**Is your feature request related to a problem? Please describe.**
+There was recently a decision to rename N-API to Node-API. I believe this is a poor decision that will result in actively harmful results for both users of the API and general Node.js users.
+
+Specifically, there are multiple problems with this naming:
+
+- Building APIs are a common use case for Node.js. This naming can lead to confusing information or misleading search results.
+- Products often refer to the way to access their services with JavaScript or Node.js as their "JavaScript API". If people want to use this from Node.js, there is a non-trivial chance they will look for "Node.js API" which will lead to confusing results.
+- Node.js itself has an API, which theoretically includes this API. Naming a part of the whole the same thing as the whole is immensely confusing from an education perspective.
+- This API is far less likely to be used than other parts of the Ndoe.js API, which leads to an exacerbation of challenge presented by the problems above.
+
+**Describe the solution you'd like**
+
+Rename Node-API to something else.
+
+**Describe alternatives you've considered**
+- Undoing Node-API rename, moving it back to N-API. 
+  -  There is a reason a rename was done initially, and that reason is valid.
+- Leave it as is.
+  - This is going to be actively harmful to communication and education n the long-run. +++$+++ 7 +++$+++ 0
+COM0 +++$+++ SP9373002 +++$+++ ROOT +++$+++ ROOT +++$+++ 2021-05-06T18:57:27Z +++$+++ For context the rename/work is complete. The blog post which explains the changes is https://nodejs.medium.com/renaming-n-api-to-node-api-27aa8ca30ed8.
+
+The node-api team was asked to change the name in: https://github.com/nodejs/abi-stable-node/issues/420 . Being sensitive to the concern the team took on this extra work.
+
+
+ +++$+++ 1 +++$+++ 0
+COM1 +++$+++ SP718899 +++$+++ ROOT +++$+++ COM0 +++$+++ 2021-05-10T04:13:30Z +++$+++ Repeating [what I wrote 3 months ago](https://github.com/nodejs/TSC/issues/967#issuecomment-773031602):
+
+> I support changing the name N-API to something else, but the new term does have an obvious downside. The term "Node API" already has a straightforward meaning. Applying it to a specific API is more vague than descriptive.
+> 
+> That said, I don't know that I have better ideas. (Native Bindings API? Addon API? ABI Stability API?)
+
+I'll also add that `Node API` is somewhat contrary to our years-long efforts to have the name of the runtime spelled `Node.js` and not `Node` (or `NodeJS` or a number of other variatns). 
+
+Of course, now that the name change has already happened, there are significant costs/downsides to changing the name a second time in such a short period of time. I'd still support it, though, if the name was more descriptive and not subject to misinterpretation. A better name is better for our users. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP439929 +++$+++ ROOT +++$+++ COM1 +++$+++ 2021-05-20T22:52:51Z +++$+++ I'm -1 on changing the name again and I appreciate the effort the node-api team put into making the changes. It's a good change.  +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP9373002 +++$+++ ROOT +++$+++ COM2 +++$+++ 2022-06-03T15:38:29Z +++$+++ This was discussed in the Node-API team meeting today and and consensus was we don't think we want/will change at this point. Some of the team members could not comment directly since it was locked. +++$+++ 0 +++$+++ 0

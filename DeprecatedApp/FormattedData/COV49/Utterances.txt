@@ -1,0 +1,231 @@
+ROOT +++$+++ SP1812093 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-02-03T16:12:05Z +++$+++ Marketplace: searching by an extension's name is practically broken There are a few major problems when searching by an extension's name. First of all, if I remember correctly, the marketplace had this thing on every extension's page:
+
+![](https://cloud.githubusercontent.com/assets/2685357/25901135/734e34fc-359e-11e7-8a0b-a4ee9171ef4c.png)
+
+So I've added an analogous message to all of my extensions' readme files, and I think other extension authors have done this too.
+
+I have an extension called [Todo+](https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-todo-plus) (full id: `fabiospampinato.vscode-todo-plus`). This is what happens when the command `ext install vscode-todo-plus` is executed:
+
+![](https://user-images.githubusercontent.com/17926167/35692049-868ae976-077a-11e8-8ecc-debf7c71c558.gif)
+
+- `vscode-todo-plus` in an exact match of the id minus my username, and the extension is not even in the top 10 results.
+- Searching for `fabiospampinato.vscode-todo-plus`, which is an exact match of the full id, leads to the same results.
+- Searching for `@id:fabiospampinato.vscode-todo-plus` works, **but only inside VSC**, it doesn't work on [marketplace.visualstudio.com](https://marketplace.visualstudio.com)
+- Where are these `ext install` and `@id:` commands documented anyway?
+
+Let's try to search for another extension of mine, [Open in Browsers](https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-open-in-browsers) (full id: `fabiospampinato.vscode-open-in-browsers`):
+
+<img width="1102" alt="screen shot 2018-02-03 at 16 51 16" src="https://user-images.githubusercontent.com/1812093/35768894-f918c7e0-0902-11e8-8876-8386a2c52078.png">
+
+- Not only `vscode-open-in-browsers` is an exact match of the extention id minus my username, but "Open in Browsers" is the extension's title, and "vscode" is practically a meaningless keyword, as is "in". What's the first result for this search? [vscode-ins-support](https://marketplace.visualstudio.com/items?itemName=wk-j.vscode-ins-support) 😕
+
+I hope we do agree there's a problem here.
+
+If I may suggest a few improvements: 
+
+1. Always check if an extension's id (minus the username) is an exact match of the current query.
+2. Implement [stop words](https://en.wikipedia.org/wiki/Stop_words).
+
+_Please don't close this issue as "non actionable"._ +++$+++ 18 +++$+++ 0
+COM0 +++$+++ SP641685 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-02-03T22:36:47Z +++$+++ This has been a long standing issue -- it is the reason I had to rename my extension to *Git Lens* rather than its actual name *GitLens* (no space), because when searching for git it would never show up. And even with that rename -- I had to pack in other words into the title (SEO hacking style) to even get it to show up on some other keywords -- even if those keywords were in the package.json keywords list. +++$+++ 1 +++$+++ 0
+COM1 +++$+++ SP1812093 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-02-04T00:15:47Z +++$+++ So those keywords I've been adding are actually useless you say? Nice...
+
+I'm not sure if it's worse that the search engine works as badly as it does or that it hasn't been fixed already. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP641685 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-02-05T08:07:34Z +++$+++ Not useless, but just ranked quite a lot below what is in the name -- at least that used to be the case +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP22350 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-02-05T09:08:12Z +++$+++ cc @viradhamMS @pkuma-msft +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP22350 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-02-06T08:58:09Z +++$+++ @fabiospampinato 
+
+Disregarding the fact that the Marketplace doesn't return any results when searching for an extension's id, we have fixed the Marketplace instructions since a while. `ext install` was our way of guiding users to install extensions inside VS Code. Since we now have URL handlers for Mac and Windows, those instructions became almost irrelevant. We now only show them for Linux users:
+
+![image](https://user-images.githubusercontent.com/22350/35850126-1510cbaa-0b24-11e8-88da-f21d798b53b3.png)
+
+Running this in VS Code will correctly trigger the search for `@id.name`. The `name` format should've never been there. Only the`id.name` is unequivocal in order to find an extension in the Marketplace.
+
+One idea I have for alleviating this pain is to improve the `ext install name` (without `id`) experience: what if we showed in quick open a list of extensions which match that name? This would simply mitigate the fact that there are instructions for `ext install name` out there. But in any case, I recommend switching your instructions to `ext install id.name`.
+
+We've notified the Marketplace of the search issues. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP1812093 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-02-06T15:58:05Z +++$+++ > we have fixed the Marketplace instructions since a while
+
+I've only recently noticed the change (from `ext-name` to `owner.ext-name`) because somebody opened an issue about that in one of my repositories, has this change been mentioned in any changelog in the past?
+
+> Since we now have URL handlers for Mac and Windows, those instructions became almost irrelevant
+
+I would have replaced those `ext install (...)` instructions with URL handlers, but I've tried them once and after that, for a few days/weeks, a "Do you want to install (...)" message kept popping up every time I opened a new window. By the time that was fixed I guess I had forgotten about them.
+
+> what if we showed in quick open a list of extensions which match that name? 
+
+Why providing 2 different interfaces for discovering extensions?
+
+Shouldn't searching "just work"? +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP22350 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-02-07T16:39:34Z +++$+++ > I've only recently noticed the change (from ext-name to owner.ext-name) because somebody opened an issue about that in one of my repositories, has this change been mentioned in any changelog in the past?
+
+I guess it wasn't, since it was a Markeplace change... Sorry about that.
+
+> Shouldn't searching "just work"?
+
+It should. We've notified the Marketplace of the search issues. +++$+++ 2 +++$+++ 0
+COM7 +++$+++ SP1812093 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-05-27T15:41:03Z +++$+++ Just to reiterate on how bad the search engine works:
+
+- I've just published an extension named `Open in node_modules`
+- Searching for `open in node modules` (without the underscore) won't even show said extension within the first 60 results 🤷‍♂️ +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP13743203 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-05-28T15:02:16Z +++$+++ @fabiospampinato, regarding the issue of searching your new extension:
+
+While searching an extension, we also take into account the community inputs like number of downloads, number of ratings and average rating along with the string matching. Among the string matching, exact string matches carry a higher weight than prefix match. 
+
+Since `node_modules` is one word in your extension name, word `node` in search text gets prefix match here. However, there are lot of extensions on Marketplace which have exact word 'node' in their extension name. So they carry a higher weight for matching the word 'node'. Additionally, since your extension is new, download count and ratings of other extensions are way higher, pushing their total score to the top.
+
+One way to improve your extension rank is to break word `node_modules` into separate words `node modules`. This will increase the string matching score and push your extension up in the result. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP1812093 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-05-28T15:38:02Z +++$+++ @gaurav42 Well, I would still consider whatever algorithm you guys are using broken because if I search for "open in node modules" I get these search results (some samples ~~randomly picked):
+
+| Rank    | Ext. Name    | Ext. Description | My comments  |
+|--------|-------------|-----------------|----------------|
+| `#6`  | [Node Exec](https://marketplace.visualstudio.com/items?itemName=miramac.vscode-exec-node) | Execute the current file or your selected code with node.js. | 80k downloads, but no mention of "open" or "module(s)" anywhere.
+| `#10` | [CSS Modules](https://marketplace.visualstudio.com/items?itemName=clinyong.vscode-css-modules) | Visual Studio Code extension for CSS Modules | 22k downloads, but no mention of "open" or "node" anywhere.
+| `#17` | [Node TDD](https://marketplace.visualstudio.com/items?itemName=prashaantt.node-tdd) | Ease test-driven development in Node and JavaScript | 9k downloads, no mention of "module(s)", but at least it has a few "opened" in its readme.
+| `#64` | [Open in Vim](https://marketplace.visualstudio.com/items?itemName=jonsmithers.open-in-vim) | Opens current file in vim | 2k downloads, this is not even mentioning "node" anywhere, let alone "module(s)". But at least it has "open" and "in" in it's title.
+| `#65` | [Open in node_modules](https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-open-in-node-modules) | Open the current selection or arbitrary string in node_modules. | 2 downloads, it matches all the provided keywords, **in its title**.
+
+If I had to guess what's wrong with your approach I'd say:
+
+- Lack of stopwords, kind of meaningless keywords like "vscode" or "in" are given too much weight.
+- Poor query parsing, if keywords are joined in some sort or another the whole thing falls apart (vscode-foo-bar, foo_bar, GitLens etc.)
+- Maybe you're giving too much weight to downloads and ratings, the first thing to sort for is relevancy.
+
+> One way to improve your extension rank is to break word node_modules into separate words node modules. This will increase the string matching score and push your extension up in the result.
+
+I'm not going to rename the extension to something wrong (`node_modules` is a folder, I'm not talking about `node modules`, as in "NPM packages", here) just to work around this. +++$+++ 4 +++$+++ 0
+COM10 +++$+++ SP13080965 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-06-11T14:02:25Z +++$+++ I agree, the search ranking seems wierd.
+
+Some examples (when searching for "python"):
+
+Py Files generator is above autoDocString, despite having about 50k less installs and 0 reviews
+Same thing with ladieratheme - it is above autoDocString despite having about 49k less installs and 3 less reviews
+
+Trustcode odo snippets and kvlang is above docker linter, despite having 47k less installs
+
+Python paste and indent has 3 stars but apparently it's 2k extra downloads trumps Python (pydev)'s 5 star rating.  Seems like download count is weighted more heavily than rating in the ranking (or maybe python paste and indent has better keywords)
+
+Python Coding Conventions has 773 downloads and is unrated, yet somehow is above magicpython (with 742 _thousand_ downloads and 3.5 stars) and several other extensions with far more downloads / good ratings.  So you could have a very popular or well-rated extension but if you don't have the right keywords you will still be ranked down.
+
+Wait..,. but looking at the Python Coding Conventions package.json, it doesn't even have any keywords!
+
+https://github.com/harip/python-coding-conventions/blob/master/package.json  🤔🤔🤔
+
+> While searching an extension, we also take into account the community inputs like number of downloads, 
+
+You mean the download count that is _also_ the update count?  This has been a outstanding issue ever since 2016 - when you release an update the marketplace shows your downloads as having increased.
+The update count should not effect the search ranking.
+
+> number of ratings and average rating 
+
+That's good, but what algorithim are you using to calculate the weighted rating?  Not sure if that is open source but hopefully it isn't something like RatingA - RatingB or RatingA/RatingB
+
+http://www.evanmiller.org/how-not-to-sort-by-average-rating.html +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP1812093 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-06-11T14:22:03Z +++$+++ > Python Coding Conventions has 773 downloads and is unrated, yet somehow is above magicpython 
+
+This probably happens because of this:
+
+> Poor query parsing, if keywords are joined in some sort of another the whole thing falls apart (vscode-foo-bar, foo_bar, GitLens etc.)
+
+> You mean the download count that is also the update count? This has been a outstanding issue ever since 2016 - when you release an update the marketplace shows your downloads as having increased.
+The update count should not effect the search ranking.
+
+Yeah that's another major problem, one could automatically push a new update every day and downloads will go through the roof even though the same number of people are using it.
+
+I guess technically those users are _downloading_ the update, but once this things are counted the downloads counter becomes less meaningful. 
+
+The download counter for extensions on Chrome's store decreases when somebody uninstalls your extension and I think it doesn't increase just because the extension gets updated. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP13727302 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-06-14T05:02:55Z +++$+++ Hey guys, I want to thank you for all the feedback. Please keep them coming. We are discussing this issue internally and I'll update this thread as soon as we have something to share. +++$+++ 3 +++$+++ 0
+COM13 +++$+++ SP1812093 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-07-18T11:22:07Z +++$+++ Here there's another weird one, searching for "monokai" and ordering by downloads returns those language packs at the top. The only place where those language packs mention "monokai" is inside their `package.json` as the value of some `contributes.localizations[0].translations[x].id` keys, why are you guys even indexing those fields?
+
+<img width="1193" alt="screen shot 2018-07-18 at 13 09 36" src="https://user-images.githubusercontent.com/1812093/42878075-112f643c-8a8c-11e8-93a2-1c5f54f57589.png"> +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP1812093 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-09-20T16:34:48Z +++$+++ I've just realized that the readmes aren't indexed at all. 
+
+I searched for "cyclomatic" in the marketplace, and I've got this result:
+
+<img width="674" alt="screen shot 2018-09-20 at 18 27 56" src="https://user-images.githubusercontent.com/1812093/45832685-ebe46c00-bd02-11e8-85ec-3cf9dc21ad82.png">
+
+Then I tried searching for "marketplace cyclomatic" on Google, and this is the result:
+
+<img width="846" alt="screen shot 2018-09-20 at 18 25 18" src="https://user-images.githubusercontent.com/1812093/45832583-95772d80-bd02-11e8-875b-473a56d814a1.png">
+
+This is a bit ridiculous. 
+
+I'm not saying that the search functionalities in the marketplace should be as good as Google's under **all** circumstances, but that's a full-word match in the readme, this query just can't return 0 results.
+
+@pkuma-msft do you have any updates for us? +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP13727302 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-09-21T21:11:09Z +++$+++ @fabiospampinato Yes, unfortunately we do not index readme.md.. sorry about that. We use SQL FTS in our backend today and that's kind of the limiting factor. There's only so much custom logic we can run over the results returned by FTS to make it 'more' relevant - and more importantly it doesn't scale in the long run.
+
+We are exploring moving our search platform to Azure Search or Bing which are techologies that are being actively developed and should provide us with more features and capabilities.
+
+I'm afraid we are not going to invest more in trying to optimize search with FTS. +++$+++ 3 +++$+++ 0
+COM16 +++$+++ SP13080965 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-09-21T23:06:22Z +++$+++ @pkuma-msft thanks for the update.  Any timeframe for when the move will happen? +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP13080965 +++$+++ ROOT +++$+++ COM16 +++$+++ 2018-09-22T15:50:45Z +++$+++ Holy crap changing my extension name to "AREPL for python" moved it to the *third* position in the search rankings when searching for python.  Thanks for the tip @eamodio and @gaurav42  ! +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP13727302 +++$+++ ROOT +++$+++ COM17 +++$+++ 2018-09-26T07:42:24Z +++$+++ @Almenon Sorry we are still in early exploration stages, cannot comment on a timeline yet. +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP22350 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-01-04T07:52:29Z +++$+++ From @octref 
+
+> Previously: https://github.com/Microsoft/vscode/issues/24511
+> 
+> Now if you search for Vue, Vetur doesn't even show up in the first page despite being the most popular Vue extension. The install count of the 24 Vue extensions in first page combined is not even half of Vetur's install count.
+> 
+> ![image](https://user-images.githubusercontent.com/4033249/50652857-a6a81b00-0f3c-11e9-95e2-e2838082acfc.png)
+> 
+> A new Vue user coming to VS Code have a hard time finding Vetur by organic search. He might be misled to install a lot of the random extensions in Marketplace and believe VS Code has poor support for Vue files. +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP4033249 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-01-04T19:02:08Z +++$+++ ~~@kesane-msft~~
+
+~~Which~~
+
+Oops, misclick. +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP4033249 +++$+++ ROOT +++$+++ COM20 +++$+++ 2019-01-04T19:10:53Z +++$+++ > our search algorithm gives more weightage to matches in the extension's display name. If you add the "vue" term in your display name your extension would start showing as the top result.
+
+@kesane-msft Which I would refuse. What do I call it? `Vetur Vue`?
+
+Another example: Searching for "Golang"
+
+![image](https://user-images.githubusercontent.com/4033249/50705744-a2e5c880-1010-11e9-941e-5a1d68cc6848.png)
+
+What should [Go extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.Go) do? Renaming it to Golang? After which the query `Go` wouldn't return it as top result?
+
+Maybe it's better to start a community curation of good extensions for each language/framework. http://howistart.org/ is a good example. At least it wouldn't be impossible for new users to find which extension to use, because the search results are not ranked helpfully.
+ +++$+++ 2 +++$+++ 0
+COM22 +++$+++ SP641685 +++$+++ ROOT +++$+++ COM21 +++$+++ 2019-01-04T19:24:19Z +++$+++ Maybe there could be a keyword (maybe the first one?), that is ranked as if it was part of the title. So that way GitLens could have _git_, Vetur could have _vue_, Go could have _golang_, etc. +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP4033249 +++$+++ ROOT +++$+++ COM22 +++$+++ 2019-01-04T19:28:11Z +++$+++ @eamodio Already did that, just need marketplace to index the `keywords` in package.json:
+
+![image](https://user-images.githubusercontent.com/4033249/50706819-cc542380-1013-11e9-8786-e286bb014c2a.png)
+ +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP641685 +++$+++ ROOT +++$+++ COM23 +++$+++ 2019-01-04T19:29:36Z +++$+++ @octref yup, exactly +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP1812093 +++$+++ ROOT +++$+++ COM24 +++$+++ 2019-01-04T19:36:24Z +++$+++ > Maybe there could be a keyword (maybe the first one?), that is ranked as if it was part of the title. So that way GitLens could have git, Vetur could have vue, Go could have golang, etc.
+
+This sounds too specific to me, IMHO the solution is transitioning from full-text search to a real search engine. Readmes, titles, descriptions and keywords should be properly indexed and the search query should be properly parsed too.  +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP641685 +++$+++ ROOT +++$+++ COM25 +++$+++ 2019-01-04T20:42:34Z +++$+++ @fabiospampinato While I don't disagree -- I was just trying to offer an alternative that would hopefully be easy to implement but improves things somewhat and therefore likely to happen 😉  +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP802702 +++$+++ ROOT +++$+++ COM26 +++$+++ 2019-02-27T21:07:26Z +++$+++ Just wanted to open this as an issue. I often read `search for [xxx] and install the first result`.
+I search the exact name of an extension and the one I'm looking for never is the first result :(
+
+![image](https://user-images.githubusercontent.com/802702/53523036-073a7b00-3adc-11e9-8000-2b2b802ba1e5.png)
+ +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP17692058 +++$+++ ROOT +++$+++ COM27 +++$+++ 2019-03-31T10:31:42Z +++$+++ I can confirm this is still a bad issue. 
+### This isn't a 'bad' search algorithm, something is broken here.
+
+When searching for "line endings" (picture below)<br>
+The following 4 circles are all similar extensions. The red circles have MORE downloads, installs, and better ratings, and I checked the `package.json` all of them have "line endings" in the title and as keywords.<br>
+
+How can 'Line Note' (4th result) which
+- doesn't have 'endings' in the title
+- has 203 downloads
+- no reviews
+- doesn't even have 'endings' in the package.json or readme 
+
+Beat out both 'line-endings' and 'code-eol (2019) Line Endings'
+- both contain the full search term in the title
+- they have 4K and 6K downloads respectively
+- they have 4 stars and 5 stars respectively
+-  and have 'line endings', 'line', 'endings' in the keywords of the package.json and readme
+
+And it's not like 'Line Note' is some anomaly, there are 25 just as bad results that come before the relevant one. 
+
+<img width="1221" alt="Screen Shot 2019-03-31 at 5 02 32 AM" src="https://user-images.githubusercontent.com/17692058/55287759-c059d280-5372-11e9-8c99-21549a98d33f.png"> +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP17692058 +++$+++ ROOT +++$+++ COM28 +++$+++ 2019-03-31T10:39:16Z +++$+++ My only theory to how these are being ranked, is that the marketplace has grabbed 200 results and accidentally sorted them by trending-ness instead of search-query relevance.
+
+Since this is an upstream problem, is there a more direct repo we can reach out to? @auchenberg. 
+
+If not then I agree with @octref, its been 2 months, it's probably time for the community to start building their own solution. I don't understand how something this critical can fail without tests catching it and a rollback being issued. +++$+++ 0 +++$+++ 0

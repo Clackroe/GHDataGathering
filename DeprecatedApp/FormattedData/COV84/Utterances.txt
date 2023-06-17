@@ -1,0 +1,29 @@
+ROOT +++$+++ SP22350 +++$+++ ROOT +++$+++ ROOT +++$+++ 2021-02-10T15:51:57Z +++$+++ ⚠️🚧👷 Scheduled rename `master` branch to `main` On **Feb 14, 2021, 8PM UTC** the `microsoft/vscode` repository will rename its `master` branch to `main`.
+
+cc @microsoft/vscode
+
+---
+
+⚠️ **Call to Action** ⚠️
+
+If you have a clone of `microsoft/vscode` locally, you'll need to run the following commands **_after_** the rename happens:
+
+```
+git branch -m master main
+git fetch origin
+git branch -u origin/main main
+git fetch --prune
+``` +++$+++ 16 +++$+++ 0
+COM0 +++$+++ SP1494154 +++$+++ ROOT +++$+++ ROOT +++$+++ 2021-02-11T08:39:57Z +++$+++ Women can also be a construction worker 👷‍♀️ 🤦‍♀️  +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP22350 +++$+++ ROOT +++$+++ COM0 +++$+++ 2021-02-11T09:11:01Z +++$+++ > Women can also be a construction worker 👷‍♀️ 🤦‍♀️
+
+@baslr Absolutely, why would you even think otherwise?
+
+In this case, I am the one doing the construction work and I happen to be a man... I think. 🤔  +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP78904980 +++$+++ ROOT +++$+++ COM1 +++$+++ 2021-02-11T10:24:18Z +++$+++ May I ask why is this necessary? Did I miss something?  +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP11769352 +++$+++ ROOT +++$+++ COM2 +++$+++ 2021-02-11T12:22:46Z +++$+++ > May I ask why is this necessary? Did I miss something?
+
+I guess the same reason why GitHub defaults to 'main' master branch name now. Good old PC BS. Apparently word 'master' has a bad stigma attached to it now 🤦‍♂️ +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP22350 +++$+++ ROOT +++$+++ COM3 +++$+++ 2021-02-11T13:04:58Z +++$+++ Guys & gals, I'm sorry. Nothing bad happened here, but I'm just going to lock this thread right now before it does.
+
+As a team, we've decided to go ahead with this rename, because reasons. This issue isn't the place to discuss the merits and drawbacks of the rename. If you feel like venting, I recommend you do so through your own personal mechanisms. Mine is running 10k out in the cold. 🏃  +++$+++ 0 +++$+++ 0

@@ -1,0 +1,317 @@
+ROOT +++$+++ SP6677272 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-01-21T21:12:24Z +++$+++ Top-level statements and functions # Top level statements and functions
+
+There are at least three somewhat conflicting scenarios around allowing statements and/or functions to be declared at the top level of program text. 
+
+First I'll consider each in turn, and point out how they conflict with each other. Then I'll propose an approach for C# to take.
+
+## Scenario 1: Simple programs
+
+There's a certain amount of boilerplate surrounding even the simplest of programs, because of the need for an explicit `Main` method. This seems to get in the way of language learning and program clarity.
+
+The simplest feature to address this would be to allow a sequence of *statements* to occur right before the *namespace_member_declaration*s of a *compilation_unit* (i.e. source file).
+
+The semantics are that if such a sequence of *statements* is present, the following type declaration would be emitted:
+
+``` c#
+static class Program
+{
+    static async Task Main(string[] args)
+    {
+        // statements
+    }
+}
+```
+
+This would make it an error for multiple compilation units to have statements, because you'd get two classes with the same name `Program`. If the assembly is run, it would also be an error to have other valid entry points, such as explicit `Main` methods.
+
+## Scenario 2: Top-level functions
+
+C# restricts named functions to being declared as members of types, as well as local functions. The closest you can get to a notion of "global" (or "namespace-global") functions is to put them as static members in a class `C` and then say `using static C;` in places where you want to use the functions directly without prefixing with a class name. This adds ceremony to both the declaring side and the consuming side dealing with the class `C`.
+
+The simplest feature to address this is to add function declarations to *namespace-member_declaration*s - the kind of thing you can declare globally or in a namespace.
+
+The functions would be limited in the modifiers that apply: They cannot be `abstract`, `virtual`, `override` or `sealed`. Their accessibility, like that of top-level classes would be `internal` or `public`, with `internal` being the default. 
+
+There's a design decision as to which kinds of function member declarations would be allowed: methods are key, but properties, indexers, etc. could also be considered. You could even consider stateful members (fields, auto-properties), and you would essentially get global variables. User defined operators and conversions are probably completely off the table, though, as they have relationships with their enclosing type, and there wouldn't be one.
+
+On the consuming side, the top-level members would be direct members of the namespace, just as top level types are. If the namespace is `using`ed, or is the global namespace, the members are directly in scope.
+
+The implementation would be that a partial class is generated to wrap the members as static members. The class name would probably be unspeakable, and would be chosen in such a way that the same name wouldn't be used twice in the same namespace across different assemblies. If any of the top-level members are public, the class would be public, and marked in such a way that a consuming assembly would know to expose the members directly.
+
+## Scenario 3: Scripting
+
+There is currently a "scripting dialect" of C#, where top-level statements and functions are not only *allowed*, but are *the* way the program is specified. It's similar to scenario 1, except that the statements are freely scattered among type declarations. (Namespace declarations are currently not allowed in scripting, but that may change in the future.)
+
+The execution of a script is often performed by a "host", that is able to put specific things into scope of the script, as well as access the state of its "local" variables. This is enabled by the state being represented as instance fields of a generated class, of which the running script is an instance.
+
+Also, scripts can be executed as individual "submissions", one after the other, with subsequent ones being within the scope of their predecessors' declarations, modulo shadowing. In this mode submissions need to be captured as objects, and cannot allow stack-only things such as ref variables. Similarly, scripts are implicitly `async` so that `await` can be used freely, and this also limits the use of certain features.
+
+If we want to add top level statements and functions to C#, we don't want them to conflict with how those work in scripting. Rather we want to compile them in the requisite manner when necessary, but unify on the semantics of the features. This doesn't fully eliminate the scripting dialect, as we would still need to deal with the special directives and "magic commands" that it requires, but at the minimum we do need to avoid the same syntax to not mean materially different things.
+
+## Problem
+
+The main conflict between these three scenarios is in how top-level functions are construed. Are they "local-to-the-main-program" functions (as in 1 and 3), or are they top level library declarations just like types (as in 2)?
+
+If the former, then top-level functions can only occur as part of a top-level program. They can see the local variables of that program, but they (and the local variables themselves) aren't visible to e.g. adjacent type declarations.
+
+If the latter, then top-level functions can occur everywhere top-level type declarations can occur. They wouldn't be able to access the state of a top-level program, unless we also interpret the "locals" of such a program as top-level "global" variables. The functions - as well as such global variables if we choose to embrace them - would be members of their namespace, visible to any code in the assembly, and, if declared `public`, to any other assemblies referencing it.
+
+# Proposal: Simple programs
+
+You can squint and imagine a merged feature that serves all the scenarios. It would require a lot of design work, and some corners cut. I do not propose that. Instead I suggest that we fully embrace scenario 1, essentially fleshing out and slightly generalizing the feature sketched out for that scenario above.
+
+The primary goal of the feature therefore is to allow C# programs without unnecessary boilerplate around them, for the sake of learners and the clarity of code. A secondary but important goal is to not introduce a fundamental conflict with scenarios 2 (which we may want to revisit in the future) and 3 (not having the meaning of top-level code differ between "program" and "script" scenarios).
+
+It should be relatively straightforward to ensure that, while more restrictive than scenario 3, for programs that *are* allowed, the semantics will be approximately the same; enough so that the two don't materially conflict. 
+
+The approach more fundamentally clashes with scenario 2, and in its straightforward form it would bar us from extending the feature to embrace scenario 2 in the future. I propose that we build in additional restrictions to keep that design space open.
+
+(If we later find that there's a need for libraries of top-level functions, we can also consider an equivalent to VB's *modules*, which still provide a named wrapper for static members (similar to a static class), but put the names of those members in scope implicitly when the enclosing namespace is `using`ed, instead of requiring an explicit `using static`).
+
+## Syntax
+
+The only additional syntax is allowing a sequence of *statement*s in a compilation unit, just before the *namespace_member_declaration*s:
+
+``` antlr
+compilation_unit
+    : extern_alias_directive* using_directive* global_attributes? statement* namespace_member_declaration*
+    ;
+```
+
+In all but one *compilation_unit* the *statement*s must all be local function declarations. 
+
+Example:
+
+``` c#
+// File 1 - any statements
+if (args.Length == 0
+    || !int.TryParse(args[0], out int n)
+    || n < 0) return;
+Console.WriteLine(Fib(n).curr);
+
+// File 2 - only local functions
+(int curr, int prev) Fib(int i)
+{
+    if (i == 0) return (1, 0);
+    var (curr, prev) = Fib(i - 1);
+    return (curr + prev, curr);
+}
+```
+
+Note the use of `return` as a top-level statement. We may find that this looks/feels wrong since it's not visibly inside a body of a member. 
+
+## Semantics
+
+If any top-level statements are present in any compilation unit of the program, the meaning is as if they were combined in the block body of a `Main` method of a `Program` class in the global namespace, as follows:
+
+``` c#
+static class Program
+{
+    static async Task Main(string[] args)
+    {
+        // File 1 statements
+        // File 2 local functions
+        // ...
+    }
+}
+```
+
+If any one compilation unit has statements other than local function declarations, those statements occur first. The order of statement contributions (which would all be local functions) from other compilation units is undefined.
+
+Warnings about missing `await` expressions are omitted. 
+
+Normally collision between multiple `Main` method entry points is only diagnosed if and when the program is run. However, we should consider forbidding any `Main` methods suitable as entry points to coexist with top-level statements. Or if we do allow them, we should not allow synchronous ones to silently take precedence over the async one generated from the top-level statements. That precedence was only reluctantly allowed over async `Main` methods for back compat reasons which do not apply here.
+
+The example above would yield the following `Main` method declaration:
+
+``` c#
+static class Program
+{
+    static async Task Main(string[] args)
+    {
+        // Statements from File 1
+        if (args.Length == 0
+            || !int.TryParse(args[0], out int n)
+            || n < 0) return;
+        Console.WriteLine(Fib(n).curr);
+        
+        // Local functions from File 2
+        (int curr, int prev) Fib(int i)
+        {
+            if (i == 0) return (1, 0);
+            var (curr, prev) = Fib(i - 1);
+            return (curr + prev, curr);
+        }
+    }
+}
+```
+
+## Scope of top-level parameters, local variables and local functions
+
+Even though the `args` parameter and top-level local variables and functions are "wrapped" into the generated `Main` method, they should still be in scope throughout the program, as if they were declared with internal accessibility in the global namespace. 
+
+This could lead to name collisions, ambiguous lookups and shadowing of imported names. If one is picked by name look-up, it should lead to an error instead of being silently bypassed. 
+
+In this way we protect our future ability to better address scenario 2, and are able to give useful diagnostics to users who mistakenly believe them to be supported.
+
+LDM notes:
+- https://github.com/dotnet/csharplang/blob/master/meetings/2020/LDM-2020-01-22.md +++$+++ 101 +++$+++ 8
+COM0 +++$+++ SP6677272 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-01-21T21:15:56Z +++$+++ See relevant discussion at #2765. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-01-21T21:30:20Z +++$+++ The primary thing that bothers me here is scoping.  i.e. both around 'args' as well as the scopes of variables introduced in teh statements that precede a namespace.  However, it may just be an initial aversion that i coudl get over.
+
+Given that your goal is `Proposal: Simple programs`, i would say that there's actually no need for scoping to extend from teh statements elsewhere.  A simple program is just statements and little funcs.  The moment we get to namespaces/classes/etc, we're no longer "simple" and i personally would prefer stating that they shouldn't mix.
+
+--
+
+another issue for me is that while this is pitched as 'simple programs' it seems to still allow the statements to coexist with namespaces/classes.  First, this isn't really 'simple' to me anymore.  Second, it actually opens up large cans of worms for me.  For example, if i were to be able to have top-level statements that can be in scope for the rest of my program, then I absolutely would want to be able to make those top level variables `readonly` so they couldn't just be overwritten by the rest of my code.
+
+I strongly like the idea of simple-programs.  But I actually don't think this goes far enough.  Perhaps a simple program should *only* be top level statements/local-funcs? +++$+++ 5 +++$+++ 2
+COM2 +++$+++ SP10102290 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-01-21T21:36:02Z +++$+++ Where do imported namespaces come in?  Or do we need support for `using` directive within a method in order to support this?  Or would the compiler take `using` directives and "promote" them outside of the generated class?  What if multiple files want to import multiple and potentially colliding namespaces?
+
+It's difficult to not have an immediate negative visceral reaction to this proposal.  It feels like it creates yet another dialect of the language without solving for any problems or the use cases suggested.  You wouldn't be able to take CSX and run it this way, not without additional syntax work.  You couldn't use most of the language as you'd expect.  All variables end up in some mixed global scope.
+
+Feels like tools like LINQPad already satisfy this need and do so in a vastly superior manner. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP8640149 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-01-21T22:54:18Z +++$+++ @CyrusNajmabadi I agree that simple programs should remain simple. I am not even convinced that splitting your simple program into multiple simple files is something desirable. I imagine that `csc run hello.cs` or `dotnet run hello.cs` would be the preferred mode of running them. As soon as you have multiple files you need either a csproj or some other way to refer to multiple files. The former is complicated enough that you might as well rote learn `static void Main` as well, while the latter leads learners away from the "proper" way of doing things.
+
+Of course, the scripting dialect could invent its own way of including other files, but that's outside the scope of this issue. +++$+++ 1 +++$+++ 0
+COM4 +++$+++ SP55229438 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-01-22T00:51:06Z +++$+++ I agree with @MadsTorgersen proposal, that this feature should be targeting simple programs and people learning the language (and should be a shortcut for what goes inside Main()).  It could be worth adding a little more detail (with examples) to the section on the scoping of local variables and functions just so everyone is clear. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP29174528 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-01-22T05:09:33Z +++$+++ I'm feeling a little bit sceptical of this proposal.
+
+Writing a static Main function is not particularly difficult, and the tooling generates it for you anyway. In terms of benefits of top level statements I would suggest there's almost none from an actual use case perspective.
+
+Instead I feel this is more of a marketing issue. C# looks old and stuffy because you need so many things to create an app. Python you just type something and it runs.
+
+Marketing is important, but I don't think it's worth introducing a whole load of complexity for it. Instead I would keep this extremely simple. You can have a single file in a project with top level statements, which act exactly as if they're inside an async Main method. They are not globally scoped, and can't be referenced anywhere else. That should be enough to give beginners their python feel. +++$+++ 22 +++$+++ 6
+COM6 +++$+++ SP8166847 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-01-22T08:20:02Z +++$+++ For my part I really like Scenario 2. That would allow for significant time savings via less typing. And having worked with VB.NET for a number of years, I do miss VB's modules and their implicit imports.
+
+> User defined operators and conversions are probably completely off the table, though, as they have relationships with their enclosing type, and there wouldn't be one.
+
+I would love to have globally accessible implicit and other operators I could define even for existing CLR types. So if the team can find a way to include those it would add even more value to Scenario 2.
+ +++$+++ 1 +++$+++ 0
+COM7 +++$+++ SP8640149 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-01-22T10:54:39Z +++$+++ @YairHalberstadt I would absolutely use simple C# programs for throwaway scripts and tiny utilities. `dotnet new console` is fast, but it leaves behind a whole project folder with a bunch of binaries. +++$+++ 3 +++$+++ 0
+COM8 +++$+++ SP29174528 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-01-22T10:58:14Z +++$+++ @orthoxerox 
+Would you require more than one file? +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP8640149 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-01-22T11:48:16Z +++$+++ @YairHalberstadt one file per utility/script. I've already written I don't think it's nesessary to support multi-file "simple programs". +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP10102290 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-01-22T16:13:56Z +++$+++ If all this proposal does is take the statements in the file(s) and put that into the middle of a generated `Main` method why does this need to be a part of the compiler or C# spec at all?  Couldn't a separate `dotnet` tool be shipped which does that for users?  A simplified tool could be geared towards making this as easy as possible.  And you could prototype this all out right now without having to touch Roslyn or the C# spec. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP8640149 +++$+++ ROOT +++$+++ COM10 +++$+++ 2020-01-22T16:55:53Z +++$+++ @HaloFour It's a bit more complex than that, since the tool has to recognize the usings as well. +++$+++ 1 +++$+++ 0
+COM12 +++$+++ SP10102290 +++$+++ ROOT +++$+++ COM11 +++$+++ 2020-01-22T17:04:13Z +++$+++ @orthoxerox 
+
+> It's a bit more complex than that, since the tool has to recognize the usings as well.
+
+I see nothing in this proposal that claims that `using` directives would be supported.  That would land us firmly back into dialect territory since said directives aren't permitted mid-method.  But, if this proposal would need to support it, without a corresponding change to the language, then an external tool could also do so just as easily.  CSX already does it.
+
+IMO, we'd get more mileage making it easier to get/use CSX, and adding support for converting CSX scripts to a C# project.
+
+ +++$+++ 2 +++$+++ 1
+COM13 +++$+++ SP287848 +++$+++ ROOT +++$+++ COM12 +++$+++ 2020-01-22T19:28:01Z +++$+++ For me, the simple programs I would want to write:
+
+* Are single file.
+* Are ordered usings, types, functions, statements, e.g. (artificial example):
+
+    ```c#
+    using System;
+
+    class C
+    {
+        public int P { get; set; }
+    }
+
+    void Print(C c) => Console.WriteLine(c?.P);
+
+    Print(new C { P = 0 });
+    Print(null);
+    ```
+
+* Types don't need access to local variables from statements.
+
+This means that for me, the suggested ordering of "_statements_ right before the *namespace_member_declaration*s" would not be natural, I'd prefer it the other way around.
+
+And being able to have top-level local functions in other files and being able to access top-level local variables from other files is unnecessary and probably undesirable.
+
+On the other hand, the suggestion by @CyrusNajmabadi of having only "top level statements/local-funcs" goes too far: being able to declare types is necessary for the "simple programs" I want to write. +++$+++ 5 +++$+++ 0
+COM14 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM13 +++$+++ 2020-01-22T19:37:44Z +++$+++ Very interesting point @svick .  Thanks!  
+
+There's something definitely more appealing to me about that as it feels much more 'natural' in terms of scoping.  i.e if i think of the 'top level locals' i declare as similar to 'method locals', then placing them after everyting else feels 'better' (since locals can't be referenced by code that is earlier than their declaration).   +++$+++ 2 +++$+++ 0
+COM15 +++$+++ SP8640149 +++$+++ ROOT +++$+++ COM14 +++$+++ 2020-01-22T19:41:40Z +++$+++ @HaloFour Take a look at the grammarlet Mads posted:
+
+```
+compilation_unit
+    : extern_alias_directive* using_directive* global_attributes? statement* namespace_member_declaration*
+    ;
+```
+
+Usings are supported, and they must precede the statements. I actually don't mind if CSX is merged with mainline C#, I can then just treat this proposal as the first step in that direction. +++$+++ 3 +++$+++ 0
+COM16 +++$+++ SP1042507 +++$+++ ROOT +++$+++ COM15 +++$+++ 2020-01-23T05:29:20Z +++$+++ Would like to voice that I prefer the scenario 2 specifically
+
+Is it true that I could assume that top level function will be `internal static` by default? If it is then, as for simple program purpose, just one `void Main` is already reduced enough from the verbose class and `static`
+
+Another main reason I really support this feature is that, outermost `void Main` will become exactly one in the whole program, never be any conflict thereafter. It also true for any same name singleton function we want
+
+Also I would like to repeat myself that, I wish that we could not write top level statement. Only function and property. Because, unlike class that easily make dependency chain, we cannot expect timing and order of the statement aside from `void Main` +++$+++ 0 +++$+++ 1
+COM17 +++$+++ SP196899 +++$+++ ROOT +++$+++ COM16 +++$+++ 2020-01-23T08:33:30Z +++$+++ Scenario 2 is also my preferred option. 
+
+But I disagree with @MadsTorgersen suggestion of:
+> Their accessibility, like that of top-level classes would be `internal` or `public`, with `internal` being the default. 
+
+`private` should be supported and should be the default, in my view. Each file containing its own set of free functions should end up as a differently named static class, allowing each to contain its own private functions.
+
+ +++$+++ 3 +++$+++ 0
+COM18 +++$+++ SP29174528 +++$+++ ROOT +++$+++ COM17 +++$+++ 2020-01-23T08:36:58Z +++$+++ > private should be supported and should be the default, in my view. Each file containing its own set of free functions should end up as a differently named static class, allowing each to contain its own private functions.
+
+I think that would be very useful to support an FP rather than class based style of programming. Each file becomes a sort of module and defines a number of private, internal, and public functions. +++$+++ 7 +++$+++ 0
+COM19 +++$+++ SP1965570 +++$+++ ROOT +++$+++ COM18 +++$+++ 2020-01-23T15:57:27Z +++$+++ I don't understand the use case here. Is something wrong with 'csx' scripts? Why can't 'learners' and those who want 'simple programs' just use the already-existing scripting dialect?
+
+If the reason is "no one is using it"- that's a tooling and education problem, not a language design problem. You guys released  CSX and then did close to zero promotion of it- to my knowledge, no one official has ever blogged about it or demoed it at conferences, and development on  C# Interactive stopped almost as soon as it started. +++$+++ 0 +++$+++ 2
+COM20 +++$+++ SP788783 +++$+++ ROOT +++$+++ COM19 +++$+++ 2020-01-23T23:17:20Z +++$+++ > I strongly like the idea of simple-programs. But I actually don't think this goes far enough. Perhaps a simple program should only be top level statements/local-funcs?
+
+@CyrusNajmabadi I agree. IMO, having both top level statements/local-funcs and "regular" C# code coexist as proposed here can work, but allowing them to mix might be against the simple program scenario that motivated this proposal in the first place. 
+
+However, this would pretty much make it identical to a csx, right? It seems to me that making improvement to existing C# scripting would address the simple program scenario more effectively.  +++$+++ 0 +++$+++ 1
+COM21 +++$+++ SP3756641 +++$+++ ROOT +++$+++ COM20 +++$+++ 2020-01-24T00:07:51Z +++$+++ @MgSam The motivation here is to come up with a single dialect where you wouldn't have to think about the environment regardless to proficiency or task, people who just want/need to write a "simple program" and run it shouldn't use a different tool just because now they want to define a top-level function or whatever but for beginners this might be a show stopper especially for new programmers with no prior knowledge and this barrier is a language concern because there are two different dialects and two different tools for the same language. +++$+++ 7 +++$+++ 0
+COM22 +++$+++ SP3756641 +++$+++ ROOT +++$+++ COM21 +++$+++ 2020-01-28T21:22:31Z +++$+++ @AlgorithmsAreCool With all due respect your comment makes zero sense here. +++$+++ 1 +++$+++ 0
+COM23 +++$+++ SP10837869 +++$+++ ROOT +++$+++ COM22 +++$+++ 2020-01-29T00:25:38Z +++$+++ @eyalsk In retrospect, I agree. I've removed it. +++$+++ 1 +++$+++ 0
+COM24 +++$+++ SP10102290 +++$+++ ROOT +++$+++ COM23 +++$+++ 2020-01-29T17:31:47Z +++$+++ @RUSshy 
+
+Does it really solve that problem, though?  Sure, you might get "Hello World" off the ground faster, but for anything even slightly less trivial you're going to have to jump that same hurdle.
+
+And does that hurdle really exist, even for beginners?  Odds are that a beginner is starting from a tool like Visual Studio or `dotnet new` which writes all of that boilerplate for you.  If they're trying to write this program from the command line they've already had to vault significantly higher hurdles.
+
+If adoption and outreach are the goals I'd suggest that there are significantly better opportunities that don't result in creating dialects of the language.  And if the Tiobe index is to be trusted it doesn't appear that C# is having too many issues attracting developers.  Neither do most of the other languages towards the top of that list most of which require some kind of syntactic boilerplate.
+
+Oh, and bring back temporary solutions in Visual Studio.  The removal of that feature has been infinitely more annoying to my ability to toss together a quick&dirty project than having Visual Studio automatically generate some code around the code I want to write.
+
+ +++$+++ 1 +++$+++ 3
+COM25 +++$+++ SP1042507 +++$+++ ROOT +++$+++ COM24 +++$+++ 2020-01-29T17:44:14Z +++$+++ @HaloFour 
+
+> `dotnet new` which writes all of that boilerplate for you
+
+In the eye of beginner programmer, even the word `namespace` and `class`  itself is already magic that require them to understand that they cannot put a logic code inside those block. They need to learn that they could only put code into the bracket of `void Main`
+
+Starting with `dotnet new` will present them a sudden 3 layers that require understanding. This proposal can reduce to only one (or zero, if we could write a top level statement) +++$+++ 3 +++$+++ 0
+COM26 +++$+++ SP10102290 +++$+++ ROOT +++$+++ COM25 +++$+++ 2020-01-29T17:55:36Z +++$+++ @Thaina 
+
+> In the eye of beginner programmer, even the word `namespace` and `class` itself is already magic that require them to understand that they cannot put a logic code inside those block. They need to learn that they could only put code into the bracket of `void Main`
+
+I disagree that such syntax poses a burden to beginners, either to C# or to programming in general.  They're going to have to learn so much about the syntax of C# in order to put _anything_ anywhere anyway, and many of those concepts (like variables, definite assignment, etc.) are so much more complicated to grasp than requiring a single container around a method (`namespace` has always been optional).  What's next?  Implicit variable declaration by assignment?  Auto-importing namespaces?  Automatically emitting the output of any expression to the console?
+
+If C# is going to seriously consider the addition of top-level functions it should do so in consideration as to how they would impact and benefit developers of all skill levels and projects of all shapes. +++$+++ 0 +++$+++ 5
+COM27 +++$+++ SP1042507 +++$+++ ROOT +++$+++ COM26 +++$+++ 2020-01-29T18:35:19Z +++$+++ > @Thaina
+> 
+> > In the eye of beginner programmer, even the word `namespace` and `class` itself is already magic that require them to understand that they cannot put a logic code inside those block. They need to learn that they could only put code into the bracket of `void Main`
+> 
+> I disagree that such syntax poses a burden to beginners, 
+
+This might be only my opinion. But I still remember when I myself was a beginner. So this is my direct experience. I have learn only a little bit of C and start learning Java and C# at the same time. I remember I feel much burden on the `package`/`namespace` and `class` that was unknown to me. I don't know what it is and what effect it has on my code. What can I change in that file. What is the meaning of it. Where could I start typing. Looking back now I still felt that burden, partly because I always want this feature so it always reminded me on that first day
+
+It very easy when you have learn C or older language as a starting point to programming. You already know what a code of program really is. It really another story when you don't really know it but just start learning C# or Java as your first ever language in your life. And I think most of us here cannot experience that kind of experience anymore
+
+I have watch one 3Blue1Brown chapter, he talk about "This problem seems hard, then it doesn't, but it really is". He make that video about question in math competition that the organizer think it is quite easy, but the participant cannot solve it
+The conclusive word he give is, "It extremely hard to imagine what it feel like to not understand". And I kind of thinking the same with our understanding of programming language. What we feel like easy is easy from our perspective with some experience. We then sometimes fail to understand what it feel like to not understand, because we can't imagine it anymore +++$+++ 8 +++$+++ 0
+COM28 +++$+++ SP1042507 +++$+++ ROOT +++$+++ COM27 +++$+++ 2020-01-29T18:39:55Z +++$+++ > If C# is going to seriously consider the addition of top-level functions it should do so in consideration as to how they would impact and benefit developers of all skill levels and projects of all shapes.
+
+As for me I think this feature already benefit us if we could write only one `void Main` in the project. Made second and it will give a name collision error. It pin down that we would have only one entrypoint in the project ever. That was the main benefit for all singleton function
+
+My point is, the benefit for beginner that some people talk about is also as real and also a great bonus for our language too +++$+++ 3 +++$+++ 0
+COM29 +++$+++ SP135246 +++$+++ ROOT +++$+++ COM28 +++$+++ 2020-01-29T19:16:53Z +++$+++ > In the eye of beginner programmer, even the word namespace and class itself is already magic that require them to understand that they cannot put a logic code inside those block. They need to learn that they could only put code into the bracket of void Main
+
+I agree with this. There is a rather significant amount a syntax a beginner would have to read and understand to know what is happening. The less this is happening, the best. +++$+++ 3 +++$+++ 0

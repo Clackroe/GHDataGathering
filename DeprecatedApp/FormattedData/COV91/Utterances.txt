@@ -1,0 +1,192 @@
+ROOT +++$+++ SP68514 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-04-08T07:45:58Z +++$+++ v2.9.6 templating performance regression due to caching change in #67429 ##### SUMMARY
+#67429 (included in Ansible v2.9.6) causes a massive performance penalty compared to Ansible v2.9.5. I have a project making heavy use of Ansible's `template` module. With v2.9.5 it takes about 15 seconds to render a file. With v2.9.6, it takes about 9 minutes. Reverting the change in #67429 (just changing `if cache and only_one:` back to `if cache:`) restores the v2.9.5 performance.
+
+##### ISSUE TYPE
+- Bug Report
+
+##### COMPONENT NAME
+`lib/ansible/template/__init__.py`
+
+##### ANSIBLE VERSION
+<!--- Paste verbatim output from "ansible --version" between quotes -->
+```paste below
+ansible 2.9.6
+  config file = /users/kenyon/git/tni4/ansible.cfg
+  configured module search path = ['/users/kenyon/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /users/kenyon/.local/share/virtualenvs/tni4-I44CyCAv/lib/python3.6/site-packages/ansible
+  executable location = /users/kenyon/.local/share/virtualenvs/tni4-I44CyCAv/bin/ansible
+  python version = 3.6.8 (default, Apr 25 2019, 21:02:35) [GCC 4.8.5 20150623 (Red Hat 4.8.5-36)]
+```
+
+##### CONFIGURATION
+<!--- Paste verbatim output from "ansible-config dump --only-changed" between quotes -->
+```paste below
+DEFAULT_HOST_LIST(/users/kenyon/git/tni4/ansible.cfg) = ['/users/kenyon/git/tni4/hosts']
+```
+
+##### OS / ENVIRONMENT
+<!--- Provide all relevant information below, e.g. target OS versions, network device firmware, etc. -->
+CentOS 7
+
+##### STEPS TO REPRODUCE
+<!--- Describe exactly how to reproduce the problem, using a minimal test-case -->
+Use large templates with lots of Jinja code. I am rendering configuration files for network devices, so the end resulting rendered files are around 2000 lines or less, but the templates use a lot of Jinja features.
+
+##### EXPECTED RESULTS
+<!--- Describe what you expected to happen when running the steps above -->
+No performance regression.
+
+##### ACTUAL RESULTS
+<!--- Describe what actually happened. If possible run with extra verbosity (-vvvv) -->
+Performance regression. +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP6585283 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-04-08T07:53:18Z +++$+++ Files identified in the description:
+* [`lib/ansible/modules/files/template.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/modules/files/template.py)
+* [`lib/ansible/plugins/action/template.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/plugins/action/template.py)
+* [`lib/ansible/plugins/lookup/template.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/plugins/lookup/template.py)
+* [`lib/ansible/template/__init__.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/template/__init__.py)
+* [`lib/ansible/template/native_helpers.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/template/native_helpers.py)
+* [`lib/ansible/template/safe_eval.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/template/safe_eval.py)
+* [`lib/ansible/template/template.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/template/template.py)
+* [`lib/ansible/template/vars.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/template/vars.py)
+
+If these files are incorrect, please update the `component name` section of the description or use the `!component` bot command.
+
+[click here for bot help](https://github.com/ansible/ansibullbot/blob/master/ISSUE_HELP.md)
+<!--- boilerplate: components_banner ---> +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP39340 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-04-09T18:20:28Z +++$+++ After reviewing the change, we believe this to be a correct change. However, since you are seeing a performance degradation, I'm going to assume that you have some variable assigned to a `lookup`, that is being repeatedly re-evaluated now.
+
+Can you confirm whether this is the case, and how that variable is being used in these templates?
+
+In order to more effectively help you, we ultimately need a reproducer that we can run that replicates the behavior you describe. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP39340 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-04-09T19:01:09Z +++$+++ needs_info +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP68514 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-04-10T07:14:06Z +++$+++ I'm only using `lookup` as in `somevar: '{{ lookup("vars", ...) }}'`, and only in two places out of thousands of lines, and the performance is degraded even when templating files that don't include those `lookup` calls, so those aren't the problem (not sure if that's what you meant by "some variable assigned to a `lookup`").
+
+I'll try to come up with a minimal reproducer soon. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP4280480 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-04-17T13:04:20Z +++$+++ We use a lot of lookup in variables too and observing a 26% performance degradation in our case on 2.9.6+ +++$+++ 1 +++$+++ 0
+COM5 +++$+++ SP68514 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-04-19T23:57:19Z +++$+++ Well I'm having trouble making a reproducer for this. Unfortunately I can't easily attempt to reproduce this on the same hardware where I first experienced the problem because my company network heavily restricts Internet access from my development environment. So I've been trying to reproduce on my home computer, but am only getting essentially identical results between 2.9.5 and 2.9.6. One difference between my work and home environments is that the work env has $HOME mounted over NFS, so I wonder if that has something to do with it. Otherwise, I'm not sure. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP9899409 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-05-01T15:57:47Z +++$+++ I can also confirm that I'm seeing this templating caching change have pretty significant performance degradation issues. Before 2.9.6, role execution took anywhere from 3-7 minutes, and when we bump the Ansible minor version to 2.9.6+, it typically takes 45+ minutes to deploy all of our resources and this is always reproducible. When I deploy with more verbose logs, I can see that a task given a [jinja2 expression](https://github.com/kube-reporting/metering-operator/blob/master/images/metering-ansible-operator/roles/meteringconfig/tasks/configure_root_ca.yml#L13) makes a file lookup call many, many times:
+
+```yaml
+TASK [meteringconfig : Check if Root CA secret already exists] *****************
+task path: /opt/ansible/roles/meteringconfig/tasks/configure_root_ca.yml:9
+Friday 01 May 2020  15:43:09 +0000 (0:00:00.054)       0:00:20.668 ************
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+File lookup using /opt/ansible/charts/openshift-metering/values.yaml as file
+
+...
+```
+
+In comparison to 2.9.5, this file lookup call was made one or two times, and if I revert the change to `if cache and only_one`, I see the performance issues resolved. +++$+++ 1 +++$+++ 0
+COM7 +++$+++ SP481677 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-05-01T16:32:33Z +++$+++ > One difference between my work and home environments is that the work env has $HOME mounted over NFS, so I wonder if that has something to do with it.
+
+@kenyon - That would definitely have an impact, if something is doing a filesystem lookup X times, on NFS it might be a 20-30ms delay, whereas on a local SSD it's like 0.01ms... if it's running 100 lookups, that's an extra 3 seconds per task. I've run into similar issues when pulling data from EFS on AWS (not reproducible outside of that environment). +++$+++ 1 +++$+++ 0
+COM8 +++$+++ SP39340 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-05-01T16:54:53Z +++$+++ @timflannagan1 yes, so in your case, because templating is lazy evaluated, every time `meteringconfig_default_values` is used, it's re-evaluated.  The `only_one` var used in templating is described as:
+
+```
+                    # Check to see if the string we are trying to render is just referencing a single
+                    # var.
+```
+
+Because `meteringconfig_default_values` has a value using `lookup` it is not just a single var.
+
+Right now, to improve performance, you would need to have a `set_fact` task towards the start of the role that "finalizes" the variable, so that the result is stored.
+
+```
+- set_fact:
+    meteringconfig_default_values: "{{ meteringconfig_default_values }}"
+```
+
+We've been talking about someway to tell ansible to finalize a variable immediately on definition, like:
+
+```
+meteringconfig_default_values: !finalize "{{ lookup('file', meteringconfig_default_values_file) | from_yaml }}"
+```
+
+But that feature does not exist yet.
+
+Another potential future feature, is a way to instruct `lookup` to cache the value. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP4280480 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-05-01T17:44:38Z +++$+++ I'm puzzled why this caching was removed without an optional fallback. lookup() could have dynamic data! Ok, mine don't. Could we have an optional and disabled by default argument "enable lookup cache"? +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP39340 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-05-01T17:56:35Z +++$+++ @Oloremo We fixed valid bugs by making this change.  The change in question is a correct change. However, it exposes that some people were relying on buggy behavior, without realizing it. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP4280480 +++$+++ ROOT +++$+++ COM10 +++$+++ 2020-05-01T18:07:24Z +++$+++ It's a correct change in 90% of the cases, I agree. Yet there is cases where lookups work with static data and adding an argument to the lookup function would solve 100% of cases. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP891871 +++$+++ ROOT +++$+++ COM11 +++$+++ 2020-05-01T18:22:10Z +++$+++ I think what @sivel is saying that while we fixed buggy behaviour as a result, it's not as easy for us  to implement the expected caching behaviour as suggested or previously worked.  
+
+For now, there is a work-around, using set_fact.  Let's use that for now.
+
+We are going to introduce a feature in a future release, after 2.10, to re-implement the expected caching behaviour.  That behaviour being, to allow for performance improvement to exist, by having an explicit decision made by the content creator to do the caching. +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP4280480 +++$+++ ROOT +++$+++ COM12 +++$+++ 2020-05-01T19:35:43Z +++$+++ No chance to introduce it in 2.9? It seems like a single argument and an `if`. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP197972 +++$+++ ROOT +++$+++ COM13 +++$+++ 2020-05-13T21:01:38Z +++$+++ +1 
+
+The bug happens here too. Steps are taking up to 20 Minutes with 2.9.7 when they access a software version/location lookup structure that maps a current variable multiple times. 
+
+For now we have installed an older version (2.9.3) as workaround. 
+ +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP39340 +++$+++ ROOT +++$+++ COM14 +++$+++ 2020-05-13T21:08:43Z +++$+++ As an update to this issue, we will not revert the fix, as the original bug has been reclassified as a CVE and documented at https://access.redhat.com/security/cve/CVE-2020-10729
+
+The 2.9.x series will not see any resolution of this performance degradation, as it will require a new feature to implement. It is also unlikely that such a feature will make it into the 2.10 release.
+
+In the meantime, as indicated above, I recommend using an intermediate `set_fact` task to "finalize" the value.  If you are experiencing this issue during template file generation due to looping, you can also take advantage of Jinja2 [assignments](https://jinja.palletsprojects.com/en/master/templates/#assignments) to create an intermediate cached variable.
+
+For the time being I am locking this issue to further activity. +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP6585283 +++$+++ ROOT +++$+++ COM15 +++$+++ 2020-05-21T21:27:20Z +++$+++ Files identified in the description:
+* [`lib/ansible/modules/template.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/modules/template.py)
+* [`lib/ansible/plugins/action/template.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/plugins/action/template.py)
+* [`lib/ansible/plugins/lookup/template.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/plugins/lookup/template.py)
+* [`lib/ansible/template/__init__.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/template/__init__.py)
+* [`lib/ansible/template/native_helpers.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/template/native_helpers.py)
+* [`lib/ansible/template/safe_eval.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/template/safe_eval.py)
+* [`lib/ansible/template/template.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/template/template.py)
+* [`lib/ansible/template/vars.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/template/vars.py)
+
+If these files are incorrect, please update the `component name` section of the description or use the `!component` bot command.
+
+[click here for bot help](https://github.com/ansible/ansibullbot/blob/master/ISSUE_HELP.md)
+<!--- boilerplate: components_banner ---> +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP6585283 +++$+++ ROOT +++$+++ COM16 +++$+++ 2020-08-25T22:53:37Z +++$+++ Files identified in the description:
+* [`lib/ansible/template/__init__.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/template/__init__.py)
+
+If these files are incorrect, please update the `component name` section of the description or use the `!component` bot command.
+
+[click here for bot help](https://github.com/ansible/ansibullbot/blob/master/ISSUE_HELP.md)
+<!--- boilerplate: components_banner ---> +++$+++ 0 +++$+++ 0

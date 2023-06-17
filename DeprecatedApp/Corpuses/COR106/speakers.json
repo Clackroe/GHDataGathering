@@ -1,0 +1,34 @@
+{
+    "mikedn": {
+        "id": "SP9973420",
+        "role": "CONTRIBUTOR (AUTHOR)"
+    },
+    "tannergooding": {
+        "id": "SP10487869",
+        "role": "MEMBER"
+    },
+    "sandreenko": {
+        "id": "SP22642771",
+        "role": "CONTRIBUTOR"
+    },
+    "CarolEidt": {
+        "id": "SP2973870",
+        "role": "CONTRIBUTOR"
+    },
+    "briansull": {
+        "id": "SP11621884",
+        "role": "CONTRIBUTOR"
+    },
+    "richlander": {
+        "id": "SP2608468",
+        "role": "MEMBER"
+    },
+    "terrajobst": {
+        "id": "SP5169960",
+        "role": "MEMBER"
+    },
+    "drieseng": {
+        "id": "SP312863",
+        "role": "CONTRIBUTOR"
+    }
+}

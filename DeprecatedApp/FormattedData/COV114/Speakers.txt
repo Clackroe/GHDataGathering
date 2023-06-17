@@ -1,0 +1,4 @@
+SP61242764 +++$+++ nikolayval +++$+++ NONE (AUTHOR)
+SP2916023 +++$+++ blainekasten +++$+++ CONTRIBUTOR
+SP209817 +++$+++ pvdz +++$+++ CONTRIBUTOR
+SP3924690 +++$+++ DSchau +++$+++ CONTRIBUTOR

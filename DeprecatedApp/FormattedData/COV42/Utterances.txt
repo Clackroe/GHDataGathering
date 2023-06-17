@@ -1,0 +1,84 @@
+ROOT +++$+++ SP666297 +++$+++ ROOT +++$+++ ROOT +++$+++ 2016-09-28T18:32:48Z +++$+++ Support Web Components v1 The `dart:html` library should deprecate the current v0 specifications of Custom Elements and Shadow DOM and move to using v1 of both specifications.
+ +++$+++ 21 +++$+++ 0
+COM0 +++$+++ SP666297 +++$+++ ROOT +++$+++ ROOT +++$+++ 2016-09-28T19:20:54Z +++$+++ DDC related issue https://github.com/dart-lang/sdk/issues/27311
+ +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP666297 +++$+++ ROOT +++$+++ COM0 +++$+++ 2016-10-17T20:46:29Z +++$+++ @floitschG anything to follow for this? Chrome 54 shipped and comes with the v1 specs enabled.
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP17034 +++$+++ ROOT +++$+++ COM1 +++$+++ 2016-11-24T00:50:12Z +++$+++ @donny-dont there are a *LOT* of things we need to fixup in `dart:html` – we're holding off until DDC is locked and loaded. It'll be *much* easier to get everything working when our dev story is 100% javascript. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP10780624 +++$+++ ROOT +++$+++ COM2 +++$+++ 2016-11-24T07:10:36Z +++$+++ > when our dev story is 100% javascript
+
+I'm not sure I understand this. Could you please add some more info. Is it JS compatibility you're referring to or the possible inclusion of javascript specific tools in the build step, along with DDC? +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP405837 +++$+++ ROOT +++$+++ COM3 +++$+++ 2016-11-24T07:27:01Z +++$+++ @kulshekhar the problem is the Dart VM in Dartium where during development some Dart code is directly executed by the Dart VM  but other stuff runs in JS land. 
+With Bazel and DDC they are working on building a developer story with fast edit-reload cycles with standard Chrome (without a Dart VM being involved) to simplify interop between the Dart code (transpiled to JS) and the native JS world. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP10780624 +++$+++ ROOT +++$+++ COM4 +++$+++ 2016-11-24T07:28:13Z +++$+++ Thanks @zoechi 
+
+That makes sense now :sweat_smile:  +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP69960 +++$+++ ROOT +++$+++ COM5 +++$+++ 2017-08-22T04:17:38Z +++$+++ Any updates on this, we're in 2017 now :-D +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP168174 +++$+++ ROOT +++$+++ COM6 +++$+++ 2017-08-22T04:29:38Z +++$+++ I imagine there won't be any progress on this until Dart 2.0 rolls out completely removing Dartium.
+
+I'd check back in a few more months, or use JS interop to "build your own":
+https://pub.dartlang.org/packages/html5 +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP69960 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-02-19T02:11:48Z +++$+++ Who's still following this issue in 2018? Sorry, couldn't resist. Maybe 2018 will be the year Dart finally gets Web Components v1! +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP17034 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-03-01T18:17:32Z +++$+++ We're in the process of updating our `dart:html` APIs – https://dart-review.googlesource.com/c/sdk/+/24501
+
+That roll – and getting rid of Dartium – should make it easier to support the latest Browser features.
+
+Having said that, our primary framework – AngularDart – is not using WebComponent features, so it's not a big priority for us.
+
+My suggestion: once we've updated `dart:html` and friends, let us know specific APIs that are missing/broken
+
+ +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP931919 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-03-11T10:42:24Z +++$+++ That's really sad.
+In my mind a serious "community centered" effort should kind of use and depend on different independent blocks. to make the idea more clear, `AngularDart` for sure needs some stuff handling DOM and it seems sane to me to use something like `dart:html` as a basis.
+so, every work from google would be contributed back to the basis and others building on top of this basis would automatically benefit - somehow like the whole OpenSource-Idea, no? ;) 
+
+currently ` Dart` is more like: "You want to do web? Sure, use AngularDart." (Hint: AngularDart != "the web")
+
+that said, I'm not the guy who can actually judge what you're doing and why - just saying this from a rather distant and abstract point of view and trying to support `Dartlang` itself against common attacks. (you know those.... "meh, google is going to throw it away anyways..." etc.)
+
+Maybe I should add, that webComponents are the reason why our app is only running on Chrome... +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP168174 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-03-11T18:43:56Z +++$+++ @elmcrest Hi Marius.
+
+I realize and understand you are disappointed. I'm one of the TLs of AngularDart, and let me make it clear I think web components are awesome, and would love Dart to support them well. The primary take away here is _well_ though, and that will take a little bit of effort, because the current HTML libraries and browser bindings aren't well suited for this.
+
+We could probably get some _hacky_ support quicker, but it won't be something useful to most customers. It's something we'd like to revisit after Dart2 launches, but until then - again to be very honest - it's just not a priority. We care, but we have limited time and resources, and have to use them efficiently, like I'm sure you do on your project(s) and company.
+
+FWIW, most popular web frameworks are not utilizing web components today:
+* React
+* Vue
+* Angular (JS/TS/Dart)
+
+... so it's not clear web components is the "killer" feature for most people.
+
+Thanks for your patience! +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP69960 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-03-11T19:15:36Z +++$+++ The *entire* point of Web Components is that it's a "framework" that is built-in to browsers. You can just use it, without any extra libs or 3rd party frameworks.
+
+AngularDart emulates many features of Web Components, why does it do that instead of just using Web Components directly? +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP168174 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-03-11T19:24:44Z +++$+++ @eukreign:
+
+> The entire point of Web Components is that it's a "framework" that is built-in to browsers
+
+Well, sort of. It has [yet to be supported in Microsoft Edge](https://caniuse.com/#feat=custom-elementsv1), for example, which is quite a large market segment still, and the polyfill performs quite badly. So until it works everywhere, it's not free.
+
+> AngularDart emulates many features of Web Components, why does it do that instead of just using Web Components directly
+
+AngularDart (and JS/TS, and React, and Vue, and Ember) all were created before web components were a thing. A lot of these framework authors have evaluated web components and found them severely lacking. Here is [one of the leads of React](https://docs.google.com/document/d/1QZxArgMwidgCrAbuSikcB2iBxkffH6w0YB0C1qCsuH0/edit), arguably the most popular framework today:
+
+> We’re not going to use it at all at Facebook. We’re not going to build React on it because there’s a strong model difference – imperative in Web Components to declarative in React. Web Components doesn’t have an idiomatic way to define things like where events go. How do you pass data when everything is a string? We see it more as an interop layer that lets various frameworks talk to each other.
+> 
+> In talking to the Atom team, this doesn’t solve different framework idioms as it doesn’t have an opinion on how they relate.
+
+Again, it's not that support will never be offered, but it's unlikely to happen in any immediate time frame. There are other APIs that are more useful for our users, like web workers, service workers, and more right now.
+
+From a _personal_ perspective (not the Dart team's), I'd use JavaScript or TypeScript if I was highly interested in web components - its much better suited for this lightweight model than Dart is (more suited for larger web applications, not scripts/standalone components/buttons).
+
+Thanks for understanding!
+ +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP69960 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-03-11T21:39:46Z +++$+++ _This post has been deleted for violating the [code of conduct][]._
+
+[code of conduct]: https://www.dartlang.org/code-of-conduct +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP931919 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-03-11T21:50:26Z +++$+++ I also disagree to prefer typescript over dart for little snippets. The undefined, NaN, 0, false, null, whatever hell is one point, imports and package management still another...
+Dart can really shine even for small snippets and if your build system is already setup anyway, why wouldn‘t I want to use dart for everything?
+One truth tends to get hidden/ignored more and more these days: Javascript sucks! ;) +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP168174 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-03-11T21:57:07Z +++$+++ I'm locking this conversation for now since it's getting non-productive. This is something that is interesting to us, but it's not on the immediate roadmap at this time. Thanks for the feedback. +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP17034 +++$+++ ROOT +++$+++ COM16 +++$+++ 2019-03-08T21:02:39Z +++$+++ We don't plan to support this API in the short term. None of our core users require it and would involve substantial effort to implement it correctly. +++$+++ 0 +++$+++ 0

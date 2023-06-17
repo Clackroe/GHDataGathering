@@ -1,0 +1,12 @@
+SP4751797 +++$+++ esakal +++$+++ NONE (AUTHOR)
+SP13783395 +++$+++ mickaelvalmier +++$+++ NONE
+SP10137 +++$+++ ghost +++$+++ NONE
+SP189873 +++$+++ xealot +++$+++ NONE
+SP17563226 +++$+++ alan-agius4 +++$+++ CONTRIBUTOR
+SP886464 +++$+++ Bratn +++$+++ NONE
+SP5605 +++$+++ evocateur +++$+++ MEMBER
+SP3168135 +++$+++ joewoodhouse +++$+++ NONE
+SP4030377 +++$+++ austingreendev +++$+++ NONE
+SP22189661 +++$+++ sandangel +++$+++ NONE
+SP4237280 +++$+++ yordis +++$+++ NONE
+SP1084847 +++$+++ noherczeg +++$+++ COLLABORATOR

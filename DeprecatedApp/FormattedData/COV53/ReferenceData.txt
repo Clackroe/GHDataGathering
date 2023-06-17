@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/microsoft/terminal/issues/8441
+Number of Comments: 49

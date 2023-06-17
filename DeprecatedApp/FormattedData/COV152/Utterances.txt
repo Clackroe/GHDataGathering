@@ -1,0 +1,360 @@
+ROOT +++$+++ SP1042507 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-02-20T10:58:17Z +++$+++ Firebase Realtime Database don't get update from wifi <!-- DO NOT DELETE 
+validate_template=true
+template_path=.github/ISSUE_TEMPLATE/bug.md
+-->
+
+### [REQUIRED] Step 2: Describe your environment
+
+  * Firebase Component: Database
+  * Component version: 19.2.0, but I think it has been problem since 2018
+
+### [REQUIRED] Step 3: Describe the problem
+
+Using realtime database change listener normally in android mobile with wifi connection. It work perfectly for most of the times. But it would eventually (2-3 days to 2-3 weeks) not be able to connect to firebase realtime database and get the realtime update, even if the PC of the same router still able to connect. I need to shut the wifi of my android to use mobile 4g network, or reset the router. Resetting router make it usable but eventually after a while it will fail again
+
+I myself using unity. But there was already some people happen to face the same problem so I think it could be common to many people
+
+https://stackoverflow.com/questions/52609349/couldnt-connect-to-firebase-database-via-wifi-but-connects-fine-with-4g-mobile
+https://stackoverflow.com/questions/48340327/firebase-database-listeners-dont-work-on-android-with-wifi
+
+Also, surprisingly, the web that use firebase still work in the same network state. So I think this problem is because native network library
+
+I think the actual source of problem could be a problem of router setting. But that might be critical. Because realtime update could be fail for anyone in misconfig router (in workplace for instance) but it result in the whole app failed unknowingly to us. It could also be a critical feature of that app. Isn't it possible to have firebase native to have failsafe to fallback? +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP56451054 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-02-20T13:10:34Z +++$+++ Thanks for reporting, @Thaina. From what I understand, Realtime Database works on mobile/cellular connection properly, but not on Wi-Fi connection. 
+
+We usually mention to developers that the issue may be isolated to certain network providers that possibly blocks access to certain services. However, if this isn't the case, then there may be something else that is causing it. With that, I would like to ask for the following details in order for me to understand the issue further:
+
+- A set of verbose logs captured upon running your app through your IDE (can be found in your Logcat)
+
+     - To capture them, you need to enable the [debug logging](https://firebase.google.com/docs/reference/android/com/google/firebase/database/FirebaseDatabase.html#setLogLevel(com.google.firebase.database.Logger.Level)) after getting an instance by using the following line:
+     - rtdbInstance.setLoggingLevel(Logger.Level.DEBUG);
+
+- Any other information that would be helpful +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP1042507 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-02-27T14:10:36Z +++$+++ @aguatno On monday I try to build and find the log but cannot see anything related to firebase database. It just silence
+
+I have upgrade to 6.11 yesterday and will try to log and search for problem again soon
+
+But one thing I would like to report is, while realtime database face the problem from wifi. Firestore (I have alpha privilege) can listen to change from that wifi normally. Is there anything related to network connection system difference between these two library? +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP1042507 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-03-03T04:11:58Z +++$+++ ```
+03-03 11:09:45.842 20590 21583 D WebSocket: ws_17 - WebSocket error.
+03-03 11:09:45.842 20590 21583 D WebSocket: com.google.firebase.database.tubesock.WebSocketException: IO Error
+03-03 11:09:45.842 20590 21583 D WebSocket: 	at com.google.firebase.database.tubesock.WebSocketReceiver.run(com.google.firebase:firebase-database@@19.2.1:92)
+03-03 11:09:45.842 20590 21583 D WebSocket: 	at com.google.firebase.database.tubesock.WebSocket.runReader(com.google.firebase:firebase-database@@19.2.1:427)
+03-03 11:09:45.842 20590 21583 D WebSocket: 	at com.google.firebase.database.tubesock.WebSocket.access$000(com.google.firebase:firebase-database@@19.2.1:48)
+03-03 11:09:45.842 20590 21583 D WebSocket: 	at com.google.firebase.database.tubesock.WebSocket$2.run(com.google.firebase:firebase-database@@19.2.1:144)
+03-03 11:09:45.842 20590 21583 D WebSocket: 	at java.lang.Thread.run(Thread.java:919)
+03-03 11:09:45.842 20590 21583 D WebSocket: Caused by: javax.net.ssl.SSLException: Read error: ssl=0x7a5e049a08: I/O error during system call, Software caused connection abort
+03-03 11:09:45.842 20590 21583 D WebSocket: 	at com.android.org.conscrypt.NativeCrypto.SSL_read(Native Method)
+03-03 11:09:45.842 20590 21583 D WebSocket: 	at com.android.org.conscrypt.NativeSsl.read(NativeSsl.java:411)
+03-03 11:09:45.842 20590 21583 D WebSocket: 	at com.android.org.conscrypt.ConscryptFileDescriptorSocket$SSLInputStream.read(ConscryptFileDescriptorSocket.java:549)
+03-03 11:09:45.842 20590 21583 D WebSocket: 	at java.io.DataInputStream.readFully(DataInputStream.java:198)
+03-03 11:09:45.842 20590 21583 D WebSocket: 	at com.google.firebase.database.tubesock.WebSocketReceiver.read(com.google.firebase:firebase-database@@19.2.1:155)
+03-03 11:09:45.842 20590 21583 D WebSocket: 	at com.google.firebase.database.tubesock.WebSocketReceiver.run(com.google.firebase:firebase-database@@19.2.1:48)
+03-03 11:09:45.842 20590 21583 D WebSocket: 	... 4 more
+03-03 11:09:45.842 20590 21583 D WebSocket: ws_17 - closing itself
+03-03 11:09:45.842 20590 21583 D Connection: conn_17 - Realtime connection lost
+03-03 11:09:45.842 20590 21583 D Connection: conn_17 - closing realtime connection
+03-03 11:09:45.842 20590 21583 D PersistentConnection: pc_0 - Got on disconnect due to OTHER
+03-03 11:09:45.843 20590 21583 D PersistentConnection: pc_0 - Scheduling connection attempt
+03-03 11:09:45.843 20590 21583 D ConnectionRetryHelper: Scheduling retry in 0ms
+03-03 11:09:45.843 20590 21583 D WebSocket: ws_17 - WebSocket error.
+03-03 11:09:45.843 20590 21583 D WebSocket: com.google.firebase.database.tubesock.WebSocketException: IO Exception
+03-03 11:09:45.843 20590 21583 D WebSocket: 	at com.google.firebase.database.tubesock.WebSocketWriter.runWriter(com.google.firebase:firebase-database@@19.2.1:159)
+03-03 11:09:45.843 20590 21583 D WebSocket: 	at com.google.firebase.database.tubesock.WebSocketWriter.access$000(com.google.firebase:firebase-database@@19.2.1:30)
+03-03 11:09:45.843 20590 21583 D WebSocket: 	at com.google.firebase.database.tubesock.WebSocketWriter$1.run(com.google.firebase:firebase-database@@19.2.1:47)
+03-03 11:09:45.843 20590 21583 D WebSocket: 	at java.lang.Thread.run(Thread.java:919)
+03-03 11:09:45.843 20590 21583 D WebSocket: Caused by: java.net.SocketException: socket is closed
+03-03 11:09:45.843 20590 21583 D WebSocket: 	at com.android.org.conscrypt.ConscryptFileDescriptorSocket$SSLOutputStream.write(ConscryptFileDescriptorSocket.java:618)
+03-03 11:09:45.843 20590 21583 D WebSocket: 	at java.nio.channels.Channels$WritableByteChannelImpl.write(Channels.java:453)
+03-03 11:09:45.843 20590 21583 D WebSocket: 	at com.google.firebase.database.tubesock.WebSocketWriter.writeMessage(com.google.firebase:firebase-database@@19.2.1:138)
+03-03 11:09:45.843 20590 21583 D WebSocket: 	at com.google.firebase.database.tubesock.WebSocketWriter.runWriter(com.google.firebase:firebase-database@@19.2.1:152)
+03-03 11:09:45.843 20590 21583 D WebSocket: 	... 3 more
+03-03 11:09:45.843 20590 21583 D WebSocket: ws_17 - closed
+03-03 11:09:45.843 20590 21583 D PersistentConnection: pc_0 - Trying to fetch auth token
+03-03 11:09:45.844  1758 19520 E ConnectivityPacketTracker.wlan0: readPacket error: 
+03-03 11:09:45.844  1758 19520 E ConnectivityPacketTracker.wlan0: android.system.ErrnoException: read failed: ENETDOWN (Network is down)
+03-03 11:09:45.844  1758 19520 E ConnectivityPacketTracker.wlan0: 	at libcore.io.Linux.readBytes(Native Method)
+03-03 11:09:45.844  1758 19520 E ConnectivityPacketTracker.wlan0: 	at libcore.io.Linux.read(Linux.java:190)
+03-03 11:09:45.844  1758 19520 E ConnectivityPacketTracker.wlan0: 	at libcore.io.ForwardingOs.read(ForwardingOs.java:177)
+03-03 11:09:45.844  1758 19520 E ConnectivityPacketTracker.wlan0: 	at libcore.io.BlockGuardOs.read(BlockGuardOs.java:303)
+03-03 11:09:45.844  1758 19520 E ConnectivityPacketTracker.wlan0: 	at android.system.Os.read(Os.java:468)
+03-03 11:09:45.844  1758 19520 E ConnectivityPacketTracker.wlan0: 	at android.net.util.PacketReader.readPacket(PacketReader.java:59)
+03-03 11:09:45.844  1758 19520 E ConnectivityPacketTracker.wlan0: 	at android.net.util.PacketReader.readPacket(PacketReader.java:34)
+03-03 11:09:45.844  1758 19520 E ConnectivityPacketTracker.wlan0: 	at android.net.util.FdEventsReader.handleInput(FdEventsReader.java:220)
+03-03 11:09:45.844  1758 19520 E ConnectivityPacketTracker.wlan0: 	at android.net.util.FdEventsReader.lambda$createAndRegisterFd$2$FdEventsReader(FdEventsReader.java:201)
+03-03 11:09:45.844  1758 19520 E ConnectivityPacketTracker.wlan0: 	at android.net.util.-$$Lambda$FdEventsReader$MJGveJiu3TqatZaBXlmIyD8DwEE.onFileDescriptorEvents(Unknown Source:2)
+03-03 11:09:45.844  1758 19520 E ConnectivityPacketTracker.wlan0: 	at android.os.MessageQueue.dispatchEvents(MessageQueue.java:294)
+03-03 11:09:45.844  1758 19520 E ConnectivityPacketTracker.wlan0: 	at android.os.MessageQueue.nativePollOnce(Native Method)
+03-03 11:09:45.844  1758 19520 E ConnectivityPacketTracker.wlan0: 	at android.os.MessageQueue.next(MessageQueue.java:336)
+03-03 11:09:45.844  1758 19520 E ConnectivityPacketTracker.wlan0: 	at android.os.Looper.loop(Looper.java:174)
+03-03 11:09:45.844  1758 19520 E ConnectivityPacketTracker.wlan0: 	at android.os.HandlerThread.run(HandlerThread.java:67)
+03-03 11:09:45.845 20590 21583 D PersistentConnection: pc_0 - Successfully fetched token, opening connection
+03-03 11:09:45.845 20590 21583 D Connection: conn_18 - Opening a connection
+03-03 11:09:45.851  3291 28814 V NativeCrypto: SSL shutdown failed: ssl=0x79ddc18c48: I/O error during system call, Broken pipe
+03-03 11:09:45.851  3291 28814 E WakeLock: GCM_HB_ALARM release without a matched acquire!
+03-03 11:09:45.851  3291 28814 W WakeLock: GCM_HB_ALARM counter does not exist
+03-03 11:09:45.853 20590 21583 D WebSocket: ws_18 - WebSocket error.
+03-03 11:09:45.853 20590 21583 D WebSocket: com.google.firebase.database.tubesock.WebSocketException: unknown host: s-usc1c-nss-246.firebaseio.com
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at com.google.firebase.database.tubesock.WebSocket.createSocket(com.google.firebase:firebase-database@@19.2.1:331)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at com.google.firebase.database.tubesock.WebSocket.runReader(com.google.firebase:firebase-database@@19.2.1:359)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at com.google.firebase.database.tubesock.WebSocket.access$000(com.google.firebase:firebase-database@@19.2.1:48)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at com.google.firebase.database.tubesock.WebSocket$2.run(com.google.firebase:firebase-database@@19.2.1:144)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at java.lang.Thread.run(Thread.java:919)
+03-03 11:09:45.853 20590 21583 D WebSocket: Caused by: java.net.UnknownHostException: Unable to resolve host "s-usc1c-nss-246.firebaseio.com": No address associated with hostname
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at java.net.Inet6AddressImpl.lookupHostByName(Inet6AddressImpl.java:156)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at java.net.Inet6AddressImpl.lookupAllHostAddr(Inet6AddressImpl.java:103)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at java.net.InetAddress.getAllByName(InetAddress.java:1152)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at java.net.Socket.<init>(Socket.java:218)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at javax.net.ssl.SSLSocket.<init>(SSLSocket.java:931)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at com.android.org.conscrypt.AbstractConscryptSocket.<init>(AbstractConscryptSocket.java:97)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at com.android.org.conscrypt.OpenSSLSocketImpl.<init>(OpenSSLSocketImpl.java:41)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at com.android.org.conscrypt.ConscryptFileDescriptorSocket.<init>(ConscryptFileDescriptorSocket.java:131)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at com.android.org.conscrypt.Java8FileDescriptorSocket.<init>(Java8FileDescriptorSocket.java:42)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at com.android.org.conscrypt.Platform.createFileDescriptorSocket(Platform.java:332)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at com.android.org.conscrypt.OpenSSLSocketFactoryImpl.createSocket(OpenSSLSocketFactoryImpl.java:106)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at android.net.SSLCertificateSocketFactory.createSocket(SSLCertificateSocketFactory.java:597)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at com.google.firebase.database.tubesock.WebSocket.createSocket(com.google.firebase:firebase-database@@19.2.1:319)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	... 4 more
+03-03 11:09:45.853 20590 21583 D WebSocket: Caused by: android.system.GaiException: android_getaddrinfo failed: EAI_NODATA (No address associated with hostname)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at libcore.io.Linux.android_getaddrinfo(Native Method)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at libcore.io.ForwardingOs.android_getaddrinfo(ForwardingOs.java:74)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at libcore.io.BlockGuardOs.android_getaddrinfo(BlockGuardOs.java:200)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at libcore.io.ForwardingOs.android_getaddrinfo(ForwardingOs.java:74)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	at java.net.Inet6AddressImpl.lookupHostByName(Inet6AddressImpl.java:135)
+03-03 11:09:45.853 20590 21583 D WebSocket: 	... 16 more
+03-03 11:09:45.853 20590 21583 D WebSocket: ws_18 - closing itself
+03-03 11:09:45.853 20590 21583 D Connection: conn_18 - Realtime connection failed
+03-03 11:09:45.853 20590 21583 D Connection: conn_18 - closing realtime connection
+03-03 11:09:45.853 20590 21583 D PersistentConnection: pc_0 - Got on disconnect due to OTHER
+03-03 11:09:45.854 20590 21583 D PersistentConnection: pc_0 - Scheduling connection attempt
+03-03 11:09:45.854 20590 21583 D ConnectionRetryHelper: Scheduling retry in 589ms
+03-03 11:09:45.854 20590 21583 D WebSocket: ws_18 - closed
+```
+
+This is the log that might be related +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP19397744 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-03-04T00:44:57Z +++$+++ @Thaina Thank you for sharing the logs. It looks like the error might be a fundamental issue with the device's network (`Unable to resolve host "s-usc1c-nss-246.firebaseio.com": No address associated with hostname`).
+
+Can you let us know if this problem occurs on multiple devices? If so, would it be possible to share a reproduction for us that we could run on Emulator? +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP1042507 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-03-04T03:58:54Z +++$+++ @schmidt-sebastian I don't know which specific device have this problem except one samsung of my acquaintance I don't know detail about. And my own Nokia 7 plus
+
+This problem could occur in many router setting even though it could use internet normally and the most disturbingly confusion is, in the same wifi that cause problem to android, realtime database in ios of the same app still work under it properly
+
+And while RTDB won't work, at the same time in the same device that RTDB can't load anything, firestore could work properly
+
+So this issue is really specifically a problem of only RTDB android library in wifi +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP19397744 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-03-07T03:41:04Z +++$+++ Firestore and RTDB uses a very different networking stack. Firestore uses GRPC, whereas the RTDB used WebChannel which more heavily relies on Android's built in networking. 
+
+If you are able to reproduce this somewhat reliable in an emulator, then we could probably come up with a reproduction. It's a bit tough to diagnose issues that point to issues with the DNS resolver from afar. +++$+++ 1 +++$+++ 0
+COM6 +++$+++ SP1042507 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-03-07T05:00:52Z +++$+++ Thank you for your information. Sadly I don't have times, so I would switch to firestore instead as of now it release unity SDK +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP16231546 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-03-07T23:58:04Z +++$+++ Is there any alternative to solve this problem? +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP19397744 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-03-09T19:00:20Z +++$+++ At this point, I don't see an obvious fix since this happens very low in the network stack. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP38480730 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-03-28T00:33:37Z +++$+++  same problem help :(
+use MODEM WIFI  :   https://articulo.mercadolibre.com.pe/MPE-435156300-modem-router-huawei-b612s-4g-nuevo-movistar-claro-entel-_JM
+LOGS:
+D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/Surface: Surface::setBuffersDimensions(this=0xb847e3f0,w=720,h=1480)
+ D/MALI: _egl_make_current:857: [MALI] make current with display 0x1, context 0x40000001, state 0xb846edb8
+ D/MALI: _egl_make_current:872: [MALI] Map __dpy 0x1 to dpy 0xb84011b0
+ D/MALI: _egl_make_current:906: [MALI] Map __ctx 0x40000001 to ctx 0xb84835d8
+ D/OpenGLRenderer: Flushing caches (mode 0)
+ D/Surface: Surface::disconnect(this=0xb84e9c68,api=1)
+ D/GraphicBuffer: unregister, handle(0xb845f0e0) (w:412 h:88 s:416 f:0x1 u:0x000f02)
+ D/OpenGLRenderer: Flushing caches (mode 0)
+ D/ViewRootImpl: hardware acceleration is enabled, this = ViewRoot{35cf9e9b Toast,ident = 2}
+ D/OpenGLRenderer: CanvasContext() 0xb84896a0 initialize 0xb85146f0
+ D/Surface: Surface::connect(this=0xb85146e8,api=1)
+ D/GraphicBuffer: register, handle(0xb8517b30) (w:390 h:88 s:400 f:0x1 u:0x000f02)
+ I/MaliEGL: [Mali]window_type=1, is_framebuffer=0, errnum = 0
+ I/MaliEGL: [Mali]surface->num_buffers=4, surface->num_frames=3, win_min_undequeued=1
+ I/MaliEGL: [Mali]max_allowed_dequeued_buffers=3
+ D/Surface: Surface::setBufferCount(this=0xb85146e8,bufferCount=4)
+ D/GraphicBuffer: unregister, handle(0xb8517b30) (w:390 h:88 s:400 f:0x1 u:0x000f02)
+ D/MALI: _egl_make_current:857: [MALI] make current with display 0x1, context 0x40000001, state 0xb846edb8
+ D/MALI: _egl_make_current:872: [MALI] Map __dpy 0x1 to dpy 0xb84011b0
+ D/MALI: _egl_make_current:906: [MALI] Map __ctx 0x40000001 to ctx 0xb84835d8
+ D/Surface: Surface::setBuffersDimensions(this=0xb85146e8,w=390,h=88)
+ D/GraphicBuffer: register, handle(0xb8517b30) (w:390 h:88 s:400 f:0x1 u:0x000f02)
+ D/Surface: Surface::allocateBuffers(this=0xb85146e8)
+ D/MALI: _egl_make_current:857: [MALI] make current with display 0x1, context 0x40000001, state 0xb846edb8
+ D/MALI: _egl_make_current:872: [MALI] Map __dpy 0x1 to dpy 0xb84011b0
+ D/MALI: _egl_make_current:906: [MALI] Map __ctx 0x40000001 to ctx 0xb84835d8
+ D/OpenGLRenderer: Flushing caches (mode 0)
+ D/Surface: Surface::disconnect(this=0xb85146e8,api=1)
+ D/GraphicBuffer: unregister, handle(0xb8517b30) (w:390 h:88 s:400 f:0x1 u:0x000f02)
+ D/OpenGLRenderer: Flushing caches (mode 0)
+ V/FA: Inactivity, disconnecting from the service
+ I/System.out: [socket][1:41386] exception
+ I/System.out: [CDS]close[41386]
+ I/System.out: Close in OkHttp
+ I/System.out: [CDS]rx timeout:0
+ I/System.out: [socket][1] connection settings.crashlytics.com/216.58.192.35:443;LocalPort=58048(10000)
+ I/System.out: [CDS]connect[settings.crashlytics.com/216.58.192.35:443] tm:10
+ D/Posix: [Posix_connect Debug]Process com.solucionesonline.tcompraempresa :443 
+ I/System.out: [socket][/192.168.1.100:58048] connected
+ D/libc-netbsd: [getaddrinfo]: mtk hostname=settings.crashlytics.com; servname=(null); cache_mode=(null), netid=0; mark=0
+ D/libc-netbsd: getaddrinfo( app_uid:10129
+ D/libc-netbsd: getaddrinfo() uid prop:
+ D/libc-netbsd: getaddrinfo() getuid():10129
+ D/libc-netbsd: [getaddrinfo]: mtk ai_addrlen=0; ai_canonname=(null); ai_flags=4; ai_family=0
+ D/NativeCrypto: ssl=0xb85196a0 NativeCrypto_SSL_do_handshake fd=0xa2bb82f0 shc=0xa2bb82f4 timeout_millis=0 client_mode=1 npn=0x0
+ D/NativeCrypto: doing handshake ++
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x10 ret=1
+ D/NativeCrypto: ssl=0xb85196a0 handshake start in UNKWN  before/connect initialization
+ D/NativeCrypto: ssl=0xb85196a0 info_callback calling handshakeCompleted
+ D/NativeCrypto: ssl=0xb85196a0 info_callback completed
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x1001 ret=1
+ D/NativeCrypto: ssl=0xb85196a0 SSL_connect:UNKWN  before/connect initialization
+ D/NativeCrypto: ssl=0xb85196a0 info_callback ignored
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x1001 ret=1
+ D/NativeCrypto: ssl=0xb85196a0 SSL_connect:23WCHA SSLv2/v3 write client hello A
+ D/NativeCrypto: ssl=0xb85196a0 info_callback ignored
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x1002 ret=-1
+ D/NativeCrypto: ssl=0xb85196a0 SSL_connect:error exit in 23RSHA SSLv2/v3 read server hello A
+ D/NativeCrypto: ssl=0xb85196a0 info_callback ignored
+ D/NativeCrypto: doing handshake -- ret=-1
+ D/NativeCrypto: ssl=0xb85196a0 NativeCrypto_SSL_do_handshake ret=-1 errno=11 sslError=2 timeout_millis=0
+ D/NativeCrypto: doing handshake ++
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x1001 ret=1
+ D/NativeCrypto: ssl=0xb85196a0 SSL_connect:3RSH_A SSLv3 read server hello A
+ D/NativeCrypto: ssl=0xb85196a0 info_callback ignored
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x1002 ret=-1
+ D/NativeCrypto: ssl=0xb85196a0 SSL_connect:error exit in 3RSC_A SSLv3 read server certificate A
+ D/NativeCrypto: ssl=0xb85196a0 info_callback ignored
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x1002 ret=-1
+ D/NativeCrypto: ssl=0xb85196a0 SSL_connect:error exit in 3RSC_A SSLv3 read server certificate A
+ D/NativeCrypto: ssl=0xb85196a0 info_callback ignored
+ D/NativeCrypto: doing handshake -- ret=-1
+ D/NativeCrypto: ssl=0xb85196a0 NativeCrypto_SSL_do_handshake ret=-1 errno=11 sslError=2 timeout_millis=0
+ D/NativeCrypto: doing handshake ++
+ E/NativeCrypto: ssl=0xb85196a0 cert_verify_callback x509_store_ctx=0xa2bb8138 arg=0x0
+ E/NativeCrypto: ssl=0xb85196a0 cert_verify_callback calling verifyCertificateChain authMethod=ECDHE_RSA
+ D/NativeCrypto: ssl=0xb85196a0 cert_verify_callback => 1
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x1001 ret=1
+ D/NativeCrypto: ssl=0xb85196a0 SSL_connect:3RSC_A SSLv3 read server certificate A
+ D/NativeCrypto: ssl=0xb85196a0 info_callback ignored
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x1001 ret=1
+ D/NativeCrypto: ssl=0xb85196a0 SSL_connect:3RSKEA SSLv3 read server key exchange A
+ D/NativeCrypto: ssl=0xb85196a0 info_callback ignored
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x1001 ret=1
+ D/NativeCrypto: ssl=0xb85196a0 SSL_connect:3RSD_A SSLv3 read server done A
+ D/NativeCrypto: ssl=0xb85196a0 info_callback ignored
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x1001 ret=1
+ D/NativeCrypto: ssl=0xb85196a0 SSL_connect:3WCKEA SSLv3 write client key exchange A
+ D/NativeCrypto: ssl=0xb85196a0 info_callback ignored
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x1001 ret=1
+ D/NativeCrypto: ssl=0xb85196a0 SSL_connect:3WCCSA SSLv3 write change cipher spec A
+ D/NativeCrypto: ssl=0xb85196a0 info_callback ignored
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x1001 ret=1
+ D/NativeCrypto: ssl=0xb85196a0 SSL_connect:3WFINA SSLv3 write finished A
+ D/NativeCrypto: ssl=0xb85196a0 info_callback ignored
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x1001 ret=1
+ D/NativeCrypto: ssl=0xb85196a0 SSL_connect:3FLUSH SSLv3 flush data
+ D/NativeCrypto: ssl=0xb85196a0 info_callback ignored
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x1002 ret=-1
+ D/NativeCrypto: ssl=0xb85196a0 SSL_connect:error exit in UNKWN  SSLv3 read server session ticket A
+ D/NativeCrypto: ssl=0xb85196a0 info_callback ignored
+ D/NativeCrypto: doing handshake -- ret=-1
+ D/NativeCrypto: ssl=0xb85196a0 NativeCrypto_SSL_do_handshake ret=-1 errno=11 sslError=2 timeout_millis=0
+ D/NativeCrypto: doing handshake ++
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x1001 ret=1
+ D/NativeCrypto: ssl=0xb85196a0 SSL_connect:UNKWN  SSLv3 read server session ticket A
+ D/NativeCrypto: ssl=0xb85196a0 info_callback ignored
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x1001 ret=1
+ D/NativeCrypto: ssl=0xb85196a0 SSL_connect:3RFINA SSLv3 read finished A
+ D/NativeCrypto: ssl=0xb85196a0 info_callback ignored
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x20 ret=1
+ D/NativeCrypto: ssl=0xb85196a0 handshake done in SSLOK  SSL negotiation finished successfully
+ D/NativeCrypto: ssl=0xb85196a0 info_callback calling handshakeCompleted
+ D/NativeCrypto: ssl=0xb85196a0 info_callback completed
+ D/NativeCrypto: ssl=0xb85196a0 info_callback where=0x1002 ret=1
+ D/NativeCrypto: ssl=0xb85196a0 SSL_connect:ok exit in SSLOK  SSL negotiation finished successfully
+ D/NativeCrypto: ssl=0xb85196a0 info_callback ignored
+ D/NativeCrypto: doing handshake -- ret=1
+ D/NativeCrypto: ssl=0xb85196a0 NativeCrypto_SSL_get_certificate => NULL
+ I/System.out: gba_cipher_suite:TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+ I/System.out: [OkHttp] sendRequest>>
+ I/System.out: [OkHttp] sendRequest<<
+ D/NativeCrypto: ssl=0xb85196a0 sslWrite buf=0xb84dc348 len=816 write_timeout_millis=0
+ D/NativeCrypto: ssl=0xb85196a0 sslRead buf=0xb8531ae0 len=2048,timeo=0
+ E/Fabric: Failed to retrieve settings from https://settings.crashlytics.com/spi/v2/platforms/android/apps/com.solucionesonline.tcompraempresa/settings
+ E/Answers: Failed to retrieve settings
+ W/CrashlyticsCore: Received null settings, skipping report submission!
+ I/System.out: [CDS][DNS] getAllByNameImpl netId = 0
+ D/libc-netbsd: [getaddrinfo]: mtk hostname=tcompra-7dc35.firebaseio.com; servname=(null); cache_mode=(null), netid=0; mark=0
+ D/libc-netbsd: getaddrinfo( app_uid:10129
+ D/libc-netbsd: getaddrinfo() uid prop:
+ D/libc-netbsd: getaddrinfo() getuid():10129
+ D/libc-netbsd: [getaddrinfo]: mtk ai_addrlen=0; ai_canonname=(null); ai_flags=4; ai_family=0
+ D/libc-netbsd: [getaddrinfo]: mtk hostname=tcompra-7dc35.firebaseio.com; servname=(null); cache_mode=(null), netid=0; mark=0
+ D/libc-netbsd: getaddrinfo( app_uid:10129
+ D/libc-netbsd: getaddrinfo() uid prop:
+ D/libc-netbsd: getaddrinfo() getuid():10129
+ D/libc-netbsd: [getaddrinfo]: mtk ai_addrlen=0; ai_canonname=(null); ai_flags=1024; ai_family=0
+ D/libc-netbsd: getaddrinfo: tcompra-7dc35.firebaseio.com get result from proxy >>
+ I/System.out: propertyValue:true
+ I/System.out: [CDS]connect[tcompra-7dc35.firebaseio.com/2600:1901:0:94b6:::443] tm:90
+ D/Posix: [Posix_connect Debug]Process com.solucionesonline.tcompraempresa :443 
+ I/art: System.exit called, status: 1
+ I/AndroidRuntime: VM exiting with result code 1, cleanup skipped. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP46724607 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-04-18T00:45:15Z +++$+++ I've also encountered this problem before and only resetting the customer's router ended up working. Writes over wifi to another REST API were working during this period, but setValue() to my Firebase RTDB were not. I unfortunately don't have the logs from that period. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP1794792 +++$+++ ROOT +++$+++ COM10 +++$+++ 2020-04-21T12:07:48Z +++$+++ Chiming in since this seems to be an issue in our usage of Realtime Database too. For years already, we have received support requests from Android app users who are not receiving data from RTDB. I've tried many things over the years to mitigate this, but never have found a way to fix the issue completely. Switching away from wifi usually fixes the situation. It's not a very widespread issue, but one that has been very hard to reproduce. Common symptoms include:
+- Only affects our Android app, not iOS (which is accessing the exact same database)
+- Other apps / internet connection in general works on the phone, it's just RTDB things that fail
+- Seems to affect devices from many manufacturers (Samsung, OnePlus, Huawei, Nokia)
+- Has been a consistent problem over many Android versions (7-10) +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP46724607 +++$+++ ROOT +++$+++ COM11 +++$+++ 2020-04-21T14:50:07Z +++$+++ One thing I am going to try (which I already do in another version of my app, for different reasons) is to create a dummy keep-alive setValue() write to my RTDB every 5 minutes or so. I've never gotten a report from that version of my app that the connection has broken, so I am wondering if it has something to do with it. 
+
+**Update:**
+
+I was actually able to reproduce this, or some version of this, it seems. I connected my test device to my phone's hotspot wifi connection and then turned off the LTE mobile data. I sent my setValue() request with an onComplete listener and the connection hangs. DatabaseError is never thrown. I then re-enable the mobile LTE data on my hotspot device - subsequent attempts also fail, DatabaseError is never thrown so the else statement never runs. I opened a browser and confirmed internet connection is present. Restarting the activity in the reconnected state did not help as well. 
+
+The fix was to disable and re-enable wifi on the device. +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP959972 +++$+++ ROOT +++$+++ COM12 +++$+++ 2020-04-21T21:56:46Z +++$+++ How long did you wait for the connections to recover? This would be useful for comparing to the socket connection timeouts. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP46724607 +++$+++ ROOT +++$+++ COM13 +++$+++ 2020-04-21T22:51:41Z +++$+++ Hi Kato,
+
+I let the setValue() run twice and both times it recovered after around 18 minutes. I'm happy to email you the entire stacktrace if that's helpful, it looks like there's some relevant stuff going on there.  +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP46724607 +++$+++ ROOT +++$+++ COM14 +++$+++ 2020-04-22T20:20:38Z +++$+++ @katowulf and I connected offline and this is expected behavior due to the Android OS basically neglecting to informing apps when the connection is restored. I can't say if this is the same exact issue the original poster and others faced, but in my case (Nexus 10 tablet, Android 5.1.1) it took around 18 minutes to reconnect to the socket and for the setValue() request to complete after an initial internet disconnect (when no change in wifi network connection occurs). 
+
+Restarting the app or disabling and re-enabling wifi appears to fix it.   +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP1794792 +++$+++ ROOT +++$+++ COM15 +++$+++ 2020-04-24T06:59:16Z +++$+++ I managed to get some additional info about this issue from one of our users: sees like that using an Android device on wifi over a certain wifi router/modem (Sagemcom F-3686ACv2) from a certain Finnish mobile carrier (DNA) caused Firebase's websocket connection to wss://s-usc1c-nss-256.firebaseio.com to not work. HTTP traffic worked normally through the same wifi. This issue was "solved" by rebooting or resetting the router. Unfortunately I don't have logs about this case.
+
+While the blame in this case falls to the router and/or carrier, it's very unfortunate that this happens for Realtime Database usage only. And it's weird that this seems to affect Android only. I wish I could even get an error from Firebase SDK in these cases (currently no callbacks are fired when connection does not work). Our usage of Realtime database is read-only. +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP1042507 +++$+++ ROOT +++$+++ COM16 +++$+++ 2020-04-24T07:51:40Z +++$+++ @korva The glimpse of the cause is in this comment https://github.com/firebase/firebase-android-sdk/issues/1258#issuecomment-596042114
+
+ "The network stack" that rely on underlying android network library is the root cause, there was many bug about networking in android OS itself, not only firebase but facebook SDK also suffer from another android networking library bug and google themselves never ever had publicly announcement to fix them
+
+FireStore use GRPC instead and they avoid those android bug +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP12603675 +++$+++ ROOT +++$+++ COM17 +++$+++ 2020-05-07T16:18:44Z +++$+++ I happen to have the same issue, after reading this thread I contact our clients experimenting this issue, I suggested to them to use their mobile data instead of their wifi and the app loaded the info.
+On my research I found that the problem could be even more complex.
+
+One of our clients have two phones, Samsung A30s and Huawei P20 pro, the 2 devices were connected to the same wifi router. The samsung is having the issue, the Huawei is not. 
+ +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP46724607 +++$+++ ROOT +++$+++ COM18 +++$+++ 2020-05-22T17:15:26Z +++$+++ Firebase support got back to me and in my case, after an initial internet connectivity disconnect occurs with device wifi remaining connected, the correct approach is to simply call `goOffline()` followed by `goOnline()`. I verified this immediately restores connection to the Firebase database, though not sure if it's the same wifi issue others are facing.  +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP959972 +++$+++ ROOT +++$+++ COM19 +++$+++ 2020-05-26T17:01:42Z +++$+++ Current status:
+Seems to recover in about 18 minutes (when the OS informs the app the connection is recovered, most likely). 
+
+Workaround: Call goOffline() followed by goOnline(). 
+
+While calling goOffline/goOnline is a reasonable workaround until there's a fix, doesn't feel like clients should have to monitor and manage the connectivity; our SDKs should handle this. 
+
+Locking discussion to save eng time answering ETA requests, but keeping this open as a bug for discussion and resolution. We'll update here when there is a status update or news of a fix. Until then, please use the workaround and assume there's no release date available. +++$+++ 0 +++$+++ 0

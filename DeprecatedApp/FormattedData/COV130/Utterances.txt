@@ -1,0 +1,9 @@
+ROOT +++$+++ SP36811399 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-19T13:19:24Z +++$+++ Please rename your project VSCode implies that you are versus the code as a concept.
+I like the code and many people like the code too.
+I suggest ASCode as a new name.
+AS is an acronym for "alongside". +++$+++ 21 +++$+++ 1
+COM0 +++$+++ SP600504 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-19T13:21:23Z +++$+++ Better still `SAnta Code`. +++$+++ 0 +++$+++ 1
+COM1 +++$+++ SP695831 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-12-19T13:22:48Z +++$+++ It will remind everyone about ActionScript: it had ints and uints, while JavaScript does not. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP172399 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-12-19T19:34:09Z +++$+++ Thanks for creating this issue. We think this issue is unactionable or unrelated to the goals of this project. Please follow our [issue reporting](https://aka.ms/vscodeissuereporting) guidelines.
+
+Happy Coding! +++$+++ 0 +++$+++ 0

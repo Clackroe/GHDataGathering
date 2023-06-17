@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/Semantic-Org/Semantic-UI/issues/6889
+Number of Comments: 8

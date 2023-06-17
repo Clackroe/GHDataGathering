@@ -1,0 +1,20 @@
+SP169707 +++$+++ kzu +++$+++ NONE (AUTHOR)
+SP679326 +++$+++ KirillOsenkov +++$+++ MEMBER
+SP1633401 +++$+++ ealsur +++$+++ NONE
+SP130238 +++$+++ pedroreys +++$+++ NONE
+SP16944 +++$+++ bradwilson +++$+++ NONE
+SP14316954 +++$+++ DHowett-MSFT +++$+++ CONTRIBUTOR
+SP20691252 +++$+++ sgreenmsft +++$+++ MEMBER
+SP1912284 +++$+++ impguard +++$+++ NONE
+SP3229632 +++$+++ durack1 +++$+++ NONE
+SP361574 +++$+++ wleepang +++$+++ NONE
+SP1295229 +++$+++ gdamore +++$+++ NONE
+SP10468217 +++$+++ regs01 +++$+++ NONE
+SP5951045 +++$+++ eidylon +++$+++ NONE
+SP74080 +++$+++ shtirlic +++$+++ NONE
+SP10800041 +++$+++ randomascii +++$+++ NONE
+SP48340428 +++$+++ msftbot[bot] +++$+++ CONTRIBUTOR
+SP1041752 +++$+++ vadimkantorov +++$+++ NONE
+SP18356694 +++$+++ zadjii-msft +++$+++ MEMBER
+SP10969616 +++$+++ rbreaves +++$+++ NONE
+SP4022813 +++$+++ stewSquared +++$+++ NONE

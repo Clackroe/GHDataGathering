@@ -1,0 +1,325 @@
+ROOT +++$+++ SP11772787 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-07-05T08:46:40Z +++$+++ SEA3D vs GLTF This is the current (july 2018) GLTF status.
+Test case: the same skinned mesh exported from 3DS Max 2018.
+Standard material: Diffuse + Specular + Normal
+
+1) SEA3D exporter + SEA3D importer:
+http://necromanthus.com/Test/html5/Lara.html 
+SEA file size: 658 KB
+Result: close to perfect
+
+2) Babylon3D GLTF exporter + GLTF importer:
+http://necromanthus.com/Test/html5/Lara_gltf.html 
+GLB file size: 1,850 KB
+Result: messed up materials
+
+I've also tested the FBX2GLTF utility (by Facebook): the same wrong results
+
+Important note: there is nothing wrong with THREE.js and PBR materials:
+http://necromanthus.com/Test/html5/Lara_PBR.html 
+
+In any case, PBR was a bad choice for GLTF and also, all the current converters are collection of bugs.
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP12612165 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-07-05T12:37:30Z +++$+++ I don't think this repo is the right place for this post. It's neither a feature request, nor a bug. So my question is: What are you trying to accomplish with this issue? Bashing `glTF`?
+
+If you encounter problems with an exporter or converter, I suggest you open an issue at the respective github repo.
+
+> In any case, PBR was a bad choice for GLTF and also, all the current converters are collection of bugs.
+
+I generally reject such Trump-like statements. They have a provocative nature and are not objective at all. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP11772787 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-07-05T12:42:38Z +++$+++ > I don't think this repo is the right place for this post.
+
+It's the best place for sure and it shows the current GLTF status.
+
+> I generally reject such Trump-like statements.
+
+Really?
+Here is a statement from Trump: Google already failed with UTF8.
+
+> If you encounter problems with an exporter or converter, I suggest you open an issue at the respective github repo.
+
+Many of them blame THREE.js for bad GLTF results.
+The posted samples prove they are wrong. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP5307958 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-07-05T14:31:57Z +++$+++ @RemusMar are you suggesting any particular actions we should take? If not I vote to close this issue. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP11772787 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-07-05T14:41:18Z +++$+++ > RemusMar are you suggesting any particular actions we should take?
+
+Three possible causes for the wrong GLTF results:
+1. the Babylon3D exporter is buggy (they say it's not)
+2. the FBX2GLTF converter is buggy (they say it's not)
+3. the GLTF importer is buggy.
+
+But you and Mugen87 want to close the topic because there is no issue and everytbody is happy ... +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP5307958 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-07-05T14:51:12Z +++$+++ > the GLTF importer is buggy
+
+You mean the GLTFLoader? Can you identify what the bug is? It would be especially helpful if you can find a very simple model that demonstrates the bug.
+
+>  (they say it's not)
+
+If you've made bug reports on the Babylon3D exporter and FBX2GLTF can you link to them here? +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP11772787 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-07-05T14:59:04Z +++$+++ > You mean the GLTFLoader? 
+
+Yes.
+Importer = Loader + Parser
+
+> It would be especially helpful if you can find a very simple model that demonstrates the bug.
+
+You have everything you need to study the issue.
+Any PHONG material (Diffuse + Specular + Normal) exported or converted to GLTF gives wrong results.
+p.s.
+PHONG represents 50-60% of the current samples, compared to Physical less than 1%.
+That's why I said that PBR was a bad choice for GLTF. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP5307958 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-07-05T15:08:13Z +++$+++ > You have everything you need to study the issue
+
+In other words you want someone else to do the work for you 🙄
+
+Regarding Phong materials and glTF, I agree that this makes glTF a bad choice for converting older models - especially models originally exported as FBX which only supports Phong or Lambert shading. +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP11772787 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-07-05T15:09:50Z +++$+++ > n other words you want someone else to do the work for you
+
+I don't have enough spare time for "GitHub activities".
+You got the report and the working samples.
+That's all for now.
+cheers +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP5307958 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-07-05T15:20:58Z +++$+++ In that case, I still don't consider this to be a complete or actionable bug report and I continue to vote to close this issue. +++$+++ 3 +++$+++ 1
+COM9 +++$+++ SP97088 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-07-06T03:06:29Z +++$+++ Hey @RemusMar,
+
+Thanks for reporting this. Some notes...
+
+**File size**
+I'm not sure where you're getting these numbers, this is what I see:
+
+```
+Lara.sea: 1,032,525 bytes 
+Lara.glb: 1,850,164 bytes
+
+Lara.sea.gz: 1,031,840 bytes
+Lara.glb.gz: 919,712 bytes 
+```
+
+**Materials**
+Your model uses `Diffuse + Specular`. Unfortunately, seems like the specular texture is not being exported. GLTF supports 2 PBR modes: `Metalness + Roughness` and `Specular + Glossiness`. You want to export your model using the second mode. `GLTFLoader` supports both but maybe the Babylon.js doesn't have an option to export in that mode? In that case you may want to do a feature request on their project.
+
+Let us know what you find out. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP11772787 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-07-06T06:56:27Z +++$+++ Hi Ricardo,
+
+1. File size.
+If you download the files (with Firefox) you'll get:
+Lara.sea: 658,901 bytes
+Lara.glb: 1,850,964 bytes
+Even more: the GLB file does not even contain the equivalent (Metalness) of the Specular texture !
+
+2) Materials
+As I said before, the original MAX  and FBX files contain a standard PHONG material:
+Diffuse + Specular + Normal 
+None of the current GLTF exporters and converters is able to generate a correct Physical material.
+PHONG is way more popular than Physical.
+
+p.s.
+I'm not interested in the GLTF format (SEA3D is better from any point of view).
+I just want to help other poeple. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP11772787 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-07-06T10:11:28Z +++$+++ Another userful sample:
+Here is a NATIVE Physical material in 3DS Max 2018 exported to GLTF with Babylon3D exporter:
+http://necromanthus.com/Test/html5/Lara_gltf_physical.html 
+Now the metalness is present, but the result is still wrong:
+- it looks emissive (but it's not)
+- it has a red color bump
+
+However, this GLB file looks better (compared to THREE) in the Babylon sandbox ( https://sandbox.babylonjs.com ).
+Again, this is how the Physical material should look in THREE:
+http://necromanthus.com/Test/html5/Lara_PBR.html 
+
+So let's forget now about PHONG and buggy exporters and converters.
+We should investigate why the GLB file looks better in the Babylon sandbox.
+Buggy GLTF Loader in THREE ? +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP4681282 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-07-06T19:30:26Z +++$+++ If one could quickly prototype some hacks over the existing phong / standard implementations i bet it would be pretty useful 😉 
+
+ +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP97088 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-07-08T10:53:47Z +++$+++ @RemusMar Seems like the glb includes a `AmbientLight`.
+
+<img width="766" alt="screen shot 2018-07-08 at 7 44 30 pm" src="https://user-images.githubusercontent.com/97088/42419015-7a49ede0-82e7-11e8-8067-ae27f0b0937a.png">
+
+If you set `visible` to `false` to the imported `AmbientLight` the character starts to look less red.
+
+The last thing to do is setting `renderer.gammaOutput = true`. (Needed when using GLTF #12766)
+
+<img width="634" alt="screen shot 2018-07-08 at 7 48 00 pm" src="https://user-images.githubusercontent.com/97088/42419034-dca797b2-82e7-11e8-8548-e9f204aa7b54.png">
+ +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP11772787 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-07-08T12:46:45Z +++$+++ > Seems like the glb includes a AmbientLight.
+
+Good catch Ricardo! :thumbsup: 
+
+> If you set visible to false to the imported AmbientLight the character starts to look less red.
+
+Something better (no wasted resources):
+```javascript 
+		gltf.scene.remove( gltf.scene.children[2] );
+```
+
+> The last thing to do is setting renderer.gammaOutput = true. (Needed when using GLTF #12766)
+
+That indicates buggy GLTF Loader (and it has to be fixed).
+If I use that for other loaders, I get wrong colors for the loaded models.
+Just think about this scenario: use various loaders for the same scene and one of them is GLTF.
+It will mess up the entire scene!
+
+Anyway, after removing that ambient light and using this workaround, this is the result:
+http://necromanthus.com/Test/html5/Lara_gltf_physical.html 
+Much better compared to the initial GLTF one, but the material quality is far away from this one:
+http://necromanthus.com/Test/html5/Lara_PBR.html 
+Impressive lighting response and great metalness for bra and bikini.
+
+At this stage I won't use GLTF in any serious project.
+ +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP97088 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-07-08T14:56:45Z +++$+++ Can you try adding a `envMap` cubemap to these examples too? PBR looks the best when a `envMap` is supplied. +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP11772787 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-07-08T15:34:07Z +++$+++ > Can you try adding a envMap cubemap to these examples too?
+> PBR looks the best when a envMap is supplied.
+
+I've added offline.
+Of course it looks better, but PHONG with Environment map still looks WAY better (in THREE).
+Also, the envMap does not fix the GLTF Loader issue(s). +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP97088 +++$+++ ROOT +++$+++ COM16 +++$+++ 2018-07-08T16:57:42Z +++$+++ > I've added offline.
+
+Could you update the online samples? +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP1848368 +++$+++ ROOT +++$+++ COM17 +++$+++ 2018-07-09T02:43:59Z +++$+++ The glTF format supports PBR and unlit shaders at this time. Whether the BabylonJS and FBX2GLTF tools do the Phong-to-PBR conversion in a way that preserves Phong specular maps, I don't know — that would be a question for the repos of those tools. If you are trying to preserve the exact appearance of models using classic Phong shaders, you may have an easier time with other formats.
+
+> > The last thing to do is setting renderer.gammaOutput = true.
+> 
+> That indicates buggy GLTF Loader (and it has to be fixed).
+
+This is a deliberate decision and not a bug. Base color and emissive textures in glTF (and, typically, diffuse textures in any format...) are in sRGB colorspace. GLTFLoader marks them as such (`material.map.encoding = THREE.sRGBEncoding`), so that they're converted to linear colorspace for correct PBR lighting calculations. Finally colors should be converted back to sRGB (e.g. `renderer.gammaOutput=true`).
+
+If you skip all of this, with any format, lighting calculations are incorrect. SEA3DLoader, FBXLoader, and ColladaLoader never touch the `.encoding` property of any texture, and leave it to the end user to change texture colorspace and renderer colorspace. I'm pretty confident that the large majority of three.js users are passing sRGB colors into three.js without converting, despite the fact that renderer lighting calculations assume linear colorspace, and getting results that are "good enough" but inconsistent with other engines and authoring environments. For correct results you should be using `renderer.gammaOutput=true`, and marking sRGB textures as sRGB.
+
+None of these issue are specific to glTF (see https://github.com/mrdoob/three.js/issues/11337), but with GLTFLoader we're trying to achieve consistency with other engines and 3D authoring environments, and have chosen to treat all sRGB textures as sRGB for a first step. If you're mixing models from other formats in the scene, then yes it's awkward, and you'd need to either mark the diffuse textures of those formats as sRGB or mark the colorspace on the glTF models to linear (the latter is incorrect for all model formats involved, but may look good enough if you don't need precise colors).
+
+***
+
+It does not seem like there is anything actionable here, unless there are specific issues we can report to the tools mentioned. @RemusMar if you are happy with your SEA3D workflow, that's great — I'm not interested in debating formats or persuading you to change from something that is already working well for you. +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP11772787 +++$+++ ROOT +++$+++ COM18 +++$+++ 2018-07-09T06:46:25Z +++$+++ > Could you update the online samples?
+
+Ricardo,
+PHONG looks great with Diffuse + Specular only.
+PBR does not look great with BaseColor + MetallicRoughness only.
+That's the main problem here.
+The Normal/Bump and Environment textures are irrelevant at this point.
+On top of that: more texture layers = bigger file size and performances drop
+
+> If you skip all of this, with any format, lighting calculations are incorrect. SEA3DLoader, FBXLoader, and ColladaLoader never touch the .encoding property of any texture
+
+That was a wise decision.
+
+> I'm not interested in debating formats or persuading you to change from something that is already working well for you.
+
+Don,
+I'm not debating the "PBR only" bad choice for GLTF.
+This topic shows GLTFLoader design flaws.
+We don't reinvent the wheel here, so "renderer.gammaOutput = true" is not an option now, when GLTF represents less than 1% of the market.
+cheers +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP11772787 +++$+++ ROOT +++$+++ COM19 +++$+++ 2018-07-09T08:28:15Z +++$+++ > Can you try adding a envMap cubemap to these examples too? PBR looks the best when a envMap is supplied.
+> Could you update the online samples?
+
+Because you asked me to:
+
+SEA3D + Phong: http://necromanthus.com/Test/html5/Lara_envMap.html 
+vs
+GLTF + PBR: http://necromanthus.com/Test/html5/Lara_gltf_envMap.html 
+
+The quality drop is obvious.
+Also, in 3DS Max 2018 the Physical material looks WAY better than the GLTF result. +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP11772787 +++$+++ ROOT +++$+++ COM20 +++$+++ 2018-07-09T12:25:36Z +++$+++ > None of these issue are specific to glTF (see #11337), but with GLTFLoader we're trying to achieve consistency with other engines and 3D authoring environments,
+
+That's completely wrong Don!
+Here we're talking about GLTFLoader and THREE.js
+The users are interested in the best results with THREE.
+Other engines and 3D authoring environments are irrelevant here.
+
+And you still don't understand the main problem here.
+For the last time:
+
+1) JSONLoader (or SEA3D loader) + PBR = GOOD results (close to Phong):
+http://necromanthus.com/Test/html5/Lara_PBR.html 
+
+2) GLTFLoader + PBR = BAD results
+http://necromanthus.com/Test/html5/Lara_gltf_physical.html 
+
+p.s.
+In the first sample you don't even need "renderer.gammaOutput = true" to get good results !!! +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP1848368 +++$+++ ROOT +++$+++ COM21 +++$+++ 2018-07-09T15:11:57Z +++$+++ 
+> The users are interested in the best results with THREE. Other engines and 3D authoring environments are irrelevant here.
+
+Being able to author a PBR model in Substance Painter or download one from Sketchfab, and have the model appear as the artist designed it, is good for three.js users. I don't think there's any definition of "best result" where that sort of consistency can be dismissed.
+
+> This topic shows GLTFLoader design flaws. We don't reinvent the wheel here, so "renderer.gammaOutput = true" is not an option now...
+
+This isn't reinventing any wheels, and it isn't a design flaw. PBR calculations are done in linear space, with every engine I'm aware of. If you pass sRGB data into the renderer and pretend it's linear, the lighting and blending math will come out wrong. The difference is not huge, and so this not a major concern for many three.js users, but nevertheless it is not as good as it could be. For that reason, your "good" result example is not actually correct. But as you've said before, backward-compatibility is important, so I'm not here to advocate for changing any three.js defaults. But because glTF is a new format, and because we're trying to get PBR right, we're going to mark sRGB textures as sRGB, even if other loaders are not doing so.
+
+See [this article about Unreal](http://artbyplunkett.com/Unreal/unrealgamma.html) — 
+
+> ...textures that are used for color information should have the sRGB flag checked, and textures that are used for masks and numerical calculations in shaders and effects (like Normal maps) should have it unchecked. And if you follow this simple guideline you mostly get the best effect.
+
+This is precisely what we are doing. +++$+++ 4 +++$+++ 1
+COM23 +++$+++ SP5307958 +++$+++ ROOT +++$+++ COM22 +++$+++ 2018-07-09T18:39:25Z +++$+++ > ...I'm pretty confident that the large majority of three.js users are passing sRGB colors into three.js without converting, despite the fact that renderer lighting calculations assume linear colorspace
+
+You are talking about PBR materials with glTF, but I assume this is just as much a problem with a Phong material?
+
+> ...because glTF is a new format, and because we're trying to get PBR right, we're going to mark sRGB textures as sRGB, even if other loaders are not doing so.
+
+@donmccurdy should other loaders be doing so? It seems like this inconsistency between loaders is a point of confusion for users, and it would make sense for all of them to treat sRGB textures the same way if possible.  +++$+++ 1 +++$+++ 0
+COM24 +++$+++ SP1848368 +++$+++ ROOT +++$+++ COM23 +++$+++ 2018-07-09T19:16:30Z +++$+++ > You are talking about PBR materials with glTF, but I assume this is just as much a problem with a Phong material?
+
+Yes, the problem is the same for Phong materials or PBR materials loaded in any other format.
+
+> ...should other loaders be doing so? It seems like this inconsistency between loaders is a point of confusion for users, and it would make sense for all of them to treat sRGB textures the same way if possible.
+
+If we had a time machine, yes, the other loaders should also be marking sRGB textures containing color data as sRGB. But making the change now would cause confusion and break backward-compatibility, and the `gammaOutput=true` setting needed to fix output is not intuitive — I don't think changing other loaders can be justified given those issues.
+
+Let's keep an eye on https://github.com/mrdoob/three.js/issues/11337. I hope the resolution there will make color workflows more intuitive. With that and NodeMaterial, there may be opportunities to fix some existing issues without breaking anyone's existing applications. +++$+++ 2 +++$+++ 1
+COM25 +++$+++ SP11772787 +++$+++ ROOT +++$+++ COM24 +++$+++ 2018-07-10T06:40:10Z +++$+++ > Being able to author a PBR model in Substance Painter or download one from Sketchfab,
+
+They are irrelevant.
+I get much better results in 3DS Max and that tells me that the GLTFLoader and/or your PBR model are not properly implemented.
+
+> The difference is not huge, and so this not a major concern for many three.js users, but nevertheless it is not as good as it could be.
+
+Your girlfriend looks bad but you're happy because your boss told you that's normal.
+OMG ...
+
+> For that reason, your "good" result example is not actually correct.
+
+In fact you should fix your "correct" example to look good. +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP5307958 +++$+++ ROOT +++$+++ COM25 +++$+++ 2018-07-14T14:36:45Z +++$+++ > If we had a time machine, yes, the other loaders should also be marking sRGB textures containing color data as sRGB.  
+
+Yeah, it's unfortunate but I agree that it's not worth breaking backwards compatibility over this. 
+
+However, as I've been working with larger FBX scenes consisting of multiple models, animated cameras and so on I've found myself wishing that the output of the loader was something more like GLTFLoader's output - that is, it should return an `fbx` object with properties:
+
+```
+fbx.animations; // Array<THREE.AnimationClip>
+fbx.models; // Array <THREE.Group, THREE.Mesh, THREE.SkinnedMesh>
+fbx.cameras; // Array<THREE.Camera>
+fbx.asset; // Object
+```
+
+There may be other loaders that would benefit from a similar change.  We should add this to the backburner (and certainly wait on #11337), but if any loaders do have breaking changes made for whatever reason, then we can use that as opportunity to apply this change as well. 
+
+Perhaps we should open a new issue to keep track of this?  +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP12612165 +++$+++ ROOT +++$+++ COM26 +++$+++ 2018-07-14T15:05:50Z +++$+++ > Perhaps we should open a new issue to keep track of this?
+
+Please do. That's better than resume the conversation in this closed thread. +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP11772787 +++$+++ ROOT +++$+++ COM27 +++$+++ 2018-07-20T09:58:03Z +++$+++ Just removed the FORCED sRGB encoding in the GLTFLoader.
+```javascript
+//			if ( material.map ) material.map.encoding = THREE.sRGBEncoding;
+//			if ( material.emissiveMap ) material.emissiveMap.encoding = THREE.sRGBEncoding;
+//			if ( material.specularMap ) material.specularMap.encoding = THREE.sRGBEncoding;
+```
+
+The result is better from any point of view:
+- better lighting and material quality
+- no need of "renderer.gammaOutput = true" anymore (a bad idea anyway)
+- now you can use the GLTFLoader with other loaders for the same scene (renderer)
+
+SEA3D + Phong: http://necromanthus.com/Test/html5/Lara_envMap.html
+vs
+GLTF + PBR: http://necromanthus.com/Test/html5/Lara_gltf_envMap.html
+ +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP1848368 +++$+++ ROOT +++$+++ COM28 +++$+++ 2018-07-20T17:07:02Z +++$+++ I've addressed each of those points in https://github.com/mrdoob/three.js/issues/14419#issuecomment-403513554 — we will not be removing the sRGB encoding assignment to sRGB textures in GLTFLoader. If you would like to override that, it is easy to change the texture encoding after loading the model.
+
+If there are no other actions to take here, this issue should be closed. +++$+++ 1 +++$+++ 1

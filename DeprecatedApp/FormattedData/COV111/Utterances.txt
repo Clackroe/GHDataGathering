@@ -1,0 +1,97 @@
+ROOT +++$+++ SP35394377 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-06-04T12:29:32Z +++$+++ Incorrect wsl disk space <!--
+🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
+
+I ACKNOWLEDGE THE FOLLOWING BEFORE PROCEEDING:
+1. If I delete this entire template and go my own path, the core team may close my issue without further explanation or engagement.
+2. If I list multiple bugs/concerns in this one issue, the core team may close my issue without further explanation or engagement.
+3. If I write an issue that has many duplicates, the core team may close my issue without further explanation or engagement (and without necessarily spending time to find the exact duplicate ID number).
+4. If I leave the title incomplete when filing the issue, the core team may close my issue without further explanation or engagement.
+5. If I file something completely blank in the body, the core team may close my issue without further explanation or engagement.
+
+All good? Then proceed!
+-->
+
+<!--
+This bug tracker is monitored by Windows Subsystem for Linux development team and other technical folks.
+
+Important: When reporting BSODs or security issues, DO NOT attach memory dumps, logs, or traces to Github issues.
+Instead, send dumps/traces to secure@microsoft.com, referencing this GitHub issue. Ideally, please configure your machine to capture minidumps, repro the issue, and send the minidump from "C:\Windows\minidump\".
+You can find instructions to do that here: https://support.microsoft.com/en-us/help/315263/how-to-read-the-small-memory-dump-file-that-is-created-by-windows-if-a
+
+If this is a console issue (a problem with layout, rendering, colors, etc.), please post the issue to the Terminal tracker: https://github.com/microsoft/terminal/issues
+For documentation improvements, please post to the documentation tracker: https://github.com/MicrosoftDocs/WSL/issues
+For any other questions on contributing please see our contribution guidelines: https://github.com/Microsoft/WSL/blob/master/CONTRIBUTING.md
+
+Please fill out the items below.
+-->
+
+```
+# Environment
+Platform ServicePack Version      VersionString
+-------- ----------- -------      -------------
+ Win32NT             10.0.19041.0 Microsoft Windows NT 10.0.19041.0
+```
+
+```
+❯ lsb_release -r
+Release:        20.04
+```
+
+```
+❯ cat /proc/version
+Linux version 4.19.84-microsoft-standard (oe-user@oe-host) (gcc version 8.2.0 (GCC)) #1 SMP Wed Nov 13 11:44:37 UTC 2019
+```
+
+# Steps to reproduce
+`df -h -> enter`
+<!--  What you're doing and what's happening. Copy&paste the full set of specific command-line steps necessary to reproduce the behavior, and their output. Include screenshots if that helps demonstrate the problem. -->
+
+<!-- 
+If you'd like to provide logs you can provide an `strace(1)`  log of the failing command (if `some_command` is failing, then run `strace -o some_command.strace -f some_command some_args`, and link the contents of `some_command.strace` in a gist. 
+More info on `strace` can be found here: https://www.man7.org/linux/man-pages/man1/strace.1.html
+You can use Github gists to share the output: https://gist.github.com/
+
+Additionally, For WSL launch issues, please collect detailed logs, instructions here: https://github.com/Microsoft/WSL/blob/master/CONTRIBUTING.md#8-detailed-logs 
+-->
+
+#  Expected behavior
+Free space on wsl corresponds to reality
+
+<!-- A description of what you're expecting, possibly containing screenshots or reference material. -->
+
+# Actual behavior
+
+Free / occupied space does not correspond to reality
+![image](https://user-images.githubusercontent.com/35394377/83756183-5aa05f00-a677-11ea-96f1-22f3f9d7d631.png)
+
+<!-- What's actually happening? -->
+
+
+
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP17727402 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-06-04T16:48:31Z +++$+++ /dev/sdb is not your C drive, it's a VHD that contains your root filesystem. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP35394377 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-06-04T16:50:15Z +++$+++ Yes, but there should be as much space on it as there is on the current drive, isn’t it? +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP7049700 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-06-04T17:52:44Z +++$+++ No, because it isn't your drive. There is 250GiB on "it" (by default). Where the "it" here isn't a real drive. It is a virtual block device. The size of the _virtual device_ is 250GiB whether the _backing storage_ for the device lives on a 128 gigabyte ssd or a 128 terrabyte raid array. The size isn't real because the device isn't real. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP35394377 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-06-04T17:56:46Z +++$+++ Where is 250mb here? There 251GB
+I understand that this is a virtual device, but it must have a certain size occupied on the disk, as on the disks of virtual machines in a workstation, etc. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP17727402 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-06-04T18:00:34Z +++$+++ @Mystic8b - I don't see MB anywhere in the screenshot you posted, I might be looking at it wrong but I see.
+
+/dev/sdb size=251G used=2.8G
+C:\ size=209G Used=98G +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP35394377 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-06-04T18:02:05Z +++$+++ > /dev/sdb size=251G used=2.8G
+> C:\ size=209G Used=98G
+
+Exactly. Where does 251gb come from?
+About megabytes, I never said a word
+ +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP7049700 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-06-04T18:04:37Z +++$+++ Type-o obv. 250 GiB (shows as 251GiB). That number is arbitrary ref #4373. +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP35394377 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-06-04T18:04:38Z +++$+++ Okay, therealkenc edited his post, first he wrote 250mib
+So you want to say that a 250GB virtual disk with a real free space of 111GB is normal? +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP7049700 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-06-04T18:11:10Z +++$+++ Very normal. You can have a dozen 250 GiB virtual disks (total of 3TiB of space that doesn't really exist) one 128 GiB SSD. [Which is why this is tag by-design already.] +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP17727402 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-06-04T18:18:11Z +++$+++ @therealkenc is right, the disk is dynamic and that is the maximum size. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP35394377 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-06-04T18:19:26Z +++$+++ ![image](https://user-images.githubusercontent.com/35394377/83796043-09a95e80-a6a9-11ea-833e-927b3694b2a4.png)
+benhillis, kapish? +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP7049700 +++$+++ ROOT +++$+++ COM10 +++$+++ 2020-06-04T18:19:27Z +++$+++ Thought of a clearer way to put this. Your ext4 filesystem is ~250GiB. It doesn't [resize](http://manpages.ubuntu.com/manpages/xenial/man8/resize2fs.8.html) every time you consume a few more bytes in Windows. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP35394377 +++$+++ ROOT +++$+++ COM11 +++$+++ 2020-06-04T18:22:27Z +++$+++ damn, okay, it seems there is an opportunity to reduce the size of this disk, even so.
+ty +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP17727402 +++$+++ ROOT +++$+++ COM12 +++$+++ 2020-06-04T18:27:08Z +++$+++ This isn't constructive. +++$+++ 0 +++$+++ 0

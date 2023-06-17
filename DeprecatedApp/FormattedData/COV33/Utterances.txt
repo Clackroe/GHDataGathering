@@ -1,0 +1,211 @@
+ROOT +++$+++ SP388198 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-09-27T12:44:17Z +++$+++ Feature: Allow until-loops on blocks or includes ##### SUMMARY
+It would be quite useful if you can loop over more than one single tasks.
+
+For instance if you have to poll a remote system for some progress and at the same time you want to push this progress to another backend, you could be doing:
+
+```yaml
+- hosts: localhost
+  tasks:
+  - name: Start a long-running task
+    uri:
+      url: https://some-service/v1/put/new_job
+      body: { foo: bar }
+    register: new_job
+
+  - until: job_status.json.message in ['Finished', 'Failed']
+    block:
+    - name: Get job status
+      uri:
+        url: https://some-service/v1/get/new_job
+      register: job_status
+
+    - name: Report job status to web service
+      uri:
+        url: https://backend-system/v1/post/job_status
+        body: '{{ job_status.json }}'
+```
+
+There are many uses to this.
+
+##### ISSUE TYPE
+- Feature Idea
+
+##### COMPONENT NAME
+Core +++$+++ 68 +++$+++ 0
+COM0 +++$+++ SP1215518 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-09-27T13:17:02Z +++$+++ https://github.com/ansible/ansible/issues/13262 +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP388198 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-09-27T13:35:34Z +++$+++ @mkrizek Hmm, I searched for various combination of keywords, and that one did not stick out :-(
+
+That said, I tried using `until:` with `block:`, `include:` and `include_tasks`, but the first one fails, and the 2 others only run the included file once.
+
+```yaml
+- hosts: localhost
+  tasks:
+  - include: taskboot.yml
+    until: 5|random == 5
+```
+
+But apparently looping only works when using `loop:` ?
+
+```yaml
+- hosts: localhost
+  tasks:
+  - include: taskboot.yml
+    loop: [ 1, 2, 3, 4, 5 ]
+``` +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP388198 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-09-27T13:38:01Z +++$+++ Whatever I try, using `until:` does not work with `include:` and `include_tasks:`.
+
+```yaml
+- hosts: localhost
+  tasks:
+  - include: taskbook.yml
+    until: false
+    retries: 5
+    delay: 1
+``` +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP1215518 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-09-27T13:54:41Z +++$+++ Yeah, `until` is not a valid argument for includes, see https://github.com/ansible/ansible/pull/46177. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP388198 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-09-27T13:58:09Z +++$+++ @mkrizek In other words, what we need is not possible, neither on blocks or on includes.
+
+So I will keep this one open, but changed the title. +++$+++ 0 +++$+++ 1
+COM5 +++$+++ SP39340 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-09-27T14:10:59Z +++$+++ We do have an open proposal to "taskify" includes, which would allow things like until to work on them.
+
+https://github.com/ansible/proposals/issues/136
+
+I, however, do not believe that blocks should be extended to support this feature. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP388198 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-09-27T14:15:10Z +++$+++ @sivel And what would be the reason for not extending the functionality to blocks ? As it would be a natural thing if it would work. (i.e. being able to loop every construction within a play) +++$+++ 6 +++$+++ 0
+COM7 +++$+++ SP836171 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-09-27T14:17:10Z +++$+++ blocks are currently 'static' groupings, enabling loops on them (not just having tasks inherit them) would require making them dynamic ... as we saw with `include:` this has many consequences that are not immediately apparent. +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP39340 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-09-27T14:20:58Z +++$+++ To extend what @bcoca mentions, doing so would require us to deprecate `block` and replace with something like `block_dynamic` and `block_static`.
+
+Also, _every_ user of ansible utilizes blocks, whether explicit, or our internal implicit use of them.  They are a fundamental building block of how tasks are represented and executed.  Changing such an integral feature is sure to lead to unforeseen issues. +++$+++ 3 +++$+++ 1
+COM9 +++$+++ SP388198 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-09-28T15:35:37Z +++$+++ In any case, the documentation does not give any detail, or even does not discuss what is supposed to work and what not. There's no real distinction between "loops" and until-loops, not sure how we can make this more clear overal. The expectation is that what works for "loops" also works for until-loops. +++$+++ 6 +++$+++ 0
+COM10 +++$+++ SP836171 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-09-28T15:46:45Z +++$+++ i would do both, allow until/retry loops to work with includes and then clearly document how they work ... so we have something to point at when it does not meet some people's expectations +++$+++ 1 +++$+++ 0
+COM11 +++$+++ SP39340 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-09-28T16:35:13Z +++$+++ Just to provide a small amount of detail about how includes work, is that dynamic includes are more of an internal trigger, as opposed to something that wraps execution.
+
+As such, the task_executor short circuits early on an include, indicating to the strategy that it should read a file and insert task blocks into the TQM, that will later be processed by the task_executor.
+
+Due to this, there is no tracking of state as a roll up to the parent include.  So an until loop, which would rely on some version of a failed when/success scenario, would only refer to whether or not the strategy was told to do as detailed above.  In which case, it should always succeed.
+
+In any case, the mode of operation is that we short circuit far before an until conditions are inspected.  If we just "made it work" right now, it definitely wouldn't do what a person expects.  To do what people expect, would require ansible/proposals#136 to be implemented. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP836171 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-09-28T16:38:07Z +++$+++ the until in this case would have to rely on vars set or registered from the included tasks as the registration of the include itself would be useless ... it would still 'work' just not how most other cases do. +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP63074 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-09-28T21:01:02Z +++$+++ @dagwieers The other thread is locked now. But this recent suggestion (@sivel comment above) is brand new:
+
+https://github.com/ansible/ansible/issues/46203#issuecomment-425111123
+
+And you are saying we might want to leave open the possibility of someone else coming along later, to do a PR for looping over blocks off their own backs. Then at least we could make it crystal clear to them, as to make it as a separate and new `block_dynamic:`, and not touching the traditional static `block:` intact? Would that not make more sense to everybody ? Can we all agree upon that ahead of time? Because I agree with this idea. For all the same reasons - it's going to help prevent breaking other existing stuff which we rely on. Whilst still allowing the possibility of someone to come along, try making a PR for actually implementing it. Should we really want them to be making the best possible job and such. Then we should at least be clearly specifying this. If we already know that ahead of time. Which seems to be the case now?  +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP1215518 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-10-31T14:29:00Z +++$+++ Linking this here https://github.com/ansible/ansible/issues/16621 +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP12375795 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-11-05T13:00:06Z +++$+++ +1 For implementing this feature +++$+++ 0 +++$+++ 2
+COM16 +++$+++ SP1418033 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-11-30T16:24:45Z +++$+++ It is natural that a block should be repeatable. Otherwise, it is very counterintuitive. It confuses.
+
+And there seems to be no way to write a playbook with loop with more than one statement. No programming language is so limited. +++$+++ 25 +++$+++ 0
+COM17 +++$+++ SP1418033 +++$+++ ROOT +++$+++ COM16 +++$+++ 2018-11-30T21:02:25Z +++$+++ It looks like in Ansible, if one needs to do something complex, one should write an action plugin. This is what we are going to do.
+
+Here one has many examples:
+https://github.com/ansible/ansible/tree/devel/lib/ansible/plugins/action
+
+Best regards +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP14332693 +++$+++ ROOT +++$+++ COM17 +++$+++ 2019-03-26T20:48:14Z +++$+++ This is absolutely a shortcoming.  Ansible has been perfect for most of my needs so far, but it seems like expanding the capabilities of blocks would make Ansible a lot better solution.  +++$+++ 7 +++$+++ 0
+COM19 +++$+++ SP19873627 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-03-26T23:37:19Z +++$+++ I tried to use `until` in a `include_tasks` and it didn't worked. 
+
+What I did as a workaround was to create a yml file that include the task (`loop.yml`) and call itself recursively (`recursive.yml`) while the condition is still not satisfied.
+
+_recursive.yml:_
+
+```yml
+---
+
+- name: 'checking {{ watch_job }} status (recursive)'
+  include_tasks: 'loop.yml'
+
+- name: 'count ({{ watch_count | int + 1 }})'
+  set_fact:
+    watch_count: '{{ watch_count | int + 1 }}'
+
+- name: 'retries ({{ (watch_timeout | int / watch_poll | int) | int }})'
+  set_fact:
+    watch_retries: '{{ (watch_timeout | int / watch_poll | int) | int }}'
+
+- name: 'timeout ({{ watch_timeout }} seconds)'
+  fail: 
+    msg: "Timeout of {{ watch_timeout }} seconds exceeded ({{ watch_retries }} retries)"
+  when: (not watch_status.finished) and (watch_count | int > watch_retries | int)
+
+- name: 'wait for {{ watch_poll }} seconds'
+  wait_for:
+    timeout: '{{ watch_poll | int }}'
+  when: not watch_status.finished
+
+- name: 'call itself recursively'
+  include_tasks: 'recursive.yml'
+  when: not watch_status.finished
+```
+
+In the above file, I included a timeout in the case of taking too long (this is in a role that [shows the output of what is running in the hosts](https://github.com/ansible/ansible/issues/30411#issuecomment-471277785)).
+
+Not the ideal solution, but worked for me and was relatively easy to change using `until` to do the above. +++$+++ 12 +++$+++ 0
+COM20 +++$+++ SP2209728 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-05-07T09:11:49Z +++$+++ +1 for this feature ! +++$+++ 6 +++$+++ 5
+COM21 +++$+++ SP2997782 +++$+++ ROOT +++$+++ COM20 +++$+++ 2019-05-07T20:16:18Z +++$+++ +1 +++$+++ 6 +++$+++ 5
+COM22 +++$+++ SP21317549 +++$+++ ROOT +++$+++ COM21 +++$+++ 2019-05-27T15:44:08Z +++$+++ +1 for until loops on blocks +++$+++ 1 +++$+++ 5
+COM23 +++$+++ SP42803777 +++$+++ ROOT +++$+++ COM22 +++$+++ 2019-05-28T14:38:49Z +++$+++ I have been searching a way to do `until` (infinitely) for a success on all modules on the block and I managed to do this with `include_tasks` with `rescue`
+
+I could not use regular `until` because the IP is changing over time and had to modify it on the run
+
+> wait_until_success.yml
+
+```
+- name: 'Wait until success'
+  block:
+    - name: Get server updated ip
+      uri:
+        url: https://localhost/ip
+        return_content: yes
+        status_code: 200
+      register: ip
+
+    - name: ssh to the server
+      wait_for:
+        host: "{{ ip }}"
+        port: 22
+        timeout: 30
+        state: started
+  rescue:
+    - debug:
+        msg: "Failed to connect - Retrying..."
+    - include_tasks: wait_until_success.yml
+``` +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP1218714 +++$+++ ROOT +++$+++ COM23 +++$+++ 2019-11-20T13:56:11Z +++$+++ Same as @matanbaru with a way to fail after multiple retries
+
+```yml
+- name: 'Wait until success'
+  block:
+    - name: Set the retry count
+      set_fact:
+        retry_count: "{{ 0 if retry_count is undefined else retry_count|int + 1 }}"
+
+    - name: Get server updated ip
+      uri:
+        url: https://localhost/ip
+        return_content: yes
+        status_code: 200
+      register: ip
+
+    - name: ssh to the server
+      wait_for:
+        host: "{{ ip }}"
+        port: 22
+        timeout: 30
+        state: started
+  rescue:
+    - fail:
+        msg: Ended after 5 retries
+      when: retry_count|int == 5
+
+    - debug:
+        msg: "Failed to connect - Retrying..."
+
+    - include_tasks: wait_until_success.yml
+``` +++$+++ 2 +++$+++ 0
+COM25 +++$+++ SP23147820 +++$+++ ROOT +++$+++ COM24 +++$+++ 2020-06-21T06:27:26Z +++$+++ +1 could you please add retry-until in loops !
+Absolutely "Must Have" feature ! +++$+++ 1 +++$+++ 0
+COM26 +++$+++ SP27526373 +++$+++ ROOT +++$+++ COM25 +++$+++ 2020-07-03T22:10:03Z +++$+++ +1
+ +++$+++ 1 +++$+++ 2
+COM27 +++$+++ SP987055 +++$+++ ROOT +++$+++ COM26 +++$+++ 2020-07-29T16:46:36Z +++$+++ +1 +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP39340 +++$+++ ROOT +++$+++ COM27 +++$+++ 2020-07-29T16:50:34Z +++$+++ I've locked this to contributors for now.  Adding `+1` comments is too noisy.  For future reference, add a reaction to the issue body, and don't comment. +++$+++ 0 +++$+++ 0

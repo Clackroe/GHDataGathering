@@ -1,0 +1,40 @@
+ROOT +++$+++ SP1863566 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-18T20:25:31Z +++$+++ Is Microsoft capable of writing software that doesn't turn into a nightmare? I just wasted several hours trying to figure out why my site wasn't working. First, I got a 500.32 "ANCM Failed to Load dll" server error code. This wasted several hours of my time trying to work through the suggested troubleshooting tips (https://docs.microsoft.com/en-us/aspnet/core/test/troubleshoot-azure-iis?view=aspnetcore-3.1).  The doc said it was most likely due to binary incompatibility so I tried to use the **dotnet** command to find out what's installed. When I typed  **dotnet --list-sdks** or  **dotnet --version** I got the following error message:
+
+> The specified SDK version [3.1.100] from global.json [D:\****] not found; install specified SDK version
+> Did you mean to run dotnet SDK commands? Please install dotnet SDK from:
+>   http://go.microsoft.com/fwlink/?LinkID=798306&clcid=0x409
+
+I reinstalled the SDK and received the same error.  Why is **dotnet** giving me this error for no apparent reason?  This was getting me no closer to the solving the problem until I realized that I should restart the web server and perhaps my app will work again.  Lo and behold it was a simple restart!  This is the second or third time I've been screwed over by Microsoft's shitty installation practices. You guys suck at everything!
+
+WTF Microsoft!  Can't you guys get anything done without turning it into a nightmare?  You force the user to restart the computer when they uninstall a server bundle, but you don't require them to restart IIS when they install a server bundle?  I would be tempted to blame legalization for this kind of mishap, but you guys have always sucked at software!  Everything you guys put your hands on sucks!  Windows sucks and now you even made .NET, your crown jewels, suck!  Microsoft should grow turnips instead of writing software! +++$+++ 0 +++$+++ 9
+COM0 +++$+++ SP4263674 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-18T21:18:08Z +++$+++ Relax and take your medication. The grass isn't greener on the other side... 
+
+// +10 year Java master & former frequent linux user +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP4016293 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-12-18T21:28:13Z +++$+++ Take a deep breath and try the following:
+
+IF USING AZURE APP SERVICE:
+
+1) Remove any older ASP.NET Core Runtime Extensions from your App Service (especially any preview extensions), then install the ASP.NET Core 3.1 Runtime x64 Extension. 
+2) Restart your app service
+3) a) If you see more errors, republish your project.
+ b) Make sure the deployment Mode is `Framework-Dependent`. 
+
+IF ON PREM:
+
+1) Make sure you have the ASP.NET Core 3.1 Hosting Bundle installed (Installs the RUNTIME and IIS hosting support. Does NOT install the SDK).
+https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-aspnetcore-3.1.0-windows-hosting-bundle-installer
+2) Run the `dotnet --info` commands outside of the current directory location you tried. You have a global.json file somewhere that's locking .NET Core SDK to 3.1.100. You likely don't have the 3.1 SDK installed, which would be why you're encountering that error. 
+3) IISReset
+4) Check the Application Event Logs. Usually more details about why the IIS Hosting Module blew up will appear in there.
+ +++$+++ 9 +++$+++ 0
+COM2 +++$+++ SP1863566 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-12-19T22:00:48Z +++$+++ > Relax and take your medication. The grass isn't greener on the other side...
+> 
+> // +10 year Java master & former frequent linux user
+
+If you're comparing the development products of one of the largest corporations in the world to those developed by volunteers, then you've made my point better than I have. I have over 25 years of development experience from 80x86 to C++ on many different platforms and the grass has always been greener! During the 1990s, we had Think C and Metrowerks CodeWarrior on the Macintosh which were far more productive and pleasant than what we even have today. Microsoft was at least smart enough to incorporate those features into VB and Visual Studio.
+
+Microsoft's development tools have never been great, but just "good enough." The trend over the past years, however, has been a downward spiral. Visual Studio has become unbearably slow no matter how much computing resources you throw at it.  The documentation is a labyrinth of dead ends full of outdated information and broken links. Microsoft is no longer vested in providing useful and productive GUI-based development tools. They're leaving it to the open source "community" who believe in UNIX's user-hostile CLIs and configuration files are the only way to go, hence VS Code.
+
+Microsoft has never had much of a vision. It's like a fat, old Elvis who still rides on its monopolistic past. As the PC fades as the primary computing platform, so will Microsoft. Apple, a company left for dead back in the late 1990s, has leapfrogged Microsoft through product excellence. Apple dominates the mobile platform, while Microsoft failed spectacularly in the mobile market and the internet.  Even Microsoft's own top developers, including Miguel de Icaza, are shamelessly seen using MacBook Pros. That speaks volumes about Microsoft's quality.
+
+So I guess I need to be smoking the same grass you're smoking in order to medicate my way out of seeing Microsoft's mediocrity?  No thanks!  +++$+++ 0 +++$+++ 0

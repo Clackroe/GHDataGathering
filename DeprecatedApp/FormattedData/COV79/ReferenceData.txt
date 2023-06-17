@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/microsoft/TypeScript/issues/14116
+Number of Comments: 37

@@ -1,0 +1,29 @@
+ROOT +++$+++ SP1504790 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-06-28T20:50:01Z +++$+++ Please support web standard crypto.subtle Node.js developed it's own crypto API before the WebCrypto API.
+
+Since then, browsers and the web have standardized implementations around the [WebCrypto API standard](https://www.w3.org/TR/WebCryptoAPI).
+
+This bug is about Node.js missing support for the WebCrypto standard API and reopens #2833 (from 2015).
+
+Asking 3rd party libraries to implement the WebCrypto standard is not responsible from a security standpoint for a variety of reasons from implementation expertise to malware.  It is not responsible to put this onto API end users (developers).
+
+Additionally, a variety of implementation differences ([like this one](https://stackoverflow.com/a/39651457/1483977)) make compatible implementations buggy and error-prone.
+
+Back in 2015, there were arguments for not supporting the WebCrypto standard in Node 0.12.
+
+Today, committing to not supporting the WebCrypto standard is committing to a lack of responsibility for Nodejs as a secure and standards based platform on the web.
+
+ +++$+++ 1 +++$+++ 0
+COM0 +++$+++ SP275871 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-06-28T21:25:35Z +++$+++ Largely a duplicate of #19826 from earlier this year.  The answer is still 'no'.
+
+Places where gaps in the existing crypto API make emulating WebCrypto hard can be taken into consideration.  Asking for WebCrypto to be added to core verbatim?  Not on the table. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP1504790 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-06-28T21:46:59Z +++$+++ LOL, from that issue:
+
+"@bnoordhuis Ben, why you always try to close "WebCrypto-related" issues so fast? What you are scary of? What "plan" did you mean? You have already written code, the only problem it is a Node plugin, not a native module. Or you are suggesting me to write a full-featured PR with the new code? I am really confused with the style you drive Node issues." - @YuryStrozhevsky +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP275871 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-06-28T21:51:57Z +++$+++ If you don't have anything relevant to say, stay quiet. You just sent email notification to 100+ people. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP1504790 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-06-28T21:56:18Z +++$+++ @bnoordhuis I do have relevant things to say, as a user of the project Ben.  Your heavy-handed and dismissive approach to moderation diminishes the project and the whole community.  Just because you are afraid taking responsibility doesn't mean someone else won't step up to it.  
+
+What I'm trying to say Ben is that you are on a larger team, and that team can support you through the hard stuff. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP275871 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-06-28T22:00:38Z +++$+++ You asked a question and you got an answer.  Moderation doesn't factor into it, you just didn't like the answer.
+
+Now stop trying to read the motivations of someone you don't know.  You suck at it. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP767105 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-06-29T00:14:38Z +++$+++ Locking the conversation. I don't see this conversation becoming productive. +++$+++ 0 +++$+++ 0

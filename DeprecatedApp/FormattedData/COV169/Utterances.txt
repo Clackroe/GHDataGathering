@@ -1,0 +1,56 @@
+ROOT +++$+++ SP19894000 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-21T22:27:52Z +++$+++ Forum Login Issue When attempting to log into my forum account, I get the error message:
+
+"You can't log in as <username> from that IP address." (see screen shot below)
+
+![image](https://user-images.githubusercontent.com/19894000/67247366-28ffbe00-f42f-11e9-8612-814071b1a2e4.png)
+
+This occurs across all browsers that I have (Firefox, Chrome, and Edge). All browsers are up to date. Clearing the cache and history sometimes resolves this; sometimes it doesn't. And even if it does resolve the issue, it's a one time thing only. As soon as I log out and attempt to log back in, the same error pops up again.
+
+This issue started several days ago out of the blue. No changes to my system at the time that might account for this. This issue is exclusive to log in attempts to my forum account. I can log into the lessons/project side of freecodecamp without issue and I'm having no issues accessing anything else on the web. 
+
+Any thoughts on what I might be dealing with here?
+Thanks in advance. 
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP1884376 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-21T23:05:05Z +++$+++ Hi @worl4125 
+
+Thanks for reporting. Yes, you are correct.
+
+#### TL;DR:
+
+This is a known issue, and the dev team is working on it.
+
+#### Details:
+
+We recently moved over our servers to a different infrastructure with the new platform roll out earlier last week. As a consequence, your IP addresses are masked by our CDN servers from the forum.
+
+During peak usage, this means the forum sees this as too many sign in requests from the same IPs which belong to our CDN servers. 
+
+This is a false positive.
+
+As of now this stands as a known issue, we are working with various teams to get this fixed.
+
+Thanks a lot for your patience. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP1884376 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-10-21T23:22:46Z +++$+++ Temporarily updated the message to be less cryptic for users:
+
+![image](https://user-images.githubusercontent.com/1884376/67250106-c38beb80-f487-11e9-90fa-01ce3cba749b.png)
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP52840821 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-10-21T23:44:33Z +++$+++ Just read this with the same issue, and I see that the sign in error message should be changed, but I'm still getting the same "You can't log in as ****** from that IP address." +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP1884376 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-10-21T23:56:55Z +++$+++ > [...] but I'm still getting the same [...]
+
+Do you still the message after a reload of the forum? That message could be cached. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP52840821 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-10-22T02:08:27Z +++$+++ I just tried again after reloading, and this time I was allowed to log into the forum, so I can’t confirm whether the message has changed. Thanks for following up!
+
+> On Oct 21, 2019, at 19:03, mrugesh <notifications@github.com> wrote:
+> 
+> ﻿
+> [...] but I'm still getting the same [...]
+> 
+> Do you still the message after a reload of the forum? That message could be cached.
+> 
+> —
+> You are receiving this because you commented.
+> Reply to this email directly, view it on GitHub, or unsubscribe.
+ +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP17619758 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-10-22T10:22:59Z +++$+++ I had the same problem 18 hours ago but managed to circumvent the issue by using opera's free VPN. Oddly enough that is also blocked now and I'm getting the same message.
+<img width="505" alt="Screenshot 2019-10-22 at 11 21 32" src="https://user-images.githubusercontent.com/17619758/67277238-49c32480-f4be-11e9-820c-b7f821b8eeae.png">
+ +++$+++ 0 +++$+++ 0

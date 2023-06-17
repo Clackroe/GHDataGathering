@@ -1,0 +1,38 @@
+{
+    "Yara-smurf": {
+        "id": "SP65908293",
+        "role": "NONE (AUTHOR)"
+    },
+    "PunkPun": {
+        "id": "SP37534529",
+        "role": "MEMBER"
+    },
+    "pchote": {
+        "id": "SP167819",
+        "role": "MEMBER"
+    },
+    "netnazgul": {
+        "id": "SP1614714",
+        "role": "CONTRIBUTOR"
+    },
+    "dragunoff": {
+        "id": "SP1355810",
+        "role": "CONTRIBUTOR"
+    },
+    "abcdefg30": {
+        "id": "SP7704140",
+        "role": "MEMBER"
+    },
+    "Mailaender": {
+        "id": "SP756669",
+        "role": "MEMBER"
+    },
+    "MlemandPurrs": {
+        "id": "SP48881353",
+        "role": "NONE"
+    },
+    "deleted-user-1": {
+        "id": "SP59416324",
+        "role": "CONTRIBUTOR"
+    }
+}

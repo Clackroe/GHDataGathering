@@ -1,0 +1,30 @@
+{
+    "kpetrow": {
+        "id": "SP18248938",
+        "role": "NONE (AUTHOR)"
+    },
+    "Mugen87": {
+        "id": "SP12612165",
+        "role": "COLLABORATOR"
+    },
+    "arpu": {
+        "id": "SP14173",
+        "role": "NONE"
+    },
+    "sciecode": {
+        "id": "SP3927951",
+        "role": "COLLABORATOR"
+    },
+    "makc": {
+        "id": "SP242577",
+        "role": "CONTRIBUTOR"
+    },
+    "WestLangley": {
+        "id": "SP1000017",
+        "role": "COLLABORATOR"
+    },
+    "mrdoob": {
+        "id": "SP97088",
+        "role": "OWNER"
+    }
+}

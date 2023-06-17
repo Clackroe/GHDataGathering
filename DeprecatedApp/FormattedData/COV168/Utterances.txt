@@ -1,0 +1,24 @@
+ROOT +++$+++ SP1143644 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-04-18T17:41:31Z +++$+++ pkg.install on Arch upgrades full OS as a default option. ### Description of Issue/Question
+On Arch Linux running `pkg.install vim refresh=true` will upgrade the entire OS instead of just installing the latest version of vim. This does not follow the other package managers and becomes unintuitive when dealing with multiple Linux distros. 
+
+This behavior is documented. However, It doesn't follow the standard that other pkg modules use for full os upgrade.
+
+### Setup
+run `pkg.install vim refresh=true` 
+want vim, get os upgrade. +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP1143644 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-04-18T17:41:52Z +++$+++ ZD-2445 +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP732321 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-04-19T12:25:50Z +++$+++ Yes, that is correct That should be the defaults on arch, if you refresh, you need to do an upgrade, otherwise you end up with broken so names because pacman does not resolve upgrades to sonames and force other packages to upgrade.
+
+If you want to do only a refresh and install, and not upgrade you can end up with an unbootable system, but you can do this by setting `sysupgrade=False` on the commandline with the `refresh=true` +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP732321 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-04-19T12:28:25Z +++$+++ https://gist.github.com/vodik/5660494  Here is the story that archlinux maintainers and people in #archlinux on freenode give to people that -Sy instead of -Syu.
+
+ +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP4682646 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-04-25T18:12:17Z +++$+++ By not doing what the command line tools do, you are varying from the expected behavior and breaking convention. THIS IS WRONG.
+
+
+Your belief that you're doing anyone a favor by varying from the expected command line tool behavior, you should turn in your commit per.issions and get a job in management where you don't have access to break things AGAIN. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP328598 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-04-25T18:41:33Z +++$+++ We could make `sysupgrade=False` the default, but then we'd have a lot _more_ people complaining about broken systems from unsupported partial upgrades (though, likely with far more tact than you displayed).
+
+Please read this [article](https://wiki.archlinux.org/index.php/System_maintenance#Partial_upgrades_are_unsupported) from the ArchWiki so that you can better understand the reason for making `sysupgrade=True` the default.
+
+Have a nice day! +++$+++ 0 +++$+++ 0

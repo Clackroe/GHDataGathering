@@ -1,0 +1,98 @@
+ROOT +++$+++ SP1238659 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-03-27T16:49:32Z +++$+++ [eslint-plugin-react-hooks] "Rules of hooks" considers any function beginning with "use" to be a React Hook **Do you want to request a *feature* or report a *bug*?**
+
+This seems like a bug.
+
+**What is the current behavior?**
+
+1. Follow the steps for adding the linting rules outlined on the [Rules of Hooks page](https://reactjs.org/docs/hooks-rules.html).
+2. Create a plain JS function with a name that begins with `use`, e.g. `useFoo`. Call this function from within another plain JS function, e.g. `testFoo`.
+    ```js
+    function useFoo() {
+    }
+
+    function testFoo() {
+      useFoo();
+    }
+    ```
+3. The linter will complain:
+     ```
+     React Hook "useFoo" is called in function "testFoo" which is neither a React function component or a custom React Hook function  react-hooks/rules-of-hooks
+     ```
+
+**What is the expected behavior?**
+
+Ideally, the rule would ignore functions that begin with `use` but are not React Hooks. +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP5677047 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-03-27T17:37:26Z +++$+++ In fact, how do you know your _useAnything_ is not a hook?
+It can have nither _useEffect_ nor _useState_ and still be valid hook +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP1238659 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-03-27T17:49:19Z +++$+++ Sorry, I'm new to hooks so I just now saw this in the [Build your own Hooks docs](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook):
+
+> **Do I have to name my custom Hooks starting with “use”?** Please do. This convention is very important. Without it, we wouldn’t be able to automatically check for violations of rules of Hooks because we couldn’t tell if a certain function contains calls to Hooks inside of it.
+
+I suppose the other side of this coin is that you're prohibited from naming any non-Hook function with a name that begins with "use" (or disable the eslint rule for that function). If that's the case and there's no way around this then feel free to close this. 😄  +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP810438 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-03-28T01:54:46Z +++$+++ Yeah it's intentional. We needed to pick a convention, and `use` was the least crowded out of descriptive short suffixes based on the JS codebases we've seen in open source and at FB. 
+
+There's always bound to be some false positives. But at that point `use` convention is already so ingrained that people would likely *expect* it to be a Hook. So it's worth disallowing it anyway to avoid extra confusion. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP1238659 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-03-28T02:50:51Z +++$+++ Thanks @gaearon! Keep up the great work. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP298880 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-04-25T10:27:44Z +++$+++ @gaearon whats up with other functions beginning with `use`? For example ramdas `useWith`…  Maybe the rule should check if any of the _problematic_ functions like `useState`, `useEffect` etc. is used inside my hook, otherwise the checks can be handled differently.
+
+Otherwise something like a whitelist of functions which are not hooks might be useful as a configuration parameter.  +++$+++ 8 +++$+++ 0
+COM5 +++$+++ SP592876 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-11-13T18:09:06Z +++$+++ @micha149 what are you doing to get around the issue with `useWith` from ramda? Telling eslint to ignore the line or rule for the file, entirely? +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP298880 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-11-22T11:07:50Z +++$+++ Hey @rpearce. Sorry for the delay, but I'm on vacation.
+
+To be honest: I currently didn't use the entire eslint rule at the moment. But if I used it, I'd ignore the exact rule per line. For example:
+
+``` javascript
+// eslint-disable-next-line react-hooks/rules-of-hooks
+const get = useWith(path, [split('.')]);
+```
+
+or
+
+```javascript
+const aIncludesB = useWith( // eslint-disable-line react-hooks/rules-of-hooks
+    includes,
+    [
+        prop('b'),
+        prop('a'),
+    ],
+);
+```
+
+But any automatism or at least a whitelist would be my preferred way… +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP592876 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-11-22T14:42:12Z +++$+++ @micha149 Thank you for the response! We did the same, but we also limited the rules of hooks in our eslint config to only our component folders like this:
+```js
+  overrides: [
+    {
+      files: ['path/to/folder1/**/*.js', 'path/to/folder2/**/*.js'],
+      rules: {
+        'react-hooks/rules-of-hooks': 'error',
+      },
+    },
+  ],
+  rules: {
+    // ...
+    'react-hooks/rules-of-hooks': 0, // see overrides for enabled info
+  }
+``` +++$+++ 1 +++$+++ 0
+COM8 +++$+++ SP5413726 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-07-17T17:20:39Z +++$+++ This is absolutely unacceptable behavior. This rule is simply assuming it owns the entire namespace of all functions beginning with "use", and starts screaming about unrelated functions in the rest of the project that have nothing to do with React.
+
+This is much more atrocious than carelessly declaring variables in the global namespace! Whoever came up with this idea clearly doesn't understand why ESLint was created in the first place. There are plenty of domains where you would like to give a function a name beginning with "use". Not all of us are React developers and we shouldn't have to change code in unrelated parts of the application.
+
+We're having a real problem with this because ESLint ignores the .eslintrc.json file (due to some other bug in ESLint), and it breaks the build.
+ +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP1238659 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-07-17T18:00:06Z +++$+++ @jtiscione I understand you're upset and this rule is causing problems for you. At the same time, remember you're using open-source software. You're not paying for it and the maintainers of this tool don't owe you anything. You'll get farther along if you give yourself time to cool down before posting a complaint about OSS.
+
+When you do post a complaint, you'll maximize your chances of getting what you want by avoiding incendiary language like "absolutely unacceptable", "screaming", "atrocious", "carelessly", and "doesn't understand". I've found that it helps to clearly describe the problem I'm encountering and propose some solutions or ask questions to understand the problem space better.
+
+How you communicate establishes your own reputation, for better or worse! +++$+++ 1 +++$+++ 0
+COM10 +++$+++ SP810438 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-07-17T19:08:26Z +++$+++ @jtiscione 
+
+>Not all of us are React developers and we shouldn't have to change code in unrelated parts of the application.
+
+I empathize with your frustration, but the solution to it is to not run React-related rules on non-React-related parts of your codebase.
+
+>We're having a real problem with this because ESLint ignores the .eslintrc.json file (due to some other bug in ESLint), and it breaks the build.
+
+This seems like something you'd need to find a solution for.
+
+I'm going to lock this thread because this heated atmosphere is not constructive. +++$+++ 0 +++$+++ 0

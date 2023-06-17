@@ -1,0 +1,139 @@
+ROOT +++$+++ SP1443724 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-17T01:59:13Z +++$+++ Azure Cloud Shell is readded to the profiles.json file after I remove it and restart terminal.  # Steps to reproduce
+
+Open profiles.json through the settings menu option and edit the profiles.json file. Remove the section for Azure Cloud Shell completely including the surrounding brackets and comma preceding the first curly bracket.  leaving the file valid but missing the Azure option. I have no need for it. 
+
+# Expected behavior
+
+I expect to be able to remove the option that I do not have any use for. 
+
+# Actual behavior
+
+When the Windows Terminal Program is run, the profile segment that was removed reappears as if by magic much to my amazement. 
+If I mark the file as read-only to protect it from being reverted, Windows Terminal refuses to load. 
+
+I literally watched the section in question reappear in the configuration file open in VS code after I deleted it saved the file and re-run the Terminal program. 
+
+I want very much to include several invectives and expletives in this bug report. But I will refrain from doing so. 
+But I want you to imagine what I would have said and you be sure and be creative. 
+
+The following is the text that I remove from the configuration file that reappears when the Windows Terminal program is run. There is no error or notification. It just reappears and the option for Azure Cloud is on the menu. 
+
+<----------- begin relevent text ----------->
+,
+        {
+            "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+            "hidden": false,
+            "name": "Azure Cloud Shell",
+            "source": "Windows.Terminal.Azure"
+        }
+<----------- end relevent text -----------> +++$+++ 8 +++$+++ 1
+COM0 +++$+++ SP14316954 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-10-17T02:14:59Z +++$+++ @Alacritous thanks for _not_ including those invectives. 😅 
+
+We're working on the documentation around "dynamic profiles," but until that lands:
+
+There's a fine line we're walking between dynamic and user-generated content. Most of the dynamic generators are for system-dependent things like "what WSL distributions do you have" and "which versions of powershell core are installed?". Each distribution gets its own profile, as will each powershell version.
+
+We want to make sure they're _found_, but also that the user is clued into the fact that they can be customized. To that end, we add a "stub" entry to your settings file. _When we can't find it,_ we assume it's because the generator never ran or discovered new content (like: a WSL distribution was installed) rather than that the user removed it. 
+
+With just the one settings file as a single source of truth, we aren't storing a bit somewhere saying "we already generated `{aaaa}`, don't do it again" anywhere but the actual profiles list.
+
+Broadly speaking, you've got two options for disabling this profile (and any other dynamic/automatic profiles).
+
+1. Hide the profile, live with it being in your settings, and continue to let us know that you're not happy that it's there. Set `hidden` to `false`, and it'll stop cluttering up your profile list and key bindings.
+
+2. _Disable the whole dynamic generator_. We have three dynamic profile generators today:
+  * `Windows.Terminal.Azure`
+  * `Windows.Terminal.Wsl`
+  * `Windows.Terminal.PowershellCore`
+
+If you add one of these names (or all of them!) to a new array at the top level of your settings file called `disabledProfileSources`, like this:
+
+```json
+{
+    "defaultProfile": "{abcd}",
+    "disabledProfileSources": [
+        "Windows.Terminal.Azure"
+    ],
+    // ...
+}
+```
+
+the generator won't even run and the profile will never come back. +++$+++ 17 +++$+++ 0
+COM1 +++$+++ SP14316954 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-10-17T02:17:19Z +++$+++ (The part about continuing to let us know was not meant to read like "we're ignoring you, everybody please stop yelling" -- it was intended to sound more like "please express dissatisfaction; we want to make sure we're doing the right things") +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP1443724 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-10-17T02:26:02Z +++$+++ So am I to understand that you are saying that the Terminal program scans to see what's installed each time it is run and creates the profiles for the things it finds assuming that if there isn't already a profile for it that it should just make one? 
+ +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP14316954 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-10-17T02:35:56Z +++$+++ Indeed! It only scans for a small set of things -- WSL distributions and PowerShell Core instances. The Azure generator doesn't scan anything.
+
+For what it's worth, this was informed by user requests in #1289, #1424, #1394, #1518, #1674, #2037, #2023, #2283, #2300, #2536 and #2804 (and the lack of autogeneration caused bugs like #1692 and #1449)
+
+When we have a settings UI (#1564) there'll be a more natural way to configure what terminal does/doesn't do on your behalf, and a bit more visibility into the "scanning" process. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP1443724 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-10-17T03:07:12Z +++$+++ You guys aren't big fans of the KISS principle, I see. 
+
+I added that disabledprofilesources tag and that worked to remove the Azure Cloud option. Thanks for that. 
+
+However, (insert ominous music here)
+
+Something else is actually broken.  I was experimenting and just to see what would happen, I removed the PowerShell profile from the profiles.json file to see if it would come back too. And it is not there anymore and it did not come back, but the PowerShell option is still in the menu when I open the terminal program and when I click it, a tab opens with Powershell.   I have closed and reopened both the profiles.json file and Windows Terminal several times and it's not in the profiles.json file and it IS in the menu in Windows Terminal.   
+
+I then added "Windows.Terminal.PowershellCore" to the disabledprofilesources  mentioned previously and the PowerShell option is still in the menu. 
+
+Then I renamed the profiles.json file to profiles.json.bak and reran Windows Terminal to see if it would regenerate the entire config file and it did so, creating a much sparser file than existed before with no keybinding information or color schemes. 
+
+I then added the profiles I had created before to the profiles.json and set the default and added the disabledprofilesources option for Azure Cloud and now everything is as it should be. 
+
+We now return to your regularly scheduled program. 
+
+additional.  Curiouser and curiouser. I did the alt-click-settings to view the default settings file and it shows me a file that DOES include the keybindings and color schemes.  The file it generated after I deleted the profiles.json did NOT include keybindings and color schemes. 
+
+Windows Terminal (Preview)
+Version: 0.5.2762.0
+
+ +++$+++ 5 +++$+++ 1
+COM5 +++$+++ SP44741536 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-05-01T03:33:55Z +++$+++ This really isn't cool, and the story about dynamic generators is really thin. You are shipping with a default config, and if a user removes a part of that config, re-adding it and not leaving any hints in the settings file how to disable your fancy "dynamic generator" is just a super user-hostile action. 
+
+Since you ship with a default config, you can be sure that it is _found_ - because you shipped it that way. Getting rid of it was literally my first course of action on installing this software.  
+
+My next action was googling for "wtfbshax why is this Azure rubbish coming back" and, after reading this thread, my next action will be to get rid of this software immediately. Microsoft once again doesn't fail to disappoint.  +++$+++ 2 +++$+++ 2
+COM6 +++$+++ SP1443724 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-05-01T03:39:16Z +++$+++ I deleted this app a while ago when I discovered they were blaming Microsoft Core devs for bugs they can't be bothered to fix or work around.  +++$+++ 0 +++$+++ 1
+COM7 +++$+++ SP14316954 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-05-01T03:47:23Z +++$+++ > can't be bothered to fix or work around.
+
+I’m legitimately curious which ones you’re referring to. We have worked around a bunch of platform bugs that we haven’t raised a fanfare about. We sit in the same buildings, and generally on the same floors, as these “Core” people because _we are on the core operating system team ourselves._ When they say something can’t be fixed or worked around, that’s the brakes and the best we can do is communicate that to our community.
+
+> Microsoft once again doesn't fail to disappoint.
+
+I appreciate you expressing your discontent here. It’s the only way we can really learn how our community feels. I _don’t_ appreciate you expressing it by heaping it on top of everybody I work with.
+
+The decisions made on this project stop with me and my PM. Hi! I’m a real person, happy to have a dialogue about that. 
+
+EDIT- when I say “stop with ...” I really mean that _we’re the ones responsible, at the end of the day._ Sorry about that, it sounded bad on a re-read.  +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP44741536 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-05-01T07:38:25Z +++$+++ > I don’t appreciate you expressing it by heaping it on top of everybody I work with
+
+_looks at the top of the page_ yup, still says Microsoft, as it does in your handle. You represent your organisation, and my criticism is directed at your organisation. This isn't the first time Microsoft is forcing "good ideas" down my throat - if it was, I'd be happy to ask you about them directly, but this is just another data-point in a long history of similarly user-hostile actions. 
+
+Having said all that, this "feature" is an exceptionally bad idea, that breaks all conventions of software and user interface design. Moreover, the initial impression from a user perspective is "this is broken. I performed an action, and now this action is undone." There is no universe in which this is OK, and if the decisions on this project stop with you and your PM, I'd strongly recommend you both find some additional learning on this subject. 
+
+From a software design perspective, there are many possible ways in which you could have chosen to ensure your configuation generation component works together, this one is exceptionally poor.
+
+> We want to make sure they're found, but also that the user is clued into the fact that they can be customized
+
+The irony of this statement is significant. You are literally clueing the user in to the opposite. "I performed a customisation, and it is undone. This doesn't appear to be customisable"
+
+Finally, it is a very safe assumption to make that the user of this software is somewhat technical. I sincerely hope that your persona's don't include "Rob is a greengrocer, and uses his computer to browse the web and do his accounts for his shop. Rob also plays a game from time to time. Rob als has the strong desire to download custom alpha shell/terminal software to pimp up his command prompt". In other words, your target users can safely be assumed to be a bit more technical leaning. At the end of the day, you are expecting the user to edit a JSON file manually to modify settings.
+
+In the context of the more technical user it would also be safe to assume that that when a piece of your default config (that ships with your package) has gone, and that this is a user action. 
+
+As I said, the motivation for this misfeature (it comes across as an ad in disguise) is flimsy at best., and doesn't give the impression that this project has the benefit of some adult supervision from time to time.  +++$+++ 0 +++$+++ 1
+COM9 +++$+++ SP18356694 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-05-01T12:59:30Z +++$+++ Hey, so we spent a good deal of time trying to come up with a solution to a hard set of problems. We want to cover cases like "what happens when a dynamic profile generator doesn't always create the same list of profiles" and "what if a user wants to use the same settings file on two PCs with _different_ WSL distros installed"? We wanted to make it robust, so that it would fail in the fewest possible cases. Software though is about compromises - there's not an effective way for us to dynamically generate a profile then _have the user delete that profile entirely_, and know to not delete it again. There's not a practical different between the profile not existing _because we haven't generated it_ and not existing _because the user deleted it_.
+
+You're right that our userbase is a technical audience, which is why we expected them to be able to <!--rub two brain cells together, and-->take the four seconds it takes to read the synthesized JSON, see the `"hidden": false` that we stick in there, and think "hmm, maybe that hides the profile 🤔".
+
+If you'd like to read more about how we came to the conclusions on this design that we did, I'd encourage reading #1258, where we originally designed the settings model, and especially #1321, which is a changelist specifically relating to dynamic profile generation.
+
+We're looking towards the future here, towards a scenario where users largely _aren't_ having to modify their settings files by hand, and can just use the UI for that. In that future world, all the intricacies of how dynamic profiles are implemented won't actually be exposed to the user - they'll just delete the profile in the UI, and we'll mark it as `hidden` for them. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP1443724 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-06-30T18:21:35Z +++$+++ > You're right that our userbase is a technical audience, which is why we expected them to be able to take the four seconds it takes to read the synthesized JSON, see the `"hidden": false` that we stick in there, and think "hmm, maybe that hides the profile
+
+So what you're saying is that every time I upgrade or update any software made by you and yours I have to scour the documentation and support and config files for any new "features" and traps you may have placed in it? 
+
+How about ASKING THE USER? Did that ever cross your mind?  "Hey, I've detected that you've made a change in the config. I'm about to undo all your work and confuse the hell out of you, Would you like me to continue?"
+
+ +++$+++ 0 +++$+++ 0

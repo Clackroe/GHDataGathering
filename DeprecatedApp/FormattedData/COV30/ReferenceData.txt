@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/godotengine/godot/issues/19602
+Number of Comments: 21

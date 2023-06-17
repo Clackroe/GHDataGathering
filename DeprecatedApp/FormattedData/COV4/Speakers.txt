@@ -1,0 +1,9 @@
+SP9440903 +++$+++ Alexhuszagh +++$+++ NONE (AUTHOR)
+SP8096977 +++$+++ ghemawat +++$+++ CONTRIBUTOR
+SP11460 +++$+++ pwnall +++$+++ MEMBER
+SP2226434 +++$+++ andschwa +++$+++ NONE
+SP11296510 +++$+++ jenokizm +++$+++ NONE
+SP38893989 +++$+++ chrismorfos +++$+++ NONE
+SP35536724 +++$+++ ketnoimai +++$+++ NONE
+SP1634990 +++$+++ thomasjm +++$+++ NONE
+SP207795 +++$+++ felipecrv +++$+++ CONTRIBUTOR

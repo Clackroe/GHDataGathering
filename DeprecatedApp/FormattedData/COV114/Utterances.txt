@@ -1,0 +1,64 @@
+ROOT +++$+++ SP61242764 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-02-29T04:13:58Z +++$+++ How I can add Yandex RTB (Ads-code) to Gatsby? Hello!
+
+I'm using Gatsby-MDX for my posts. And I want to add Yandex RTB-code to my site. 
+
+It's Google Adsense alternative from Yandex (in Russia). Here is example, how is looking Yandex RTB-code:
+
+```
+<div id="rtb-1"></div>
+<script type="text/javascript">
+    (function (w, d, n, s, t) {
+        function renderRtb () {
+            Ya.Context.AdvManager.render({
+                blockId: "R-A-12345-1",
+                renderTo: "rtb-1",
+                statId: 34567, // CROSS SECTION ID
+                async: true
+            });
+        }
+        w[n] = w[n] || [];
+        w[n].push(renderRtb);
+        t = d.getElementsByTagName("script")[0];
+        s = d.createElement("script");
+        s.type = "text/javascript";
+        s.src = "http://an.yandex.ru/system/context.js";
+        s.async = true;
+        t.parentNode.insertBefore(s, t);
+    })(this, this.document, "yandexContextAsyncCallbacks");
+</script>
+```
+
+Please, sir, tell me. What's there is best way to insert Yandex Ads into my MDX-posts? For example, can I create .txt-file. Then import .txt file (with Ads code) where I need into my MDX-posts? +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP2916023 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-02-29T16:16:07Z +++$+++ Hey @nikoladev I'm assuming this is just some code you need to insert into the `head` element. If so, this document will tell you how to customize the html output. Follow the steps and put this script tag in the head tag. I'm not sure what else Yandex needs, but this is generally how google adsense works.
+
+https://www.gatsbyjs.org/docs/custom-html/
+
+I'm going to close this issue as I don't believe it's reporting a problem with Gatsby. I'm happy to keep the discussion going, so don't take this as a negative sign. Please report back if you need continued support! 😃 +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP61242764 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-03-01T02:50:24Z +++$+++ No, I don't need to insert a showed code between `<head>` tag's or in the footer. 
+
+I should to insert the code into my MDX-posts. And it's show my Yandex Ads into my posts.
+
+For example, I want to show Ads in the center of my MDX-posts. Or after some H2-tags etc. 
+
+How I can insert my code into MDX-posts? +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP209817 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-03-10T11:00:49Z +++$+++ @nikolayval Feels to me like this is more of an MDX question than Gatsby, is it not? I have little experience with MDX. Gatsby takes the MDX content and uses Babel (etc.) to generate the web pages. It's not really aware of this. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP3924690 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-03-13T17:06:13Z +++$+++ @nikbelikov You can do something like this: https://github.com/gatsbyjs/gatsby/blob/master/www/src/components/script-loader.js (and then you'd use a component for those ads that uses that component, and then you'd use that wrapping component in MDX)
+
+Please in the future be a bit more careful in how you approach soliciting help from this community. We're glad to have you here, and value you using Gatsby, but we want to also be kind in how we request help from the core maintainers of Gatsby. +++$+++ 0 +++$+++ 1
+COM4 +++$+++ SP61242764 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-03-13T17:15:19Z +++$+++ **Dschau**, thank you very much for answer. You are the best, and thank you thank you thank you thank you thank you! 
+
+But sorry, it's bullshit solution. 
+
+If I want to display specific script (in my case - it's Yandex Ads, like Google Adsense alternative from Russia) in MDX-posts (or markdown files), then I should create a custom script components with specific attributes. It's very hard and not convenient. 
+
+Maybe Gatsby team can create plugin to render custom scripts into MDX or markdown files? I want to display Yandex Ads, Amazon Ads, Yahoo Ads or something else. And each time I should create hard components? WTF?  +++$+++ 0 +++$+++ 3
+COM5 +++$+++ SP3924690 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-03-13T18:13:24Z +++$+++ Then you would do something slightly different. It's hard to predict what you want, because it's not clear what you want.
+
+Here's an example Codesandbox that gets _closer_ to what you want, but it's still not working. This being said, I also wasn't even able to get the snippet you pasted above working, so I'm skeptical of the general approach.
+
+[React Codesandbox](https://codesandbox.io/s/angry-sun-4dfmf) | [Vanilla Codesandbox](https://codesandbox.io/s/festive-surf-4t6k4)
+
+> Failed to load resource: the server responded with a status of 404 ()
+
+I'm going to lock this, as I don't find this discussion productive nor valuable for us to be having. This is very much not a Gatsby problem, and is a general issue with loading Yandex scripts.
+ +++$+++ 0 +++$+++ 0

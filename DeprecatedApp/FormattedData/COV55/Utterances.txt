@@ -1,0 +1,115 @@
+ROOT +++$+++ SP10137 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-01-24T17:31:36Z +++$+++ Remember 5-6 months ago before C#? @reduz said on facebook something like (i'm paraphrasing here)
+
+"C# won't really affect the core work because it's run by separate people"
+
+Well.. look here:
+
+https://github.com/godotengine/godot/issues?utf8=%E2%9C%93&q=mono
+
+ @akien-mga and other contributors.. get your shit together. Stop shilling for $ from software conservancy  +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP6265307 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-01-24T17:37:32Z +++$+++ I stand by my words, that's exactly what happened.
+
+On Jan 24, 2018 2:33 PM, "Poommetee Ketson" <notifications@github.com>
+wrote:
+
+> Closed #16029 <https://github.com/godotengine/godot/issues/16029>.
+>
+> —
+> You are receiving this because you were mentioned.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/godotengine/godot/issues/16029#event-1440015379>, or mute
+> the thread
+> <https://github.com/notifications/unsubscribe-auth/AF-Z2_o-xuQ4zRkhNl4QzeSrpL1ab29Uks5tN2ligaJpZM4Rroja>
+> .
+>
+ +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP6265307 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-01-24T17:38:44Z +++$+++ You are most likely misinterpreting the girhub list of issues.
+
+On Jan 24, 2018 2:37 PM, "Juan Linietsky" <reduzio@gmail.com> wrote:
+
+> I stand by my words, that's exactly what happened.
+>
+> On Jan 24, 2018 2:33 PM, "Poommetee Ketson" <notifications@github.com>
+> wrote:
+>
+>> Closed #16029 <https://github.com/godotengine/godot/issues/16029>.
+>>
+>> —
+>> You are receiving this because you were mentioned.
+>> Reply to this email directly, view it on GitHub
+>> <https://github.com/godotengine/godot/issues/16029#event-1440015379>, or mute
+>> the thread
+>> <https://github.com/notifications/unsubscribe-auth/AF-Z2_o-xuQ4zRkhNl4QzeSrpL1ab29Uks5tN2ligaJpZM4Rroja>
+>> .
+>>
+>
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP6265307 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-01-24T17:46:20Z +++$+++ And even if that was not the case, it's still not a problem.  +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP629422 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-01-24T17:58:35Z +++$+++ @ghost I'm certainly not the biggest contributor to Godot, but maybe 2 of my 34 contributions are related to C#. I also donate almost double my Unity subscription to Godot, I know most of that money will not be used for C# development... and I'm 100% happy with that.
+
+I've been using Unity since the 1.x days. I tried switching to Godot a couple of years ago and found it impractical to do so but am finding it pretty easy to do so now. What is finally enabling me to switch completely over to Godot? Despite it being a great engine now and also with a lot of promise in the future, the largest thing that is making the transition possible is C# :)
+
+I agree with @reduz, I think you're interpreting the issue list wrong.
+
+It seems to me that you're assuming that:
+
+1) That no new C++ contributors are here because of C#
+2) That C# issues have increased, but the new contributors are unable to fix these issues, thus the core team members must pick up the slack
+3) The newcomers to Godot who use C# don't contribute to non-C# issues.
+
+Every one of these points can easily be proven false and I think you'll see that the momentum of Godot is only going to increase due to C# being a standard part of the engine. :) +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-01-24T18:04:28Z +++$+++ @reduz 
+
+c# was the biggest mistake i've ever witnessed in godot. name me, one god damn reason why a developer would favour C# over Godot's GDScript? for the godot engine?
+
+what you will say is, ohh but mahh c# sharp unity users! it will help bring people from unity over!
+then, on the other hand, everyone says "we're not competing against unity!". yeah, that's horse shit.
+
+second reason: "ohhh the performance is so much better!". oh yeah? what are the use cases to back that up? 1% of the godot users having performance issues with gdscript? i doubt it. if a developer is having a performance issue with gdscript, they'd use fucking gdnative.
+
+look through all the **contributors** in those issues. 80% of them have participated in adding other helpful features to Godot too, not just C# stuff. this means, by nature their time is **inherently being focused** on c#.
+
+oh yeah, and here's another problem with this entire "only implement low level features" stuff. want to tell me then, why **smiley emojis were added to the core of the engine** then? surely that's not low level is it? but when i suggest **that an inventory system** and other 2d features be added, you spit in my  face and tell me "it's not low level!".  meter la mula, cotoco. 
+
+
+
+
+ +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP6265307 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-01-24T18:17:43Z +++$+++ Whether it was a mistake or not is not decided by you, but the community as a whole. You are not the center of the universe. The community not only is happy about it, but posts about C# are by far some of the most shared and viewed. In fact, it also attracted many new developers.
+
+You also act as if I had any control of what contributors work on. This is an open source project, contributors work on what they want, when they want. It's not a company where I pay them to work for me and they do what I order them to.
+
+That left aside, of the main contributors (the ones writing most of the code) none changed their priorities to focus on mono instead of their usual areas.  The link you posted clearly shows that.
+
+I have no idea what you are so angry about, just chill man. +++$+++ 4 +++$+++ 0
+COM6 +++$+++ SP6265307 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-01-24T18:21:53Z +++$+++ Also, the only way someone can convince someone else to work on something on this project is good arguments from one side and the will to do it from the other side.
+
+Not only in this case there simply are no good arguments against implementing mono (in fact, there are only good arguments in favor of it), but also developers willing to do it. 
+
+It's unavoidable, this project has life of it's own, I am not in control of it. +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP385688 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-01-24T18:27:15Z +++$+++ @ghost you come off as quite hostile.
+
+Personally as someone that has been interested in the Godot project for quite a while, but who has never used GDScript and only used a little bit of C# I am much more inclined to use C# than GDScript because C# is a transferable skill.
+
+I think this rings true for others too.
+
+Like @reduz said, open source works by people doing what they feel like.
+
+I feel like I've seen you troll (that's what your comments amount to really) other GitHub projects also but I won't bother to check. Life is too short 👋🏻 +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-01-24T18:43:55Z +++$+++ @reduz right back at you then. since there is no "leadership" in this open source project, you sir, cannot claim C# is superior to gdscript then. i just gave you two god damn good reasons why gdscript > C#, and you still continue to dodge. gg faker.
+
+you also completely dodged my point about the smiley emoji implementations. so i recommend a good feature for the engine **(inventory and other 2d stuff, that ALL GAME DEVELOPERS WILL BENEFIT FROM)**, but **you spit in my face**, claim that it's not "low level enough", but then go around merging PRs for "emoji smiley" support for fonts? that's somehow still low level though? wtf??
+
+
+websocket support still has never been implemented. are you going to pay @Faless a quarter of the $20,000 grant that mozilla gave? since he actually implemented the websocket module? or you going to say "ahhh, software conservancy handles the funds, we don't know what to do with it!" as you always do? then keep it for akien, you, and @karroffel? doesn't really seem fair to me.  look at it from my perspective please.
+
+in any event. complete and utter crap. but wait, @akien-mga will continue to block users, close discussions, etc. seems like i need to go make a new fucking account again for the 5th time... can't have discussions without bypassing  / cheating github it seems! so much for "open source".
+ 
+
+
+
+
+
+
+ +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP7718100 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-01-24T18:58:51Z +++$+++ This went out of hands. There is not a drop of constructive criticism here, only very hostile behavior and personal attacks. Locking. +++$+++ 0 +++$+++ 0

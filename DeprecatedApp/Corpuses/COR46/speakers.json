@@ -1,0 +1,22 @@
+{
+    "ericmorand": {
+        "id": "SP125664",
+        "role": "NONE (AUTHOR)"
+    },
+    "ashmaroli": {
+        "id": "SP12479464",
+        "role": "MEMBER"
+    },
+    "pathawks": {
+        "id": "SP251545",
+        "role": "MEMBER"
+    },
+    "ghost": {
+        "id": "SP10137",
+        "role": "NONE"
+    },
+    "jekyllbot": {
+        "id": "SP6166343",
+        "role": "CONTRIBUTOR"
+    }
+}

@@ -1,0 +1,82 @@
+{
+    "kzu": {
+        "id": "SP169707",
+        "role": "NONE (AUTHOR)"
+    },
+    "KirillOsenkov": {
+        "id": "SP679326",
+        "role": "MEMBER"
+    },
+    "ealsur": {
+        "id": "SP1633401",
+        "role": "NONE"
+    },
+    "pedroreys": {
+        "id": "SP130238",
+        "role": "NONE"
+    },
+    "bradwilson": {
+        "id": "SP16944",
+        "role": "NONE"
+    },
+    "DHowett-MSFT": {
+        "id": "SP14316954",
+        "role": "CONTRIBUTOR"
+    },
+    "sgreenmsft": {
+        "id": "SP20691252",
+        "role": "MEMBER"
+    },
+    "impguard": {
+        "id": "SP1912284",
+        "role": "NONE"
+    },
+    "durack1": {
+        "id": "SP3229632",
+        "role": "NONE"
+    },
+    "wleepang": {
+        "id": "SP361574",
+        "role": "NONE"
+    },
+    "gdamore": {
+        "id": "SP1295229",
+        "role": "NONE"
+    },
+    "regs01": {
+        "id": "SP10468217",
+        "role": "NONE"
+    },
+    "eidylon": {
+        "id": "SP5951045",
+        "role": "NONE"
+    },
+    "shtirlic": {
+        "id": "SP74080",
+        "role": "NONE"
+    },
+    "randomascii": {
+        "id": "SP10800041",
+        "role": "NONE"
+    },
+    "msftbot[bot]": {
+        "id": "SP48340428",
+        "role": "CONTRIBUTOR"
+    },
+    "vadimkantorov": {
+        "id": "SP1041752",
+        "role": "NONE"
+    },
+    "zadjii-msft": {
+        "id": "SP18356694",
+        "role": "MEMBER"
+    },
+    "rbreaves": {
+        "id": "SP10969616",
+        "role": "NONE"
+    },
+    "stewSquared": {
+        "id": "SP4022813",
+        "role": "NONE"
+    }
+}

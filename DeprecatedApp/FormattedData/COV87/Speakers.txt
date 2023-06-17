@@ -1,0 +1,4 @@
+SP34998433 +++$+++ JoeGruffins +++$+++ NONE (AUTHOR)
+SP3576549 +++$+++ mvdan +++$+++ MEMBER
+SP3194333 +++$+++ ianlancetaylor +++$+++ CONTRIBUTOR
+SP1696829 +++$+++ cybercrypt13 +++$+++ NONE

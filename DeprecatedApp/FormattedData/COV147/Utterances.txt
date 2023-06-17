@@ -1,0 +1,200 @@
+ROOT +++$+++ SP1700160 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-11-25T00:45:52Z +++$+++ Support Pluginfile in "import_from_git" ### Feature Request
+I know this has been requested many times but the status of it is a bit unclear to me.
+
+1. Is it possible to do this? In #8682 @KrauseFx mentioned that:
+> Mh, I don't think that's gonna work, as all Ruby files are already loaded at that point by bundler. You'd have to run bundle update after importing the file, which is not something fastlane can do on its own as far as I know.
+
+What about `fastlane_require`? It could be used to install a plugin gem - not sure whether it contradicts a _Gemfile_ or what other steps are needed.
+
+Anyway, if this is not possible, can we add a note in `import_from_git` [description](https://docs.fastlane.tools/actions/import_from_git/) with reasoning if any?
+Maybe it would be great to add a warning when `import_from_git` detects a _Pluginfile_ to remind that plugins should be installed/updated. I think it would follow _fastlane philosophy_.
+
+Or _fastlane_require_plugin_ could be added in order to fail if there is no entry with a provided plugin name in a project _Pluginfile_?
+
+2. If this can be done then maybe someone is already working on it? Maybe _fastlane community_ could help?
+In #7636 @lacostej tried to discuss an idea to solve this but with no answer. Any chance to do this in this thread?
+
+#### Motivation Behind Feature
+<!-- Why should this feature be implemented? What problem does it solve? -->
+Updating a _shared Fastfile_ with usage of a plugin requires an update in a _Pluginfile_ in each project importing this _Fastfile_ (or also in a _Gemfile_ if plugins were not used before). This is a bit inconvenient and not a safe way of introducing changes.
+
+`import_from_git` should import a fully configured, standalone _shared Fastfile_ with all dependencies defined there and/or other files.
+
+#### Alternatives or Workarounds
+<!-- Describe alternatives or workarounds you are currently using -->
+<!-- Are there ways to do this with existing actions and plugins? -->
+In #11112 @NiklasWebnuts proposed an interesting workaround.
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP17056452 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-11-25T17:30:21Z +++$+++ It seems like you have not included the output of `fastlane env`
+
+To make it easier for us help you resolve this issue, please update the issue to include the output of `fastlane env` :+1: +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP183673 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-11-26T16:05:52Z +++$+++ >  1. Is it possible to do this? In #8682 @KrauseFx mentioned that:
+> 
+> > Mh, I don't think that's gonna work, as all Ruby files are already loaded at that point by bundler. You'd have to run bundle update after importing the file, which is not something fastlane can do on its own as far as I know.
+> 
+> What about `fastlane_require`? It could be used to install a plugin gem - not sure whether it contradicts a _Gemfile_ or what other steps are needed.
+
+I can give some insight on that:
+
+`Pluginfile` is not similar to `Deliverfile` and other configuration files: When you add a plugin, some code is added to your `Gemfile` that includes `Pluginfile` there. `Gemfile` (and the included information from your `Pluginfile`) is used to define which gems to install when you run `bundle install` on your project. 
+
+So to implement a method like the one you want, at runtime in fastlane, you would then have to change both the `Gemfile` to include the new imported data, and run `bundle install`. It would change files on the file system and also 
+
+> Anyway, if this is not possible, can we add a note in `import_from_git` [description](https://docs.fastlane.tools/actions/import_from_git/) with reasoning if any?
+
+Documentation of that actions says:
+
+> Import another Fastfile from a remote git repository to use its lanes
+
+That is pretty clear that this action is for importing `Fastfile`s.
+
+> Maybe it would be great to add a warning when `import_from_git` detects a _Pluginfile_ to remind that plugins should be installed/updated. I think it would follow _fastlane philosophy_.
+
+What do you mean by that? How should this work?
+
+> Or _fastlane_require_plugin_ could be added in order to fail if there is no entry with a provided plugin name in a project _Pluginfile_?
+
+Doesn't this already happen when you use an action of a plugin, that is not installed?
+
+That being said: You can of course create an action in your shared `Fastfile` that does exactly what I described above. Download some file, edit `Pluginfile` (or create it if it doesn'T exist) or add it additionally to `Gemfile`, then run `bundle install` using the `sh()` action. That would effectively "force-install" a plugin when your imported `Fastfile` is used. Would that solve your problem? +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP1700160 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-11-26T21:14:06Z +++$+++ <details>
+
+> `Pluginfile` is not similar to `Deliverfile` and other configuration files: When you add a plugin, some code is added to your `Gemfile` that includes `Pluginfile` there. `Gemfile` (and the included information from your `Pluginfile`) is used to define which gems to install when you run `bundle install` on your project.
+
+> So to implement a method like the one you want, at runtime in fastlane, you would then have to change both the `Gemfile` to include the new imported data, and run `bundle install`. It would change files on the file system and also
+
+Probably that would still not work? When running fastlane command via `bundle exec` no other gem can be loaded as _bundler_ disallows loading gems that are not in the bundle. So when `import_from_git` is called in _fastlane_ runtime, _bundler_ runtime environment has already been created and won't allow any other gems to be loaded.
+
+However, the only solution that comes to my mind, to make it work with _bundler_, would be to nest another call to `bundle exec` but with a temporary _Gemfile_ (it can be passed like that: `BUNDLE_GEMFILE=PATH_TO_TEMP/Gemfile bundle exec some_command`). This temporary _Gemfile_ would include all the entries from a _project_ _Gemfile_/_Pluginfile_ and all the entries from an _imported_ _Gemfile_/_Pluginfile_ (as _Gemfile_ is actually calling `eval_gemfile` on a _Pluginfile_ so it is like those entries would be in a _Gemfile_). No modification of a current _Gemfile_ or any other file is needed.
+
+But this is  **not a good** idea ;), and it would only work if `import_from_git` was at the beginning of a _Fastfile_ - it would be the most convenient to just call `bundle_exec` with the same command and parameters as the original one.
+One caveat of it is that it nests with each `import_from_git` call over and over again...
+The other one is that if `import_from_git` is not placed at the top of a _Fastfile_ it means some lanes or anything else might already been executed and would require to somehow reuse this _fastlane_ state in a new `bundle exec` call...
+Terrible idea that is why I am hiding it in the details 😃 
+</details>
+
+So I guess it **cannot** be done due to usage of _bundler_.
+**But** if one is **not using** _bundler_ in a project (and hence both _Gemfile_ and _Pluginfile_), then they could just add plugins via `fastlane_require` action in a project _Fastfile_ or in an imported _Fastfile_.
+This can be done in the current version of _fastlane_ and it works.
+<br/>
+
+> > Anyway, if this is not possible, can we add a note in `import_from_git` [description](https://docs.fastlane.tools/actions/import_from_git/) with reasoning if any?
+> 
+> Documentation of that actions says:
+> 
+> > Import another Fastfile from a remote git repository to use its lanes
+> 
+> That is pretty clear that this action is for importing `Fastfile`s.
+
+Exactly, that is why I was surprised that it imports all the files of custom actions as well and not only a _Fastfile_ ;). It is not even mentioned. And as plugins are just actions this is probably why people think that remote plugins should be imported or actually expect them to be imported implicitly like in a case of custom actions.
+Besides, searching for issues regarding `import_from_git` and _Pluginfile_ yields a lot of results so it seems like it is not so obvious for people and they constantly ask to support _Pluginfile_ in `import_from_git`.
+Hence, I think an explanation with a good reasoning would be welcomed.
+<br/>
+
+> > Maybe it would be great to add a warning when `import_from_git` detects a _Pluginfile_ to remind that plugins should be installed/updated. I think it would follow _fastlane philosophy_.
+> 
+> What do you mean by that? How should this work?
+> 
+What I meant is that when `import_from_git` detects a _remote_ _Pluginfile_ (meaning in the same directory as the _Fastfile_ it tries to import) it could print a warning listing the plugin names and saying that in order to use this _remote_ _Fastfile_ these plugins are required to be in a _local_ _Pluginfile_.
+It could even compare a _local_ _Pluginfile_ with a remote one and throw an error when it detects that plugins from a remote are not included in the local one. It would be very informative and helpful.
+<br/>
+
+> > Or _fastlane_require_plugin_ could be added in order to fail if there is no entry with a provided plugin name in a project _Pluginfile_?
+> 
+> Doesn't this already happen when you use an action of a plugin, that is not installed?
+> 
+Yes I know that calling a plugin action would end up with an error but a usage of such an action might be somewhere far down the lanes 😄  i.e. after a long build or anything else.
+I think it is better to prevent such a _Fastfile_ from running at all as it will almost certainly finish with an error - so why wait for that?
+This is just another way of prevention I have described above. This time using a `fastlane_require_plugin` as an action in a _remote_ _Fastfile_.
+Instead of adding a _remote_ _Pluginfile_ (like in a case above and handle that _Pluginfile_ in `import_from_git`) you could specify directly in a _remote_ _Fastfile_ that some plugins are required via `fastlane_require_plugin` action - this would work like in a case above - check if these plugins are in a _local_ _Pluginfile_ and then throw an error if missing.
+
+Both of these preventions of course make sense if one is using _bundler_, _Gemfile_ and _Pluginfile_. Otherwise it is enough to use the current `fastlane_require` action and it will install a particular plugin gem (if necessary) upon running any lane from such a _Fastfile_.
+So now both usages are handled.
+
+<br/>
+
+> That being said: You can of course create an action in your shared `Fastfile` that does exactly what I described above. Download some file, edit `Pluginfile` (or create it if it doesn'T exist) or add it additionally to `Gemfile`, then run `bundle install` using the `sh()` action. That would effectively "force-install" a plugin when your imported `Fastfile` is used. Would that solve your problem?
+
+Like I said above, if I use _bundler_ it is almost impossible (see details at the top). If I don't use _bundler_ (and thus neither _Gemfile_ nor _Pluginfile_) I can just require my plugins via `fastlane_require` and they will be installed if necessary.
+
+ +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP183673 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-11-26T21:35:30Z +++$+++ > **But** if one is **not using** _bundler_ in a project (and hence both _Gemfile_ and _Pluginfile_), then they could just add plugins via `fastlane_require` action in a project _Fastfile_ or in an imported _Fastfile_.
+
+If you install a plugin, you always configure fastlane to use bundler: https://docs.fastlane.tools/plugins/create-plugin/#add-a-plugin-to-your-project Plugins are (by definition) gems loaded from rubygems. That is the difference to a local custom action.
+
+Besides that I honestly don't follow any more. Maybe create a new issue with just the actual _problem_ you want to solve, and not suggestion for the solution. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP1700160 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-11-26T23:21:39Z +++$+++ > > **But** if one is **not using** _bundler_ in a project (and hence both _Gemfile_ and _Pluginfile_), then they could just add plugins via `fastlane_require` action in a project _Fastfile_ or in an imported _Fastfile_.
+> 
+> If you install a plugin, you always configure fastlane to use bundler: https://docs.fastlane.tools/plugins/create-plugin/#add-a-plugin-to-your-project Plugins are (by definition) gems loaded from rubygems. That is the difference to a local custom action.
+> 
+Come on, I know they are gems and normally you use _bundler_ for plugins.
+**One thing** is that I am providing a **workaround** for `import_from_git` to work with plugins but without _bundler_. As _Pluginfile_ requires _bundler_ and such a usage cannot be supported in `import_from_git` action.
+
+Put this in a remote _Fastfile_:
+`fastlane_require "fastlane-plugin-clubmate"`
+and you can just use this action in a lane like that:
+```
+lane :custom_lane do
+    clubmate
+end
+```
+when you **import** this _Fastfile_ in another one it will also **work**, providing that you do not use _bundler_.
+
+**The second** thing is that in my previous comment I have suggested adding some **improvements** (prevention steps) either in a form of a new action `fastlane_require_plugin` or additional safety-checks in `import_from_git` action to help mitigate issues when using plugins in a _remote_ _Fastfile_ (in a normal way with _bundler_).
+
+As this issue is a _Feature_ _Request_ I was hoping to discuss all that and at the same time be proactive and bring up some ideas.
+By looking at _fastlane_ issues I can see that using a _shared_ _Fastfile_ where one would like to use some plugins, is a problem raised many times and it probably needs some support.
+
+So when using _bundler_ and importing a _remote_ _Fastfile_ it **cannot** be **guaranteed** that all the plugins used in this _remote_ _Fastfile_ are installed **locally**.
+What is more, it can be even unknown what plugins are required (without looking at the source of the _remote_ _Fastfile_) as there is no need to create (although it would be reasonable) a _Pluginfile_ for this _remote_ _Fastfile_.
+And as you can have multiple projects using a _shared_ _Fastfile_ and/or multiple _shared_ _Fastfiles_ it is easy to lose track of which plugins are required where - hence I wanted to improve that by giving some hints when importing a _shared/remote Fastfile_.
+<br/>
+
+> Besides that I honestly don't follow any more. Maybe create a new issue with just the actual _problem_ you want to solve, and not suggestion for the solution.
+
+Sorry to hear that, but what is causing here an issue for you? It supposed to be a discussion so you can ask questions too. 😄 Otherwise, I cannot help you understand. If you do not follow - can you ask other collaborators for help?
+
+By the way, I do not think spawning yet another issue on the same subject is going to help solve anything. Even more, I do not think that "the actual problem" I want to solve and "a suggestion for the solution" of this problem should be in separate threads?! 😱 What are you saying?
+ +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP1700160 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-11-27T14:06:07Z +++$+++ > Well, now I am wishing you good luck in your search for a solution. I am not interested in spending more time on this.
+
+Great attitude @janpio, especially as a _fastlane_ collaborator. Why not say it in here publicly?
+So instead of having a discussion and providing a counter example or presenting **any** reasoning why something would not be implemented, you are just discouraging people from helping _fastlane_...
+Is that what you guys do in here?
+@joshdholtz, @mfurtak, @hjanuschka, @AliSoftware @milch @revolter  +++$+++ 0 +++$+++ 1
+COM6 +++$+++ SP183673 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-11-27T14:13:47Z +++$+++ I posted a reply in the heat of a discussion. Then I quickly deleted it, as I recognized that it was not a helpful reaction and wouldn't help advance the conversation. Now you post a selected part of that deleted comment again. This is highly inappropriate.
+
+Do you really wonder why I don't want to spend any more time helping you?
+
+Mentioning other contributors that have not participated in the discussion is inappropriate as well, by the way. +++$+++ 2 +++$+++ 0
+COM7 +++$+++ SP5748627 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-11-27T14:29:43Z +++$+++ Personally, I understand both sides.
+
+One thinks it would be obvious for plugins to "just work" too, while I clearly understand why is not feasible, and I'd argue that it's actually incorrect. You use a dependency manager to install the required dependencies and then run something that uses them, it would be weird for the thing you run to install dependencies for you.
+
+Knowing this, another way to improve this is what @Skoti already mentioned, and which I always love: automatically prevent incorrect usages. So the current options seems to be:
+1. Warn users (`UI.important`) when they `import_from_git` and a `Pluginfile` also exists in that remote.
+2. Create a separate action (`ensure_plugins`?) that ensures that all the required plugins (defined in the local and in the remote `Pluginfile`s) are available (could be "harder" because of [this](https://docs.fastlane.tools/create-action/#submitting-the-action-to-the-fastlane-main-repo))
+
+And as always, PRs welcome! 😃 +++$+++ 1 +++$+++ 0
+COM8 +++$+++ SP1700160 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-11-27T14:37:39Z +++$+++ Well I didn't feel of this as being a heated discussion. So excuse me if this is how you felt.
+Anyway, it is nice to know now that you have realized it was a bad move and deleted the comment. However, I quoted the whole part not a selected one as you suggest.
+
+And I do not think that looking for help in other contributors was inappropriate in that case as you clearly didn't want to take care of this issue.
+
+And now you make another comment in a similar style 😞 :
+> Do you really wonder why I don't want to spend any more time helping you?
+
+Seriously, have I done something to you? +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP1700160 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-11-27T14:39:53Z +++$+++ @revolter 
+Thanks for a great reply!
+And the issue starts to go somewhere immediately. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP5748627 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-11-27T14:43:45Z +++$+++ I think the warning could be added somewhere here:
+
+https://github.com/fastlane/fastlane/blob/4e04d9310e339ad8d57a977a7e9c6db1903312d4/fastlane/lib/fastlane/fast_file.rb#L263-L273
+
+@Skoti, Would you be up to create a PR for us to review? 🚀 +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP869950 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-11-27T15:24:13Z +++$+++ Hey @Skoti, I locked this issue for now. Even though maybe a comment by @janpio might have come across as rude, every fastlane contributor here does this in their free time to help other people. Time is limited, and spending time on other developer's issues is usually hard to justify. It's not cool you mentioned and tried to include a random set of other contributors in the hope they'd help out. As you can see, _fastlane_ is a highly active, and widely used open source project, and there is no possible way to reply to every single issue. I wrote about the problems of how difficult it is to scale open source communities over here https://krausefx.com/blog/scaling-open-source-communities +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP17056452 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-12-27T17:32:14Z +++$+++ There hasn't been any activity on this issue recently. Due to the high number of incoming GitHub notifications, we have to clean some of the old issues, as many of them have already been resolved with the latest updates.
+
+Please make sure to update to the latest `fastlane` version and check if that solves the issue. Let us know if that works for you by adding a comment :+1: +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP17056452 +++$+++ ROOT +++$+++ COM12 +++$+++ 2019-01-04T17:32:16Z +++$+++ This issue will be auto-closed because there hasn't been any activity for a few months. Feel free to [open a new one](https://github.com/fastlane/fastlane/issues/new) if you still experience this problem :+1: +++$+++ 0 +++$+++ 0

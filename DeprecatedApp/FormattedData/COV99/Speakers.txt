@@ -1,0 +1,15 @@
+SP6677272 +++$+++ MadsTorgersen +++$+++ CONTRIBUTOR (AUTHOR)
+SP4564579 +++$+++ CyrusNajmabadi +++$+++ CONTRIBUTOR
+SP10102290 +++$+++ HaloFour +++$+++ CONTRIBUTOR
+SP8640149 +++$+++ orthoxerox +++$+++ NONE
+SP55229438 +++$+++ amdav +++$+++ NONE
+SP29174528 +++$+++ YairHalberstadt +++$+++ CONTRIBUTOR
+SP8166847 +++$+++ fitdev +++$+++ NONE
+SP287848 +++$+++ svick +++$+++ CONTRIBUTOR
+SP1042507 +++$+++ Thaina +++$+++ NONE
+SP196899 +++$+++ DavidArno +++$+++ NONE
+SP1965570 +++$+++ MgSam +++$+++ NONE
+SP788783 +++$+++ genlu +++$+++ MEMBER
+SP3756641 +++$+++ eyalalonn +++$+++ CONTRIBUTOR
+SP10837869 +++$+++ AlgorithmsAreCool +++$+++ NONE
+SP135246 +++$+++ ErikSchierboom +++$+++ CONTRIBUTOR

@@ -1,0 +1,28 @@
+ROOT +++$+++ SP814013 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-02-13T09:10:21Z +++$+++ (Title renamed to remove explicit language) https://github.com/ansible/ansible/blob/66743f33faa71d092557f2c89788868ca32061aa/lib/ansible/module_utils/facts/network/generic_bsd.py#L80 +++$+++ 23 +++$+++ 6
+COM0 +++$+++ SP6585283 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-02-13T09:13:28Z +++$+++ @emergy Greetings! Thanks for taking the time to open this issue. In order for the community to handle your issue effectively, we need a bit more information. 
+
+Here are the items we could not find in your description:
+- issue type
+- ansible version
+- component name
+
+Please set the description of this issue with this template:
+https://raw.githubusercontent.com/ansible/ansible/devel/.github/ISSUE_TEMPLATE.md
+
+[click here for bot help](https://github.com/ansible/ansibullbot/blob/master/ISSUE_HELP.md)
+<!--- boilerplate: issue_missing_data ---> +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP905853 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-02-13T11:19:52Z +++$+++ Don’t be so agitated. It’s just a lookup for route in local routing table, no network queries are actually performed. +++$+++ 0 +++$+++ 2
+COM2 +++$+++ SP305871 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-02-13T12:46:29Z +++$+++ Possibly, using a more generic "`route -n get 0.0.0.0/0`" would be a better way of finding the default route. Using a well-known address is not necessarily a good practice. +++$+++ 6 +++$+++ 0
+COM3 +++$+++ SP18294365 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-02-13T13:03:20Z +++$+++ ipv6 default route lookup is also broken "v6=[route_path, '-n', 'get', '-inet6', '2404:6800:400a:800::1012'])" +++$+++ 1 +++$+++ 0
+COM4 +++$+++ SP2983969 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-02-13T13:09:00Z +++$+++ @Akasurde Wow, was it fixed that fast? +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP633765 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-02-13T13:11:18Z +++$+++ @polkovnikov-ph $title seems offensive so I closed it. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP578543 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-02-13T13:11:55Z +++$+++ @emergy Ansible community heavily relies on [Code of Conduct](https://docs.ansible.com/ansible/latest/community.html#community-code-of-conduct) being followed, which lets us address issues more effectively and be respectful to each other. Posting issues with offensive content is definitely not going to encourage productive discussion, but normally results in confrontation.
+For best outcome please consider writing your messages mindfully and calmly explaining both your problem and what is the suggested resolution or expectation for it.
+TIA. +++$+++ 2 +++$+++ 0
+COM7 +++$+++ SP2983969 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-02-13T13:21:43Z +++$+++ @Akasurde I don't see how offensive title makes it less of an issue. The code in the issue seems self-descriptive to several people in this thread. Do you really need any additional feedback from issue author? +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP633765 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-02-13T13:24:50Z +++$+++ @polkovnikov-ph I agree that this an issue. But there is a certain way to describe an issue in Open Source Community. Using sexual abusive language is not the way to express your opinion.  +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP633765 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-02-13T13:26:01Z +++$+++ @polkovnikov-ph Please refer [Code of Conduct](https://docs.ansible.com/ansible/latest/community.html#community-code-of-conduct) for more details. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP578543 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-02-13T13:34:30Z +++$+++ @polkovnikov-ph please feel free to create a new issue with well-stated problem. Your assumption about that it's self-descriptiveness is only _partially_ correct when you refer to several ppl you mentioned. Still, there are lots of other people who won't understand it. I myself try avoiding to assume that other people see and understand things exactly the same way as me, because every individual has their own unique experience. That said I encourage you to not make such assumptions here.
+I'm locking this issue, since I don't see what can be done here to turn it into an effective conversation.
+
+If you'd like to contribute into the issue resolution, I encourage you to file another issue with clear description of the problem. Thanks and have a nice day! +++$+++ 0 +++$+++ 0

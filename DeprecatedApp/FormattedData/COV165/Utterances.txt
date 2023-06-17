@@ -1,0 +1,248 @@
+ROOT +++$+++ SP32854332 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-01-04T02:05:20Z +++$+++ VS2017express C#, tabs replaced with spaces Hello,
+
+under the following circumstances, VS2017express replaces tabs with spaces even though I deactivated that feature in the options:
+- I am working on a C# file
+- I am pasting a tab from my clipboard into a line of code, but not at the end, e.g. &quot;int i = 0; // init i&quot;. If I want more space between the command and the comment and I use my tab key, then tabs get inserted properly, but if I put a tab into my clipboard and insert it with Ctrl-V, then ALL tabs get replaced with spaces.
+
+This problem does not occur in C++ files of the same solution, even though I set the tab configuration identical for all languages.
+
+Cheers
+Peter
+
+_This issue has been moved from https://developercommunity.visualstudio.com/content/problem/154651/vs2017express-c-tabs-replaced-with-spaces.html
+VSTS ticketId: 528589_
+_These are the original issue comments:_
+
+Peter Meier on ‎11‎/‎23‎/‎2017, 02:27 AM (41 days ago): <p>Also I just found out that if I hit the auto format keys (Ctrl-K, Ctrl-D), all the tabs I inserted between the command and the comment are replaced with spaces again. I searched through Tools/Options/Text Editor/C#/Code Style/Formatting, but I found no way to change this annoying behavior. I don't understand why C# won't let me align my comments the way I want them to be when it's no problem for C++.</p>
+
+Jinu Joseph [MSFT] on ‎12‎/‎20‎/‎2017, 02:48 AM (14 days ago): <p>We appreciate you taking the time to report this problem. We are currently prioritizing problems that are impacting a broad set of our customers, so we may not be able to investigate this one immediately. We know this problem is important to you, so we will continue to monitor it.</p>
+
+_These are the original issue solutions:_
+(no solutions) +++$+++ 5 +++$+++ 0
+COM0 +++$+++ SP386545 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-05-16T18:33:37Z +++$+++ I'm having a similar problem with Visual Studio 2017 Professional (15.7.0.)  I have my indentation style set using `.editorconfig`:
+
+```
+[*.cs]
+indent_style = tab
+indent_size = tab
+tab_width = 4
+```
+
+If I add a newline to a C# file, tabs are inserted as expected.  But, if I format the document using Ctrl+K Ctrl+D, any tabs in the file are replaced with spaces.
+
+If I use ReSharper to format my document, all indentation is converted to tabs as expected. +++$+++ 2 +++$+++ 0
+COM1 +++$+++ SP18165738 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-06-26T08:10:03Z +++$+++ Would be nice to get this fixed, would save much time. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP13651458 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-09-12T00:41:26Z +++$+++ I was thinking of submitting a repro, but the OP hits the nail on the head:
+>  just found out that if I hit the auto format keys (Ctrl-K, Ctrl-D), all the tabs I inserted between the command and the comment are replaced with spaces again. I searched through Tools/Options/Text Editor/C#/Code Style/Formatting, but I found no way to change this annoying behavior. 
+
+This creates big whitespace changes after formatting the document as we use tabs at work. Please fix this.
+ +++$+++ 2 +++$+++ 0
+COM3 +++$+++ SP1408396 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-11-25T23:59:48Z +++$+++ 📝 The issue here is hard tabs contained *within* a line of code, i.e. tabs not used for indentation. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP8293542 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-12-03T23:11:40Z +++$+++ Design meeting notes:
+In the past we've had conflicting requests on the behavior for tabs within a line of code so we need to add an option for this behavior.
+
+My proposal:
+* add editorconfig setting that enforces tabs within a line of code. `tab_within_line`
+* add new toggle in **Tools > Options > C# > Tabs**: Enforce tabs within lines.
+  * It could also go under **Tools > Options > C# > Code Style > Formatting > Spacing** if that is the preferred place to keep editorconfig settings.
+
+@heejaechang @sharwell  +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP18165738 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-12-04T09:01:11Z +++$+++ @kendrahavens 
+Nice proposal to add an extra option.
+> Design meeting notes:
+In the past we've had conflicting requests on the behavior for tabs within a line of code so we need to add an option for this behavior.
+
+Are there really users that like to keep tabs only on specific parts, like indent?
+![tabs-settings](https://user-images.githubusercontent.com/18165738/49427897-d7adf800-f7a4-11e8-9842-6077bbb51952.png)
+As the current option does reflect what it should do, to "keep tabs" and do not replace them with spaces - This is the behavior as I know it from previous versions and as it is within the C++ text editor - I would prefer an new option that says "keep tabs only for indent" for this new behavior. One saying "Enforce tabs within lines" would still confuse and let me wonder why I have to check that extra option in situations I already selected "Keep tabs". +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP1408396 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-12-04T11:27:17Z +++$+++ > Are there really users that like to keep tabs only on specific parts, like indent?
+
+Yes, it's actually a primary request for users who indent with tabs.
+
+The name of the new option has not been decided, but it would have two options:
+
+1. Allow tabs whenever <kbd>Tab</kbd> is used (matches the behavior prior to Visual Studio 2015)
+2. Use tabs for indentation, but not for alignment
+
+In most cases, the second option behaves as you see today. However, the behavior would change in cases where hanging indentation is used for aligning code with code on a previous line. For example:
+
+```csharp
+void Method()
+{
+→   var·data·=·from·value·in·new[]·{·1,·2·}
+→   ···········select value;
+}
+``` +++$+++ 1 +++$+++ 0
+COM7 +++$+++ SP1408396 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-12-11T14:01:50Z +++$+++ The preliminary design discussion is now complete. We will review the final user experience once it is ready. +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP16415478 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-04-24T21:27:04Z +++$+++ > The issue here is hard tabs contained within a line of code, i.e. tabs not used for indentation.
+
+I keep hearing people referring to tabs as hard when it's actually the other way around -- tabs are soft (as in you can replace them with any number of spaces on display),, and spaces are hard (as in hard-coded number in the file itself which you can't reformat so easily on display).
+
+That said, I would really prefer if Tab key did what it says on the tin -- inserted a Tab character into the editor. Currently in Visual Studio 16.5.4 that doesn't seem to be the case even though I have configured everything to have Tabs instead of spaces.
+
+I'd like to voice my displeasure towards two trends going on in Visual Studio editor since VS 2015:
+
+1. Editor trying to be "smart" and disregarding user input more and more (i.e. I enter Tab and it enters spaces even though it's clearly configured to use Tabs)
+2. Premature code analysis and error checking (i.e. telling you your code is broken and offering to "fix" it before you ever get a chance to complete it)
+
+Those additions waste enormous amounts of developer time and effort on fighting them when they are wrong (and sadly they can be wrong a lot). The least you could do is offer an option to disable both behaviors globally.
+
+Finally, I'd appreciate if there was some workaround for this spaces instead of tabs issue, it's driving me nuts.
+ +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP10948591 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-12-13T16:31:16Z +++$+++ This is still a problem.  The older versions of editors never used to behave like this.  Other editors don't behave like this.  Even Notepad doesn't behave like this.
+
+I'll explain simply:
+With the option to KEEP TABS selected in the Editor settings, TABs typed within code (so end of line comments line up, for example.) are later changed into spaces by Visual Studio.  When copying & pasting a line, for example.
+I NEVER want this to happen.  That's why I select the option to KEEP TABS.
+If I type a TAB in my code, I NEVER want it changed it to spaces.  It's really that simple.
+
+Why is this not fixed after 2+ years?
+This is not an enhancement request, but simply a request that the editor behave as editors have always behaved since the dawn of computing.  At some point, someone in Microsoft decided to 'muck' around with users typed code and change it, when not one user asked for that to happen.
+
+> > Are there really users that like to keep tabs only on specific parts, like indent?
+> Yes, it's actually a primary request for users who indent with tabs.
+That's simply not true.  Show us ONE request from ANYONE who asked for their TABs to be changed to spaces within their code when using the option KEEP TABS.
+
+Also worth noting that this still happens when the 'Use Adaptive Formatting' option is turned off.  So it is impossible to prevent this from happening. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP1408396 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-12-14T16:08:36Z +++$+++ > Why is this not fixed after 2+ years?
+
+There is no one consensus on the definition of correct behavior. The overwhelming majority of users are happy with the current implementation of tabs/spaces handling. Accounting for the remaining ones (in particular, https://github.com/dotnet/roslyn/issues/24031#issuecomment-444067640 and "always use tabs") without breaking the experience for users who are happy with the current behavior is a particularly challenging exercise that requires both design and implementation work.
+
+I'm not sure this will move up on the internal priority list in the near future, but if an external user wanted to spend the time to define and implement the full experience we would be happy to review it. See #23394 for a great example of a feature which shipped because a contributor went through this process. 😄  +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP16415478 +++$+++ ROOT +++$+++ COM10 +++$+++ 2021-02-23T00:27:09Z +++$+++ @sharwell 
+> There is no one consensus on the definition of correct behavior.
+
+How about you take the same approach as Git does for line endings?
+
+1. Replace TABs with spaces on reformat
+2. Replace spaces with TABs on reformat
+3. Leave both as entered on reformat
+
+Shouldn't the above satisfy everyone involved?
+
+Come on people, this is not rocket science, it's a text editor for $(Deity)'s sake! +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM11 +++$+++ 2021-02-23T04:06:22Z +++$+++ I've never seen git do that.  +++$+++ 0 +++$+++ 1
+COM13 +++$+++ SP10948591 +++$+++ ROOT +++$+++ COM12 +++$+++ 2021-02-23T09:52:52Z +++$+++ > 
+> 
+> I've never seen git do that.
+
+No matter, you've never seen any other existing or previous code editor, since text editors first existed, behave the way VS does.
+When auto-indenting, it ALWAYS changes TABs between code and line comments to SPACES no matter what settings are selected - like the 'always keep TABs' setting.
+Nobody asked for this behaviour.  It's a bug.
+Obviously it's more convient to blindly deny it here rather than simply fix it. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP16415478 +++$+++ ROOT +++$+++ COM13 +++$+++ 2021-02-23T09:59:34Z +++$+++ > I've never seen git do that.
+
+How about not commenting before understanding what you read? I never said Git does anything with spaces and TABs -- I explicitly mentioned line endings. +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP1408396 +++$+++ ROOT +++$+++ COM14 +++$+++ 2021-02-23T15:31:33Z +++$+++ > Nobody asked for this behaviour. It's a bug.
+
+This is not correct. Some users who use tabs for indenting prefer the current setting, since it allows for variable-width tabs without changing alignment¹. _Most_ users who use tabs for indenting either prefer the current behavior _or_ they are OK with either behavior.
+
+We are willing to reconsider the design since some teams still aren't happy with the current behavior, but only if the design provides a comprehensive approach that works for both preferences.
+
+¹ Some alignment scenarios are still broken; we would expect the change proposal to ensure these are corrected per https://github.com/dotnet/roslyn/issues/24031#issuecomment-444067640.
+
+> How about not commenting before understanding what you read? I never said Git does anything with spaces and TABs -- I explicitly mentioned line endings.
+
+Git has the ability to transparently normalize line endings as part of commit/checkout, but there are many reasons why this would not work with tabs/spaces:
+
+1. Git doesn't have the ability to alter its understanding of normalization to include characters other than end-of-line characters.
+2. Git's normalization process is transparent, meaning any given developer never actually sees it take action. From a local perspective, the file only ever existed in the local form.
+3. Not all users are working with Git for source control.
+4. Tools which operate on files with checksum validation (e.g. debugging) _explicitly_ account for the fact that every text file has two possible forms: one with `\r\n` and a second with `\n`. All of these tools will break if new normalization characters are added. +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM15 +++$+++ 2021-02-23T16:15:05Z +++$+++ > How about not commenting before understanding what you read?
+
+How can I understand without discussing and talking with people about the topic? +++$+++ 0 +++$+++ 1
+COM17 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM16 +++$+++ 2021-02-23T16:44:27Z +++$+++ So, i would need some strong answers to problems i see arising from changing the representation of the file for different developers.  First, that would violate some of our efforts we have around reproducible builds.  Second, it seems like it would just cause problems for normal situations like:
+
+```c#
+var v1 = from c in customers
+         where c.Age >= 21
+         ...
+```
+
+Here, the continuation lines need to be indented 9 columns to maintain alignment.  Replacing these with tabs just breaks this.  Even if it was on some tab multiple for some developers, it might not be for others.
+
+In general, I think all developers on the team (including CI) should operate on a bit-for-bit identical version of the code for many important reasons. +++$+++ 0 +++$+++ 1
+COM18 +++$+++ SP16415478 +++$+++ ROOT +++$+++ COM17 +++$+++ 2021-02-23T18:45:37Z +++$+++ @sharwell 
+> Git has the ability to transparently normalize line endings as part of commit/checkout, but there are many reasons why this would not work with tabs/spaces...
+
+Let me be absolutely clear that I did not suggest changing Git behavior, but rather emulating their set of options for the particular problem at hand.
+
+With that out of the way, can we agree that VS editor already does some sort of "normalization" of TABs and spaces?
+
+The problem in my opinion is twofold:
+
+1. The existing settings that govern TAB .vs. space editor behavior are all over the place and totally do not work as described in the UI, much less produce results that are expected.
+2. There is no `What You Type Is What You Get` editor setting -- I just want (and I am sure I am not the only one) that when I enter mixed TABs and spaces on a single line of code that they stay exactly like I entered them (save for expression reformatting which is already customizable enough for everyone's taste).
+
+@CyrusNajmabadi 
+
+> How can I understand without discussing and talking with people about the topic?
+
+You butted into the middle of a discussion by putting words in my mouth because you haven't bothered to understand what I wrote. Maybe that is somehow my fault because English is not my primary language and what I wrote is hard to understand, but in all honesty I am not sure what are you arguing for (or against). If you want to keep spaces in your files then rest assured that nobody here wants to take that away from you. I am asking for more options, not less. Therefore, please stop diluting the topic with pointless and/or obvious comments.
+
+@sharwell 
+
+So once again, I only want an editor option to not touch beginning of line indentation, variable name indentation, and comment indentation -- it is irrelevant whether those are done with TABs, spaces, or a mixture of the two -- I want it preserved as I typed it.
+
+I am really surprised to hear that something like that cannot be done while still keeping all current options. +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM18 +++$+++ 2021-02-23T19:00:03Z +++$+++ > You butted into the middle of a discussion by putting words in my mouth
+
+I didn't.  I said i'd never see such behavior.  I have not.  That was me just giving insight that I wasn't familiar with what you are talking about. +++$+++ 0 +++$+++ 1
+COM20 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM19 +++$+++ 2021-02-23T19:00:48Z +++$+++ > I am not sure what are you arguing for (or against)
+
+I'm happy to clarify any of my points.  Def ask questions and I'll get back to you asap.  If you'd like another venue to discuss things (perhaps in realtime) I'm also happy to use gitter or discord to continue the discussion :) +++$+++ 0 +++$+++ 1
+COM21 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM20 +++$+++ 2021-02-23T19:02:11Z +++$+++ > I am asking for more options, not less. 
+
+Sure.  However, I'm pointing out that those options are potentially quite problematic.  I would be wary about adding them without fully understanding all the implications here.  And to get there, i need to talk about the topic.
+
+> Therefore, please stop diluting the topic with pointless and/or obvious comments.
+
+It was not obvious to me.  That's the reason i made the comment.  I was unfamiliar with what you were talking about, so i pointed that out to get clarity.   +++$+++ 0 +++$+++ 1
+COM22 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM21 +++$+++ 2021-02-23T19:04:33Z +++$+++ > I am really surprised to hear that something like that cannot be done while still keeping all current options.
+
+The challenge is that you may be asking for X, and we may provide *exactly* X, only to find out soon after that you actually wanted X', and that X is not sufficient for all your cases.  THe purpose of the discussion, and the examination of all the tangential concerns is to try to get as full an understanding as possible so as to provide the best possible solution here.  
+
+As you may have noticed, this is actually a fairly complex space with lots of varying concerns.  You may have even noticed that different people have asked for things *in conflict* with other requests.  It's not as simple as just taking one proposal and implementing it and leaving it at taht. +++$+++ 0 +++$+++ 1
+COM23 +++$+++ SP16415478 +++$+++ ROOT +++$+++ COM22 +++$+++ 2021-02-23T22:39:14Z +++$+++ > The challenge is that you may be asking for X, and we may provide exactly X, only to find out soon after that you actually wanted X', and that X is not sufficient for all your cases
+
+So now you are implying that I don't even know what I want? What's next, telling me to get used to doing things your way because reasons?
+
+Well I know one thing for certain -- I do not want an AI or any piece of software to "think" instead of me and attempt to interpret my consistent keyboard input in different ways at different times as it pleases.
+
+Humans are creatures of habit and muscle memory is how we free our brain's capacity so it can perform more complex tasks, contextual controls or behavior are breaking muscle memory and are thus bad UI and software design.
+
+Again, all I want is that spaces and tabs are left as I entered them when the line is reformatted. Nothing more, nothing less. All existing indentation and spacing formatting was fine for me before this "smart" tab to space conversion on reformat was added. I just want an option to turn it off.
+
+How hard can that be? +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM23 +++$+++ 2021-02-23T22:58:45Z +++$+++ > So now you are implying that I don't even know what I want?
+
+Yes.  That's always a possibility.  It's happened numerous times in the past with many requests from many customers.  It's always something that needs to be kept in mind.  Furthermore, it may be what you want, but it may be wrong for other users complaining about something similar.  So navigating all the potential requests and constraints here can be tricky and takes a lot of communication and a lot of thought.  Thanks! :) +++$+++ 0 +++$+++ 1
+COM25 +++$+++ SP10948591 +++$+++ ROOT +++$+++ COM24 +++$+++ 2021-02-23T23:00:10Z +++$+++ > As you may have noticed, this is actually a fairly complex space with lots of varying concerns...
+
+Then just concentrate on the **original problem in the first post**.  It's a very straightforward problem.
+**Tab characters, between code and double-slashed comments, are changed to space characters when auto-indenting is performed.**
+Auto indenting works fine - it uses TAB characters when asked, but TAB characters after the code are changed.
+Why?
+
+This is with **Always keep TABs** option selected.
+If this is a feature, and not a bug, then someone please explain why, when **Always keep TABs** is selected, these TABs are being replaced by Spaces?
+
+This behaviour does not exist in older versions of VS.  At some point it has been added by someone, for some reason.
+That was the point at which the user experience was broken. +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM25 +++$+++ 2021-02-23T23:00:40Z +++$+++ > How hard can that be?
+
+It could potentially be very difficult.  The formatting engine is one part of Roslyn that i find the most challenging.  Not "it's one of the top challenging parts".  Rather: "it is literally the most challenging pieces of roslyn".
+
+Changes here often have very unexpected effects that are unintended and can break users who have become accustomed to how things work.  We have to be very delicate here as this can be very detrimental to codebases. +++$+++ 0 +++$+++ 1
+COM27 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM26 +++$+++ 2021-02-23T23:01:33Z +++$+++ > Auto indenting works fine - it uses TAB characters when asked, but TAB characters after the code are changed.
+
+I don't think this is the case.  For example, i believe we may choose to align things, and not stick with tabs.  But i would have to go check on that. 
+ +++$+++ 0 +++$+++ 1
+COM28 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM27 +++$+++ 2021-02-23T23:03:39Z +++$+++ > This is with Always keep TABs option selected. If this is a feature, and not a bug, then someone please explain why, when Always keep TABs is selected, these TABs are being replaced by Spaces?
+
+I believe this may be a bug or a feature depending on ones perspective.  I certain see how it can be a bug.  However, that doesn't mean that just because it's a bug that it is simple to fix or that it is without consequences if changes are made here.  Again, as i mentioned above, the existing formatting system is highly complex (including with likely bugs in it that many have taken dependencies on).  So changes need to be very judiciously made. +++$+++ 0 +++$+++ 1
+COM29 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM28 +++$+++ 2021-02-23T23:05:36Z +++$+++ > This behaviour does not exist in older versions of VS. At some point it has been added by someone, for some reason.
+That was the point at which the user experience was broken.
+
+That's quite possible.  My guess is that it happened when we did the entire roslyn rewrite.  We tried to preserve a lot of old behavior, but we very likely did not given the huge complexity in the old system and that the new system takes an entirely different approach on things.  Unfortunately though, we've now had this new system a long time, and we are wary about subjecting people to more potential changes in behavior, esp. as it might fix this issue, only to cause problems for others :-/   It's a tricky situation to be sure! +++$+++ 0 +++$+++ 1

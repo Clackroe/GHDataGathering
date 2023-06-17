@@ -1,0 +1,279 @@
+ROOT +++$+++ SP2132602 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-06-28T16:50:58Z +++$+++ Allow decrypting of files with vaulted variables ##### ISSUE TYPE
+ - Feature Idea
+
+##### COMPONENT NAME
+ansible-vault
+
+##### ANSIBLE VERSION
+```
+ansible 2.3.1.0
+  config file = 
+  configured module search path = Default w/o overrides
+  python version = 2.7.13 (default, Apr 23 2017, 16:50:35) [GCC 4.2.1 Compatible Apple LLVM 8.0.0 (clang-800.0.42.1)]
+```
+
+##### CONFIGURATION
+n/a
+
+##### OS / ENVIRONMENT
+n/a
+
+##### SUMMARY
+ansible-vault decrypt allows the decryption of completely encrypted yaml files, but it will not decrypt vaulted variables in an unencrypted yaml file with encrypted variables.
+
+It would be nice, for CLI purposes, to have decrypt take a partially encrypted file, and give us the decrypted text.
+
+##### STEPS TO REPRODUCE
+* create `test.yml` file with single encrypted variable encrypted by `~/.vault_pass.txt`
+* ansible-vault decrypt file
+
+```
+ansible-vault decrypt test.yml --vault-password-file ~/.vault_pass.txt
+```
+
+##### EXPECTED RESULTS
+* Expected plain text output with encrypted variable decrypted.
+
+##### ACTUAL RESULTS
+```
+ERROR! input is not vault encrypted data for test.yml
+```
+ +++$+++ 100 +++$+++ 0
+COM0 +++$+++ SP940557 +++$+++ ROOT +++$+++ ROOT +++$+++ 2017-06-29T08:55:23Z +++$+++ @alikins I believe you look after vault +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP6112411 +++$+++ ROOT +++$+++ COM0 +++$+++ 2017-07-06T19:14:57Z +++$+++ Would be also good if 'ansible-vault view' worked for such files. +++$+++ 22 +++$+++ 0
+COM2 +++$+++ SP15162 +++$+++ ROOT +++$+++ COM1 +++$+++ 2017-07-24T14:53:42Z +++$+++ This might be something that will get covered in https://github.com/ansible/ansible/blob/devel/docs/docsite/rst/roadmap/ROADMAP_2_4.rst#id25
+
+As a user, what would you expect the decrypted file to look like?
+
+First thought is just to replace the !vault yaml scalar with the decrypted text. That probably makes the most sense for 'view'.
+
+For 'decrypt' and especially 'edit', I'm not sure that will be sufficient. For 'edit', the re-encrypt phrase is going to need to be able to figure out which variable values originally came from a vaulted value. Especially if the file is edited significantly (reordering lines for example, or changing the variable name). 
+
+So the file presented for editing would need to include some markers indicating the text that was decrypted/should be re-encrypted. A couple of ways to do that:
+
+   1) Add comments to mark the text, and doing some text manipulation/regexes to replace it with encrypted text in place. Something like:
+
+``` yaml
+# START VAULT PLAINTEXT - my_var
+my_var: my text goes here
+# END VAULT PLAINTEXT - my_var
+some_plain_var: blippy
+```
+
+  2) Add a new yaml type indicating text to be encrypted. Something like:
+
+``` yaml
+my_var: !vault-plaintext |
+    my text goes here
+some_plain_var: blippy
+```
+
+It would be best if we could yaml parse the input, decrypt the value, serialize the yaml to a file for editing, let user edit it, then yaml parse the results, encrypt the value, and serialize to yaml and save.
+
+But... doing that with the available yaml parser would lose comments and ordering of maps.
+
+So likely some in place string/text manipulations will be required. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP15162 +++$+++ ROOT +++$+++ COM2 +++$+++ 2017-09-14T14:14:22Z +++$+++ Not going to happen for 2.4, so bumped to 2.5. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP6585283 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-01-31T15:47:45Z +++$+++ @jhkrischel This issue is waiting for your response. Please respond or the issue will be closed.
+
+[click here for bot help](https://github.com/ansible/ansibullbot/blob/master/ISSUE_HELP.md)
+<!--- boilerplate: needs_info_base ---> +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP17752048 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-01-31T18:57:34Z +++$+++ Any news when this is planned to be implemented in ansible?
+We have lots of passwords as vaulted variables, hence updating\viewing them is troublesome.
+I did some script (based on solution, from alikins last post) to at least parse such yml and decrypt every variable to stdout\file to see a decrypted file at once, but this is just a script that is not a complete solution (and it is decrypting only).
+UPD: I ended up going thru ansible code to understand how it works with encrypted variables and wrote some tiny script that I can use in my automation jobs with Jenkins. I hope it would be useful for anyone who is waiting for this issue to be fixed.
+https://github.com/andrunah/ansible-vault-variable-updater
+It would be nice to have this functionality in ansible out of the box. +++$+++ 13 +++$+++ 0
+COM6 +++$+++ SP19914339 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-03-05T14:27:09Z +++$+++ I do see this in 2.5.
+
+```
+root@ubuntu-xenial:~# ansible  --version
+ansible 2.5.0rc1 (stable-2.5 36566e62a7) last updated 2018/03/05 13:46:00 (GMT +000)
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = [u'/root/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+  ansible python module location = /root/git/ansible/lib/ansible
+  executable location = /root/git/ansible/bin/ansible
+  python version = 2.7.12 (default, Nov 20 2017, 18:23:56) [GCC 5.4.0 20160609]
+
+root@ubuntu-xenial:~# cat vars.yaml
+ansible_ssh_pass: !vault |
+          $ANSIBLE_VAULT;1.2;AES256;my_user
+          31313064366365626535323066613234626234336664333266663161366233396365633063303539
+          3066363333666236666335656631666663373037643338630a303763363031373337663733326134
+          38336566366535373561373830386638663635363438333633313536333731646331366138383961
+          3331346163623661340a663862323337313562376338386539326438323562383136383832376266
+          31306663393532323761353761353435373432633632626365633734303335633436
+nonpass: pass
+root@ubuntu-xenial:~# ansible-vault view vars.yaml
+Vault password:
+ERROR! input is not vault encrypted datavars.yaml is not a vault encrypted file for vars.yaml
+``` +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP6585283 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-03-05T14:37:12Z +++$+++ @jhkrischel This issue is waiting for your response. Please respond or the issue will be closed.
+
+[click here for bot help](https://github.com/ansible/ansibullbot/blob/master/ISSUE_HELP.md)
+<!--- boilerplate: needs_info_base ---> +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP15162 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-03-09T18:13:35Z +++$+++ I poked at this a little yesterday and braindumped some thoughts in code comments at https://github.com/alikins/ansible/commit/603cac4a041a10ec8186617c95ef539a9ece787a
+
+(copied/paraphrased here for discussion)
+
+>         Open a file, figure out if it is all vault or yaml with vault strings, edit.
+> 
+>         if yaml with vault strings, parse the yaml with AnsibleYaml 
+>         and secret. Replace with '!vault-plaintext vault-id' and plaintext. 
+>         Save, open editor. 
+>         On save/reencrypt, reparse the file with AnsibleYaml, get the
+>         plaintext of the to be reencrypted vaulted string, encrypt it
+>         (!vault-plaintext -> !vault,
+>          AnsibleVaultUnencryptedUnicode -> AnsibleVaultEncryptedUnicode).
+> 
+>         And then, things get complicated... we can't just AnsibleYaml.dumps()
+>        the data structure out:
+>             1. Comments and comment placement is not preserved which 
+>                 is kind of annoying
+>             2. AnsibleYaml can loads things into data structures
+>                 that it can not `dumps()` out.
+>                 Ie, we can't serialize a bunch of stuff we can deserialize.
+> 
+>             So just AnsibleYaml.dumps'ing the datastructure back
+>             to a file will usually either fail or do the wrong thing.
+> 
+>             #2 above is unlikely to get fixed soon if ever.
+>             #1 is mostly a limitiation of the PyYaml yaml module ansible uses. 
+>                Other implementation like Rueyaml can do this, but it is unlikely for 
+>                ansible to change this any time soon.
+> 
+>         So, since we can't just serialize to yaml, we likely need to do some 
+>         string manipulation to replace the '!vault ' blob.
+> 
+>         We would need to know exactly what the before string looked like
+>         and where in the file it is, and what the new !vault will look like.
+>         But we don't really know what the new  !vault-plaintext 
+>         string will look like.
+> 
+>         For that  matter, we don't know if it will be in the same place,
+>         or if it will exist at all, or if it will be at the same path in the 
+>         datastructure after the edit. 
+> 
+>         We could limit edit to only try to work in cases where
+>         those aren't changed. We also have no idea what the
+>         plaintext will look like.
+>         
+>        ideas:
+>            - !vault-plaintext is a compound yaml type, with fields for
+>               the vault id to use, and for the plaintext. Could also
+>              possibly include some identifying info for what the !vault
+>              it replaced looked like. An example:
+> 
+>         some_var: !vault-plaintext:
+>                     vault_id: 'dev'
+>                     decrypted_from: |
+>                                     $ANSIBLE_VAULT;1.1;AES256
+>                                     66393964663765613335633461643334393234346231666665306635323635333137306339356232
+>                     plaintext: |
+>                                 The new plaintext to replace decrypted_from with
+> 
+>         That would give vault-edit enough info to do a reliable job 
+>         of replacing the previous content.
+> 
+
+       
+
+The downside to that approach is that it points out the limitations of the current !vault format. It may also be useful to extend !vault to support getting a data structure with info in it instead of just the plain text scalar. At the moment, I'm not sure if it could do both but it seems possible.
+
+Or could just call the extended info version of !vault  !vault-extended or similar.  At that point it might be possible to make !vault-extended the default vault blob format for vaulted files as well. ie, instead of
+a vaulted file being:
+
+```
+$ANSIBLE_VAULT;1.1;AES256
+66393964663765613335633461643334393234346231666665306635323635333137306339356232
+3533306631646431663239623762366365663137383435380a393139303161383561303336623962
+35373663663036333863373666326634616532376335333133326163376136353636633763623739
+3736343064326662390a306438356239386665306437646665323836393032393565666136643362
+3663
+```
+
+It would be yaml something like
+
+``` yaml
+--- 
+- !vault-extended:
+    vault_id: 'dev'
+    cipher: AES256
+    encrypted_on: 2018-03-14
+    ciphertext: |
+        $ANSIBLE_VAULT;1.2;AES256;dev
+        66393964663765613335633461643334393234346231666665306635323635333137306339356232
+                  
+```
+
+ie, more or less like https://github.com/voxpupuli/hiera-eyaml +++$+++ 2 +++$+++ 0
+COM9 +++$+++ SP7386929 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-03-14T14:39:50Z +++$+++ Would it be possible for the user to tell you which scalars to decrypt - not try to do the whole file? +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP950561 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-04-12T14:21:15Z +++$+++ Right now the usability of encrypted variables compared to whole encrypted files is rather poor unfortunately. Especially in cases where I quickly need to access an encrypted variable (e.g. a password) I really don't want to google for solutions like https://stackoverflow.com/questions/43467180/how-to-decrypt-string-with-ansible-vault-2-3-0.
+
+It is also a problem for `git diff` use cases (https://stackoverflow.com/questions/29937195/how-to-diff-ansible-vault-changes). Is improving this state still on the roadmap? I didn't find it neither for 2.5 nor 2.6... +++$+++ 1 +++$+++ 0
+COM11 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-05-17T02:20:56Z +++$+++ Hi, so I've figured out a way to do this for checking individual values, using a yaml parser, **yq** https://github.com/mikefarah/yq (there's more than one yq project, but I used this). This works with ansible 2.5.2
+
+I have a vars file, with encrypted and unencrypted values, `all.yml`
+
+```
+unencrypted_value: 1234
+encrypted_value: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          37316535353565313063353530353539666634363834626664366263666538346131653332353932
+          3637363030613037316336306466656432353463383230370a396530323164353563363434663238
+          30336436396264656663663837346162323762333063376631326633356533376566633563386637
+          6531383261396366640a363339616164333630373730613564646434386364396534653063666238
+          6131
+```
+
+I have a password file, `vault-password`
+```
+password
+```
+
+Using `yq`, I'm able to decrypt the value pretty easily, by selecting the encrypted value and passing it to the decrypt function
+
+```
+$ yq read all.yml encrypted_value | ansible-vault --vault-id vault-password decrypt
+Decryption successful
+secretsecret
+```
+
+Hope this helps! +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP950561 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-05-17T11:24:52Z +++$+++ Thanks, this helps if it is possible to install additional software. I would argue that ansible-vault should also have this functionality built-in. +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-05-17T23:48:43Z +++$+++ Yeah definitely that'd be the best option :) +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP5423285 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-08-08T22:04:22Z +++$+++ Also related, let rekey work on all encrypted variables in a file. There doesn't seem to be a good way to rekey all the encrypted variables, which makes encrypted variables super cumbersome now that we have to rekey (will end up having script this). Even if it just spits it back out to stdout that'd be a huge help instead of modifying the variables in the file directly. +++$+++ 5 +++$+++ 0
+COM15 +++$+++ SP488213 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-08-23T07:55:52Z +++$+++ Why is this issue still assigned to the `2.5 milestone` when `ansible 2.5` is already release a long time ago ? See #44556 for outdated milestones.
+
+Please reassign to a current milestone, this is a really missing feature imo (especially the lack of rekeying functionality). +++$+++ 6 +++$+++ 0
+COM16 +++$+++ SP112187 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-09-28T21:25:28Z +++$+++ It would be nice if rekey worked this way as well.  Updating only the encrypted values in a mixed variable file. +++$+++ 2 +++$+++ 0
+COM17 +++$+++ SP481677 +++$+++ ROOT +++$+++ COM16 +++$+++ 2019-01-15T17:21:38Z +++$+++ Just giving another thumbs up on this; something like the `yq` solution above works okay and can be scripted, but having the functionality be part of `ansible-vault` itself would make management and re-keys so much simpler, and require one fewer dependency. +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP1361780 +++$+++ ROOT +++$+++ COM17 +++$+++ 2019-03-25T22:21:46Z +++$+++ A simple but effective solution would be to keep the existing symantecs of ansible vault encrypt, decrypt and view commands, to detect and encrypt and decrypt values of complete files.
+
+For existing users of encrypted files, it would be trivial to convert to the enrypted values.  It could even be considered best practice is to keep encrypted values in files named such as secrets.yml, to make it easier to spot accidently unencrypted secrets.
+
+During the encrypt phase, it would convert any unencrypted values to encrypted values.  This would allow users to very simply add new values just by editing the "secrets.yml", test as required, then run the encypt command.   Users would be able to enforce or check encryption by git hooks or similar.
+ +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP950561 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-03-25T22:44:19Z +++$+++ That solution would be simple, but likely not enough. For example every variable can be encrypted with a different secret/vault identifier. Also encrypted and unencrypted variables can be mixed.
+
+I'd still like to have a way at least to decrypt all variables belonging to a vault ID transparently using `ansible-vault`. Seriously, this is a usability problem since Ansible 2.3! This makes it nearly impossible for me to use vaulted variables, since being able to run `git diff` on changes is important. +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP509689 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-06-05T10:42:20Z +++$+++ This is still a problem with Ansible 2.8... A solution would be really appreciated! +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP509689 +++$+++ ROOT +++$+++ COM20 +++$+++ 2019-06-05T12:33:33Z +++$+++ For others looking for a quick solution I created this script: https://gist.github.com/steffann/240d4170e45aa3cf7cf0df5e9beaf0ba
+
+It uses [ruamel.yaml](https://yaml.readthedocs.io/), which preserves ordering, comments etc in the YAML file. Great when depending on decent git diffs etc :) +++$+++ 2 +++$+++ 0
+COM22 +++$+++ SP488213 +++$+++ ROOT +++$+++ COM21 +++$+++ 2019-06-05T14:01:47Z +++$+++ maybe a bit unrelated but I like how [sops](https://github.com/mozilla/sops) does it. +++$+++ 1 +++$+++ 0
+COM23 +++$+++ SP36764136 +++$+++ ROOT +++$+++ COM22 +++$+++ 2019-06-11T18:36:23Z +++$+++ Running into this issue again and it sucks. Please guys, this issue has been open for almost 2 years now and for people who really use ansible-vault, this is a major pain the butt. +++$+++ 16 +++$+++ 0
+COM24 +++$+++ SP12090299 +++$+++ ROOT +++$+++ COM23 +++$+++ 2019-11-19T01:04:53Z +++$+++ same issue here, we need to unencrypt all values and it is a nightmare, this must be common function +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP41154665 +++$+++ ROOT +++$+++ COM24 +++$+++ 2019-12-05T11:25:00Z +++$+++ +1 for this functionality. +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP50200552 +++$+++ ROOT +++$+++ COM25 +++$+++ 2019-12-05T14:13:48Z +++$+++ +1, really need it! +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP740323 +++$+++ ROOT +++$+++ COM26 +++$+++ 2020-01-07T11:51:24Z +++$+++ I solved this using debug mode. E.g.
+
+`ansible localhost -m debug -a var='myVariable' -e "@myFile.yml" --ask-vault-pass` +++$+++ 6 +++$+++ 0
+COM28 +++$+++ SP57633461 +++$+++ ROOT +++$+++ COM27 +++$+++ 2020-02-04T12:45:01Z +++$+++ +1 it would be very handy!!! +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP4614943 +++$+++ ROOT +++$+++ COM28 +++$+++ 2020-02-06T11:39:12Z +++$+++ > I solved this using debug mode. E.g.
+> 
+> `ansible localhost -m debug -a var='myVariable' -e "@myFile.yml" --ask-vault-pass`
+
+Works beautifully! No need for `--ask-vault-pass` if you have the password in a file identified by the `ANSIBLE_VAULT_PASSWORD_FILE` environment variable:
+
+https://docs.ansible.com/ansible/latest/reference_appendices/config.html#envvar-ANSIBLE_VAULT_PASSWORD_FILE +++$+++ 2 +++$+++ 0

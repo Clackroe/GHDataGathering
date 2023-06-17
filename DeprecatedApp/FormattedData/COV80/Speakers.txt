@@ -1,0 +1,6 @@
+SP5343243 +++$+++ jermowery +++$+++ NONE (AUTHOR)
+SP1267316 +++$+++ spock123 +++$+++ NONE
+SP36745510 +++$+++ CodeLiam +++$+++ NONE
+SP13039652 +++$+++ ericmartinezr +++$+++ CONTRIBUTOR
+SP455023 +++$+++ mgechev +++$+++ MEMBER
+SP123679 +++$+++ JoostK +++$+++ MEMBER

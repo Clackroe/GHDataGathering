@@ -1,0 +1,64 @@
+ROOT +++$+++ SP43930 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-04-24T20:15:41Z +++$+++ Add Ubuntu 20.04 to CI and ansible-test ##### SUMMARY
+
+What the title says
+
+##### ISSUE TYPE
+<!--- Pick one below and delete the rest -->
+- Bugfix Pull Request
+
+##### COMPONENT NAME
+
+tests +++$+++ 12 +++$+++ 0
+COM0 +++$+++ SP6585283 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-04-27T15:45:30Z +++$+++ @relrod this PR contains the following merge commits:
+
+* https://github.com/ansible/ansible/commit/081bde4b74fed4f7e068665d01f6298f7262af20
+
+Please [rebase your branch](http://docs.ansible.com/ansible/devel/dev_guide/developing_rebasing.html) to remove these commits.
+
+[click here for bot help](https://github.com/ansible/ansibullbot/blob/master/ISSUE_HELP.md)
+<!--- boilerplate: merge_commit_notify ---> +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP8999596 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-05-20T11:12:19Z +++$+++ Hi, just checking in on this PR--are there plans to merge soon? +++$+++ 9 +++$+++ 0
+COM2 +++$+++ SP481677 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-07-22T16:50:32Z +++$+++ As more people are upgrading their systems to Ubuntu 20.04, old builds that used Ansible's official PPA are breaking and more people are switching to Pip installs... from @sivel's [last comment](https://github.com/ansible/ansible/issues/68645#issuecomment-610460321) before closing #68645, he mentioned:
+
+> Packages for new Ubuntu releases are only created during the Ansible release process, and as Focal has yet to be released, a package will not be made available until the next release that is made after Focal has been released.
+
+Focal was released in April, and Ansible has had a number of releases since then... is it possible to get this merged soon? Is it held up on tests? +++$+++ 8 +++$+++ 0
+COM3 +++$+++ SP43930 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-07-22T18:33:31Z +++$+++ @geerlingguy It's held up by Ubuntu. See https://github.com/ansible/ansible/issues/69203 and https://bugs.launchpad.net/ubuntu/+source/python-virtualenv/+bug/1880749 -- there's not much we can do until that is fixed. +++$+++ 2 +++$+++ 0
+COM4 +++$+++ SP150177 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-08-11T14:00:45Z +++$+++ I see the Ubuntu issue is set to resolved. Are we unblocked here? +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP39340 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-08-11T14:06:39Z +++$+++ The issue is fixed in the latest _development_ release of Ubuntu, but not in 20.04. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP66925589 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-08-12T09:49:15Z +++$+++ For those who came here because the PPA does not contain a suitable package,
+note that Ansible 2.9.6 is included in [Ubuntu's standard repositories](https://packages.ubuntu.com/focal/ansible). +++$+++ 2 +++$+++ 0
+COM7 +++$+++ SP10117960 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-08-20T15:03:14Z +++$+++ > For those who came here because the PPA does not contain a suitable package,
+> note that Ansible 2.9.6 is included in [Ubuntu's standard repositories](https://packages.ubuntu.com/focal/ansible).
+
+Broken link. +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP66925589 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-08-20T15:31:23Z +++$+++ > > For those who came here because the PPA does not contain a suitable package,
+> > note that Ansible 2.9.6 is included in [Ubuntu's standard repositories](https://packages.ubuntu.com/focal/ansible).
+> 
+> Broken link.
+
+I cannot confirm that. Broken network?
+
+![Screenshot](https://user-images.githubusercontent.com/66925589/90792551-1fb6da80-e2fa-11ea-8796-1d3f7128892e.png) +++$+++ 1 +++$+++ 0
+COM9 +++$+++ SP10117960 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-08-20T15:45:39Z +++$+++ > > > For those who came here because the PPA does not contain a suitable package,
+> > > note that Ansible 2.9.6 is included in [Ubuntu's standard repositories](https://packages.ubuntu.com/focal/ansible).
+> > 
+> > 
+> > Broken link.
+> 
+> I cannot confirm that. Broken network?
+> 
+> ![Screenshot](https://user-images.githubusercontent.com/66925589/90792551-1fb6da80-e2fa-11ea-8796-1d3f7128892e.png)
+
+Yeah sorry the server was picking up but requests returned something in the 500's, link was fine. All good now tho. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP6585283 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-10-20T16:16:34Z +++$+++ The test `ansible-test sanity --test validate-modules` [[explain](https://docs.ansible.com/ansible/devel/dev_guide/testing/sanity/validate-modules.html)] failed with 1 error:
+```
+lib/ansible/modules/system/systemd.py:0:0: option-incorrect-version-added: version_added for new option (user) should be '2.10'. Currently StrictVersion ('0.0')
+```
+<!-- job_id: 5f88a4b1b9af300007db9e37 -->
+<!-- job_id: 5f88a4b20d11080007d6ca82 -->
+<!-- job_id: /testresults/ansible-test-sanity-validate-modules.json -->
+
+[click here for bot help](https://github.com/ansible/ansibullbot/blob/master/ISSUE_HELP.md)
+<!--- boilerplate: shippable_test_result ---> +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP11413 +++$+++ ROOT +++$+++ COM10 +++$+++ 2020-10-22T01:35:42Z +++$+++ Bump on this. Ideally I'd love to avoid using something like `pipx` to install Ansible on Focal. What still needs to be done here? +++$+++ 0 +++$+++ 0

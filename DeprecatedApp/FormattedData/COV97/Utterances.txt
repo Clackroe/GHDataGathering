@@ -1,0 +1,86 @@
+ROOT +++$+++ SP25476357 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-07-20T10:43:52Z +++$+++ Array.isArray refinement loses the array's type I realize there are  a number of related issues. However, some where about ReadonlyArray, some didn't see directly related at all even though it was pointed there.
+
+Also, this is a much smaller example, just a single line of code really:
+
+[Playground link](http://www.typescriptlang.org/play/index.html#code/GYVwdgxgLglg9mABAEwKYFs4AoZQFyICSUqATgIYBGANqgDxgjqVkB8AlAY82QNoC6iAN4AoROMQQEAZyiJypCgE9EAXkQBBReSUA6GNK3KcUdogD8iXIgK9d93PwDcIsRID07xABFU1GCwUJFy6tGAA5lAAFlbS8oiypDARiOio0XDIADSIlCByYHCIZKRwpLmoEOQg0qiIcMCIUEoADnUARORgSu2IwGWIYG7ipOkgpEgKyrro5C1YSKqsg6GoEdHsLgC+IkA)
+
+```js
+function demo(it: Iterable<number>): number[] {
+    // THIS LINE: "array" is any[]
+    const array = Array.isArray(it) ? it : [...it];
+    // Deliberate: n.length is a string method, but no error because of type "any" for n
+    return array.map(n => n.length);
+}
+```
+
+I know people will point to this ir that implementation or design decision detail &mdash; honestly guys, you got it REVERSED. The tool should serve the purpose, not the other way around!
+
+That the array loses all it's type information in such a simple example is A BUG.
+
+And **it is possible** to do much better: [See here!](https://flow.org/try/#0GYVwdgxgLglg9mABAEwKYFs4AoZQFyICSUqATgIYBGANqgDxgjqVkB8AlAY82QNoC6iAN4AoROMQQEAZyiJypCgE9EAXkQBBReSUA6GNK3KcUdogD8iXIgK9d93PwDcYiQHo3iACKpqMFhQkXLq0YADmUAAWVtLyiLKkMOGI6KhRcMgANIiUIHJgcIhkpHCkOagQ5CDSqIhwwIhQSgAOtQBE5GBKbYjApYhgruKkaSCkSArKuujkzVhIqqwDIajhUewuAL4iQA) I'm only pointing this out because at times the responses sound like "We tried everything but it is just not possible" when the competition shows that it *is* actually quite possible. +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP5655961 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-07-20T11:38:55Z +++$+++ As a workaround, add overloads to Array.isArray() using declaration merging? +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP4097841 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-07-20T12:32:12Z +++$+++ Don’t underestimate how difficult things like this are from a theoretical perspective.  Humans are much better at figuring these things out than computers.
+
+In the *general case*, the compiler can’t safely deduce that `Generic1<number> —> Generic2<number>` unless both are in the union to be narrowed, because the type parameter might be used for different purposes in both types.
+
+In this *specific case*, though, adding an overload:
+```ts
+isArray<T>(x: Iterable<T>): x is Array<T>
+```
+would likely suffice.  I suspect this is probably how Flow does it. +++$+++ 1 +++$+++ 0
+COM2 +++$+++ SP4097841 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-07-20T12:48:10Z +++$+++ Proof of concept:
+[Try in TS Playground](https://www.typescriptlang.org/play/#code/JYOwLgpgTgZghgYwgAgIJSnAngYQPYgDOYUArgmHlAFADe1yjywh6mWAPACoB8AFHCgBzAFzIAkpEwAjADYRuPAJRjBQ5oTQZsigNzUAvtWoxSICsALIAJhAC2ePsDBjJ0OHIUhSd6dGVi3r7QANoAusj0TMgIBMTIguzIALxa7AB0LGzYTmBKyAD8zGDIYiHpFc5h+tFQEGCkUCAJ2ljpdnAADnzNyTzIIOnyIEJgABZKuowA9NPI0FBUYgDkIMsaAz5+NEZAA)
+
+```ts
+interface ArrayConstructor
+{
+    isArray<T>(arg: Iterable<T>): arg is Array<T>;
+}
+
+function demo(it: Iterable<number>): number[] {
+    const array = Array.isArray(it) ? it : [...it];
+    return array.map(n => n.length);  // error: 'n' is number
+}
+```
+
+---
+
+For the record, the current declaration of `isArray` is:
+```ts
+    isArray(arg: any): arg is Array<any>;
+```
+
+I wonder if that can be improved.  I'll need to give that some thought and maybe I'll open a PR. +++$+++ 1 +++$+++ 0
+COM3 +++$+++ SP25476357 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-07-20T12:59:23Z +++$+++ > Don’t underestimate how difficult things like this are from a theoretical perspective
+
+I don't. I too write code. And...?
+
+A problem is a problem. If you decide to solve it what's the point of saying in the middle "okay now it's too difficult". I trust that there are very capable people working on this project who will _find a way_. :-)
+ +++$+++ 0 +++$+++ 5
+COM4 +++$+++ SP4097841 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-07-20T13:09:32Z +++$+++ > And...? :-)
+
+Then you should already know that things that *appear* trivial can, in fact, turn out to be intractable, and being combative about that helps no one.
+
+But anyway, in this case TS indeed has a mechanism (overloads) that can solve the problem, see above. +++$+++ 1 +++$+++ 0
+COM5 +++$+++ SP25476357 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-07-20T13:16:49Z +++$+++ > and being combative about that helps no one.
+
+So _why are you_ being combative? Please check a mirror. Did you a) (only) respond to the issue, or did you b) choose to unnecessarily attack my experience? Not to mention that half of your first response was about something I had already covered in my initial post.
+
+Also, I know the problem can be solved. So your point is? If a problem can be solved using "obvious methods" it does not have to be actually done (no need to report the issue))? Are you a mathematician? The theoretical solution is enough, "I'll leave it to the reader to complete this trivial proof for themselves"?
+ +++$+++ 0 +++$+++ 8
+COM6 +++$+++ SP1282577 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-07-21T09:13:02Z +++$+++ > So why are you being combative?
+
+So feels like it is the other way around to me. 🤷‍♂  +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP6685088 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-07-22T19:56:32Z +++$+++ @lll000111 your attitude here makes my day measurably worse. Lots of people here manage to be constructive and positive and I'd appreciate your effort in not starting fights with us or other contributors. I've asked you to do this once already and am not going to ask a third time - if you continue to be combative to people just trying to help, we'll be asking you to discontinue your engagement on the issue tracker.
+
+Turning to the issue at hand, I think we need to figure out what the right solution is relative to #17002. In that issue (`Array.isArray` and `ReadOnlyArray<T>`), it seemed like the preference from people was that narrowing e.g. `string | ReadonlyArray<number>` with `isArray` should yield `ReadonlyArray<number>`. not `Array<number>`.
+
+It'd be confusing if `string | Iterable<number>` narrowed to `Iterable<number>` but narrowing `Iterable<number>` produced `Array<number>` - the `isArray` type guard should uniformly either produce a subtype or filter a union, not do one or the other depending on whether the argument type has some unrelated (e.g. known-`false`-returning) union constituents.
+
+Also an open question: surely it's not *just* `Iterable` and `ReadonlyArray` that want special treatment? Are there other types? How does this impact #28916 +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP25476357 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-07-22T20:11:24Z +++$+++ @RyanCavanaugh Please don't @-mention me in threads I'm not subscribed to. I refer to what I already wrote above. Your comment is insulting and more than useless. Go and learn some manners! +++$+++ 0 +++$+++ 2
+COM9 +++$+++ SP4097841 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-07-22T21:02:02Z +++$+++ @RyanCavanaugh Interestingly, writing a type predicate `x is ReadonlyArray<T>` doesn’t actually work from my tests: it narrows to `T[]` (sans readonly-ness) anyway. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP937933 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-07-22T22:17:15Z +++$+++ bitch needs a slap +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP972891 +++$+++ ROOT +++$+++ COM10 +++$+++ 2019-07-23T00:06:31Z +++$+++ Alright, I am going to lock this issue. We can't tolerate abrasive language or tone on this issue tracker, and it has clearly become a problem here, so I'm closing the thread. Insults, disrespectful tone, and consistently abrasive language are violations of our [code of conduct](https://opensource.microsoft.com/codeofconduct/).
+
+Keep in mind that violations of the code of conduct can result in being banned. I always try to remind participants that we are *all* striving to make TypeScript better - but if you want to participate, the only way to do so is with respect. If you cannot do that, we cannot allow you to engage on the issue tracker. +++$+++ 0 +++$+++ 0

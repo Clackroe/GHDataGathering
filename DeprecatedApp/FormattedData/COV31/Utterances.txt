@@ -1,0 +1,188 @@
+ROOT +++$+++ SP14314760 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-04-16T17:59:19Z +++$+++ Is there a way to have a full REPL or console for vs code Python? 
+I find it extremely frustrating using terminal as a REPL. There is no console. It's not a real IDE. I hope to see something like Matlab or R have done.
+
+The following is extremely inconvenient:
+1. you can't highlight in terminal
+2. shortcut like shift+left arrow which is used to highlight produces characters ;2D (see picture)
+3. breaking from a loop using Ctrl+C sometimes exits Python, you have to invoke all over again.
+4. The big fat cursor is ugly.
+
+Essentially,
+The Python extension just invokes Python from terminal. I mean, if I wanted the terminal experience, I'd do it with VIM. The whole point of VS Code Python is to step away from that.
+
+
+I'm running:
+- VS Code version: 1.33.1
+- Extension version: 2019.3.6558
+- OS and version: OS X
+- Python version: 3.6.7
+
+![terminal](https://user-images.githubusercontent.com/14314760/56231725-2de15080-604d-11e9-99b9-f9132c60f94c.png)
+
+
+
+
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP19672699 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-04-16T20:12:53Z +++$+++ If you have jupyter installed, you can use our ipython based window instead:
+https://code.visualstudio.com/docs/python/jupyter-support
+
+I believe it does everything you just asked for. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP14314760 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-04-16T20:42:16Z +++$+++ @rchiodo, Jupyter is not an IDE! It looks pretty, but pretty useless. Cells in Jupyter are pointless, it's really for a company presentation. It's not for serious code development.
+
+Anaconda comes with Jupyter Notebook.  It's quicker and better. No need to download VS Code for it. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP19672699 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-04-16T20:46:54Z +++$+++ Sorry Jupyter is overloaded here. We are using jupyter to run an IPython console. That doc link talks about if you're using Jupyter already, you can now use VS Code. The initial audience was datascientists.
+
+However it's really just an IPython console. Which is a REPL. +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP19672699 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-04-16T20:48:59Z +++$+++ Jupyter is both an editor and a set of APIs that we use under the covers to talk to the same backend that the Jupyter editor uses. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP19672699 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-04-16T20:50:44Z +++$+++ And when I said you need Jupyter installed, you specifically need the jupyter python module and its dependencies. 
+
+```
+pip install jupyter 
+```
+
+should do it. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP14314760 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-04-16T20:53:00Z +++$+++ I think it's quite stubborn to say you know what your users want.
+
+It's also quite naive to tell users they must it your way. They will abandon your product.
+
+I have Jupyter, it's not for serious programming. Also, I have Jupyter Notebook. It's works very nice, have you tried it?
+
+
+ +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP19672699 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-04-16T20:56:54Z +++$+++ I think you're misunderstanding my intent.
+
+We have this:
+![image](https://user-images.githubusercontent.com/19672699/56243408-5e29ee80-604f-11e9-9d8a-8225cedcfdf0.png)
+
+I'm suggesting this UI will meet your needs. 
+
+If this doesn't meet your needs, are you willing to go into more depth on what you want?
+ +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP19672699 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-04-16T20:59:14Z +++$+++ That window on the right behaves as a live REPL. You can type into it, you get a history of what's run, etc.  +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP14314760 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-04-16T21:10:52Z +++$+++ > If this doesn't meet your needs, are you willing to go into more depth on what you want?
+
+I am just asking if the Python extension can be fixed up. The current REPL is Editor+Terminal combo. Python is invoked from Terminal. 
+
+Terminal interface is hard to work with. What I am asking is:
+1. Highlight with left+shift keyboard combo actually works, not giving characters ;2D
+2. Breaking from a loop using Ctrl+C does not exit Python
+3. Aesthetic: have a cursor, not a bold black block
+
+These are existing problems in the extension. Just include it in the next update. 
+
+BTW, why did you close the thread after my first post? +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP19672699 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-04-16T21:19:48Z +++$+++ I closed this bug because I believed the window we have now would meet your needs. 
+
+It supports
+- left+shift etc. Its editor is a full blown editor and not the weird terminal one line thing
+- interrupt button (ctrl+c actually copies in the other repl).
+- You can change the cursor. Actually you can change this already in the regular REPL. It's a setting (interactive terminal cursor I think)
+
+We're not investing any effort into changing the VS code terminal, so I don't believe we can actually meet your original request. 
+
+If the new window doesn't work for you, can you explain why? +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP19672699 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-04-16T21:32:47Z +++$+++ At some point the new 'Python Interactive' window will likely become the default REPL for all python code. 
+
+So knowing why doing this doesn't work for people would be great. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP19672699 +++$+++ ROOT +++$+++ COM10 +++$+++ 2019-04-16T21:36:41Z +++$+++ The marketplace is kinda confusing. The 'Jupyter' extension is not the owner of this window. 
+
+The 'Python Extension' owns the window you took a screenshot of.
+
+Startup time is a problem we're trying to handle (all of it is starting the separate console in the background). 
+
+
+ +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP14314760 +++$+++ ROOT +++$+++ COM11 +++$+++ 2019-04-16T21:37:40Z +++$+++ I actually just tried it---the Jupyter extension. Boy, it was very slow. It hung for a few seconds while importing numpy, there was no response. Multi-line code run did not run smoothly. (see picture for error message)
+
+Also, the Marketplace says the Jupyter extension is no longer being maintained!
+
+![Screen Shot 2019-04-16 at 5 36 50 PM](https://user-images.githubusercontent.com/14314760/56245841-65142980-606e-11e9-9ead-a8a65abf7dae.png)
+ +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP19672699 +++$+++ ROOT +++$+++ COM12 +++$+++ 2019-04-16T21:38:02Z +++$+++ The error you have there is what an exception looks like. The code you ran must have had a relative path in it. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP14314760 +++$+++ ROOT +++$+++ COM13 +++$+++ 2019-04-16T21:49:33Z +++$+++ I wouldn't close the ticket so quickly. A lot people were also frustrated, you should let them talk!
+
+> Startup time is a problem we're trying to handle (all of it is starting the separate console in the background).
+
+It's probably faster to fix Python extension by adding few keyboard combos, rather fixing Jupyter with startup problems. But then again, you believe you know what we want better than what we tell you we actually want. +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP19672699 +++$+++ ROOT +++$+++ COM14 +++$+++ 2019-04-16T21:54:46Z +++$+++ The impression I'm getting is that closing a ticket is the same as ignoring your feedback.  +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP19672699 +++$+++ ROOT +++$+++ COM15 +++$+++ 2019-04-16T21:56:31Z +++$+++ With regards to the regular terminal, are you saying you wouldn't like if the default REPL became this new window?  +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP14314760 +++$+++ ROOT +++$+++ COM16 +++$+++ 2019-04-16T22:05:48Z +++$+++ I feel two people with oppositing opinions can sound more like a duel than a discussion.
+
+I am surprised that asking to include a few features in the next update is met with such resistance.
+
+REPL should have editor + console. It's standard and expected. 
+
+The Jupyter extension looks just..Jupyter. All the white spaces between lines. You can even x out the code chunk in console (see my picture). Why? We are testing and debugging code. We really don't care we had a piece of wrong code.
+
+The Jupyter extension looks more like a repackage Jupyter wanting to be the Python extension.
+
+![jupyter](https://user-images.githubusercontent.com/14314760/56247146-ee792b00-6071-11e9-8dda-a495fbf984d8.png)
+
+ +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP14314760 +++$+++ ROOT +++$+++ COM17 +++$+++ 2019-04-16T22:11:07Z +++$+++ Anyways, I think you get my point and what I am requesting. 
+
+If you refuse to, then you do. I will let others be the judge. +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP19672699 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-04-16T22:12:12Z +++$+++ So you don't like the look of it. It's too Jupyterish? 
+
+Modifying the current REPL is a large work item. We don't own it. VS Code proper does.  +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP14314760 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-04-16T22:21:36Z +++$+++ If you believe looks over functionality, then the Jupyter extension wins.
+
+VIM and Emacs have no looks. You can only go so far with what's on the outside. +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP14314760 +++$+++ ROOT +++$+++ COM20 +++$+++ 2019-04-16T22:29:37Z +++$+++ TBH, you really can't force down the throat of what tastes bland. Some, like me, will complain, others will quietly walk away.
+
+People are more likely to use a product recommended by their friend, than you trying to promote it on your website or social media.
+
+Your users are your best PR, listen to them!  +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP19672699 +++$+++ ROOT +++$+++ COM21 +++$+++ 2019-04-16T22:35:06Z +++$+++ If you don't like the new window, that's fine.
+
+If you don't want to give feedback on the new idea, because you just want us to fix the original REPL, that's fine too. 
+
+The likely plan moving forward is to replace the REPL with the new window though. 
+
+Something is obviously off with this plan (at least for you). 
+
+I'm trying to figure out what you don't like about it.
+
+The information I have so far is:
+- The UI isn't what you wanted
+- It's slow
+- You might as well just use Jupyter
+ +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP14314760 +++$+++ ROOT +++$+++ COM22 +++$+++ 2019-04-16T22:37:26Z +++$+++ Actually, please don't fix it. I am not paying you. And you believe you have the best idea, and that my request is too much.
+
+Have a good day! +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP19672699 +++$+++ ROOT +++$+++ COM23 +++$+++ 2019-04-16T22:40:36Z +++$+++ No I don't believe I have the best idea. If that was the case I would have ignored your request. Why else am I asking for feedback?
+
+Oh actually you also mentioned Matlab or R. Their REPL is what you're asking for?
+
+
+
+ +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP19672699 +++$+++ ROOT +++$+++ COM24 +++$+++ 2019-04-16T22:43:52Z +++$+++ I think you have a legitimate concern and I'm sorry if you feel like I'm ignoring you. 
+
+We really just want to do what it is users want. 
+
+Of course there's time constraints on all of the work we do. 
+
+So trying to meet user's expectations while also actually shipping stuff is what we attempt to do. +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP10497301 +++$+++ ROOT +++$+++ COM25 +++$+++ 2021-01-13T08:35:00Z +++$+++ > I think you're misunderstanding my intent.
+> 
+> We have this:
+> ![image](https://user-images.githubusercontent.com/19672699/56243408-5e29ee80-604f-11e9-9d8a-8225cedcfdf0.png)
+> 
+> I'm suggesting this UI will meet your needs.
+> 
+> If this doesn't meet your needs, are you willing to go into more depth on what you want?
+
+
+@rchiodo 
+How can I get to that setup? It looks like what I would need if I can run code fragments in my .py file with a shortcut (like shift+enter in terminal). So far I followed the links you provided and got to this stage 
+![image](https://user-images.githubusercontent.com/10497301/104426631-7b705180-5582-11eb-8450-1ba1b31ff728.png)
+
+I don't know how to run code on the left with a shortcut in the interactive window though.  +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP19672699 +++$+++ ROOT +++$+++ COM26 +++$+++ 2021-01-13T17:12:05Z +++$+++ @butterkaffee you can do a couple of things to get code in a python file to run in the interactive window.
+
+1. Add the ```# %%``` comment above a group of code you want to mark as a cell. Hit the 'Run Cell' link that appears after that.
+![image](https://user-images.githubusercontent.com/19672699/104485477-647c3000-557f-11eb-95e4-860d376dfe19.png)
+
+Actually that seems to be the only one working at the moment. There's supposed to be a command to run the current selection in the interactive window. Thanks for asking as you helped us find a bug. +++$+++ 0 +++$+++ 0

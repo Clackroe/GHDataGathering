@@ -1,0 +1,77 @@
+ROOT +++$+++ SP12960503 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-05-16T20:21:33Z +++$+++ fix or document proper configuration for specifying default output order I have an HP Photosmart Plus B210a which prints pages face up. I am trying to figure out how to configure Cups to print documents so that I don't have to reverse them by hand when they come out of the printer.
+
+I found [a discussion on linuxquestions.org](https://www.linuxquestions.org/questions/ubuntu-63/can-i-set-the-cups-output-order-to-always-print-in-reverse-order-746843/) which summarizes a recommended fix:
+
+     Add the line
+     *DefaultOutputOrder: "reverse"
+     to the file
+     /etc/cups/ppd/PrinterName.ppd
+
+I have tried this with varying results. I printed twelve two-page documents to try to investigate what is happening. I tried printing via the `lp` command, via Evince and via Okular. I tried using a ppd file with and without the `DefaultOutputOrder` line, and I also tried specifying a default output order with `lpoptions` of "reverse" or "normal":
+
+    lpoptions -dHP_Photosmart_Plus_B210a -o outputorder=reverse
+    ...
+    lpoptions -dHP_Photosmart_Plus_B210a -o outputorder=normal
+
+The results:
+
+* `lp`: Ignores ppd line, honors lpoptions setting
+* Evince: Ignores lpoptions setting, honors ppd
+* Okular: Ignores both lpoptions and ppd
+
+As with the reporter of #1679, I would have expected the PPD which is downloaded by default for my printer to give the "correct" behavior by default, which is to say, not requiring me to manually reverse long documents when they come out of the printer.
+
+I also tried the solution of #1679, using
+
+    lpadmin -p printer -o outputorder-default=reverse
+    lpadmin -p printer -o outputorder-default=normal
+
+This setting was honored by Evince but not by `lp` or Okular.
+
+Okular's print dialog allows the user to change the ouput ordering, but Evince's print dialog, which appears more "standard" to me, says "Page Ordering: Not available".
+
+There was some mention of all documents going through `pstops` as a final filter. If this is true then it should be possible for Cups to give users a single point at which to configure output ordering, which works uniformly across all applications which might submit print jobs to Cups. In either case it should be documented what is the preferred way to deal with face-up printers.
+
+I humbly offer my suggestion that for "outputorder=reverse" to work intuitively as a per-job option, then it should interact with the per-printer option as a parity bit, e.g. reverse+reverse=normal, rather than as an "override" (reverse+reverse=reverse). In my experimentation it seems to be the latter, and I think this should be documented because it is somewhat different from the way that other options like "page-ranges" work. If I write a script to print the odd pages in order and then the even pages in reverse, I feel I should be able to get the same result (manual duplex) regardless of the printer model. In any case where the `lp` man page says:
+
+      -o outputorder=reverse
+          Prints pages in reverse order.
+
+I think it maybe should say something like:
+
+      -o outputorder=(reverse|normal)
+          Overrides printer output-order setting for this job. With
+          "outputorder=reverse", document will be reversed on
+          face-down printers, and correctly ordered on face-up
+          printers; and vice-versa for "outputorder=normal".
+
+Here is my PPD file in case it helps: [HP_Photosmart_Plus_B210a.ppd](https://github.com/apple/cups/files/2010726/HP_Photosmart_Plus_B210a.ppd.txt)
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP488103 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-05-17T15:41:29Z +++$+++ OK, so I'm assuming from the list of applications you are using that you are using a Linux distribution of some sort. The PPD comes from the HPLIP project.
+
+Unfortunately, this isn't something we can help you with - either the cups-filters raster filter is not honoring the DefaultOutputOrder value in the PPD or the HPLIP driver isn't doing something right. Either way you need to start with your Linux distribution's bug reporter and go from there...
+
+ +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP12960503 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-05-17T17:55:26Z +++$+++ Michael, I can submit the bug elsewhere but do you really mean to suggest that I need to know about HPLIP and cups-filters to understand why three different tools process the options I've set (using your software) in three different ways? What about the other questions I asked? You don't think any of your documentation needs to be fixed? Can you point me to the place in the documentation where you say which of lpadmin/lpoptions/PPD solutions is expected to make the printer work correctly with all CUPS clients? Who takes responsibility when other projects don't know how to interface correctly with your software?
+
+Can you give the HP people a hint on how the HP filter would need to be modified so that it respects the `lpadmin` setting not just with Evince print jobs but also with jobs submitted by Okular and `lp`? Or how can Okular be modified so that it prints correctly on inkjets?
+
+Is there another brand of inkjet printers, which works correctly with CUPS?
+
+What about cups-pdf, I've noticed that when printing to the virtual PDF printer then `lp` doesn't respect the lpadmin setting, Evince doesn't respect the lpoptions setting, and Okular doesn't respect either. Is that still an HP problem? Are you ever grateful to receive bug reports about your project?
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP488103 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-05-17T18:01:15Z +++$+++ @archenemies The non-CUPS software is not following the standard interfaces that CUPS provides. IOW, this is either a bug in HPLIP or cups-filters. If they follow the standard interfaces you won't have to do a damned thing to have things Just Work™. We can't fix software that isn't ours...
+
+As for pstops, no not all jobs get routed through there. Maybe 18 years ago that was the case, but not today.
+
+As for the documentation, it is correct if the underlying driver or filters follow the standard interfaces.
+ +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP12960503 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-05-18T01:58:12Z +++$+++ So cups-pdf is HP's problem too? Is there any Linux software you can name that interfaces with CUPS correctly?
+
+It would help to have an answer to this question, relating to the configuration of face-up printers:
+
+"Can you point me to the place in the documentation where you say which of lpadmin/lpoptions/PPD solutions is expected to make the printer work correctly with all CUPS clients?"
+ +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP488103 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-05-18T14:38:09Z +++$+++ cups-pdf is from another developer. Both depend on cups-filters on Linux, which probably means that the problem lies with cups-filters.
+
+We do not document printing solutions for Linux, working or otherwise. We don't write or support the software, and we don't make the distributions. +++$+++ 0 +++$+++ 0

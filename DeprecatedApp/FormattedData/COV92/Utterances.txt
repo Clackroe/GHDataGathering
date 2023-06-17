@@ -1,0 +1,129 @@
+ROOT +++$+++ SP234019 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-08-30T18:06:50Z +++$+++ fmt: add examples Let's add examples. I think it would be good to add examples to each function (if possible?) as well as to illustrate some points - not every example should make every point but it would be good to cover these.
+
+- how do %d, %s, %q, %v differ
+
+- how do you do left/right padding
+
+- decimal formatting
+
+- how does "ln" ending vary from "f" ending
+
+When you open a change, put this at the bottom of the commit message:
+
+```
+Updates golang/go#27376.
+```
+
+That way gopherbot will post a comment here with a link to your CL.
+
+Add a comment if you want to fix one and I'll put your name next to the func in question.
+
+- [x] `func Errorf(format string, a ...interface{}) error`: @ianzapolsky
+
+- [x] func Fprint(w io.Writer, a ...interface{}) (n int, err error)
+
+- [ ] `func Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error)`: @MaerF0x0
+
+- [x] `func Fprintln(w io.Writer, a ...interface{}) (n int, err error)`: @waits 
+
+- [ ] `func Fscan(r io.Reader, a ...interface{}) (n int, err error)`: @andriisoldatenko
+
+- [ ] func Fscanf(r io.Reader, format string, a ...interface{}) (n int, err error)
+
+- [x] `func Fscanln(r io.Reader, a ...interface{}) (n int, err error)`: @mfrw
+
+- [x] func Print(a ...interface{}) (n int, err error)
+
+- [ ] `func Printf(format string, a ...interface{}) (n int, err error)`: @mooreds 
+
+- [x] `func Println(a ...interface{}) (n int, err error)`: @techmexdev
+
+- [ ] func Scan(a ...interface{}) (n int, err error)
+
+- [ ] func Scanf(format string, a ...interface{}) (n int, err error)
+
+- [ ] func Scanln(a ...interface{}) (n int, err error)
+
+- [x] func Sprint(a ...interface{}) string
+
+- [x] `func Sprintf(format string, a ...interface{}) string`: @venilnoronha
+
+- [x] `func Sprintln(a ...interface{}) string`: @drewvanstone
+
+- [ ] func Sscan(str string, a ...interface{}) (n int, err error)
+
+- [ ] func Sscanf(str string, format string, a ...interface{}) (n int, err error)
+
+- [ ] func Sscanln(str string, a ...interface{}) (n int, err error)
+
+- [ ] type Formatter
+
+- [x] type GoStringer
+
+- [ ] type ScanState
+
+- [ ] type Scanner
+
+- [ ] type State
+
+- [x] type Stringer
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP1722758 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-08-30T18:13:28Z +++$+++ `Sprintf(format string, a ...interface{}) string` +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP10700721 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-08-30T18:13:33Z +++$+++ I can do  `func Println(a ...interface{}) (n int, err error)` +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP1755679 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-08-30T18:13:56Z +++$+++ I'll do `func Errorf(format string, a ...interface{}) error` +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP811297 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-08-30T18:19:56Z +++$+++ I'll do `func Sprintln(a ...interface{}) string` +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP972475 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-08-30T18:26:04Z +++$+++ I'll do `func Printf(format string, a ...interface{}) (n int, err error)` +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP234019 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-08-30T18:31:50Z +++$+++ @waits there is actually a CL open for that one at the moment from @mooreds https://github.com/golang/go/issues/27349 - I should have added it to the sheet. how about Fprintf? +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP247846 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-08-30T18:37:04Z +++$+++ I'll do `func Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error)`
+ +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP972475 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-08-30T18:39:19Z +++$+++ Fprintf was taken also, I'll take `Fprintln` +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP1755679 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-08-30T19:44:54Z +++$+++ Anyone know how often the official go documentation is updated? i.e. how long our commits should take to show up here: https://golang.org/pkg/fmt/ +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP234019 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-08-30T19:47:40Z +++$+++ They should appear at tip.golang.org almost immediately, as I believe that project fetches from HEAD every 15 minutes.
+
+The docs on golang.org will update the next time there's a new Go release, or earlier if the patches are backported from master (which targets Go 1.12) to the Go 1.11.1 point release. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP234019 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-08-30T19:53:21Z +++$+++ The problem with updating golang.org is if we add some new API for Go 1.12 (like strings.Builder) it would not be good if it showed up in the docs before most people were able to use it. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP247846 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-08-30T20:33:26Z +++$+++ Is there a way we can run our new ExampleFunc locally to ensure it works? Else I can copy it to play.golang.org
+
+ +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP234019 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-08-30T20:36:34Z +++$+++ Yes, run `go get golang.org/x/tools/cmd/godoc` and then start godoc:
+
+```
+GOROOT=/path/to/your/contribution-repo godoc -http=:6060
+```
+
+Open localhost:6060/fmt in your browser and your changes should be there. +++$+++ 2 +++$+++ 0
+COM13 +++$+++ SP234019 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-08-30T20:37:19Z +++$+++ Alternatively you can create a new `fmt` repo on Github, copy the source files, push your changes there, then go to e.g. godoc.org/github.com/yourname/fmt to see the docs. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP8566911 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-08-30T21:33:28Z +++$+++ Change https://golang.org/cl/132375 mentions this issue: `fmt: add doc example for Fprintf` +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP234019 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-08-30T21:35:03Z +++$+++ Looking great! https://tip.golang.org/pkg/fmt/ +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP4929861 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-08-31T06:17:35Z +++$+++ I'll  do `func Fscanln(r io.Reader, a ...interface{}) (n int, err error)` +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP1374633 +++$+++ ROOT +++$+++ COM16 +++$+++ 2018-08-31T12:28:59Z +++$+++ @kevinburke I can create example for `Fscan`. +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP811297 +++$+++ ROOT +++$+++ COM17 +++$+++ 2018-08-31T16:37:46Z +++$+++ `Sprintln` is done +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP8566911 +++$+++ ROOT +++$+++ COM18 +++$+++ 2018-08-31T18:28:50Z +++$+++ Change https://golang.org/cl/132675 mentions this issue: `fmt: add example for Fscanln` +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP2303039 +++$+++ ROOT +++$+++ COM19 +++$+++ 2018-09-03T18:12:04Z +++$+++ I'll do `GoStringer` +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP8566911 +++$+++ ROOT +++$+++ COM20 +++$+++ 2018-09-03T18:48:29Z +++$+++ Change https://golang.org/cl/133075 mentions this issue: `fmt: add example for GoStringer interface` +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP8566911 +++$+++ ROOT +++$+++ COM21 +++$+++ 2018-09-05T06:42:26Z +++$+++ Change https://golang.org/cl/133455 mentions this issue: `fmt: add example for Fprint` +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP8566911 +++$+++ ROOT +++$+++ COM22 +++$+++ 2018-09-07T11:53:38Z +++$+++ Change https://golang.org/cl/134035 mentions this issue: `fmt: add example for Print` +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP8566911 +++$+++ ROOT +++$+++ COM23 +++$+++ 2018-09-07T12:04:03Z +++$+++ Change https://golang.org/cl/134036 mentions this issue: `fmt: add example for Sprint` +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP4324516 +++$+++ ROOT +++$+++ COM24 +++$+++ 2018-09-07T12:44:59Z +++$+++ Replacing with issue https://github.com/golang/go/issues/27554.
+
+Please stop adding examples to the package for now. +++$+++ 1 +++$+++ 0
+COM26 +++$+++ SP35892409 +++$+++ ROOT +++$+++ COM25 +++$+++ 2018-09-08T21:05:33Z +++$+++ > The problem with updating golang.org is if we add some new API for Go 1.12 (like strings.Builder) it would not be good if it showed up in the docs before most people were able to use it.
+
+First off, I don't see how this could be an issue if you are having docs per version (docs for 1.11, docs for 1.12, and so on), and secondly, what is `strings.Builder` and do we really need it? Are we going to have `strings.Factory`, too? For a moment I thought go is finally taking a better route, but it makes me reconsider that thought.
+
+On another note, yes, I agree with Rob here. Inconsistency has been a problem for go, it just seems like people come and write completely different and random examples to similar, related functions. That's not how it should be done. Apparently Rob had to assign it to himself, and tell others to stop posting examples for this reason. Thanks Rob, this chaotic madness needs to stop.
+
+Go linters complain when exported variables or constants are not documented (despite them being obvious in many cases), yet when core developers make major changes to go, they keep the old documentation, and don't even bother making it up-to-date.
+
+Excuse me for my tone, but it irks me a bit, anyways: thanks for putting an end to it, for the time being. +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP3194333 +++$+++ ROOT +++$+++ COM26 +++$+++ 2018-09-09T12:23:03Z +++$+++ Please do keep a polite tone.  Thanks.
+
+The comment about updating golang.org was in the context of somebody asking how they could see the current docs.  The answer was: use tip.golang.org, with an explanation for why golang.org is not updated.
+
+For `strings.Builder` see https://golang.org/pkg/strings/#Builder . +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP35892409 +++$+++ ROOT +++$+++ COM27 +++$+++ 2018-09-09T13:08:57Z +++$+++ Is there any particular reason for why it's not called `strings.Buffer`, next to `bytes.Buffer` (which exists)?
+
+It was a neutral-tone, you might have never actually attached or imagined negative connotations to it if it weren't for me saying "excuse me for my tone", which I have only said because I know how often people imagine hostility where there is none. :relaxed:  +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP3194333 +++$+++ ROOT +++$+++ COM28 +++$+++ 2018-09-09T13:47:32Z +++$+++ `bytes.Buffer` is also an `io.Reader`, `strings.Builder` is not.
+
+I disagree about the tone; phrases like "this chaotic madness" and statements that the core developers do not keep documentation up to date, without giving any examples, are not helpful.  Please see https://golang.org/conduct; search for "Avoid destructive behavior".  Thanks. +++$+++ 1 +++$+++ 0

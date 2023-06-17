@@ -1,0 +1,687 @@
+ROOT +++$+++ SP1897962 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-09-17T08:58:08Z +++$+++ mount.mounted does not handle blanks properly Currently it is not possible to mount a filesystem to a mount point that contains blanks.
+
+There are many problems in the ``states.mount.mounted`` code path, e.g. the mount command arguments are not quoted in the ``modules.mount.mount`` function, see 
+https://github.com/saltstack/salt/blob/develop/salt/modules/mount.py#L1237. 
+
+Code should look like this IMO:
+```
+cmd = 'mount {0} {1} {2} '.format(args, device, shlex.quote(name))
+```
+But this will fix only a small piece of the whole problem.
+
+Another one is that ``states.mount.mounted`` does not detect correctly that the filesystem might be mounted already, i think it's because the key in the active table is not unquoted, so a comparison between
+``/srv/dev-disk-by-label-My\040Passport\040Blue`` and the specified ``/srv/dev-disk-by-label-My Passport Blue`` fails.
+
+To me it looks like the whole mount state and module is not able to handle blanks in device names and mount points properly.
+
+Example SLS:
+```
+mount_fs_with_label:
+  mount.mounted:
+    - name: "/srv/dev-disk-by-label-My Passport Blue"
+    - device: "/dev/disk/by-label/My\\x20Passport\\x20Blue"
+    - fstype: ext4
+    - mkmnt: True
+    - persist: False
+    - mount: True
+```
+
+Result:
+```
+          ID: mount_fs_with_label
+    Function: mount.mounted
+        Name: /srv/dev-disk-by-label-My Passport Blue
+      Result: False
+     Comment: mount: bad usage
+              Try 'mount --help' for more information.
+     Started: 08:31:10.286521
+    Duration: 181.307 ms
+     Changes: 
+```
+
+```
+# salt-call mount.active
+...
+ /srv/dev-disk-by-label-My\040Passport\040Blue:
+        ----------
+        alt_device:
+            None
+        device:
+            /dev/sda1
+        fstype:
+            ext4
+        opts:
+            - rw
+            - noexec
+            - relatime
+            - jqfmt=vfsv0
+            - usrjquota=aquota.user
+            - grpjquota=aquota.group
+...
+```
+
+```
+# ls -alh /dev/disk/by-label/
+total 0
+drwxr-xr-x 2 root root  60 Sep 17 08:29  .
+drwxr-xr-x 7 root root 140 Sep 17 08:29  ..
+lrwxrwxrwx 1 root root  10 Sep 17 08:29 'My\x20Passport\x20Blue' -> ../../sda1
+```
+
+```
+# ls -alh /srv
+total 28K
+drwxr-xr-x  7 root root    4.0K Sep 17 08:07  .
+drwxr-xr-x 21 root root    4.0K Sep 16 16:07  ..
+drwxr-xr-x  4 root root    4.0K Sep 13 13:40  dev-disk-by-id-scsi-0QEMU_QEMU_HARDDISK_drive-scsi0-0-2-part1
+drwxr-xr-x  2 root root    4.0K Sep 16 16:11 'dev-disk-by-label-My Passport Blue'
+drwxr-xr-x  2 ftp  nogroup 4.0K Sep 10 14:23  ftp
+drwxr-xr-x  3 root root    4.0K Sep 16 16:07  pillar
+drwxr-xr-x  5 root root    4.0K Sep 16 16:07  salt
+```
+
+```
+# cat /etc/fstab
+proc /proc proc defaults 0 0
+UUID=90ee6298-385f-4841-bfdc-8b1e0e0ae5c1 / ext4 errors=remount-ro 0 1
+# >>> [openmediavault]
+/dev/disk/by-label/My\x20Passport\x20Blue		/srv/dev-disk-by-label-My\040Passport\040Blue	ext4	defaults,nofail,user_xattr,noexec,usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv0,acl	0 2
+# <<< [openmediavault]
+```
+
+```
+# cat /proc/self/mountinfo
+...
+265 25 8:1 / /srv/dev-disk-by-label-My\040Passport\040Blue rw,noexec,relatime shared:148 - ext4 /dev/sda1 rw,jqfmt=vfsv0,usrjquota=aquota.user,grpjquota=aquota.group
+...
+```
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP937774 +++$+++ ROOT +++$+++ ROOT +++$+++ 2021-03-28T04:34:34Z +++$+++ Hello, @votdev 
+
+I am trying to build myself home NAS with old Atom mini-ITX board... So i install OMV5, i plug in dad's old NTFS drive... and here we go...
+
+Frankly, i wish Salt guys put the comments inside this source, listing all the bugs related to this module. So any hacker which for whatever reason would change it - would be instantly notifie on old pending bugs.
+
+Salt seems extremely fragile here, probably no one else except for OMV5 uses it for partitions. Maybe OMV6 could do it outside Salt? Like good old UDEV rules or anything. I mean, before Salt porject might decide to drop this functionality that almost no one use, instead of burden of maintaining it for OMV5 alone....
+
+Well, ranting aside, i am rather puzzled with your _device: "/dev/disk/by-label/My\\x20Passport\\x20Blue"_
+Where do you even get this hex substitution from???
+
+Thing is, the whole mounting escaping is one uber-ancient legacy mess. Putting it here so maybe someone would use it. I spent like 3 hours googling around and experimenting with Python that i never used before. Tryied to google some standard about Posix/Linux/bash filename mangling/escaping.... and then Python module to undo it. To no avail.
+
+Okay, so, to document it down.
+
+- mtab/fstab and friends is one-of-a-kind ancient mess.
+- it started with ancient BSD (not FreeBSD) function strunvis, which behaviour  not documented. Probably that was OS-specific function (a la virtual methods). http://manpages.org/strunvis/3
+- when Linux was mimicking good old BSd it only made ad hoc substitutions for 4 specific chars. There is no any systematic/generic pattern at all.
+
+```
+static inline void mangle(struct seq_file *m, const char *s)
+{
+	seq_escape(m, s, " \t\n\\");
+}
+```
+https://elixir.bootlin.com/linux/latest/source/fs/proc_namespace.c#L84
+
+```
+				R("\\", '\\'),
+				R("011", '\t'),
+				R("012", '\n'),
+				R("040", ' '),
+				R("134", '\\')
+```
+https://sources.debian.org/src/sysvinit/2.96-6/src/fstab-decode.c/
+
+So, whatever comes from Linux mounts information - should be de-mangled for those four special cases.
+Every single space-separated column of every single line.
+Ugly, and undocumented, but that is what it is. And, frankly, it is not that hard...
+
+BUT, why do you want to compare with some arbitrary hex-escaped string? what can be a real use-case for that???
+Linux kernel just does not have hex-escaping code for disk mounts.
+
+Now, to be frank, even this would NOT be enough, because i can have multiple disks with the same partition label. Like many USB thumb drives with "DATA" partition. I can even have several partitions with the same name on singe disk!
+
+Again, it can be fixed by detecting collisions and adding extra data, like counters or GUID or whatever, but...
+
+What gonna OMV do if OMV's user has two drives with partitions having same labels, and then he hotplugs one disk, or another, or both in any order? Is it race condition now? Is it okay for OMV to have race condition?
+Seems whatever use cases Salt imagined for them here is very different from what OMV users might face. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP937774 +++$+++ ROOT +++$+++ COM0 +++$+++ 2021-03-28T04:58:15Z +++$+++ Output from Linux's mount
+`/dev/sdb1 on /media/U:NTFS Disk type fuseblk (rw,relatime,user_id=0,group_id=0,allow_other,blksize=4096)`
+
+Spaces are NOT escaped there!
+Dunno how it is done on BSD/Darwin
+
+And then we have this...
+```
+# salt-call mount.list_mounts
+local:
+    ----------
+    /:
+        /dev/sda1
+......
+    /media/U:NTFS:
+        /dev/sdb1
+    /proc:
+        proc
+........
+```
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP937774 +++$+++ ROOT +++$+++ COM1 +++$+++ 2021-03-28T06:26:46Z +++$+++ @votdev  re: escaping names for calling `mount` - i think that is what was intended to do so:
+
+`"device": device_name.replace("\\040", "\\ "),` inside `def _active_mountinfo()`
+but that was only called when from `def active(extended=False)` then Extended is set to True, if ever
+
+And similar code inside `def _resolve_user_group_names(opts):`
+
+So it seems Salt prefers to keep space-containing names mangled, but mangled differently.
+So, no escaping when calling `mount` or `umount` is needed,
+
+---
+
+I am not even sure that de-escaping mount point likes `xxx\040yyy` in Salt would be correct way to go.
+
+There can be a point: since that module serves as abstraction layer and should hide UNIX-likes peculiarities from generic Salt modules, all IDs better be unmangled. But not sure. 
+
+However IF to do this de-mangling, then quoting arguments for calling `mount` becomes required indeed.
+
+But anyway, this line i believe  should not had ended in /etc/fstab and whoever added it was at fault...
+
+```
+# >>> [openmediavault]
+/dev/disk/by-label/My\x20Passport\x20Blue	
+``` +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP937774 +++$+++ ROOT +++$+++ COM2 +++$+++ 2021-03-28T09:38:18Z +++$+++ @votdev i made quite many changes in that mounts.py - and now i am thinking about undoing almost all of them... Lack of any documentation...
+
+I am coming to believe that, while never documented, the intention of that Salt module was to always use fstab-like escaped strings for all their IDs. If not, i would like to see specific calls into other Salt modules, which expect different convention for disk names.
+
+I really did quite a number of changes to de-escape \040 and other special chars. And probably that was only breaking things.
+
+Except for one place though, which i believe should be patched.
+
+```
+import pathlib 
+
+def list_mounts(): # for debug
+    return _list_mounts()
+
+def _list_mounts():
+    ret = {}
+    idx_mpoint = 2
+    # one cannot trust `mount` with space-containing paths
+    # at least on Linux - https://github.com/saltstack/salt/issues/54508
+
+    if __grains__["kernel"] == "Linux":
+        idx_mpoint = 1
+        mounts = pathlib.Path('/proc/mounts').read_text()
+    elif __grains__["os"] in ["MacOS", "Darwin"]:
+        mounts = __salt__["cmd.run_stdout"]("mount")
+    else:
+        mounts = __salt__["cmd.run_stdout"]("mount -l")
+
+    for line in mounts.split("\n"):
+        comps = re.sub(r"\s+", " ", line).split()
+        if len(comps) > idx_mpoint:
+##            if __grains__["kernel"] == "Linux":
+##               comps[0] = _Linux_fstab_unmangle( comps[0] )
+##               comps[idx_mpoint] = _Linux_fstab_unmangle( comps[idx_mpoint] )
+            ret[comps[idx_mpoint]] = comps[0]
+    return ret
+```
+
+Would you keep implementation non-patched and would you call `salt-call mount.list_mounts` - you would see the mount point broken, cut off on the first space. This was probably THE bug.
+
+----------------
+
+Okay, keeping my stolen Linux archeologist hat on
+
+https://unix.stackexchange.com/questions/56291/what-causes-dev-disk-by-label-to-be-populated
+
+```
+mount -l 
+   .....
+/dev/sdb1 on /media/U:NTFS Disk type fuseblk (rw,relatime,user_id=0,group_id=0,allow_other,blksize=4096) [U - Arch-2 Hitachi_2Tb_7200]
+
+root@diskoteka:/media# ls /dev/disk/by-label/
+'U\x20-\x20Arch-2\x20Hitachi_2Tb_7200'
+
+root@diskoteka:/media# blkid -o udev -p /dev/sdb1
+ID_FS_LABEL=U_-_Arch-2_Hitachi_2Tb_7200
+ID_FS_LABEL_ENC=U\x20-\x20Arch-2\x20Hitachi_2Tb_7200
+ID_FS_UUID=C6705D84705D7BDD
+ID_FS_UUID_ENC=C6705D84705D7BDD
+ID_FS_TYPE=ntfs
+ID_FS_USAGE=filesystem
+ID_PART_TABLE_TYPE=atari
+ID_PART_ENTRY_SCHEME=dos
+ID_PART_ENTRY_UUID=78fdd16a-01
+ID_PART_ENTRY_TYPE=0x7
+ID_PART_ENTRY_NUMBER=1
+ID_PART_ENTRY_OFFSET=2048
+ID_PART_ENTRY_SIZE=3907024896
+ID_PART_ENTRY_DISK=8:16
+```
+
+So, it is UDEV or SYSTEMD which creates those weird hex-mangled names. Okay. Though putting them into /etc/fstab still feels wrong. `man mount` suggests against it and suggests using `UUID=...` and `LABEL=...` flags instead.
+
+Now back to your
+```
+Example SLS:
+
+mount_fs_with_label:
+  mount.mounted:
+    - name: "/srv/dev-disk-by-label-My Passport Blue"
+```
+
+I don't know what it should mean in specific files/commands terms. But i feel this is the error on OMV part. And perhaps lack of documentation/understanding/forecasting on Salt part.
+
+```
+def mount(
+    name, device=False, mkmnt=False, fstype="", opts="defaults", user=None, util="mount"
+):
+.....
+        salt '*' mount.mount /mnt/foo /dev/sdz1 True
+.....
+    if device:
+        cmd += "{} {} {} ".format(args, device, name)
+    else:
+        cmd += "{} ".format(name)
+```
+
+My inner archeologist says that the `name` AKA mount point AKA target directory is meant to be in bash-mangled format.
+IOW OMV should had created "\ " containing fileneames:
+```
+  mount.mounted:
+    - name: "/srv/dev-disk-by-label-My\ Passport\ Blue"
+```
+Linux `man mount` also suggests against the second option due to ambiguity, where the single parameter is mount point name or device file name. I don't know if other UNIX-likes but Linux support those precision keys.
+
+```
+       --source device
+              If only one argument for the mount command is given  then  the
+              argument might be interpreted as target (mountpoint) or source
+              (device).  This option allows to explicitly  define  that  the
+              argument is the mount source.
+
+       --target directory
+              If  only  one argument for the mount command is given then the
+              argument might be interpreted as target (mountpoint) or source
+              (device).   This  option  allows to explicitly define that the
+              argument is the mount target.
+```
+
+So i think that part in `def mount` should better be written as
+
+```
+    if device:
+        cmd += "{} {} {} ".format(args, device, name)
+    else:
+        if __grains__["kernel"] == "Linux":
+             cmd += "--target "
+        cmd += "{} ".format(name)
+``` +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP1897962 +++$+++ ROOT +++$+++ COM3 +++$+++ 2021-03-28T09:38:45Z +++$+++ @the-Arioch I don't think this is the right place to discuss OMV related things.
+
+> Well, ranting aside, i am rather puzzled with your device: "/dev/disk/by-label/My\x20Passport\x20Blue"
+> Where do you even get this hex substitution from???
+
+Escaping blanks is not my idea, it is used by every userland command that processes mount points, e.g. `mount`.
+Either `systemd` want to have escaped paths in mount units too, there is a special command to convert
+paths for you, see `systemd-escape`.
+
+> Salt seems extremely fragile here, probably no one else except for OMV5 uses it for partitions. 
+> Maybe OMV6 could do it outside Salt?
+
+OMV already workarounds this issue, thus it is not affected by this reported issue here.
+
+> I mean, before Salt porject might decide to drop this functionality that almost no one use, 
+> instead of burden of maintaining it for OMV5 alone....
+
+I don't think Salt will drop `mount.mounted` because it is a somewhat essential functionality of Linux systems.
+
+> Now, to be frank, even this would NOT be enough, because i can have multiple disks with the 
+> same partition label. Like many USB thumb drives with "DATA" partition. I can even have several 
+> partitions with the same name on singe disk!
+
+You can do that, but don't blame the software then. Using USB devices in a NAS is no good idea, but that's a different thing. IMO devices using in a NAS should be already connected to the NAS, no plug-and-play, this is not how a NAS is intended to work. If devices are always connected, then you will never run into the situation that duplicate labels might harm your system. This issue is user introduced and should be handled by them.
+
+If you want to discuss this issue please open an issue in the OMV Git repository. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP1897962 +++$+++ ROOT +++$+++ COM4 +++$+++ 2021-03-28T09:46:06Z +++$+++ > So, it is UDEV or SYSTEMD which creates those weird hex-mangled names. Okay. Though putting them into /etc/fstab still feels wrong. 
+
+I think it is ok to use systemd escaped paths in `/etc/fstab` since systemd handles filesystem mounting nowadays. +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP937774 +++$+++ ROOT +++$+++ COM5 +++$+++ 2021-03-28T10:15:49Z +++$+++ @votdev i meantioned systemd because of https://github.com/systemd/systemd/issues/12018
+
+See... i know very little about Linux and nothing about Python, so i was googling everything i could think of :-)
+
+But i am glad to hear from you.  So, how can we scratch this itch, is Salt team is not with us on it...
+
+Can you make some scripts demonstrting the alleged Salt bug that i could run from bash ? Also are there some hidden option in OMV5 to re-enable mounting space-containing partitions?
+
+
+ +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP937774 +++$+++ ROOT +++$+++ COM6 +++$+++ 2021-03-28T10:17:44Z +++$+++ But i really am worried about potential race conditions in OMV when different partitions would have same label... IF you use label as "primary key" as persistent ID for all the other settings (user rights, sharing folders, etc), it might be quite a gotcha... +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP937774 +++$+++ ROOT +++$+++ COM7 +++$+++ 2021-03-28T10:26:46Z +++$+++ Some of the "deep changes" i mentioned above. I now think those are dead end, but just in case they would be useful to someone, maybe even us later.
+
+Using "Raw" non-escaped string would probably be more proper design, but might really require deep refactoring of many Salt modules and then testing on many different systems. Horror...
+
+```
+def _Linux_fstab_unmangle(fs_str):
+    # rather ugly ad-hoc substitutions cosplaying ancient BSD's non-documented strunvis(...)
+    # https://sources.debian.org/src/sysvinit/2.96-6/src/fstab-decode.c/
+    # https://elixir.bootlin.com/linux/latest/source/fs/proc_namespace.c#L84
+    fs_str = fs_str.replace(r"\011", "\t").replace(r"\012", "\n")
+    fs_str = fs_str.replace(r"\040", r" ")
+    fs_str = fs_str.replace(r"\134", "\\").replace(r"\\", "\\")
+    return fs_str
+
+def _Str_Nop(text):
+    return str(text)
+
+def _fsfilter():
+    if __grains__["kernel"] == "Linux":
+        return _Linux_fstab_unmangle
+    return _Str_Nop
+```
+
+and then
+
+```
+def _list_mounts():
+    ret = {}
+    idx_mpoint = 2
+    # one cannot trust `mount` with space-containing paths
+    # at least on Linux - https://github.com/saltstack/salt/issues/54508
+
+    if __grains__["kernel"] == "Linux":
+        idx_mpoint = 1
+        mounts = pathlib.Path('/proc/mounts').read_text()
+    elif __grains__["os"] in ["MacOS", "Darwin"]:
+        mounts = __salt__["cmd.run_stdout"]("mount")
+    else:
+        mounts = __salt__["cmd.run_stdout"]("mount -l")
+
+    for line in mounts.split("\n"):
+        comps = re.sub(r"\s+", " ", line).split()
+        if len(comps) > idx_mpoint:
+            if __grains__["kernel"] == "Linux":
+               comps[0] = _Linux_fstab_unmangle( comps[0] )
+               comps[idx_mpoint] = _Linux_fstab_unmangle( comps[idx_mpoint] )
+            ret[comps[idx_mpoint]] = comps[0]
+    return ret
+
+
+def _active_mountinfo_linux(ret):
+    _list = _list_mounts()
+    _fi = _fsfilter()
+    filename = "/proc/self/mountinfo"
+    if not os.access(filename, os.R_OK):
+        msg = "File not readable {0}"
+        raise CommandExecutionError(msg.format(filename))
+
+    if "disk.blkid" not in __context__:
+        __context__["disk.blkid"] = __salt__["disk.blkid"]()
+    blkid_info = __context__["disk.blkid"]
+
+    with salt.utils.files.fopen(filename) as ifile:
+        for line in ifile:
+            comps = salt.utils.stringutils.to_unicode(line).split()
+            device = comps[2].split(":")
+            # each line can have any number of
+            # optional parameters, we use the
+            # location of the separator field to
+            # determine the location of the elements
+            # after it.
+            _sep = comps.index("-")
+            device_name = _fi(comps[_sep + 2])
+            device_uuid = None
+            device_label = None
+            if device_name:
+                device_uuid = blkid_info.get(device_name, {}).get("UUID")
+                device_uuid = device_uuid and device_uuid.lower()
+                device_label = blkid_info.get(device_name, {}).get("LABEL")
+            ret[_fi(comps[4])] = {
+                "mountid": comps[0],
+                "parentid": comps[1],
+                "major": device[0],
+                "minor": device[1],
+                "root": _fi(comps[3]),
+                "opts": _resolve_user_group_names(comps[5].split(",")),
+                "fstype": comps[_sep + 1],
+                "device": device_name, ## .replace("\\040", "\\ "),
+                "alt_device": _list.get(_fi(comps[4]), None),
+                "superopts": _resolve_user_group_names(comps[_sep + 3].split(",")),
+                "device_uuid": device_uuid,
+                "device_label": device_label,
+            }
+    return ret
+
+
+def _active_mounts_linux(ret):
+    """
+    List active mounts on Linux systems
+    """
+    _list = _list_mounts()
+    _fi = _fsfilter()
+    filename = "/proc/self/mounts"
+    if not os.access(filename, os.R_OK):
+        msg = "File not readable {0}"
+        raise CommandExecutionError(msg.format(filename))
+
+    with salt.utils.files.fopen(filename) as ifile:
+        for line in ifile:
+            comps = salt.utils.stringutils.to_unicode(line).split()
+            ret[_fi(comps[1])] = {
+                "device": _fi(comps[0]),
+                "alt_device": _list.get(_fi(comps[1]), None),
+                "fstype": comps[2],
+                "opts": _resolve_user_group_names(comps[3].split(",")),
+            }
+    return ret
+``` +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP937774 +++$+++ ROOT +++$+++ COM8 +++$+++ 2021-03-28T11:05:59Z +++$+++ @votdev  > OMV already workarounds this issue
+
+by failing to mount the disk? because i can not mount disk in OMV5 or i would never learn about this issue.
+failing to mount disk does not look like work-around at all.
+
+let's think what we can do to make space-containing partitions mounted by OMV. It seems to be a kind of "communication breakdown" between Salt and OMV5, they expect and provide for mututally incompatible things.
+
+here is minimally patched 
+/usr/lib/python3/dist-packages/salt/modules/mount.py 
+
+[mount.py.gz](https://github.com/saltstack/salt/files/6217180/mount.py.gz)
+
+
+it makes space-containing mount point visible. If there still is something not working - i can not see what it is and how could i test it using `salt-call` scripts
+
+```
+# salt-call mount.list_mounts
+local:
+    ----------
+    /:
+        /dev/sda1
+    /dev:
+        udev
+    /dev/hugepages:
+        hugetlbfs
+    /dev/mqueue:
+        mqueue
+    /dev/pts:
+        devpts
+    /dev/shm:
+        tmpfs
+    /media/U:NTFS\040Disk:
+        /dev/sdb1
+    /proc:
+        proc
+......
+# salt-call mount.active
+....
+   /media/U:NTFS\040Disk:
+        ----------
+        alt_device:
+            /dev/sdb1
+        device:
+            /dev/sdb1
+        fstype:
+            fuseblk
+        opts:
+            - rw
+            - relatime
+            - user_id=0
+            - group_id=0
+            - allow_other
+            - blksize=4096
+..........
+# salt-call mount.active extended=true
+......
+   /media/U:NTFS\040Disk:
+        ----------
+        alt_device:
+            /dev/sdb1
+        device:
+            /dev/sdb1
+        device_label:
+            U - Arch-2 Hitachi_2Tb_7200
+        device_uuid:
+            c6705d84705d7bdd
+        fstype:
+            fuseblk
+        major:
+            8
+        minor:
+            17
+        mountid:
+            427
+        opts:
+            - rw
+            - relatime
+        parentid:
+            26
+        root:
+            /
+        superopts:
+            - rw
+            - user_id=0
+            - group_id=0
+            - allow_other
+            - blksize=4096
+```
+and also
+```
+root@diskoteka:/media# salt-call mount.is_mounted name="/media/U:NTFS Disk"
+local:
+    False
+root@diskoteka:/media# salt-call mount.is_mounted name="/media/U:NTFS\ Disk"
+local:
+    False
+root@diskoteka:/media# salt-call mount.is_mounted name="/media/U:NTFS\040Disk"local:
+    True
+``` +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP937774 +++$+++ ROOT +++$+++ COM9 +++$+++ 2021-03-28T11:41:02Z +++$+++ And now the most curious thing to me. I changed the partition label, then i mounted the disk from OMV Web UI and...
+
+....and there is no any space-containing mountpoint path regardless of partition label.
+The "workaround" seems to needlessly shoot down the perfectly working function!
+
+Maybe it is only with MBR/NTFS disks, maybe GPT or XFS disks would use something else in `fstab`, dunno
+
+```
+# mount -l
+    ....
+/dev/sdb1 on /srv/dev-disk-by-uuid-C6705D84705D7BDD type fuseblk (rw,relatime,user_id=0,group_id=0,allow_other,blksize=4096) [U_-_Arch-2_Hitachi_2Tb_7200]
+```
+and
+
+```
+# salt-call mount.active
+  . . . .
+    /srv/dev-disk-by-uuid-C6705D84705D7BDD:
+        ----------
+        alt_device:
+            /dev/sdb1
+        device:
+            /dev/sdb1
+        fstype:
+            fuseblk
+        opts:
+            - rw
+            - relatime
+            - user_id=0
+            - group_id=0
+            - allow_other
+            - blksize=4096
+    /sys:
+        ----------
+        alt_device:
+            sysfs
+```
+ +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP937774 +++$+++ ROOT +++$+++ COM10 +++$+++ 2021-03-29T17:34:41Z +++$+++ @votdev it is sad how fast you were to say Salt is all wrong and how protective you fet about OMV.
+
+You still try to push Salt to adhere to OMV data format, while common sense says it should be otherwise.
+
+Salt users would not suffer from it. OMV users would.
+Demanding PR from OMV users like me is funny when you did not make any PR to Salt, or maybe i am wrong and you did.
+
+So, back to:
+
+https://github.com/openmediavault/openmediavault/issues/566#issuecomment-809541057
+
+The intention was and is to make OMV work with disks users insert. 
+Without forcing them to go ssh sudo. 
+So simple.
+
+You make it look that making OMV "just work" is bad goal. 
+
+> Why the hell should escapeshellarg be called here?
+
+Because that woul be consistent with bash/Salt data format. But i alreeady said it was kneejerk impulse, so you eems to be crashing through door wide open.
+
+> The function is doing exactly what you are suggesting, keep data raw/verbatim/unescaped within OMV
+
+Some we are on the same page here. You blaze of ego is called for.
+
+Since eysterday i was asking you to show me at the se
+ems between OMV and Salt, the exact borderleines, didn't i?
+I am glad you seem to did so above, https://github.com/openmediavault/openmediavault/issues/566#issuecomment-809529126
+
+And when i showed those links, i commented upon them.
+
+`Salt is based on Python, not PHP. The code you're ranting about never runs in the Salt context.`
+
+I never said so. Both Salt and OMV are "black boxes" with some data exchange. And i was asking you to point me to the raw places of exchange and raw data being exchanged, didn't i?
+
+Yesterday i spent hours looking into Salt code and patching it along your suggestions.
+First i took your suggestions as correct and thought through. And just followed them. An then had to undo it all.
+
+Now you imply it was your time wasted not mine.
+
+That `Example SLS:` - many times from yesterday i asked you how can i reproduice this activity from bash command line.
+For example above - https://github.com/saltstack/salt/issues/54508#issuecomment-808875885
+You kind of answered by showing PHP code for SLS generation - after many requests and hours.
+But you still not answered how to trigger that action from bash.
+
+I asked you yesterday how to make OMV code trigger that action of Salt, allegedly buggy Salt.
+And you refused to help me doing it.
+https://github.com/openmediavault/openmediavault/issues/566#issuecomment-808955077
+
+```
+What can i patch in OMV5 to make this notification gone?
+Why do you want to know that? What do you expect to improve?
+```
+
+You made me look into Linux kernel i am not familiar with, at the same time you are not very willing to point me to specific OMV code and Salt commands you are familiar with.
+
+You are blocking any attempt to debug OMV and Salt interaction - and you demand perfectly polished PRs. 
+It is not consistent. And it is would not help anyone. Not me, not you, not OMV users. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP937774 +++$+++ ROOT +++$+++ COM11 +++$+++ 2021-03-29T17:39:39Z +++$+++ @garethgreenaway  @waynew  @sagetherage 
+
+Please consider this fix to `Salt` above
+
+> here is minimally patched /usr/lib/python3/dist-packages/salt/modules/mount.py
+> mount.py.gz
+
+https://github.com/saltstack/salt/issues/54508#issuecomment-808881089
+
+That is a clear bug in `Salt` that can be reproduced on Linux box (and probably on other UNIX-likes) independently on OMV +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP1897962 +++$+++ ROOT +++$+++ COM12 +++$+++ 2021-03-29T19:38:29Z +++$+++ @the-Arioch Please stop blaming and ranting me. This raised issue here has nothing to do with OMV.
+
+@garethgreenaway please set this issue to read-only, I had to do the same on the OMV issues to stop these rants. +++$+++ 0 +++$+++ 0

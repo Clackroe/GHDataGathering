@@ -1,0 +1,10 @@
+SP13785488 +++$+++ pakkpl +++$+++ NONE (AUTHOR)
+SP291462 +++$+++ ncrawlins +++$+++ NONE
+SP6319976 +++$+++ thecp +++$+++ CONTRIBUTOR
+SP8366455 +++$+++ djleonskennedy +++$+++ NONE
+SP5693835 +++$+++ mlc-mlapis +++$+++ CONTRIBUTOR
+SP13039652 +++$+++ ericmartinezr +++$+++ CONTRIBUTOR
+SP23387905 +++$+++ Achilles1515 +++$+++ NONE
+SP2096859 +++$+++ robinbastien +++$+++ NONE
+SP7661457 +++$+++ lazarljubenovic +++$+++ CONTRIBUTOR
+SP455023 +++$+++ mgechev +++$+++ MEMBER

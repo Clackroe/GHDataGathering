@@ -1,0 +1,82 @@
+ROOT +++$+++ SP10137 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-04-22T20:25:31Z +++$+++ Jekyll 4.0 Ideas :wave: Hello everyone! Summer is coming, and so is the implementation period for Jekyll 4.0. That's right, it's time to get some breaking changes in. To accommodate for this, we're opening this issue to collect interesting ideas that people would like to see implemented in 4.0. __Keep in mind that even if an idea receives a lot of support, there's no guarantee that it'll get implemented__ — that depends on if someone is free to actually implement it. We're all volunteers here, keep that in mind.
+
+Feel free to revive old feature requests, too, just not something that we've explicitly rejected.
+
+For an organized view of how we're consolidating ideas and features, check out our Project board: https://github.com/jekyll/jekyll/projects/2 +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP183966 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-04-23T04:32:02Z +++$+++ I vote for #6293 Markdown links bidi support, in `<>`, `[]()` by default. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP53281 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-04-23T19:15:49Z +++$+++ Adding fetch / get for datafiles to core (or as an "official" addon/plugin) would be great, see the unloved / public domain source @ <https://github.com/18F/jekyll-get>  The code itself is about 40 lines, see <https://github.com/18F/jekyll-get/blob/master/_plugins/jekyll_get.rb>. +++$+++ 11 +++$+++ 0
+COM2 +++$+++ SP53281 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-04-23T19:21:52Z +++$+++ Using the quik library for scaffolding. If you scaffold a new jekyll theme or plugin now all the code is "hard-coded" / "hard-wired". The scaffolding code itself is also "hard-wired"  / "hard-coded", that is, not (re)usable for other projects. Using a (simple) "generic" scaffolding library such as quik you can turn any git(hub) repo (or directory/folder or zip archive) into a parametrized and scripted template scaffold. See the [Jekyll Quick Starter Template / Scaffold - Build Your Own (Gem-Packaged) Theme](https://github.com/quikstart/jekyll-starter-theme) as an example. 
+
+PS: Background / References - Talk Notes - [Quik - The Missing Project Scaffolder (Library) for Ruby - Quick Start Your Ruby Gems, Jekyll Websites, Jekyll Themes 'n' More](https://github.com/geraldb/talks/blob/master/quik.md) +++$+++ 2 +++$+++ 0
+COM3 +++$+++ SP183966 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-04-23T20:59:25Z +++$+++ Custom HTTP headers compatibility for Github Pages (Webrick isn't planned to support https://github.com/github/pages-gem/issues/415) +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP251545 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-04-23T21:30:21Z +++$+++ @laukstein Let’s keep this restricted to Jekyll features. We don’t have any control over GitHub Pages. +++$+++ 1 +++$+++ 0
+COM5 +++$+++ SP4627002 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-04-23T23:31:32Z +++$+++ I'd love to see automatic generation of tag and category archive pages in core (plugins like [jekyll-archives](https://github.com/jekyll/jekyll-archives/) do this, but none are whitelisted in GitHub Pages). I wrote up #6952 with my detailed rationale and a proposal of how it could work.
+
+Here's the TL;DR:
+
+> Having vanilla Jekyll auto-generate archive pages for every tag and category is probably a good idea now, and I think I've come up with a good, clean way to do it while staying true to Jekyll's philosophy.
+
+Code-wise, this snippet gets most of it across:
+
+```yaml
+collections:
+  tags:
+    output: true
+    permalink: /tags/:name/
+  categories:
+    output: true
+    permalink: /categories/:name/
+```
+
+
+ +++$+++ 36 +++$+++ 0
+COM6 +++$+++ SP7410291 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-04-24T04:28:25Z +++$+++ I know that this is markdown and not necessarily jekyll related, but my life would have been a thousand times easier if jekyll supported inline footnotes like so  `[^Footnote, p. 123]` as apposed to the more tedious:
+
+```
+This is first reference[^one], this is the second[^two]
+
+[^one]: Footnote, p.1
+[^two]: Footnote, p.2
+
+``` +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP103008 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-04-24T08:58:22Z +++$+++ @mbrav This depends on the Markdown engine. Please ask  on [Kramdown](https://github.com/gettalong/kramdown) or [CommonMark](http://commonmark.org/). +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP4413018 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-04-25T03:55:37Z +++$+++ First would like to say thank you to the Jekyll team for all the great work you all do. Jekyll is one my favorite frameworks to work with and I really do appreciate what you guys do! 
+Ok on to the request it would be great if there was a built-in way to paginate a list Jekyll collection items on a page. I know there is [jekyll-paginate-v2 gem](https://github.com/sverrirs/jekyll-paginate-v2) but it would be nice if there was a built in pagniation that worked for both post and collection items. +++$+++ 21 +++$+++ 0
+COM9 +++$+++ SP4135530 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-04-26T13:08:07Z +++$+++ Hello all, my first post so go easy. I want to just say that I love Jekyll, I'm now using it on a lot of my web builds. One thing that has bothered me though, is that I've not been able to take advantage of the latest Jekyll features because a lot of the 3rd party CMS solutions I rely on for my clients use (cloudcannon, siteleaf and forestry) simply don't run the latest versions of Jekyll themselves. This forces me to have my folder structures in a really messy state and not take advantage of the latest features when developing locally. So if anyone at Jekyll could bend a few arms to get them to update that would be fab. +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP103008 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-04-26T14:00:09Z +++$+++ @nativerez It alwyas take some time to update to the latest version for services like GitHub Pages, Forestry, CloudCannon or Siteleaf because they need to run tests and adapt their tools. There's nothing Jekyll's core team can do about it. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP7797813 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-04-28T07:21:01Z +++$+++ I would like to see Nested Collections. I know there are alternatives to do this. But still if the Jekyll team can make it easier, that would be awesome.! +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP26921196 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-04-30T04:52:45Z +++$+++ I would like to see [reading metadata in separate files](https://github.com/jekyll/jekyll/issues/1082).  +++$+++ 8 +++$+++ 0
+COM13 +++$+++ SP4627002 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-04-30T14:02:39Z +++$+++ @hosnas Great suggestion. I'll add a use case:
+- Create a collection of static image files
+- Add metadata (like alt text, captions, dimensions) in sidecar files
+- Loop through them to create a rich image gallery
+
+Jekyll CMS services like [Siteleaf](https://siteleaf.com) could make great use of this feature. Siteleaf uploads static assets to an `_uploads` collection. cc @sskylar  +++$+++ 3 +++$+++ 0
+COM14 +++$+++ SP32698567 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-05-02T03:54:51Z +++$+++ I would like to see the tags of collections included in site.tags. Thanks! +++$+++ 2 +++$+++ 0
+COM15 +++$+++ SP24360355 +++$+++ ROOT +++$+++ COM14 +++$+++ 2018-05-03T00:33:39Z +++$+++ Please please support for i18n. At least 2 languages. Many plug-ins break or don't work with ghpages. +++$+++ 33 +++$+++ 0
+COM16 +++$+++ SP1388742 +++$+++ ROOT +++$+++ COM15 +++$+++ 2018-05-04T14:39:21Z +++$+++ build in support for content blocks and components +++$+++ 3 +++$+++ 0
+COM17 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM16 +++$+++ 2018-05-04T16:22:16Z +++$+++ @shivajivarma Can you elaborate? Do you mean something like includes? +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP10137 +++$+++ ROOT +++$+++ COM17 +++$+++ 2018-05-04T18:00:44Z +++$+++ I'd very much love to have native support for Coffeescript in much the same manner as Sass. Thus, we could define in `_config.yml`
+
+```
+# Support Coffeescript
+coffeescript:
+  coffeescript_dir: _coffee
+  output: compressed
+```
+
+This way one could create partials of `.coffee` in well-structured folders with all of them compiling minified to one `.js` file, even same way as you have `css/style.sass` with all the imports of individual Sass files. +++$+++ 4 +++$+++ 2
+COM19 +++$+++ SP26132682 +++$+++ ROOT +++$+++ COM18 +++$+++ 2018-05-05T01:29:38Z +++$+++ it would be great to have more interactions with github, like pulling profile information (contributions, avatar, ), releases data - and convert it for proper publication. this would be vital for software website to create team and download pages that would not require multiple code changes. currently working with current available plugins, this solution lacks stability since there's too many plugins that should be constantly updated. would be glad to help if this will go further! +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP26132682 +++$+++ ROOT +++$+++ COM19 +++$+++ 2018-05-05T04:00:11Z +++$+++ also background section could get some improvements - building website that will look good on regular displays and retina quiet challenging. creating multiple backgrounds for could be the solution to decrease loading time. or middle state like `page loading` to comfort browsing +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP103008 +++$+++ ROOT +++$+++ COM20 +++$+++ 2018-05-05T09:49:57Z +++$+++ @charlesrocket GitHub data should be part of GitHub-metadata plugin not Jekyll-core +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP26132682 +++$+++ ROOT +++$+++ COM21 +++$+++ 2018-05-05T11:08:20Z +++$+++ @DirtyF sorry, i just started with jekyll a week ago) this repo is on the list. at this time, i guess that this info could be pulled by `metadata`, but shouldn't jekyll convert it for better (more universal) usage? +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP103008 +++$+++ ROOT +++$+++ COM22 +++$+++ 2018-05-05T11:16:45Z +++$+++ @charlesrocket This is off-topic, but FYI GitHub-metadata already provides access to these data through `site.github` namespace. +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP26132682 +++$+++ ROOT +++$+++ COM23 +++$+++ 2018-05-05T11:23:48Z +++$+++ @DirtyF my bad. guess i misfired with backgrounds as well?  +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP103008 +++$+++ ROOT +++$+++ COM24 +++$+++ 2018-05-05T11:30:02Z +++$+++ @charlesrocket It looks like so, as Jekyll is fully agnostic when it comes what's get generated in the front-end, it just transforms files into HTML. You can use plugins like `jekyll-assets` and/or `jekyll-cloudinary` to help you deal with responsive images. +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP26132682 +++$+++ ROOT +++$+++ COM25 +++$+++ 2018-05-05T11:33:31Z +++$+++ @DirtyF thanks for the input! im looking for every jekyll plugin i can find, put majority is out of date and has no support, so it pushed me to propose these functions into core (not counting jekyll-originated plugins) should i delete my comments? don't want to overload the tread since im thinking it will grow and going tho useless comments would add some discomfort +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP12479464 +++$+++ ROOT +++$+++ COM26 +++$+++ 2018-05-05T12:01:38Z +++$+++ (I) really love this ability to minimize comments on GitHub.. :sparkles: +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP4413018 +++$+++ ROOT +++$+++ COM27 +++$+++ 2018-05-05T12:56:09Z +++$+++ I would like to see an automated tool like Webpack integrated into Jekyll to handle Sass and Javascript. 
+Some of the biggest reasons are auto-prefixing for Sass and the ability to use ES6 syntax that can automatically be polyfilled with babel. I think having an automated tool handle the sass and javascript bits may speed up the compile time of Jekyll.  +++$+++ 12 +++$+++ 0
+COM29 +++$+++ SP12479464 +++$+++ ROOT +++$+++ COM28 +++$+++ 2018-05-05T12:59:41Z +++$+++ > I think having an automated tool handle the sass and javascript bits may speed up the compile time of Jekyll
+
+How is that..?? +++$+++ 0 +++$+++ 0

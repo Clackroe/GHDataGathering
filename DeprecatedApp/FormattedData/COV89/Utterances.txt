@@ -1,0 +1,150 @@
+ROOT +++$+++ SP12932925 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-02-16T08:22:13Z +++$+++ Add the ability to author cross platform tasks in powershell core Hi there,
+
+@bryanmacfarlane to open this possible enhancement.
+
+Now PS based task won't even try to run on Linux/MacOS agent because of the missing handler. However, PowerShell is installed on those agents and you have the PowerShell task available for them and works...
+
+As Bryan pointed out, custom PS task may have windows assumptions, but that's okay, developers will just have to make those scripts OS aware to avoid those pitfalls. With the handler in place they can see where there scripts fail when running on Linux/MacOS PowerSHell implementation and fix them.
+
+I think this will open more options to PS developers.
+Thanks,
+J. +++$+++ 11 +++$+++ 0
+COM0 +++$+++ SP4302467 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-04-25T08:30:32Z +++$+++ Is something done in this field? We would like to run powershell tasks on Linux as well because a lot of the VSTS Extensions are Powershell based. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP919564 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-04-25T11:37:08Z +++$+++ We have an item on the backlog to support writing tasks in powershell core.  The powershell handlers ( and the tasks written using that ) is for full windows powershell.  We can’t just redirect all the existing windows powershell tasks to Linux - beyond catching all those existing tasks by surprise, the task authors that intentionally wrote windows specific tasks would start routing to Linux boxes in a heterogeneous pool.  We need a powershell core capability for routing and s powershell core handler in the agent. +++$+++ 3 +++$+++ 0
+COM2 +++$+++ SP919564 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-04-25T11:37:53Z +++$+++ Opening as enhancement +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP4302467 +++$+++ ROOT +++$+++ COM2 +++$+++ 2018-04-25T18:01:44Z +++$+++ I don't really know how this works in the background but a powershell task that does not use the vsts-tasks-lib should be executable or? because it does not depend on anything OS Specific? I wrote some tasks that do not use vsts-tasks-lib they are just pure powershell script and they also don't run on Linux by the agent. I haven't tried running them natively without vsts on the linux machine. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP919564 +++$+++ ROOT +++$+++ COM3 +++$+++ 2018-04-25T19:44:02Z +++$+++ @DerGary - the agent has a handler in it that basically knows how to run the script that's in the task.  So the node handler runs node against the script that's declared in the execution section of the task.json.  The task is run out of proc and communication and status is communicated via an RPC stdout protocol (hash hash vso statements in output).  The task lib is simply libraries with functions that emit that protocol over stdout.  It's a convenience.
+
+If you just have an arbitrary powershell script that you need run as part of your build / release, then you can use the powershell task (2.x version) to run.  A formalized task is the way to share your unit of work with others on the market place.  
+
+See the step by step walk throughs in this repo.  You can also look at our tasks in the vsts-tasks repo as reference examples. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP16837142 +++$+++ ROOT +++$+++ COM4 +++$+++ 2018-06-11T22:08:24Z +++$+++ Is it possible to update the current PowerShell handler to work similarly to the v2 task? Use pwsh if it's there and fall back to Windows PowerShell if it's not? Or add a an extra property to the handler definition in the task.json file to say if it should try pwsh at all, defaulting to false to maintain legacy support?
+
+Hopefully the task authors will know if their task will run in pwsh and by not requiring pwsh there should be no change to the agents.  +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP919564 +++$+++ ROOT +++$+++ COM5 +++$+++ 2018-06-11T22:12:42Z +++$+++ It's possible but it's going to be explicit.  Yes, authors will know whether their task will run on powershell core and more importantly, not windows only and they should mark the task.json appropriately.  That marking will be "powershellcore".  Existing powershell3 tasks were written and distributed with an assumption of windows only so it needs to be explicit.
+
+Note that the v2 task is about running end use ad-hoc scripts which they explicitly know the limitations and explicitly pick where it will run (queue).  The handlers is all about task authors releasing tasks to a market place where end users consume the task having no idea (and shouldn't) how it was written. +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP16837142 +++$+++ ROOT +++$+++ COM6 +++$+++ 2018-06-11T22:25:15Z +++$+++ So is the intention that a task marked as requiring the powershellcore handler will fall back to Windows PowerShell if pwsh isn't available? Or do we have to maintain two versions with the same functionality?
+
+I've got at least one task I'd love to make available on nix and Mac but don't want to maintain multiple versions or have some funky build process to copy the files around and then package it up. 
+
+I'd also not seen anything about a PowerShell3 handler, is it documented anywhere how it differs from the PowerShell handler? Or is it just a name change? Or are they the same handler and the engine just passes one to the other (presumably powershell to powershell3)? +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP919564 +++$+++ ROOT +++$+++ COM7 +++$+++ 2018-06-11T22:34:59Z +++$+++ powershellcore handler should be able to handle all platforms and all scenarios.  The powershell3 implementation has it's current restrictions.  You will be able to write one.  It's not documented on how they differ because it's not designed/implemented yet.  It's an outstanding enhancement request. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP16837142 +++$+++ ROOT +++$+++ COM8 +++$+++ 2018-06-11T22:43:03Z +++$+++ I might have a look at implementing a powershellcore handler then.
+
+I'm the powershell3 question, I work on this pester task and it uses the powershell handler, that's what I was curious about the differences between it and the powershell3 one. If there are no real differences then I'll leave it as it is, everything seems to work fine so I assume it's not a problem. 
+
+https://github.com/rfennell/vNextBuild/blob/35cb26cd0619f6e9711f62b1d7d0e28affbdd287/Extensions/Pester/task/task.json#L105 +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP919564 +++$+++ ROOT +++$+++ COM9 +++$+++ 2018-06-12T00:28:47Z +++$+++ If you take a stab at it, make sure you write up a proposal / design in the vsts-agent repo in the form of a forked branch in the docs / preview folder as markdown.  We want to avoid a large PR only to be rejected.
+
+TL;DR;
+As an FYI, here's what we're struggling with internally (and the concepts get confusing so I'll try my best to be concise :) )
+
+We have a major shift and feature set around yaml and containers:
+https://github.com/Microsoft/vsts-agent/blob/master/docs/preview/yamlgettingstarted-phase.md#container-applies-to-queue
+
+The scenario isn't building / deploying your app container (a prime scenario however) - this one is build and test in a container to seal the dev tools and configs (dev == dev == ci).
+
+In the current implementation coming to preview, the agent runs on the host and we exec steps in a container we start up with work dir mapped in.  So single use, incremental source, clean config / machine every time.  The agent can still update forward if demanded, etc...
+
+The agent carries everything it needs to to run "any container you bring" - outside / in.  It carries node internal as a script engine (mapped in) and stdin/out is the protocol.  Everything is golden with what we support.  Powershell3 is hand wavy but it's ubiquitous and win only right now.
+
+Enter powershell core and dotnet core (maybe carries dlls).  You need powershell core in the container - OK, that makes sense for a task like pester, azure powershell, etc... - anything that's powershell tech related.  Hey, I add the pester task to my def, say run in my container it makes sense that I need powershell in it.
+
+Now, write a general task like config file variable substitutions (generic task).  I install from the market place, drag it on, pick my container.  When I run it (if we do it right) we inform you powershell core is not in the container.  The user who added the task from the market place had no idea how you implemented the generic task.  
+
+So at this point the only option is to say all containers must contain powershell core or we inject it into the container if missing (not quite immutable :) ).
+
+Next problem is versions - which version of powershell core to prereq in container?  There isn't one since whatever you pick it to be, what happens when you write a task using capabilities in a later powershellcore?  All the builds with containers that took our prereq advice of installing pscore into the container will break when they add your task from the marketplace that needs a later one.  It's a forward compat problem.
+
+Potential solution there is to have a handler per maj version channel of pscore but it still has the odd experience of adding a task from the marketplace and having to realize how it was coded.  As pointed out above, the agent currently carries node.  The other option is to explore ways to do the same with powershell core and we're meeting with the ps core team.
+
+For those reasons we can't prereq certain versions.  It's also why the agent is built as a self contained net core app - it updates itself as demanded and moves to new net core versions so we can't pre-req one at config time.  
+
+Everything right now in the agent and the task model is self contained.  OS dependencies of net core is the exception but those are generally going down with new versions of net core.
+
+So it's not the implementation time that we're struggling with - it's all the versions and back and forward compat of a service, the agent and tasks on different versions with containers.
+
+Long winded but hopefully it makes sense. +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP16837142 +++$+++ ROOT +++$+++ COM10 +++$+++ 2018-06-12T13:09:55Z +++$+++ Is the PowerShell Core prereq something that can be presented to the user in a similar way to Demands/Requirements for normal agents? That will need to be used anyway for users not using containers as part of their build process. I'm not sure how well those requirements are currently presented to a user when using YAML definitions but I assume it is still done in some way since those requirements will still be there. I'm not sure being in a container has a big impact on the way it should handle this, there will be plenty of times when a user has a definition which doesn't use containers or even YAML defs and so will just be running a def defined in the web UI and we just need to surface the requirements of the various tasks to them in a sensible way.
+
+Some work would have to be done by extension authors as well to include those requirements in their readme files on the marketplace to ensure that the requirement is known ahead of time. 
+
+As for versions of PS Core to handle with this, I'd go with the latest minor version of the current major version and the previous one, so currently that's just 6.0.2 but will soon be 6.1.x and eventually will be 7.0.x and 6.x.x . I don't think the PS Team has plans to release major versions too often so that shouldn't mean updating things too often and supporting the current and 1 previous major versions feels like a reasonable amount. From a user perspective if a task changes major versions because it's supporting things in PSCore 8.0 and I want those things then I can just update my dockerfile (or whatever is building my container) to use that newer version, if I don't want/need those new things then I can keep using the old version of the task and my existing container.
+
+I'm not sure how best to handle that from the agent side, a single powershellcore execution handler with some config settings coming from the task.json about what versions it requires/supports, which then lets it swap between the two supported versions of core or full PowerShell if they aren't available. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP919564 +++$+++ ROOT +++$+++ COM11 +++$+++ 2018-06-12T14:47:01Z +++$+++ No, generic tasks from the market place don't have pre-reqs.  The requirement is you install the task from the marketplace and it works.
+
+Even if you entertained communicating pre-reqs, the problem is shifting pre-reqs.  If you pre-req 1.0 and everyone puts that in their container, when can your task start using capabilities of 1.1?  never.  If they heeded your pre-req at install time and their build works on the container they put your pre-req in, it will blow up when you change your task to code against 1.1 capabilities.  
+
+The fundamental problem is you have multiple layers from the agent, tasks and system that float on different lifetimes. That's why the agent and tasks are self contained.  You also have to be crisp between what's a dependency (node) and a tool (what the task is calling - msbuild, etc...).
+
+Nothing is preventing you from creating a task in typescript that calls powershell / pester right now until and if we add this. +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP16837142 +++$+++ ROOT +++$+++ COM12 +++$+++ 2018-06-12T15:36:48Z +++$+++ That's a fair point about separating dependencies for the task from the tool, I always think of Java as a dependency for the SonarQube task but it's actually a dependency for the SonarQube tool that is presented to the user as requirement for the build agent to have installed. 
+
+The only clean way of handling making use of new functionality in newer versions of a dependency that I can see is to increment the major version number of your task, so it becomes a choice for the users to make use of it and the need to install a new version of the dependency. The other approach requires adding checks for that version in your code before trying to use it, which grants more compatability but takes more time and effort on the part of the task author. 
+
+I still think updating for new prereqs is less of a problem for people using containers due to their nature but I know there will be a large number who don't want to change their working container because a task updated a bit. It's also still a bigger problem for people not using containers as that takes more time and effort to roll out new versions of prereqs.
+
+I'll certainly give some thought to writing a typescript wrapper for the pester task I already have and see how that performs. Hopefully some of these more interesting and difficult design questions can be worked out to enable a PS Core handler.
+
+Thanks for taking the time to explain this stuff Bryan, it's given me a much better idea of how it all hangs together and the things you have to think about when working on the agents. +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP919564 +++$+++ ROOT +++$+++ COM13 +++$+++ 2018-06-12T16:03:35Z +++$+++ @ChrisLGardner - Cool.  Thanks for listening :)  +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP30379061 +++$+++ ROOT +++$+++ COM14 +++$+++ 2019-04-21T04:15:04Z +++$+++ We also really need a native PowerShell Core task execution support (for Windows-based agents at least).
+
+As far as I understand you guys (@bryanmacfarlane) already have a backlog item for this, however I want to understand when you're planning to implement/release it? +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP42773683 +++$+++ ROOT +++$+++ COM15 +++$+++ 2019-05-16T03:12:58Z +++$+++ @dmitryserbin I think while this is something we're interested in, its not high priority for us right now so we don't have an immediate eta. There's a lot of challenges associated with this (see above) and if we do decide to move forward it will take a concerted push/thought that we don't have the bandwidth to invest right now. +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP13007450 +++$+++ ROOT +++$+++ COM16 +++$+++ 2019-06-06T17:15:39Z +++$+++ I spent a couple days trying to force existing PS module to work on Linux. I got very close, but the things I had to do made it clear that while it's possible, it's a bad idea.
+
+My approach was to invoke my existing PS script in pscore from a "trivial" JS script; importing the PS Module using Import-Module, of course. This feel apart because of the "Vaulting" behavior: the variables were inaccessible to my PS script because they'd been "vaulted" by JS (see internal.js:645,656 and a couple other places). 
+
+Just "for science", I hacked the scripts to not delete the environment variables post vault. This works. However, it's clearly a case of "because you can doesn't mean you should".
+
+I'm currently re-writing these PS scripts in JS.
+
+I'd love to see PS Core support! If you pick this up, send me a ping and I'll share my experiences. +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP9914262 +++$+++ ROOT +++$+++ COM17 +++$+++ 2019-06-12T05:58:32Z +++$+++ Oh wow, I thought for sure PowerShell Core was a v1 feature. I am very disappointed that I cannot author tasks via PowerShell Core. This is currently a complete blocker for me when it comes to authoring pipelines tasks. Going with TypeScript is a complete non-starter.
+
+From a user perspective, all this prerequisite talk is besides the point. To run JavaScript it also needs a JavaScript runtime - there is no difference with a PowerShell runtime. If you are afraid of the risk, tell the user to install it manually via some Install PowerShell Core task.
+
+Your users want to get stuff done, not wait for the perfect solution. +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP919564 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-06-12T12:41:20Z +++$+++ @sandersaares - as noted above, it's not about the user installing pre-reqs.  The consumer (user) of task simply goes to the market place and uses it.  They shouldn't have to inspect the tasks code and figure out what it's pre-reqs are.  The requirements are, choose task, use, works.  So market place tasks cannot have pre-reqs.
+
+For those reasons, the agent carries the javascript runtime (node).  It's a self contained executable.
+
+We also need to make it work in containers since [jobs can run in containers](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/container-phases?view=azure-devops&tabs=yaml).   That includes alpine and we're tracking.  For typescript tasks, we map it into the container (user can pick any container) and at that point it's about the OS pre-reqs which is almost zero for typescript/node.  netcore has been reducing OS dependencies with 2.x and 3.x so we're evaluating.
+
+All of this is possible since we could potentially package ps core in the agent but it will take quite a bit of work, docs etc. and we need ps to address the alpine (wasn't there when we last looked).  This is why we've left the issue open.  We're still considering and looking at the work involved.
+
+Note that you can use the typescript task-lib to exec powershell core against a powershell core your task carries.  That will have the issue mentioned above of a task having a pre-req though.
+
+ +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP16837142 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-06-12T12:59:38Z +++$+++ I believe PS Core now supports Alpine, might be worth checking in with @SteveL-MSFT as I know a few people asked him about Azure Pipelines supporting PS Core when we were at PSConfEU.  +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP919564 +++$+++ ROOT +++$+++ COM20 +++$+++ 2019-06-12T13:06:03Z +++$+++ @ChrisLGardner - yep.  Last status I heard was a [personal / experimental container](https://github.com/PowerShell/PowerShell/issues/4605).  Following up.   +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP18483384 +++$+++ ROOT +++$+++ COM21 +++$+++ 2019-06-12T13:31:23Z +++$+++ Not having Handler that supports natively PS6 is blocker!
+It`s not only cross-platform related problem, PS5 is no longer supported! We have ton of PS5 related bugs to which MS replied: "We cannot do anything in ps5, they are already fixed in ps6, go use ps6".
+
+Also I cannot understand why the "ProcessHandler" is calling cmd.exe to start the desired executable. If that wasn`t the case, we could have used it to call pwsh.exe from it.
+
+I don`t like the typescript approach because of:
+- My understanding is that in order to use typescript, we will end up as an with extra dependency of node.
+- chaining lots of processes will cause a lot of environment variables propagation issues, and Env variables are essential for pipelines. +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP9914262 +++$+++ ROOT +++$+++ COM22 +++$+++ 2019-06-12T13:52:00Z +++$+++ > They shouldn't have to inspect the tasks code and figure out what it's pre-reqs are.
+
+Nonsense. For NuGet tasks, I have to spray "NuGet Installer" tasks all over the place and this is far from the only one. Make a PowerShell Installer task, along the same lines, and you would make a lot of people very happy.
+
+What you claim there is an unreasonable ideal that is holding back progress. +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP919564 +++$+++ ROOT +++$+++ COM23 +++$+++ 2019-06-12T14:32:38Z +++$+++ > My understanding is that in order to use typescript, we will end up as an with extra dependency of node
+
+That is not correct.  The agent carries node as the task runtime.  It's completely self contained so adding a task from the market place works.  And that's the work that this enhancement needs.
+
+> a PowerShell Installer task
+
+That won't work in container jobs as pointed out above.  Note that a task dependency is different than installing tools in an environment.  The user and consumer of tasks brings tools they use
+
+Note that we have not said we're not doing this which is why enhancement is still open.   The work is known and it's on our backlog.  The requirements, patterns and expectations have been set for how the type script tasks work.  When we add powershell core support, the requirements are the same and it will need to work for all of our features. 
+
+I would kindly ask that we keep the conversation friendly and respectful.  Please refer to our code of conduct: https://opensource.microsoft.com/codeofconduct/
+
+We are keeping this issue open and will address it on our backlog. Thanks for all of your feedback -  All the details and considerations are captured in this issue. +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP42773683 +++$+++ ROOT +++$+++ COM24 +++$+++ 2019-10-29T21:10:23Z +++$+++ Hi, per #537 we've decided not to add this at this time +++$+++ 0 +++$+++ 0

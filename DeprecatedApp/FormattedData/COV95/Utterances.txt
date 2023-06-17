@@ -1,0 +1,239 @@
+ROOT +++$+++ SP18248938 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-11-06T21:36:20Z +++$+++ BUG: MeshPhongMaterial flicker with flatShading: false Updated from v92 to v110 and have flicker on the edges.  I use PlaneBufferGeometry with null z values to represent unknown elevations(holes).  The sparse grid shows a flicker where the nulls' edges are.  Was not seen with flatShading: true or v92:
+
+![image](https://user-images.githubusercontent.com/18248938/68339808-812af700-00a2-11ea-8f01-ec761d009580.png)
+
+I know you are going to say NaN are not supported in geometries, but any chance you could fix this or point me in proper direction?
+
+
+##### Three.js version
+
+- [ ] Dev
+- [x ] r110
+- [ ] ...
+
+##### Browser
+
+- [x] All of them
+- [ ] Chrome
+- [ ] Firefox
+- [ ] Internet Explorer
+
+##### OS
+
+- [ ] All of them
+- [x] Windows
+- [ ] macOS
+- [ ] Linux
+- [ ] Android
+- [ ] iOS
+
+##### Hardware Requirements (graphics card, VR Device, ...)
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP18248938 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-11-06T21:59:27Z +++$+++ Its something that occurred between 103 and 104.  103 works, 104 flickers.... Looking at change log +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP12612165 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-11-07T11:06:42Z +++$+++ I'm afraid a screenshot is not sufficient to debug this issue. Please always provide live examples when reporting such problems. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP18248938 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-11-07T14:28:39Z +++$+++ thank you for your help;  Flicker is seen when not moving.
+
+https://jsfiddle.net/b4xzmqcr/
+
+ +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP18248938 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-11-07T15:00:14Z +++$+++ The issue gets worse when multiple 3js windows are open and active(open the fiddle in 2 windows).  Also noticeably when "lightShot" screen capture was opened.  Also noticed when whats app message received.  I have a dev team of 4 guys finding inconsistencies of producing on different graphics cards with different results, but all see a flicker at different times +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP12612165 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-11-07T15:30:56Z +++$+++ Sorry, but I can't see any flickering on my system. Tested with Chrome 78.0.3904.97, FF 70.0.1 and macOS 0.14.6. Are you on Windows? +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP18248938 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-11-07T16:00:01Z +++$+++ video: Multiple instances of the window seem to be the issue, even with duplicate fiddles it appears.
+
+[here](https://drive.google.com/open?id=1zgscsAoXE1DNdWyIW1qORhXgatCRhKL1)
+
+windows version 1809 OS Build 17763.805
+NVIDIA GeForce RTX 2080 SUPER
+
+I have also tested on msi lapiop with NVIDIA GeForce GTX 980M and the problem is probably worse.
+
+All other devs have windows machines, but we could check on a mac if that helps
+ +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP14173 +++$+++ ROOT +++$+++ COM5 +++$+++ 2019-11-07T16:27:41Z +++$+++ looks like a Problem with the nvideo driver?  i tested this on two Systems, with amd driver (linux) without any problem 
+
+
+ +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP18248938 +++$+++ ROOT +++$+++ COM6 +++$+++ 2019-11-07T16:47:40Z +++$+++ I haven't gone through the diff of 103-104, but ideas on where to look that would make this happen?
+
+ +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP3927951 +++$+++ ROOT +++$+++ COM7 +++$+++ 2019-11-07T17:18:08Z +++$+++ Was able to replicate on Windows with NVidia GPU, but not on Mac with intel integrated GPU. 
+
+Couldn't find anything on the change logs from `r103 -> r104` that would explain that. 
+
+But, then again, you are making use of unsupported behavior, as you said it yourself. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP18248938 +++$+++ ROOT +++$+++ COM8 +++$+++ 2019-11-07T17:35:41Z +++$+++ Seems very odd that separate instances of three are causing it.  Even though unsupported seems like it could be a canary for a scoping issue? +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP242577 +++$+++ ROOT +++$+++ COM9 +++$+++ 2019-11-08T06:02:51Z +++$+++ why not just map NaNs to some big but finite values to move the triangles out of the view. that would mean removing the index attribute as well, however (rough idea: https://jsfiddle.net/uxwqyjvm/ ) +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP12612165 +++$+++ ROOT +++$+++ COM10 +++$+++ 2019-11-08T11:25:20Z +++$+++ In any event, I don't see a `three.js` bug here. I suppose this happens also with pure WebGL and with any other 3D engine so I think it's more correct to close the issue and move the dicussion to stackoverflow or the forum. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP18248938 +++$+++ ROOT +++$+++ COM11 +++$+++ 2019-11-08T13:08:08Z +++$+++ @makc We are constantly updating the surface with new known position.  Might be worth testing but would take a considerable amount of work.  If anything this would double the overhead(two geometries needed) of multi-million point grid geometries.  Do you have any docs for ExplodeModifier?  Also we have to have bufferGeometry.  These are very large surface models.
+
+@Mugen87 I do not think that is true because the issue is not seen in r103.  There was a change in the code base that introduced this bug.  If it never worked, then i would agree it is a  webGL/GPU issue, but it was working up to r103 and we have it in production at r92 for a pretty long time(since r92 release) +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP18248938 +++$+++ ROOT +++$+++ COM12 +++$+++ 2019-11-08T14:37:30Z +++$+++ So there were two shader changes in the revision in the build.  
+EDIT
+
+single change then adding that change in so this is messing it up.
+sorry my github skills suck , we are svn:
+
+it is here in light_pars_begin lines 1-40:
+```
+
+export default /* glsl */`
+uniform vec3 ambientLightColor;
+uniform vec3 lightProbe[ 9 ];
+// get the irradiance (radiance convolved with cosine lobe) at the point 'normal' on the unit sphere
+// source: https://graphics.stanford.edu/papers/envmap/envmap.pdf
+vec3 shGetIrradianceAt( in vec3 normal, in vec3 shCoefficients[ 9 ] ) {
+	// normal is assumed to have unit length
+	float x = normal.x, y = normal.y, z = normal.z;
+	// band 0
+	vec3 result = shCoefficients[ 0 ] * 0.886227;
+	// band 1
+	result += shCoefficients[ 1 ] * 2.0 * 0.511664 * y;
+	result += shCoefficients[ 2 ] * 2.0 * 0.511664 * z;
+	result += shCoefficients[ 3 ] * 2.0 * 0.511664 * x;
+	// band 2
+	result += shCoefficients[ 4 ] * 2.0 * 0.429043 * x * y;
+	result += shCoefficients[ 5 ] * 2.0 * 0.429043 * y * z;
+	result += shCoefficients[ 6 ] * ( 0.743125 * z * z - 0.247708 );
+	result += shCoefficients[ 7 ] * 2.0 * 0.429043 * x * z;
+	result += shCoefficients[ 8 ] * 0.429043 * ( x * x - y * y );
+	return result;
+}
+vec3 getLightProbeIrradiance( const in vec3 lightProbe[ 9 ], const in GeometricContext geometry ) {
+	vec3 worldNormal = inverseTransformDirection( geometry.normal, viewMatrix );
+	vec3 irradiance = shGetIrradianceAt( worldNormal, lightProbe );
+	return irradiance;
+}
+```
+
+
+
+
+
+
+ +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP18248938 +++$+++ ROOT +++$+++ COM13 +++$+++ 2019-11-08T14:56:42Z +++$+++ looks like probe light is causing this issue @WestLangley  @sciecode :
+
+Added support for light probes. [#16223](https://github.com/mrdoob/three.js/pull/16223)
+
+Edit as i walk through for future refrence:
+1.  Light probe is part of ambient light so removing ambient light fixes the issue. 
+2. light probe is a measure of ambient light not a child.  So no ambient light no light probe?
+3. Hemisphere lighting does not show flicker
+4. Hemisphere white light is super flickery
+5.  Looks like the more white the light the worse the flicker, equally bad on hemisphere and ambient. +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP18248938 +++$+++ ROOT +++$+++ COM14 +++$+++ 2019-11-08T15:57:19Z +++$+++ updated fiddle with super flicker:
+https://jsfiddle.net/sxjemofg/1/
+
+turn off ambient light for no flicker +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP18248938 +++$+++ ROOT +++$+++ COM15 +++$+++ 2019-11-08T16:51:14Z +++$+++ RESOLVED
+
+fixed it.  Is this worth committing?  Someone who knows get and three should commit this 👍 @WestLangley 
+@Mugen87 
+
+
+```
+vec3 shGetIrradianceAt( in vec3 normal, in vec3 shCoefficients[ 9 ] ) {
+	// normal is assumed to have unit length
+	float x = normal.x, y = normal.y, z = normal.z;
+	// band 0
+	vec3 result = shCoefficients[ 0 ] * 0.886227;
+
+      //FIX
+      // in webgl 2.0 this could be replaced with  isnan(val)
+      if(
+              (! ( x < 0.0 || x > 0.0 || x == 0.0 )) || 
+              (! ( y < 0.0 || y > 0.0 || y == 0.0 )) || 
+              (! ( z < 0.0 || z > 0.0 || z == 0.0 ))
+        ){ return result; };
+      // response from dev who helped fix this:
+      // "it is a bug because they should always account for NaN 
+      // whether it is intended or not ;)"
+      //END FIX
+
+	// band 1
+	result += shCoefficients[ 1 ] * 2.0 * 0.511664 * y;
+	result += shCoefficients[ 2 ] * 2.0 * 0.511664 * z;
+	result += shCoefficients[ 3 ] * 2.0 * 0.511664 * x;
+	// band 2
+	result += shCoefficients[ 4 ] * 2.0 * 0.429043 * x * y;
+	result += shCoefficients[ 5 ] * 2.0 * 0.429043 * y * z;
+	result += shCoefficients[ 6 ] * ( 0.743125 * z * z - 0.247708 );
+	result += shCoefficients[ 7 ] * 2.0 * 0.429043 * x * z;
+	result += shCoefficients[ 8 ] * 0.429043 * ( x * x - y * y );
+	return result;
+}
+``` +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP1000017 +++$+++ ROOT +++$+++ COM16 +++$+++ 2019-11-08T17:09:10Z +++$+++ > I use PlaneBufferGeometry with null z values to represent unknown elevations(holes). 
+
+You have NaN's in your position data.
+
+You also have NaN's in your vertex normals. Hence their length is undefined.
+
+three.js does not support NaNs in data pushed to the GPU. +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP18248938 +++$+++ ROOT +++$+++ COM17 +++$+++ 2019-11-08T17:13:23Z +++$+++ one should always account for NaN whether it is intended or not.  And its a simple fix.  We need this to work for our production and it doesnt harm anything having a check in.   Could we please add, is there any harm?  @WestLangley  +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP1000017 +++$+++ ROOT +++$+++ COM18 +++$+++ 2019-11-08T17:25:42Z +++$+++ >one should always account for NaN whether it is intended or not.
+
+No, YOU need to account for it in your app and pass valid data.
+
+ +++$+++ 1 +++$+++ 0
+COM20 +++$+++ SP12612165 +++$+++ ROOT +++$+++ COM19 +++$+++ 2019-11-08T17:37:44Z +++$+++ Yes, this is something that needs to be fixed on app level.
+
+> three.js does not support NaNs in data pushed to the GPU.
+
+NaN geometry data also corrupt operations on the CPU like intersection tests or the computation of bounding volumes. So again, this is no library bug. +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP18248938 +++$+++ ROOT +++$+++ COM20 +++$+++ 2019-11-08T17:48:06Z +++$+++ We have a valid use case for putting NaN's in our data set that as far as I can tell can not be done in any other way, efficiently.  In any real world application dealing with NaN's is just a fact of life .
+
+@Mugen87 Bounding Volumes was actually my last post.  It all stems from not handling NaN's properly.  Just a simple test for isNaN would resolve most these.  Why is there such push back and not a desire to resolve this issue?
+
+Are there any suggestions for dealing with real world data that has NaN's?  We have bandied around alpha mapping, but then we increase overhead with the map and need to access the alpha map and the vertex positions.  
+
+Also what if the numbers are very large and overflows?  Will that cause a NaN that might need to be dealt with. +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP12612165 +++$+++ ROOT +++$+++ COM21 +++$+++ 2019-11-08T17:58:42Z +++$+++ > Why is there such push back and not a desire to resolve this issue?
+
+`NaN` values is an app level problem from our point of view since the user is in some sense the data producer. Geometric data like position, normal or color data are meant to be numerical. `NaN` data are no numerical data.
+
+Handling `NaN` values is use case specific since proper default values depend on what the application actually does.
+
+This is not only an issue in graphics. When you process huge data in context of KDD and machine learning, data cleanup is one important preparation step before you execute the actual algorithm (which is not responsible for handling missing, undefined or corrupt values). +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP18248938 +++$+++ ROOT +++$+++ COM22 +++$+++ 2019-11-08T18:13:55Z +++$+++ so this is a "no" on resolving?  Is there a reason not to other than "we don't support this"?  Its a one line PR.
+
+I guess we will be patching every update from here out. +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP1000017 +++$+++ ROOT +++$+++ COM23 +++$+++ 2019-11-08T18:17:37Z +++$+++ three.js does not validate data -- much less accommodate invalid data. That is the app's responsibility.
+
+Also, your patch accommodates your use case, but it does not accommodate an arbitrary use case with invalid data. So, your patch is not a "fix". +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP1000017 +++$+++ ROOT +++$+++ COM24 +++$+++ 2019-11-08T18:20:48Z +++$+++ >I guess we will be patching every update from here out.
+
+One way to handle your examples is to add an "invalid" attribute: 0 if valid; 1 if invalid. Then discard fragments for which the interpolated attribute value is non-zero. +++$+++ 1 +++$+++ 0
+COM26 +++$+++ SP18248938 +++$+++ ROOT +++$+++ COM25 +++$+++ 2019-11-08T18:28:52Z +++$+++ > Also, your patch accommodates your use case, but it does not accommodate an arbitrary use case with invalid data. So, your patch is not a "fix".
+
+ what case would it not fix?  It fixes unknowns in position array from flickering. Could I add a switch to turn off probe lighting?
+
+> One way to handle your examples is to add an "invalid" attribute: 0 if valid; 1 if invalid. Then discard fragments for which the interpolated attribute value is non-zero.
+
+Where woudl you implement this.  Seems alot like an alpha map but culling vertices else where?
+
+Edit: thanks for the help.  
+
+> three.js does not validate data -- much less accommodate invalid data. That is the app's responsibility.
+
+its semantics(and not my project)  but in my mind "unknown" != "invalid".  +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP1000017 +++$+++ ROOT +++$+++ COM26 +++$+++ 2019-11-08T18:57:12Z +++$+++ My [suggestion](https://github.com/mrdoob/three.js/issues/17882#issuecomment-551936446) is similar to alpha-testing and would require injecting code into the fragment shader. Without knowing the details of your use case, I can only offer it as a suggestion.
+
+Please use the three.js forum if you need additional help. +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP97088 +++$+++ ROOT +++$+++ COM27 +++$+++ 2019-11-08T21:21:42Z +++$+++ @kpetrow 
+
+> Just a simple test for isNaN would resolve most these. Why is there such push back and not a desire to resolve this issue?
+
+You may have more luck by doing a PR with that "simple test" rather than asking us to do it for you. +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP242577 +++$+++ ROOT +++$+++ COM28 +++$+++ 2019-11-09T01:17:21Z +++$+++ @kpetrow,
+> two geometries needed... ExplodeModifier
+
+of course you could just create un-indexed buffer geometry to begin with, and not use ExplodeModifier or convert geometries otherwise.
+
+> RESOLVED... Is this worth committing?
+
+well, you know, a bunch of IF-s in the shader that almost noone would need any way... so, probably not.
+
+> updated fiddle with super flicker
+
+no flicker here at all +++$+++ 1 +++$+++ 0

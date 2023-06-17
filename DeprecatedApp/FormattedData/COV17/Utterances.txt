@@ -1,0 +1,103 @@
+ROOT +++$+++ SP10565704 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-07-09T15:29:20Z +++$+++ storage OOM not proper handled by gradle  when we have storage OOM gradle doesn't sygnalize that, instead proper info we have a bullshit :)
+
+`$ gradle clean`
+
+>FAILURE: Build failed with an exception.
+>
+>* What went wrong:
+>Unable to start the daemon process.
+>This problem might be caused by incorrect configuration of the daemon.
+>For example, an unrecognized jvm option is used.
+>Please refer to the user guide chapter on the daemon at >https://docs.gradle.org/4.7/userguide/gradle_daemon.html
+>Please read the following process output to find out more:`
+>-----------------------
+>* Try:
+>Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log >output. Run with --scan to get full insights.
+
+Unable to start the daemon process... **when explicity run with false flag in props file**
+
+the next try maybe gradle didn't read the prop file proper .. **so explicity set no deamon arg**
+
+`$ gradle --info --no-daemon clean`
+
+>Initialized native services in: /opt/gradle/ceph3us/native
+To honour the JVM settings for this build a new JVM will be forked. Please consider using the daemon: https://docs.gradle.org/4.7/userguide/gradle_daemon.html.
+Starting process 'Gradle build daemon'. Working directory: /opt/gradle/ceph3us/daemon/4.7 Command: /opt/jdk1.8/bin/java -XX:+AggressiveOpts -XX:+UseG1GC -Xmn512m -XX:MaxMetaspaceSize=1g -XX:SurvivorRatio=40 -XX:+UseCompressedOops -XX:+UseCompressedClassPointers -XX:-OmitStackTraceInFastThrow -XX:SoftRefLRUPolicyMSPerMB=100 -XX:-HeapDumpOnOutOfMemoryError -Xms512m -Xmx3g -Dfile.encoding=UTF-8 -Duser.country=PL -Duser.language=pl -Duser.variant -cp /opt/gradle/lib/gradle-launcher-4.7.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 4.7
+Successfully started process 'Gradle build daemon'
+An attempt to start the daemon took 1.005 secs.
+
+FAILURE: Build failed with an exception.
+
+>* What went wrong:
+Unable to start the daemon process.
+This problem might be caused by incorrect configuration of the daemon.
+For example, an unrecognized jvm option is used.
+Please refer to the user guide chapter on the daemon at https://docs.gradle.org/4.7/userguide/gradle_daemon.html
+Please read the following process output to find out more:
+-----------------------
+
+
+>* Try:
+Run with --stacktrace option to get the stack trace. Run with --debug option to get more log output. Run with --scan to get full insights.
+
+>* Get more help at https://help.gradle.org
+
+still some daemon shit WTF ??? one more try brings same results of bulshit doeasnt reveal the TRUE CAUSE for BUILD FAILED 
+
+'$ gradle --debug --no-daemon clean'
+
+>{ unrelated sensitive data cut}
+>16:50:14.639 [DEBUG] [org.gradle.process.internal.DefaultExecHandle] Changing state to: STARTING
+16:50:14.640 [DEBUG] [org.gradle.process.internal.DefaultExecHandle] Waiting until process started: Gradle build daemon.
+16:50:14.655 [DEBUG] [org.gradle.process.internal.DefaultExecHandle] Changing state to: STARTED
+16:50:14.656 [INFO] [org.gradle.process.internal.DefaultExecHandle] Successfully started process 'Gradle build daemon'
+16:50:14.656 [DEBUG] [org.gradle.launcher.daemon.client.DefaultDaemonStarter] Gradle daemon process is starting. Waiting for the daemon to detach...
+16:50:14.657 [DEBUG] [org.gradle.process.internal.ExecHandleRunner] waiting until streams are handled...
+16:50:14.659 [DEBUG] [org.gradle.launcher.daemon.bootstrap.DaemonOutputConsumer] Starting consuming the daemon process output.
+16:50:15.611 [DEBUG] [org.gradle.process.internal.DefaultExecHandle] Changing state to: DETACHED
+16:50:15.611 [DEBUG] [org.gradle.process.internal.DefaultExecHandle] Process 'Gradle build daemon' finished with exit value 0 (state: DETACHED)
+16:50:15.611 [DEBUG] [org.gradle.launcher.daemon.client.DefaultDaemonStarter] Gradle daemon process is now detached.
+16:50:15.613 [INFO] [org.gradle.launcher.daemon.client.DefaultDaemonStarter] An attempt to start the daemon took 0.982 secs.
+16:50:15.620 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] 
+16:50:15.620 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] FAILURE: Build failed with an exception.
+16:50:15.620 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] 
+16:50:15.620 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] * What went wrong:
+16:50:15.620 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] Unable to start the daemon process.
+16:50:15.620 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] This problem might be caused by incorrect configuration of the daemon.
+16:50:15.620 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] For example, an unrecognized jvm option is used.
+16:50:15.620 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] Please refer to the user guide chapter on the daemon at https://docs.gradle.org/4.7/userguide/gradle_daemon.html
+16:50:15.620 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] Please read the following process output to find out more:
+16:50:15.620 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] -----------------------
+16:50:15.620 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] 
+16:50:15.620 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] 
+16:50:15.620 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] * Try:
+16:50:15.620 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] Run with --stacktrace option to get the stack trace.  Run with --scan to get full insights.
+16:50:15.621 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] 
+16:50:15.621 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] * Get more help at https://help.gradle.org
+
+**pleaes add OOM storage watcher during task execution that will throw some sort of StorageOOM exception**
+
+**distracts from the fact that there was no memory left at the start of the gradle .. which should be signalized apriori any taskl start / evaluate**
+
+tneet to consider the SPACE 
+-- WHERE PROJECT IS EXECUTED (build output)   
+-- WHEN GRADLE WRITES  (cache, etc) 
+
+**those places should be checked during start gradle (LOW MEM WARNING) and monitored as mentioned above**
+
+
+i have wasted 5 min befor i did to know the real cause..  +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP1191797 +++$+++ ROOT +++$+++ ROOT +++$+++ 2018-07-09T20:30:35Z +++$+++ Closing due to abusive language. Please read our code of conduct and open an issue using appropriate language. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP10565704 +++$+++ ROOT +++$+++ COM0 +++$+++ 2018-07-18T14:23:11Z +++$+++ @oehme  you are funny :) you can learn a bit about semantics, grammar and the meanings of words - essentialy about language and usage :) 
+can you tell me who was here offended ?
+
+**maybe better was to use here a euphemisms so that the dumb people didn't think they were being offended when in fact nobody was...**  if you fell so then it is your right to feel as you want to :) 
+
+understanding is key to everything.. so **try to understand it does not hurt!**
+
+
+cipa, kutas, jebnij, pierdolenie 
+
+best 
+ceph3us +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP1191797 +++$+++ ROOT +++$+++ COM1 +++$+++ 2018-07-18T14:38:23Z +++$+++ If this is your way of communicating, please stay away from our community. +++$+++ 0 +++$+++ 0

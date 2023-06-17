@@ -1,0 +1,90 @@
+ROOT +++$+++ SP4564579 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-12-23T19:59:09Z +++$+++ ref-struct errors can be suppressed in VB. ```vb
+Class C
+    Public Shared Sub FooWithoutAnyErrorsOrWarnings()
+#Disable Warning BC40008 ' Type or member is obsolete
+        Foo()
+#Enable Warning BC40008 ' Type or member is obsolete
+    End Sub
+
+    <Obsolete("", False)>
+    Private Shared Sub Foo()
+        Dim x = New Span(Of Byte)({1, 2, 3})
+    End Sub
+End Class
+```
+
+This turns out to be pretty dangerous.  It's easy to create code now that captures spans and reads/writes from them long after their backing store is invalid:
+
+```vb
+<Obsolete("", False)>
+Class C
+    Private s As Span(Of Byte)
+
+    Public Sub Capture(s As Span(Of Byte))
+        Me.s = s
+    End Sub
+
+    Public Function Read() As Byte()
+        Return s.ToArray()
+    End Function
+End Class
+```
+
+This was discovered as a way to workaround the restriction against using ref-structs in VB where lifetimes are not tracked.  However, even though there is no usage of any unsafe apis, it's now trivial to get into very unsafe scenarios that could trivially lead to memory corruption.
+
+When we discussed 'obsolete' as the mechanism to disable access to this type, i'm not sure if it was ever recognized that there was this loophole.  I personally never realized an 'obsolete error' could be suppressed by an 'obsolete warning'.  
+
+Should we introduce a new category of obsolete (similar to how we added diagnostics to them)?  i.e. one that is an error, but is always an error no matter what? +++$+++ 0 +++$+++ 1
+COM0 +++$+++ SP4564579 +++$+++ ROOT +++$+++ ROOT +++$+++ 2020-12-23T19:59:17Z +++$+++ Tagging @jaredpar  +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP900107 +++$+++ ROOT +++$+++ COM0 +++$+++ 2020-12-25T01:54:24Z +++$+++ Or you could allow VB.net to **consume** types of this kind. +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM1 +++$+++ 2020-12-25T01:57:07Z +++$+++ @AdamSpeight2008 i believe the decisoin was already made on that that this was not supported.  Hence the use of ObsoleteAttribute in the first place.  Note that this issue applies to C# as well as VB.  +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP12789369 +++$+++ ROOT +++$+++ COM2 +++$+++ 2020-12-25T09:19:38Z +++$+++ The issue is assignment, if all I do is pass a Span or Ref Struct to another API that understands them the concern would not hold. That way VB could access all the New high performance API's and not get into the complexity they require to implement API's using these unsafe features. This is similar as VB's IntPtr it gets from Windows and is only safe to pass back to Windows.
+
+To be clear I don't want to write any code in VB that accesses these Obsolete types
+This would be allowed
+```
+Dim json As String = JsonSerializer.Serialize(people, New JsonSerializerOptions With
+   {
+    .WriteIndented = True,
+    .ReferenceHandler = New ReferenceHandler(Of GuidReferenceResolver)
+   }
+)
+
+```
+Obsolete reference would not be allowed to leak out of a statement. so below would not be allowed.
+```
+Dim options As JsonSerializerOptions = New JsonSerializerOptions With
+  {
+    .WriteIndented = True,
+    .ReferenceHandler = New ReferenceHandler(Of GuidReferenceResolver)
+  }
+
+Dim json As String = JsonSerializer.Serialize(people, options)
+```
+ +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP48354902 +++$+++ ROOT +++$+++ COM3 +++$+++ 2020-12-25T10:01:23Z +++$+++ In fact, VB can't violate ref structs rules, as this throws external runtime exceptions, so, it is not that dangerous as it will not work!
+So, I strongly recommend that you take no action about that. I came up with this Obsolete workaround to allow VB to use important libraries such as System.Text.Json, and it worked. All we need is to read the rsf types, not to copy or box them in any way. We can stick to that and hold responsible for any outcome. 
+I see no benefits of denying VB access to new .NET core APIs that use ref structs. I found a cheap workaround, but seems @CyrusNajmabadi  wants to put money and effort to take it out of our hands. This seems a loose/loose situation for the team and VB devs, and serves no purpose at all except sending a repeated message that VB is being deliberately killed, otherwise, why it only gets changes when it is not of favor of anyone? 
+I think VB will do much better if you left it as is. No more damage please.
+Thanks. +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP48354902 +++$+++ ROOT +++$+++ COM4 +++$+++ 2020-12-25T13:28:25Z +++$+++ I think we need to hear VB community voice here:
+@Happypig375  @pricerc @hartmair @franzalex  @gilfusion @ekolis @tfukumori @RevensofT @jrmoreno1 @salelele @DzonnyDZ @rskar-git @cristianlt23 @aarondglover @tverweij @KathleenDollard @ocdtrekkie  @Nukepayload2 @vbcodec  @Padanian @sahil48  +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP10798596 +++$+++ ROOT +++$+++ COM5 +++$+++ 2020-12-25T13:55:00Z +++$+++ @CyrusNajmabadi  Please don't change the behavior of `ObsoleteAttribute`. Because my projects are already using obsolete warnings to suppress obsolete errors.
+For example:
+https://github.com/Nukepayload2/ryu/blob/1a59a71a23e948cf07be0d7d7e8e493f40ad49e5/visualbasic/D2s.vb#L483 
+
+Our commercial products are also using this behavior to workaround limitations of 3rd-party libraries.  +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP2221259 +++$+++ ROOT +++$+++ COM6 +++$+++ 2020-12-25T18:12:04Z +++$+++ It seems here that Microsoft is taking an active approach to kill VB actively (as opposed to passive approach - just let it die by abandoning it). :-( +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP7769348 +++$+++ ROOT +++$+++ COM7 +++$+++ 2020-12-25T18:15:34Z +++$+++ Not interested. Unsubscribing. +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM8 +++$+++ 2020-12-25T19:20:04Z +++$+++ >  Please don't change the behavior of ObsoleteAttribute.
+
+As I said:
+
+> Should we introduce a new category of obsolete (similar to how we added diagnostics to them)? i.e. one that is an error, but is always an error no matter what? +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM9 +++$+++ 2020-12-25T19:21:29Z +++$+++ > as this throws external runtime exceptions
+
+That seems like a worse outcome. Code will compile without any indications if an issue, but then at runtime you will get cryptic runtime errors that don't even indicate where the problem exists.  +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM10 +++$+++ 2020-12-25T19:24:48Z +++$+++ > I see no benefits of denying VB access to new .NET core APIs that use ref structs.
+
+The benefit for me is the clarity that this just isn't supported or usable at all. Rather than being in this position where somethings work, but some do not, and now random cryptic runtime errors might get thrown all over the place. That doesn't seem to be a good thing.  I'd rather this either just be supported and usable, or not supported and not usable. +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP4564579 +++$+++ ROOT +++$+++ COM11 +++$+++ 2020-12-25T19:25:16Z +++$+++ Locking the convo until the team can decide on the best path forward here.  +++$+++ 0 +++$+++ 0

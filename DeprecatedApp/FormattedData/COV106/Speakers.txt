@@ -1,0 +1,8 @@
+SP9973420 +++$+++ mikedn +++$+++ CONTRIBUTOR (AUTHOR)
+SP10487869 +++$+++ tannergooding +++$+++ MEMBER
+SP22642771 +++$+++ sandreenko +++$+++ CONTRIBUTOR
+SP2973870 +++$+++ CarolEidt +++$+++ CONTRIBUTOR
+SP11621884 +++$+++ briansull +++$+++ CONTRIBUTOR
+SP2608468 +++$+++ richlander +++$+++ MEMBER
+SP5169960 +++$+++ terrajobst +++$+++ MEMBER
+SP312863 +++$+++ drieseng +++$+++ CONTRIBUTOR

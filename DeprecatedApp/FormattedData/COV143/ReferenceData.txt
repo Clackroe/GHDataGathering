@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/atom/atom/issues/10132
+Number of Comments: 39

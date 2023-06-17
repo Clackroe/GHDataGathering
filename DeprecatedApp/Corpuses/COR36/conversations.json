@@ -1,0 +1,1 @@
+{"COR36": {"title": "Last jedi release (0.18.0) is incompatible with ipython (7.19 and 7.18 tested); reason - column arg was deprecated, and now removed", "locked": true, "state": "closed"}}

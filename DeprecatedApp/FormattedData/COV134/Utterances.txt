@@ -1,0 +1,101 @@
+ROOT +++$+++ SP238676 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-02-04T14:53:36Z +++$+++ use to_list() instead of [] notation +label: docsite_pr
+
+##### SUMMARY
+when there is a single interface, data['TABLE_interface']['ROW_interface'] is a dict, not an array (case handled like populate_structured_neighbors_lldp)
+
+<!--- HINT: Include "Fixes #nnn" if you are fixing an existing issue -->
+
+##### ISSUE TYPE
+- Bugfix Pull Request
+
+##### COMPONENT NAME
+nxos_facts.py
+
+##### ADDITIONAL INFORMATION
+
+
+
+BEFORE fix
+```paste below
+PLAY [nxos] ****************************************************************************************************
+
+TASK [Gathering Facts] *****************************************************************************************
+ok: [xxxxxxxxx]
+
+TASK [nxos_facts : nxos_facts | get nxos facts] ****************************************************************
+An exception occurred during task execution. To see the full traceback, use -vvv. The error was: TypeError: string indices must be integers
+fatal: [xxxxxxxxxx]: FAILED! => {
+    "changed": false, 
+    "rc": 1
+}
+
+MSG:
+
+MODULE FAILURE
+See stdout/stderr for the exact error
+
+
+MODULE_STDERR:
+
+Traceback (most recent call last):
+  File "/home/xxx/.ansible/tmp/ansible-local-1379dtiyx8/ansible-tmp-1549291810.13-164228265130085/AnsiballZ_nxos_facts.py", line 113, in <module>
+    _ansiballz_main()
+  File "/home/xxx/.ansible/tmp/ansible-local-1379dtiyx8/ansible-tmp-1549291810.13-164228265130085/AnsiballZ_nxos_facts.py", line 105, in _ansiballz_main
+    invoke_module(zipped_mod, temp_path, ANSIBALLZ_PARAMS)
+  File "/home/xxx/.ansible/tmp/ansible-local-1379dtiyx8/ansible-tmp-1549291810.13-164228265130085/AnsiballZ_nxos_facts.py", line 48, in invoke_module
+    imp.load_module('__main__', mod, module, MOD_DESC)
+  File "/tmp/ansible_nxos_facts_payload_Txdrav/__main__.py", line 1003, in <module>
+  File "/tmp/ansible_nxos_facts_payload_Txdrav/__main__.py", line 986, in main
+  File "/tmp/ansible_nxos_facts_payload_Txdrav/__main__.py", line 387, in populate
+  File "/tmp/ansible_nxos_facts_payload_Txdrav/__main__.py", line 422, in populate_structured_interfaces
+TypeError: string indices must be integers
+
+
+
+msg:
+MODULE FAILURE
+See stdout/stderr for the exact error
+
+PLAY RECAP *****************************************************************************************************
+xxxxxxx              : ok=1    changed=0    unreachable=0    failed=1   
+```
+AFTER fix
+
+```
+PLAY [nxos] ****************************************************************************************************
+
+TASK [Gathering Facts] *****************************************************************************************
+ok: [xxxxxxxxxx]
+
+TASK [nxos_facts : nxos_facts | get nxos facts] ****************************************************************
+ok: [xxxxxxxxx]
+
+PLAY RECAP *****************************************************************************************************
+xxxxxxxxx                 : ok=2    changed=0    unreachable=0    failed=0   
+
+
+
+
+```
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP6585283 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-02-04T14:57:20Z +++$+++ cc @GGabriele @jedelman8 @mikewiebe @rahushen @rcarrillocruz @trishnaguha @tstoner
+[click here for bot help](https://github.com/ansible/ansibullbot/blob/master/ISSUE_HELP.md)
+<!--- boilerplate: notify ---> +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP6585283 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-02-04T14:57:20Z +++$+++ @r1k0, just so you are aware we have a dedicated Working Group for network.
+You can find other people interested in this in `#ansible-network` on Freenode IRC
+For more information about communities, meetings and agendas see https://github.com/ansible/community
+
+[click here for bot help](https://github.com/ansible/ansibullbot/blob/master/ISSUE_HELP.md)
+<!--- boilerplate: community_workgroups ---> +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP6585283 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-02-04T19:00:51Z +++$+++ @r1k0 this PR contains the following merge commits:
+
+* https://github.com/ansible/ansible/commit/234d5988faec3639aa0bcdeb7775d963c52a9b21
+
+Please [rebase your branch](http://docs.ansible.com/ansible/devel/dev_guide/developing_rebasing.html) to remove these commits.
+
+[click here for bot help](https://github.com/ansible/ansibullbot/blob/master/ISSUE_HELP.md)
+<!--- boilerplate: merge_commit_notify ---> +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP238676 +++$+++ ROOT +++$+++ COM2 +++$+++ 2019-02-04T20:15:29Z +++$+++ @trishnaguha somehow your suggestion fails the check. I tried twice via github gui (dont have git installed and no rights to) and I probably shouldn't make any more PR as they will fail.
+imo, should merge what works and then iterate not the other way around.  it's ok to not merge the original commit, plugins are fine. +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP13337039 +++$+++ ROOT +++$+++ COM3 +++$+++ 2019-02-05T04:39:32Z +++$+++ @r1k0 Please feel free to reopen the pull request so that we can discuss about the CI failure. Your original commit in the PR looked fine and will work, but the review I submitted is how ansible code base does it.  +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP238676 +++$+++ ROOT +++$+++ COM4 +++$+++ 2019-02-05T19:17:54Z +++$+++ @trishnaguha I'm sorry I don't have much time for other things beside work and family. I didn't realize a 4 line PR would pull me into a discussion on how to improve it by implementing a new code base and consequently figure why shippable would fail. I understand your request but I'm not sure it is the most efficient. Release fast and refactor after by actors that have an interest (they'll make time) in it (dissecting to_list() brings not value to my use case). Look, 24h later, a valid tiny patch is still not merged and we'd need to "discuss" why shippable failed on its improvement, not even on the patch itself. It's clearly less effective than merge and refactor later added to the fact I feel my time creating that PR was wasted, so not rewarding, hence I'll think twice before making another PR. There is much more to gain by going fast on smalls steps/iteration and securing what you have asap, that's my way of working anyway so very subjective I'll give you that. Feel free do whatever you see fit, I'm off to other things, good luck & sorry for the noise. +++$+++ 0 +++$+++ 0

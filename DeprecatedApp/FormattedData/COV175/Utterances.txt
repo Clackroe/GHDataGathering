@@ -1,0 +1,49 @@
+ROOT +++$+++ SP16668354 +++$+++ ROOT +++$+++ ROOT +++$+++ 2021-03-07T04:41:41Z +++$+++ Microsoft Safety Scanner shows different results than Test-ProxyLogon.ps1  **Describe the issue**
+I ran Test-ProxyLogon.ps1 it showed that my machine was impacted by the 0day CVEs.
+I ran MSERT and it reported nothing on a full scan.
+**Expected behavior**
+
+I would expect that both of them would show IOCs or neither of them would show IOCs.
+
+How is anyone supposed to know what is going on if two tools from the same company gives two different results? +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP4518572 +++$+++ ROOT +++$+++ ROOT +++$+++ 2021-03-07T04:51:06Z +++$+++ Test-ProxyLogon.ps1 and MSERT scan for two different things. They are not expected to show the same results. Please refer to the blog post for details. +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP16668354 +++$+++ ROOT +++$+++ COM0 +++$+++ 2021-03-07T05:14:25Z +++$+++ Quote the blog post to me one more time.
+
+On Sat, Mar 6, 2021, 11:51 PM Bill Long <notifications@github.com> wrote:
+
+> Closed #109 <https://github.com/microsoft/CSS-Exchange/issues/109>.
+>
+> —
+> You are receiving this because you authored the thread.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/microsoft/CSS-Exchange/issues/109#event-4417645174>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/AD7FNQTM4RXUTTGGOOOQO5TTCMA4LANCNFSM4YXOOVPQ>
+> .
+>
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP16668354 +++$+++ ROOT +++$+++ COM1 +++$+++ 2021-03-07T05:28:19Z +++$+++ I honestly cannot believe how casual and dismissive you guys at MS are.
+Lose more games than the Jets and act like you are a team full of Tom
+Bradys. The hubris. I understand it must really difficult to do your job as
+a $1.75T company but can you try?
+
+Make some sort of effort. Please? Anything?
+
+On Sun, Mar 7, 2021, 12:14 AM Drew <zerocarbthirty@gmail.com> wrote:
+
+> Quote the blog post to me one more time.
+>
+> On Sat, Mar 6, 2021, 11:51 PM Bill Long <notifications@github.com> wrote:
+>
+>> Closed #109 <https://github.com/microsoft/CSS-Exchange/issues/109>.
+>>
+>> —
+>> You are receiving this because you authored the thread.
+>> Reply to this email directly, view it on GitHub
+>> <https://github.com/microsoft/CSS-Exchange/issues/109#event-4417645174>,
+>> or unsubscribe
+>> <https://github.com/notifications/unsubscribe-auth/AD7FNQTM4RXUTTGGOOOQO5TTCMA4LANCNFSM4YXOOVPQ>
+>> .
+>>
+>
+ +++$+++ 0 +++$+++ 0

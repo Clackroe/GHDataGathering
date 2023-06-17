@@ -1,0 +1,5 @@
+SP15650524 +++$+++ WrongBit +++$+++ NONE (AUTHOR)
+SP7389110 +++$+++ mdtauk +++$+++ CONTRIBUTOR
+SP5379488 +++$+++ kmgallahan +++$+++ CONTRIBUTOR
+SP3163374 +++$+++ maxkatz6 +++$+++ CONTRIBUTOR
+SP20667023 +++$+++ jevansaks +++$+++ MEMBER

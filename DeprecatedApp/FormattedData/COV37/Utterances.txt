@@ -1,0 +1,2476 @@
+ROOT +++$+++ SP8958862 +++$+++ ROOT +++$+++ ROOT +++$+++ 2013-04-28T07:35:03Z +++$+++ Dart VM on FreeBSD _This issue was originally filed by efes...&#064;gmail.com_
+
+---
+
+Is there posibility that Dart VM will support BSD (like Go)?
+ +++$+++ 0 +++$+++ 0
+COM0 +++$+++ SP2156198 +++$+++ ROOT +++$+++ ROOT +++$+++ 2013-04-29T12:32:42Z +++$+++ _Added [Area-VM](../labels/Area-VM), [Triaged](../labels/Triaged) labels._
+ +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP5449880 +++$+++ ROOT +++$+++ COM0 +++$+++ 2013-06-05T21:20:29Z +++$+++ _Removed [Priority-Medium](../labels/Priority-Medium) label._
+_Added [Priority-Unassigned](../labels/Priority-Unassigned) label._
+ +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP8958862 +++$+++ ROOT +++$+++ COM1 +++$+++ 2014-01-22T03:24:57Z +++$+++ _This comment was originally written by beatg...&#064;gmail.com_
+
+---
+
+I got this error on a gclient runhooks:
+
+________ running '/usr/local/bin/python dart/tools/gyp_dart.py runtime' in '/usr/home/otto'
+gyp: Undefined variable dart_target_os in dart/runtime/dart-runtime.gyp while trying to load dart/runtime/dart-runtime.gyp
+Error: Command /usr/local/bin/python dart/tools/gyp_dart.py runtime returned non-zero exit status 1 in /usr/home/otto
+
+It looks like it's not set up to run on FreeBSD, but I don't know where to make changes (I don't know anything about gyp).
+
+I searched for dart_target_os, and I found tools/gyp/configurations.gypi, which seemed like the place to add something in (configurations.gypi.patch, it's not very interesting). When I did this, I got the following error:
+
+________ running '/usr/local/bin/python dart/tools/gyp_dart.py runtime' in '/usr/home/otto'
+Traceback (most recent call last):
+&nbsp;&nbsp;File "dart/third_party/gyp/gyp_main.py", line 18, in &lt;module>
+&nbsp;&nbsp;&nbsp;&nbsp;sys.exit(gyp.script_main())
+&nbsp;&nbsp;File "dart/third_party/gyp/pylib/gyp/**init**.py", line 547, in script_main
+&nbsp;&nbsp;&nbsp;&nbsp;return main(sys.argv[1:])
+&nbsp;&nbsp;File "dart/third_party/gyp/pylib/gyp/**init**.py", line 540, in main
+&nbsp;&nbsp;&nbsp;&nbsp;return gyp_main(args)
+&nbsp;&nbsp;File "dart/third_party/gyp/pylib/gyp/**init**.py", line 516, in gyp_main
+&nbsp;&nbsp;&nbsp;&nbsp;options.circular_check)
+&nbsp;&nbsp;File "dart/third_party/gyp/pylib/gyp/**init**.py", line 131, in Load
+&nbsp;&nbsp;&nbsp;&nbsp;params['parallel'])
+&nbsp;&nbsp;File "dart/third_party/gyp/pylib/gyp/input.py", line 2714, in Load
+&nbsp;&nbsp;&nbsp;&nbsp;SetUpConfigurations(target, target_dict)
+&nbsp;&nbsp;File "dart/third_party/gyp/pylib/gyp/input.py", line 2175, in SetUpConfigurations
+&nbsp;&nbsp;&nbsp;&nbsp;target_dict, configuration, [])
+&nbsp;&nbsp;File "dart/third_party/gyp/pylib/gyp/input.py", line 2116, in MergeConfigWithInheritance
+&nbsp;&nbsp;&nbsp;&nbsp;target_dict, parent, visited + [configuration])
+&nbsp;&nbsp;File "dart/third_party/gyp/pylib/gyp/input.py", line 2116, in MergeConfigWithInheritance
+&nbsp;&nbsp;&nbsp;&nbsp;target_dict, parent, visited + [configuration])
+&nbsp;&nbsp;File "dart/third_party/gyp/pylib/gyp/input.py", line 2111, in MergeConfigWithInheritance
+&nbsp;&nbsp;&nbsp;&nbsp;configuration_dict = target_dict['configurations'][configuration]
+KeyError: 'Dart_FreeBSD_Base'
+Error: Command /usr/local/bin/python dart/tools/gyp_dart.py runtime returned non-zero exit status 1 in /usr/home/otto
+
+It looks like the string Dart_FreeBSD_Base is dynamically generated from dart_target_os, but I wasn't sure where to define it. I feel like I'm going down a deep rabbit hole that won't lead me to the solution. I'm sure it's easy, I just don't know where to look.
+
+I don't know anything about gclient or gyp, and I didn't see any documentation in the repo to lead me in the right direction (except the README, which tells me I should be looking in tools/).
+
+If I get time, I'll try to wrap my head around gyp and see if I can figure out where to go from here. Issue #6929 would make this *much* easier (something like chromium's source tarballs that Arch Linux uses).
+
+---
+
+**Attachment:**
+[configurations.gypi.patch](https://storage.googleapis.com/google-code-attachments/dart/issue-10260/comment-4/configurations.gypi.patch) (673 Bytes)
+ +++$+++ 0 +++$+++ 0
+COM3 +++$+++ SP5449880 +++$+++ ROOT +++$+++ COM2 +++$+++ 2014-01-22T04:27:04Z +++$+++ Regarding the patch in comment 4:
+
+You might have a much easier time if you did say "[ 'OS=="freebsd"', { 'dart_target_os': 'Linux', } ]," as this will pickup all of the relevant build configurations for a make/gcc based build.
+ +++$+++ 0 +++$+++ 0
+COM4 +++$+++ SP8958862 +++$+++ ROOT +++$+++ COM3 +++$+++ 2014-01-22T16:46:38Z +++$+++ _This comment was originally written by beatgam...&#064;gmail.com_
+
+---
+
+Making that change I get further. "glient sync", "gclient runhooks" and "tools/build.py -mrelease -ax64 runtime" (instructions from Issue #6929). Both returned 0 exit status, but there's no "out" directory in the dart directory.
+
+All I get is: gmake: Nothing to be done for `runtime`
+
+For reference, I'm using "glient config http://dart.google.com/svn/branches/1.1/deps/standalone.deps" (I figure that will be the easiest to get working). My build env is FreeBSD 9.2 with minimal software installed (e.g. no bash so I'm running gclient.py directly).
+ +++$+++ 0 +++$+++ 0
+COM5 +++$+++ SP8958862 +++$+++ ROOT +++$+++ COM4 +++$+++ 2014-05-31T16:20:08Z +++$+++ _This comment was originally written by ef...&#064;gmail.com_
+
+---
+
+I gave up when building NSPR. Original Mozilla version has files for building with FreeBSD but in patched Dart branch are files somewhat missing. Even with proper files i am unable to compile it :(
+ +++$+++ 0 +++$+++ 0
+COM6 +++$+++ SP8958862 +++$+++ ROOT +++$+++ COM5 +++$+++ 2014-11-06T15:39:15Z +++$+++ _This comment was originally written by sms3...&#064;gmail.com_
+
+---
+
+Has there been any update on this?
+ +++$+++ 0 +++$+++ 0
+COM7 +++$+++ SP8958862 +++$+++ ROOT +++$+++ COM6 +++$+++ 2014-11-18T10:46:48Z +++$+++ _This comment was originally written by ets3rodama...&#064;gmail.com_
+
+---
+
+http://ugetdm.com/blog/3-stable/68-uget-for-bsd-is-now-available
+
+Does that perhaps help?
+ +++$+++ 0 +++$+++ 0
+COM8 +++$+++ SP8958862 +++$+++ ROOT +++$+++ COM7 +++$+++ 2015-04-20T13:47:20Z +++$+++ _This comment was originally written by @mulander_
+
+---
+
+I started work on a port for OpenBSD (https://github.com/mulander/openbsd-dart).
+
+Hacky at this point but I want to get at least the runtime built to see how the whole thing will feel. I'll start adding proper platform support for OpenBSD as soon as I get a single binary going (work limited to weekend so don't expect fast progress).
+
+People wanting to help out are of course welcome.
+ +++$+++ 0 +++$+++ 0
+COM9 +++$+++ SP8958862 +++$+++ ROOT +++$+++ COM8 +++$+++ 2015-04-20T15:13:08Z +++$+++ _This comment was originally written by sms3h...&#064;gmail.com_
+
+---
+
+Thanks for working on this! I'll try to jump in and help a little bit at
+some point but the schedule is full!
+ +++$+++ 0 +++$+++ 0
+COM10 +++$+++ SP8958862 +++$+++ ROOT +++$+++ COM9 +++$+++ 2015-05-10T18:23:19Z +++$+++ _This comment was originally written by @mulander_
+
+---
+
+Hi all, short status update on the porting effort.
+
+The build got pretty far, as in most of dart runtime builds without issues with small modifications to use kqueue/pthreads in some places - so far I 'patched' 36 files where most of them is 'use the mac one instead of linux' or 'use the android one instead of linux' with really rare cases when I actually had to edit the code. I obviously took the recommended "[ 'OS=="openbsd"', { 'dart_target_os': 'Linux', } ]," from comment #&#173;5.
+
+Unfortunately I'm also having huge issues with building NSPR similarly to what was reported in comment #&#173;7 over an year ago. I'm afraid that without guidance/help I won't be able to move far with the port.
+
+Regardless, it would be nice if the project had a porting guide for new platforms. I did not find any documentation that would tell me how the project build system works & how it should be configured. I don't know why the third party libs are bundled with the distribution & how to untangle them to use the system wide installed & already ported libraries. I assume the project has reasons for that but this leads to duplicate effort in software porting on the platform side.
+
+The current state is of course uploaded to the github account linked in comment #&#173;10.
+ +++$+++ 0 +++$+++ 0
+COM11 +++$+++ SP1343914 +++$+++ ROOT +++$+++ COM10 +++$+++ 2015-05-11T07:27:57Z +++$+++ We are working on moving the TLS support from Mozilla NSS to Boring SSL. If the NSS library and its dependencies are providing issues, then maybe just stubbing it out for now, and not support TLS until the change to use Boring SSL has landed.
+ +++$+++ 0 +++$+++ 0
+COM12 +++$+++ SP8958862 +++$+++ ROOT +++$+++ COM11 +++$+++ 2015-05-11T10:13:43Z +++$+++ _This comment was originally written by @mulander_
+
+---
+
+Hi sgjesse@, thanks for the response.
+
+I will give stubbing out a shot over the next weekend, good to know that you are moving to Boring SSL.
+
+Two little requests, please make it possible to pick up system wide Boring SSL during the build. Additionally I would be interested in using LibreSSL for dart on OpenBSD. Considering that both projects are an OpenSSL fork it should not be that hard if the build is not hard wired to Boring SSL.
+
+Regards,
+Adam
+ +++$+++ 0 +++$+++ 0
+COM13 +++$+++ SP107247 +++$+++ ROOT +++$+++ COM12 +++$+++ 2015-09-02T20:01:26Z +++$+++ Hi guys, I'm @mulander from the migrated code.google.com comments (the guy trying to get Dart running on #OpenBSD).
+
+I didn't give up and I'm really happy that BoringSSL replaced nss/nspr.
+
+Though since the changes are only on head and adding OpenBSD support will be a much larger endeavour than just patching a file or two here & there I made a fork off the official repository and plan to do a proper port hopefully working with the upstream to make adding the BSD platform in a smooth way that's acceptable on both sides.
+
+According to the [Contributing](https://github.com/dart-lang/sdk/wiki/Contributing) guide I should give an up front notice with larger changes possibly coming down the line to coordinate.
+
+Goals for my branch:
+- build the base runtime on OpenBSD
+- build the whole SDK
+- allow using LibreSSL instead of BoringSSL
+- eventually build the Dartium browser
+
+There's no action that upstream needs to take now of course. The initial porting effort with an updated status can be found [here](https://github.com/mulander/openbsd-dart), the new fork is under my account [here](https://github.com/mulander/sdk).
+ +++$+++ 0 +++$+++ 0
+COM14 +++$+++ SP5479 +++$+++ ROOT +++$+++ COM13 +++$+++ 2015-09-02T20:03:37Z +++$+++ cc @whesse  and @mit-mit 
+ +++$+++ 0 +++$+++ 0
+COM15 +++$+++ SP4905639 +++$+++ ROOT +++$+++ COM14 +++$+++ 2015-09-07T09:31:03Z +++$+++ Have you considered trying to make the ninja build work, rather than the make build?  It may be that this new build system is more rational, and the generation of the build files by gyp is clearer, than the "make" gyp_generator.  Documentation for gyp is at https://chromium.googlesource.com/external/gyp/+/md-pages/index.md
+ +++$+++ 0 +++$+++ 0
+COM16 +++$+++ SP107247 +++$+++ ROOT +++$+++ COM15 +++$+++ 2015-09-07T15:59:08Z +++$+++ @whesse I didn't try the ninja build. Essentially I got this one working flawlessly by putting symlinks to gcc, g++ & cc in a local directory that is in front of $PATH.
+
+I would personally say the build feels to be going quite well so far and I think I'm not that far away from having a working runtime. Though the porting effort is paused until the next weekend.
+ +++$+++ 0 +++$+++ 0
+COM17 +++$+++ SP180825 +++$+++ ROOT +++$+++ COM16 +++$+++ 2015-12-23T16:09:54Z +++$+++ @mulander any update on your effort? I would really love to see DartVM on the BSD's (FreeBSD in particular) ... and I would like to help .. just don't think I have the needed skills.
+ +++$+++ 0 +++$+++ 0
+COM18 +++$+++ SP107247 +++$+++ ROOT +++$+++ COM17 +++$+++ 2015-12-23T16:32:15Z +++$+++ @pbgc I was able to last work on this port on September 19th. Unfortunately since then work has been busy which left no time for further dart work. I did not abandon the porting effort - it's just on hold for now.
+
+Initial porting effort: https://github.com/mulander/openbsd-dart
+Normal branch to work on upstreaming proper support: https://github.com/mulander/sdk/commits/OpenBSD-support
+
+@krytarowski started a similar effort to port Dart to NetBSD based on my current status, his repository is here: https://github.com/krytarowski/sdk (also on hold from what I know)
+
+@pbgc though it should be noted I am porting this for OpenBSD not FreeBSD though as you might be aware the work should be really similar (same with NetBSD as we found out). You can start by forking the dart repository and adding *_freebsd.cc/h files based on the ones I added in my repository. That should get you pretty far building the code on FreeBSD.
+
+> > and I would like to help .. just don't think I have the needed skills.
+
+It just needs time. I'm also not the best person to do this but look at the age of this ticket. If people like me and you don't attempt it then we can wait another 3 years without anyone else picking the issue up. I will gladly help you get to the same spot on FreeBSD that I am with OpenBSD. Feel free to ask me question or just grab query with me on IRC @ freenode nick mulander.
+ +++$+++ 0 +++$+++ 0
+COM19 +++$+++ SP180825 +++$+++ ROOT +++$+++ COM18 +++$+++ 2015-12-24T14:52:47Z +++$+++ @mulander Thanks! I decided that trying to accomplish this will be one of my new year resolutions. On January I will setup my machine to be able to build and then will start. I will then contact you on freenode (nick pbgc)
+ +++$+++ 0 +++$+++ 0
+COM20 +++$+++ SP180825 +++$+++ ROOT +++$+++ COM19 +++$+++ 2015-12-29T23:33:47Z +++$+++ Hi!
+A quick status update!
+I was able to build the runtime on FreeBSD by patching 25 files (using linux plataform as base with some files from macos), including several gyp files.
+I will now try to build all the sdk and then make a proper Platform for FreeBSD and will try to coordinate my effort with @mulander so we can have FreeBSD and OpenBSD (NetBSD will be also easy).
+Currently I have 10/3785 failed tests:
+
+= 10 tests failed
+
+[08:16 | 100% | + 3775 | -   10]
+
+--- Total time: 08:16 ---
+0:05:06.454286 - vm - none-vm-checked release_x64/language/factory_redirection_test/04
+0:05:06.440066 - vm - none-vm-checked release_x64/language/factory_redirection_test/05
+0:05:06.435563 - vm - none-vm-checked release_x64/language/factory_redirection_test/06
+0:05:06.430600 - vm - none-vm-checked release_x64/language/factory_redirection_test/07
+0:03:23.218128 - vm - none-vm-checked release_x64/language/large_class_declaration_test
+0:02:43.406611 - vm - none-vm-checked release_x64/language/async_await_syntax_test/b11d
+0:02:37.621098 - vm - none-vm-checked release_x64/language/async_await_test/03
+0:02:37.266058 - vm - none-vm-checked release_x64/language/async_await_test/02
+0:02:14.180701 - vm - none-vm-checked release_x64/language/classes_static_method_clash_test
+0:01:15.562117 - vm - none-vm-checked release_x64/language/closure_cycles_test
+0:00:41.783698 - vm - none-vm-checked release_x64/language/gc_test
+0:00:35.128110 - vm - none-vm-checked release_x64/language/hello_dart_test
+0:00:27.538508 - vm - none-vm-checked release_x64/language/factory_redirection_test/08
+0:00:25.880236 - vm - none-vm-checked release_x64/language/async_await_test/none
+0:00:21.531277 - vm - none-vm-checked release_x64/language/ct_const2_test
+0:00:19.084653 - vm - none-vm-checked release_x64/language/await_for_test
+0:00:18.226716 - vm - none-vm-checked release_x64/language/disassemble_test
+0:00:10.358696 - vm - none-vm-checked release_x64/language/vm/debug_break_enabled_vm_test/01
+0:00:09.750202 - vm - none-vm-checked release_x64/language/async_await_syntax_test/b13a
+0:00:09.183596 - vm - none-vm-checked release_x64/language/vm/optimized_stacktrace_test
+
+I don't know if the tests are failing because of the port ... or because of the PRE-1.14 status of the rep.
+
+pbeck@dart:~/dart/sdk % ./out/ReleaseX64/dart --version
+Dart VM version: 1.14.0-edge.6602644bb3fd094cddc638a8e963c6a49d9cbdc8 (Tue Dec 29 08:46:27 2015) on "linux_x64"
+
+pbeck@dart:~/dart/sdk % uname -a
+FreeBSD dart 10.2-RELEASE-p7 FreeBSD 10.2-RELEASE-p7 #0: Mon Nov  2 14:19:39 UTC 2015     root@amd64-builder.daemonology.net:/usr/obj/usr/src/sys/GENERIC  amd64
+ +++$+++ 0 +++$+++ 0
+COM21 +++$+++ SP180825 +++$+++ ROOT +++$+++ COM20 +++$+++ 2015-12-29T23:58:59Z +++$+++ Running the tests with:
+
+./out/ReleaseX64/dart tools/test.dart --compiler none --runtime vm --progress color --arch x64 --mode release --checked --report --time --tasks 6 -t60 language
+
+I get 8 tests failed
+
+[08:20 | 100% | + 3777 | -    8]
+
+--- Total time: 08:20 ---
+0:07:56.502934 - vm - none-vm-checked release_x64/language/async_await_syntax_test/a15c
+0:07:56.375965 - vm - none-vm-checked release_x64/language/async_await_syntax_test/a15d
+0:06:03.708446 - vm - none-vm-checked release_x64/language/ct_const2_test
+0:05:48.473868 - vm - none-vm-checked release_x64/language/disassemble_test
+0:03:23.058061 - vm - none-vm-checked release_x64/language/large_class_declaration_test
+0:02:21.911094 - vm - none-vm-checked release_x64/language/async_await_syntax_test/b00a
+0:01:34.449744 - vm - none-vm-checked release_x64/language/classes_static_method_clash_test
+0:01:17.627236 - vm - none-vm-checked release_x64/language/closure_cycles_test
+0:00:42.253910 - vm - none-vm-checked release_x64/language/gc_test
+0:00:37.057008 - vm - none-vm-checked release_x64/language/vm/optimized_stacktrace_test
+0:00:36.798708 - vm - none-vm-checked release_x64/language/hello_dart_test
+0:00:26.233428 - vm - none-vm-checked release_x64/language/async_await_test/none
+0:00:19.042199 - vm - none-vm-checked release_x64/language/await_for_test
+0:00:14.891542 - vm - none-vm-checked release_x64/language/async_await_syntax_test/b00c
+0:00:11.004358 - vm - none-vm-checked release_x64/language/vm/debug_break_enabled_vm_test/01
+0:00:09.445221 - vm - none-vm-checked release_x64/language/async_await_syntax_test/e1
+0:00:07.805136 - vm - none-vm-checked release_x64/language/async_star_test
+0:00:06.947421 - vm - none-vm-checked release_x64/language/vm/closure_memory_retention_test
+0:00:04.021573 - vm - none-vm-checked release_x64/language/inferrer_constructor5_test/none
+0:00:02.996990 - vm - none-vm-checked release_x64/language/allocate_test
+
+Executing a test in isolation I get this information:
+
+Total: 3788 tests
+- 3 tests will be skipped (0 skipped by design)
+- 0 tests are expected to be flaky but not crash
+- 0 tests are expected to flaky crash
+- 3746 tests are expected to pass
+- 22 tests are expected to fail that we won't fix
+- 15 tests are expected to fail that we should fix
+- 0 tests are expected to crash that we should fix
+- 0 tests are allowed to timeout
+- 0 tests are skipped on browsers due to compile-time error
+- 2 could not be categorized or are in multiple categories
+
+So ... I'm confused .....
+
+Can someone give me some guidance on what to look for (thread implementation, etc..) if any of the failed tests are unexpected failures?
+
+I forgot to mention ... The build is done with CLANG:
+
+pbeck@dart:~/dart/sdk % clang --version
+FreeBSD clang version 3.4.1 (tags/RELEASE_34/dot1-final 208032) 20140512
+Target: x86_64-unknown-freebsd10.2
+Thread model: posix
+
+Thanks in advance!
+Pedro Costa
+ +++$+++ 0 +++$+++ 0
+COM22 +++$+++ SP6665730 +++$+++ ROOT +++$+++ COM21 +++$+++ 2015-12-30T01:37:38Z +++$+++ Please upstream BSD bits as soon as possible, I will mirror them for NetBSD.
+ +++$+++ 0 +++$+++ 0
+COM23 +++$+++ SP107247 +++$+++ ROOT +++$+++ COM22 +++$+++ 2016-01-01T19:08:46Z +++$+++ I now have a fully built runtime & sdk on OpenBSD added as a proper 'target platform'.
+
+What's left:
+- ~~run runtime tests~~ :+1: 3780 passed; :red_circle:  5 failed;
+- ~~build sdk~~
+- build all
+- review and implement runtime specifics (like procfs path)
+
+Can someone from the dart team update on how the upstream wants to move forward?
+
+All of my changes are in a feature branch of my repo https://github.com/mulander/sdk/commits/OpenBSD-support merged periodically with latest upstream so the code is not stale.
+
+Should I open a pull request now? Do you want me to first go through other steps? I think the code could be merged early as none of the existing files are modified in a way that would impact other build targets (I'm just adding openbsd entries to gypi files + *_openbsd.cc/h files).
+ +++$+++ 0 +++$+++ 0
+COM24 +++$+++ SP107247 +++$+++ ROOT +++$+++ COM23 +++$+++ 2016-01-01T20:05:00Z +++$+++ Here is a full test run from a debug runtime + sdk build. 5 tests failed 3780 passed.
+
+```
+$ ./DebugX64/dart ../tools/test.dart --compiler none --runtime vm --progress color --arch x64 --mode debug --checked --report --time --tasks 6 -t60 l
+anguage
+Test configuration: none_vm_debug_x64_checked
+[00:27 |  --% | +   22 | -    0]Total: 3788 tests
+ * 3 tests will be skipped (0 skipped by design)
+ * 0 tests are expected to be flaky but not crash
+ * 0 tests are expected to flaky crash
+ * 3746 tests are expected to pass
+ * 22 tests are expected to fail that we won't fix
+ * 15 tests are expected to fail that we should fix
+ * 0 tests are expected to crash that we should fix
+ * 0 tests are allowed to timeout
+ * 0 tests are skipped on browsers due to compile-time error
+ * 2 could not be categorized or are in multiple categories
+
+[05:53 |  12% | +  474 | -    0]
+FAILED: none-vm-checked debug_x64 language/closure_cycles_test
+Expected: Pass 
+Actual: Timeout
+CommandOutput[vm]:
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /h
+ome/mulander/github.com/mulander/sdk/tests/language/closure_cycles_test.dart
+Took 0:01:00.185584
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t60 language/closure_cycles_test
+
+[10:52 |  24% | +  920 | -    1]
+FAILED: none-vm-checked debug_x64 language/ct_const2_test
+Expected: Pass 
+Actual: Timeout
+CommandOutput[vm]:
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --compile_all --ignore-unrecognized-flags --package-root=DebugX6
+4/packages/ /home/mulander/github.com/mulander/sdk/tests/language/ct_const2_test.dart
+Took 0:01:00.506468
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t60 language/ct_const2_test
+
+[18:45 |  43% | + 1628 | -    2]
+FAILED: none-vm-checked debug_x64 language/hello_dart_test
+Expected: Pass 
+Actual: Timeout
+CommandOutput[vm]:
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --compile_all --error-on-bad-type --error-on-bad-override --igno
+re-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/language/hello_dart_test.dart
+Took 0:01:00.166028
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t60 language/hello_dart_test
+
+[21:53 |  49% | + 1879 | -    3]
+FAILED: none-vm-checked debug_x64 language/vm/optimized_stacktrace_test
+Expected: Pass 
+Actual: Timeout
+CommandOutput[vm]:
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --stacktrace-every=3 --optimization-counter-threshold=10 --enabl
+e-inlining-annotations --no-background-compilation --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests
+/language/vm/optimized_stacktrace_test.dart
+Took 0:01:01.369802
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t60 language/vm/optimized_stacktrace_test
+
+[23:55 |  54% | + 2053 | -    4]
+FAILED: none-vm-checked debug_x64 language/large_class_declaration_test
+Expected: Pass 
+Actual: Timeout
+CommandOutput[vm]:
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /h
+ome/mulander/github.com/mulander/sdk/tests/language/large_class_declaration_test.dart
+Took 0:01:00.195278
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t60 language/large_class_declaration_test
+
+[43:12 | 100% | + 3780 | -    5]
+=== Failure summary:
+
+FAILED: none-vm-checked debug_x64 language/closure_cycles_test
+Expected: Pass 
+Actual: Timeout
+CommandOutput[vm]:
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /h
+ome/mulander/github.com/mulander/sdk/tests/language/closure_cycles_test.dart
+Took 0:01:00.185584
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t60 language/closure_cycles_test
+
+
+FAILED: none-vm-checked debug_x64 language/ct_const2_test
+Expected: Pass 
+Actual: Timeout
+CommandOutput[vm]:
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --compile_all --ignore-unrecognized-flags --package-root=DebugX6
+4/packages/ /home/mulander/github.com/mulander/sdk/tests/language/ct_const2_test.dart
+Took 0:01:00.506468
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t60 language/ct_const2_test
+
+
+FAILED: none-vm-checked debug_x64 language/hello_dart_test
+Expected: Pass 
+Actual: Timeout
+CommandOutput[vm]:
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --compile_all --error-on-bad-type --error-on-bad-override --igno
+re-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/language/hello_dart_test.dart
+Took 0:01:00.166028
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t60 language/hello_dart_test
+
+FAILED: none-vm-checked debug_x64 language/vm/optimized_stacktrace_test
+Expected: Pass 
+Actual: Timeout
+CommandOutput[vm]:
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --stacktrace-every=3 --optimization-counter-threshold=10 --enabl
+e-inlining-annotations --no-background-compilation --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests
+/language/vm/optimized_stacktrace_test.dart
+Took 0:01:01.369802
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t60 language/vm/optimized_stacktrace_test
+
+
+FAILED: none-vm-checked debug_x64 language/large_class_declaration_test
+Expected: Pass 
+Actual: Timeout
+CommandOutput[vm]:
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /h
+ome/mulander/github.com/mulander/sdk/tests/language/large_class_declaration_test.dart
+Took 0:01:00.195278
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t60 language/large_class_declaration_test
+
+===
+=== 5 tests failed
+===
+
+
+[43:12 | 100% | + 3780 | -    5]
+
+--- Total time: 43:12 ---
+0:01:01.369802 - vm - none-vm-checked debug_x64/language/vm/optimized_stacktrace_test
+0:01:00.506468 - vm - none-vm-checked debug_x64/language/ct_const2_test
+0:01:00.195278 - vm - none-vm-checked debug_x64/language/large_class_declaration_test
+0:01:00.185584 - vm - none-vm-checked debug_x64/language/closure_cycles_test
+0:01:00.166028 - vm - none-vm-checked debug_x64/language/hello_dart_test
+0:00:34.960820 - vm - none-vm-checked debug_x64/language/gc_test
+0:00:24.287353 - vm - none-vm-checked debug_x64/language/symbol_conflict_test
+0:00:21.027712 - vm - none-vm-checked debug_x64/language/disassemble_test
+0:00:19.957616 - vm - none-vm-checked debug_x64/language/bit_operations_test/03
+0:00:18.686961 - vm - none-vm-checked debug_x64/language/bit_operations_test/none
+0:00:17.678434 - vm - none-vm-checked debug_x64/language/osr_test
+0:00:17.561074 - vm - none-vm-checked debug_x64/language/bit_operations_test/04
+0:00:17.259620 - vm - none-vm-checked debug_x64/language/issue23244_test
+0:00:17.112266 - vm - none-vm-checked debug_x64/language/named_parameters_with_conversions_test
+0:00:17.101167 - vm - none-vm-checked debug_x64/language/compound_assignment_operator_test
+0:00:17.049203 - vm - none-vm-checked debug_x64/language/bit_operations_test/01
+0:00:16.142086 - vm - none-vm-checked debug_x64/language/async_star_test
+0:00:15.990715 - vm - none-vm-checked debug_x64/language/sync_generator1_test/01
+0:00:15.614790 - vm - none-vm-checked debug_x64/language/deferred_inlined_test
+0:00:15.595091 - vm - none-vm-checked debug_x64/language/await_future_test
+
+```
+ +++$+++ 0 +++$+++ 0
+COM25 +++$+++ SP2311549 +++$+++ ROOT +++$+++ COM24 +++$+++ 2016-01-02T11:15:53Z +++$+++ If this do not need Google, why this need you?
+ +++$+++ 0 +++$+++ 0
+COM26 +++$+++ SP5449880 +++$+++ ROOT +++$+++ COM25 +++$+++ 2016-01-04T07:50:26Z +++$+++ @mulander Thanks for the promising progress updates.
+
+Please make sure to run the full test suite and report its failure rate (e.g. omitting the "language" parameter). Also note that the default timeout for debug builds is 120 seconds and you would likely want to run with "-t120" or let the harness chose the right default value for you.
+
+Once you have run the full test harness, please follow the steps at https://github.com/dart-lang/sdk/wiki/Contributing to create a CL and send it to me for comments. Thanks!
+ +++$+++ 0 +++$+++ 0
+COM27 +++$+++ SP107247 +++$+++ ROOT +++$+++ COM26 +++$+++ 2016-01-04T16:16:49Z +++$+++ @iposva-google here are the test results for a full harness with a default timeout.
+
+The tests took 182 minutes and 38 seconds. 13514 tests passed & 71 failed. I included everything that fitted in my backlog in the snippet below.
+
+Test commmand: `./DebugX64/dart ../tools/test.dart --compiler none --runtime vm --progress color --arch x64 --mode debug --checked --report --time --tasks 6`
+
+```
+PASS: ExitDetectorTest | test_forStatement_initialization
+PASS: ExitDetectorTest | test_forStatement_true
+PASS: ExitDetectorTest | test_forStatement_true_break
+PASS: ExitDetectorTest | test_forStatement_true_continue
+PASS: ExitDetectorTest | test_forStatement_true_if_return
+PASS: ExitDetectorTest | test_forStatement_true_noBreak
+PASS: ExitDetectorTest | test_forStatement_updaters
+PASS: ExitDetectorTest | test_forStatement_variableDeclaration
+PASS: ExitDetectorTest | test_functionExpression
+PASS: ExitDetectorTest | test_functionExpression_bodyThrows
+PASS: ExitDetectorTest | test_functionExpressionInvocation
+PASS: ExitDetectorTest | test_functionExpressionInvocation_argumentThrows
+PASS: ExitDetectorTest | test_functionExpressionInvocation_targetThrows
+PASS: ExitDetectorTest | test_identifier_prefixedIdentifier
+PASS: ExitDetectorTest | test_identifier_simpleIdentifier
+PASS: ExitDetectorTest | test_if_false_else_return
+PASS: ExitDetectorTest | test_if_false_noReturn
+PASS: ExitDetectorTest | test_if_false_return
+PASS: ExitDetectorTest | test_if_noReturn
+PASS: ExitDetectorTest | test_if_return
+PASS: ExitDetectorTest | test_if_true_noReturn
+PASS: ExitDetectorTest | test_if_true_return
+PASS: ExitDetectorTest | test_ifElse_bothReturn
+PASS: ExitDetectorTest | test_ifElse_elseReturn
+PASS: ExitDetectorTest | test_ifElse_noReturn
+PASS: ExitDetectorTest | test_ifElse_thenReturn
+PASS: ExitDetectorTest | test_ifNullAssign
+PASS: ExitDetectorTest | test_ifNullAssign_rhs
+PASS: ExitDetectorTest | test_indexExpression
+PASS: ExitDetectorTest | test_indexExpression_index
+PASS: ExitDetectorTest | test_indexExpression_target
+PASS: ExitDetectorTest | test_instanceCreationExpression
+PASS: ExitDetectorTest | test_instanceCreationExpression_argumentThrows
+PASS: ExitDetectorTest | test_isExpression
+PASS: ExitDetectorTest | test_isExpression_throws
+PASS: ExitDetectorTest | test_labeledStatement
+PASS: ExitDetectorTest | test_labeledStatement_throws
+PASS: ExitDetectorTest | test_literal_boolean
+PASS: ExitDetectorTest | test_literal_double
+PASS: ExitDetectorTest | test_literal_integer
+PASS: ExitDetectorTest | test_literal_null
+PASS: ExitDetectorTest | test_literal_String
+PASS: ExitDetectorTest | test_methodInvocation
+PASS: ExitDetectorTest | test_methodInvocation_argument
+PASS: ExitDetectorTest | test_methodInvocation_target
+PASS: ExitDetectorTest | test_parenthesizedExpression
+PASS: ExitDetectorTest | test_parenthesizedExpression_throw
+PASS: ExitDetectorTest | test_propertyAccess
+PASS: ExitDetectorTest | test_propertyAccess_throws
+PASS: ExitDetectorTest | test_rethrow
+PASS: ExitDetectorTest | test_return
+PASS: ExitDetectorTest | test_superExpression
+PASS: ExitDetectorTest | test_switch_allReturn
+PASS: ExitDetectorTest | test_switch_defaultWithNoStatements
+PASS: ExitDetectorTest | test_switch_fallThroughToNotReturn
+PASS: ExitDetectorTest | test_switch_fallThroughToReturn
+PASS: ExitDetectorTest | test_switch_noDefault
+PASS: ExitDetectorTest | test_switch_nonReturn
+PASS: ExitDetectorTest | test_thisExpression
+PASS: ExitDetectorTest | test_throwExpression
+PASS: ExitDetectorTest | test_tryStatement_noReturn
+PASS: ExitDetectorTest | test_tryStatement_return_catch
+PASS: ExitDetectorTest | test_tryStatement_return_finally
+PASS: ExitDetectorTest | test_tryStatement_return_try
+PASS: ExitDetectorTest | test_variableDeclarationStatement_noInitializer
+PASS: ExitDetectorTest | test_variableDeclarationStatement_noThrow
+PASS: ExitDetectorTest | test_variableDeclarationStatement_throw
+PASS: ExitDetectorTest | test_whileStatement_false_nonReturn
+PASS: ExitDetectorTest | test_whileStatement_throwCondition
+PASS: ExitDetectorTest | test_whileStatement_true_break
+PASS: ExitDetectorTest | test_whileStatement_true_continue
+PASS: ExitDetectorTest | test_whileStatement_true_if_return
+PASS: ExitDetectorTest | test_whileStatement_true_noBreak
+PASS: ExitDetectorTest | test_whileStatement_true_return
+PASS: ExitDetectorTest | test_whileStatement_true_throw
+PASS: ExitDetectorTest2 | test_switch_withEnum_false_noDefault
+PASS: ExitDetectorTest2 | test_switch_withEnum_false_withDefault
+PASS: ExitDetectorTest2 | test_switch_withEnum_true_noDefault
+PASS: ExitDetectorTest2 | test_switch_withEnum_true_withDefault
+PASS: FileBasedSourceTest | test_equals_false_differentFiles
+PASS: FileBasedSourceTest | test_equals_false_null
+PASS: FileBasedSourceTest | test_equals_true
+PASS: FileBasedSourceTest | test_fileReadMode
+PASS: FileBasedSourceTest | test_fileReadMode_changed
+PASS: FileBasedSourceTest | test_fileReadMode_normalize_eol_always
+PASS: FileBasedSourceTest | test_getEncoding
+PASS: FileBasedSourceTest | test_getFullName
+PASS: FileBasedSourceTest | test_getShortName
+PASS: FileBasedSourceTest | test_hashCode
+FAIL: FileBasedSourceTest | test_isInSystemLibrary_contagious
+  Expected: not null
+    Actual: <null>
+
+  package:unittest/src/simple_configuration.dart 128:34         SimpleConfiguration.onExpectFailure
+  package:unittest/src/simple_configuration.dart 24:13          _ExpectFailureHandler.fail
+  package:unittest/src/matcher/expect.dart 121:5                DefaultFailureHandler.failMatch
+  package:unittest/src/matcher/expect.dart 95:20                expect
+  ../pkg/analyzer/test/generated/all_the_rest_test.dart 7847:5  FileBasedSourceTest.test_isInSystemLibrary_contagious
+  dart:mirrors-patch/mirrors_impl.dart 533                      _LocalInstanceMirror._invoke
+  dart:mirrors-patch/mirrors_impl.dart 529                      _LocalInstanceMirror.invoke
+  ../pkg/analyzer/test/reflective_tests.dart 105:35             _runTest.<fn>
+  dart:async/zone.dart 914                                      _rootRunUnary
+  dart:async/zone.dart 810                                      _CustomZone.runUnary
+  dart:async/future_impl.dart 551                               _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                               _Future._propagateToListeners
+  dart:async/future_impl.dart 424                               _Future._completeWithValue
+  dart:async/future_impl.dart 479                               _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                                      _rootRun
+  dart:async/zone.dart 802                                      _CustomZone.run
+  dart:async/zone.dart 708                                      _CustomZone.runGuarded
+  dart:async/zone.dart 733                                      _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                         _microtaskLoop
+  dart:async/schedule_microtask.dart 50                         _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394                        _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414                        _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148                     _RawReceivePortImpl._handleMessage
+PASS: FileBasedSourceTest | test_isInSystemLibrary_false
+PASS: FileBasedSourceTest | test_issue14500
+PASS: FileBasedSourceTest | test_resolveRelative_dart_fileName
+PASS: FileBasedSourceTest | test_resolveRelative_dart_filePath
+PASS: FileBasedSourceTest | test_resolveRelative_dart_filePathWithParent
+PASS: FileBasedSourceTest | test_resolveRelative_file_fileName
+PASS: FileBasedSourceTest | test_resolveRelative_file_filePath
+PASS: FileBasedSourceTest | test_resolveRelative_file_filePathWithParent
+PASS: FileBasedSourceTest | test_resolveRelative_package_fileName
+PASS: FileBasedSourceTest | test_resolveRelative_package_fileNameWithoutPackageName
+PASS: FileBasedSourceTest | test_resolveRelative_package_filePath
+PASS: FileBasedSourceTest | test_resolveRelative_package_filePathWithParent
+PASS: FileBasedSourceTest | test_system
+PASS: FileUriResolverTest | test_creation
+PASS: FileUriResolverTest | test_resolve_file
+PASS: FileUriResolverTest | test_resolve_nonFile
+PASS: FileUriResolverTest | test_restore
+PASS: ReferenceFinderTest | test_visitSimpleIdentifier_const
+PASS: ReferenceFinderTest | test_visitSimpleIdentifier_nonConst
+PASS: ReferenceFinderTest | test_visitSuperConstructorInvocation_const
+PASS: ReferenceFinderTest | test_visitSuperConstructorInvocation_nonConst
+PASS: ReferenceFinderTest | test_visitSuperConstructorInvocation_unresolved
+PASS: SDKLibrariesReaderTest | test_readFrom_dart2js
+PASS: SDKLibrariesReaderTest | test_readFrom_empty
+PASS: SDKLibrariesReaderTest | test_readFrom_normal
+PASS: UriKindTest | test_fromEncoding
+PASS: UriKindTest | test_getEncoding
+
+838 PASSED, 8 FAILED, 0 ERRORS
+
+
+stderr:
+Unhandled exception:
+Exception: Some tests failed.
+#0      SimpleConfiguration.onDone (package:unittest/src/simple_configuration.dart:197:9)
+#1      _completeTests (package:unittest/unittest.dart:368:10)
+#2      _runTest (package:unittest/unittest.dart:308:5)
+#3      _nextTestCase (package:unittest/unittest.dart:256:3)
+#4      _microtaskLoop (dart:async/schedule_microtask.dart:41)
+#5      _startMicrotaskLoop (dart:async/schedule_microtask.dart:50)
+#6      _Timer._runTimers (dart:isolate-patch/timer_impl.dart:394)
+#7      _Timer._handleMessage (dart:isolate-patch/timer_impl.dart:414)
+#8      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/pkg/analyzer/test/generated/all_the_rest_test.dart
+Took 0:01:40.232980
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 pkg/analyzer/test/generated/all_the_rest_test
+
+
+FAILED: none-vm-checked debug_x64 pkg/analyzer/test/generated/compile_time_error_code_test
+Expected: Pass
+Actual: Timeout
+CommandOutput[vm]:
+
+stdout:
+unittest-suite-wait-for-done
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/pkg/analyzer/test/generated/compile_time_error_code_test.dart
+Took 0:02:00.179501
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 pkg/analyzer/test/generated/compile_time_error_code_test
+
+
+FAILED: none-vm-checked debug_x64 pkg/analyzer/test/generated/non_error_resolver_test
+Expected: Pass
+Actual: Timeout
+CommandOutput[vm]:
+
+stdout:
+unittest-suite-wait-for-done
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/pkg/analyzer/test/generated/non_error_resolver_test.dart
+Took 0:02:00.160646
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 pkg/analyzer/test/generated/non_error_resolver_test
+
+
+FAILED: none-vm-checked debug_x64 pkg/analyzer/test/generated/resolver_test
+Expected: Pass
+Actual: Timeout
+CommandOutput[vm]:
+
+stdout:
+unittest-suite-wait-for-done
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/pkg/analyzer/test/generated/resolver_test.dart
+Took 0:02:00.236365
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 pkg/analyzer/test/generated/resolver_test
+
+
+FAILED: none-vm-checked debug_x64 pkg/analyzer/test/src/context/cache_test
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stdout:
+unittest-suite-wait-for-done
+PASS: AnalysisCacheTest | test_creation
+PASS: AnalysisCacheTest | test_get
+PASS: AnalysisCacheTest | test_getContextFor
+PASS: AnalysisCacheTest | test_getSourcesWithFullName
+PASS: AnalysisCacheTest | test_getState_hasEntry_flushed
+PASS: AnalysisCacheTest | test_getState_hasEntry_valid
+PASS: AnalysisCacheTest | test_getState_noEntry
+PASS: AnalysisCacheTest | test_getValue_hasEntry_valid
+PASS: AnalysisCacheTest | test_getValue_noEntry
+PASS: AnalysisCacheTest | test_iterator
+PASS: AnalysisCacheTest | test_put
+PASS: AnalysisCacheTest | test_remove
+PASS: AnalysisCacheTest | test_remove_invalidateResults_sameTarget
+PASS: AnalysisCacheTest | test_size
+PASS: AnalysisCacheTest | test_sources
+PASS: CacheEntryTest | test_dispose
+PASS: CacheEntryTest | test_explicitlyAdded
+PASS: CacheEntryTest | test_fixExceptionState_error_exception
+PASS: CacheEntryTest | test_fixExceptionState_noError_exception
+PASS: CacheEntryTest | test_fixExceptionState_noError_noException
+PASS: CacheEntryTest | test_getState
+PASS: CacheEntryTest | test_getValue_default
+PASS: CacheEntryTest | test_getValue_flushResults
+PASS: CacheEntryTest | test_hasErrorState_false
+PASS: CacheEntryTest | test_hasErrorState_true
+PASS: CacheEntryTest | test_invalidateAllInformation
+PASS: CacheEntryTest | test_setErrorState
+PASS: CacheEntryTest | test_setErrorState_invalidateDependent
+PASS: CacheEntryTest | test_setErrorState_noDescriptors
+PASS: CacheEntryTest | test_setErrorState_noException
+PASS: CacheEntryTest | test_setErrorState_nullDescriptors
+PASS: CacheEntryTest | test_setState_error
+PASS: CacheEntryTest | test_setState_flushed
+PASS: CacheEntryTest | test_setState_inProcess
+PASS: CacheEntryTest | test_setState_invalid
+PASS: CacheEntryTest | test_setState_invalid_dependencyCycle
+PASS: CacheEntryTest | test_setState_invalid_invalidateDependent
+PASS: CacheEntryTest | test_setState_invalid_keepEmpty_ifExplicitlyAdded
+PASS: CacheEntryTest | test_setState_invalid_removeEmptyEntry
+PASS: CacheEntryTest | test_setState_invalid_withDelta_keepDependency
+PASS: CacheEntryTest | test_setState_valid
+PASS: CacheEntryTest | test_setValue
+PASS: CacheEntryTest | test_setValue_flushResults
+PASS: CacheEntryTest | test_setValue_keepDependent
+PASS: CacheEntryTest | test_setValueIncremental
+PASS: CacheEntryTest | test_toString_empty
+PASS: CacheEntryTest | test_toString_nonEmpty
+PASS: CacheFlushManagerTest | test_madeActive
+PASS: CacheFlushManagerTest | test_madeIdle
+PASS: CacheFlushManagerTest | test_new
+PASS: CacheFlushManagerTest | test_resultAccessed
+PASS: CacheFlushManagerTest | test_resultAccessed_negativeMaxSize
+PASS: CacheFlushManagerTest | test_resultAccessed_noSuchResult
+PASS: CacheFlushManagerTest | test_resultStored
+PASS: CacheFlushManagerTest | test_resultStored_negativeMaxSize
+PASS: CacheFlushManagerTest | test_targetRemoved
+PASS: SdkCachePartitionTest | test_creation
+PASS: SdkCachePartitionTest | test_dispose
+PASS: SdkCachePartitionTest | test_entrySet
+PASS: SdkCachePartitionTest | test_get
+PASS: SdkCachePartitionTest | test_put_alreadyInPartition
+PASS: SdkCachePartitionTest | test_put_noFlush
+PASS: SdkCachePartitionTest | test_remove_absent
+PASS: SdkCachePartitionTest | test_remove_present
+PASS: SdkCachePartitionTest | test_contains_false
+ERROR: SdkCachePartitionTest | test_contains_true
+  Test failed: Caught The null object does not have a getter 'source'.
+
+  NoSuchMethodError: method not found: 'source'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                      Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                      Object.noSuchMethod
+  package:analyzer/src/context/cache.dart 1224:28           SdkCachePartition.isResponsibleFor
+  ../pkg/analyzer/test/src/context/cache_test.dart 1068:22  SdkCachePartitionTest.test_contains_true
+  dart:mirrors-patch/mirrors_impl.dart 533                  _LocalInstanceMirror._invoke
+  dart:mirrors-patch/mirrors_impl.dart 529                  _LocalInstanceMirror.invoke
+  ../pkg/analyzer/test/reflective_tests.dart 105:35         _runTest.<fn>
+  dart:async/zone.dart 914                                  _rootRunUnary
+  dart:async/zone.dart 810                                  _CustomZone.runUnary
+  dart:async/future_impl.dart 551                           _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                           _Future._propagateToListeners
+  dart:async/future_impl.dart 424                           _Future._completeWithValue
+  dart:async/future_impl.dart 479                           _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                                  _rootRun
+  dart:async/zone.dart 802                                  _CustomZone.run
+  dart:async/zone.dart 708                                  _CustomZone.runGuarded
+  dart:async/zone.dart 733                                  _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                     _microtaskLoop
+  dart:async/schedule_microtask.dart 50                     _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394                    _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414                    _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148                 _RawReceivePortImpl._handleMessage
+PASS: UniversalCachePartitionTest | test_creation
+PASS: UniversalCachePartitionTest | test_dispose
+PASS: UniversalCachePartitionTest | test_entrySet
+PASS: UniversalCachePartitionTest | test_get
+PASS: UniversalCachePartitionTest | test_put_alreadyInPartition
+PASS: UniversalCachePartitionTest | test_put_noFlush
+PASS: UniversalCachePartitionTest | test_remove_absent
+PASS: UniversalCachePartitionTest | test_remove_present
+PASS: UniversalCachePartitionTest | test_contains
+PASS: ResultDataTest | test_creation
+PASS: ResultDataTest | test_flush
+
+76 PASSED, 0 FAILED, 1 ERRORS
+
+
+stderr:
+Unhandled exception:
+Exception: Some tests failed.
+#0      SimpleConfiguration.onDone (package:unittest/src/simple_configuration.dart:197:9)
+#1      _completeTests (package:unittest/unittest.dart:368:10)
+#2      _runTest (package:unittest/unittest.dart:308:5)
+#3      _nextTestCase (package:unittest/unittest.dart:256:3)
+#4      _microtaskLoop (dart:async/schedule_microtask.dart:41)
+#5      _startMicrotaskLoop (dart:async/schedule_microtask.dart:50)
+#6      _Timer._runTimers (dart:isolate-patch/timer_impl.dart:394)
+#7      _Timer._handleMessage (dart:isolate-patch/timer_impl.dart:414)
+#8      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/pkg/analyzer/test/src/context/cache_test.dart
+Took 0:00:24.568282
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 pkg/analyzer/test/src/context/cache_test
+
+
+FAILED: none-vm-checked debug_x64 pkg/analyzer/test/src/task/dart_test
+Expected: Pass
+Actual: Timeout
+CommandOutput[vm]:
+
+stdout:
+unittest-suite-wait-for-done
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/pkg/analyzer/test/src/task/dart_test.dart
+Took 0:02:00.208476
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 pkg/analyzer/test/src/task/dart_test
+
+
+FAILED: none-vm-checked debug_x64 pkg/analyzer_cli/test/options_test
+Expected: Pass
+Actual: Fail
+CommandOutput[vm]:
+
+stdout:
+unittest-suite-wait-for-done
+
+
+stderr:
+No Dart SDK found.
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/pkg/analyzer_cli/test/options_test.dart
+Took 0:00:16.737089
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 pkg/analyzer_cli/test/options_test
+
+
+FAILED: none-vm-checked debug_x64 pkg/analyzer_cli/test/driver_test
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stdout:
+unittest-suite-wait-for-done
+ERROR: Driver | options | custom processor
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 63:16      main.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/isolate_patch.dart 96             _runPendingImmediateCallback
+  dart:isolate-patch/isolate_patch.dart 149            _RawReceivePortImpl._handleMessage
+ERROR: Driver | exit codes | fatal hints
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 75:9       main.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | exit codes | not fatal hints
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 80:9       main.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | exit codes | fatal errors
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 85:9       main.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | exit codes | not fatal warnings
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 90:9       main.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | exit codes | fatal warnings
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 95:9       main.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | exit codes | missing options file
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 100:9      main.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | exit codes | missing dart file
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 105:9      main.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | exit codes | part file
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 110:9      main.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | exit codes | non-dangling part file
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 116:16     main.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | exit codes | extra part file
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 125:16     main.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | linter | lints in options | gets analysis options
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 137:31     main.<fn>.<fn>.<fn>.<fn>
+  ../pkg/analyzer_cli/test/driver_test.dart 142:20     main.<fn>.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | linter | lints in options | generates lints
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 137:31     main.<fn>.<fn>.<fn>.<fn>
+  ../pkg/analyzer_cli/test/driver_test.dart 153:20     main.<fn>.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | linter | default lints | gets default lints
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 161:31     main.<fn>.<fn>.<fn>.<fn>
+  ../pkg/analyzer_cli/test/driver_test.dart 166:20     main.<fn>.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | linter | default lints | generates lints
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 161:31     main.<fn>.<fn>.<fn>.<fn>
+  ../pkg/analyzer_cli/test/driver_test.dart 177:20     main.<fn>.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | linter | no `--lints` flag (none in options) | lints disabled
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 185:31     main.<fn>.<fn>.<fn>.<fn>
+  ../pkg/analyzer_cli/test/driver_test.dart 189:20     main.<fn>.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | linter | no `--lints` flag (none in options) | no registered lints
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 185:31     main.<fn>.<fn>.<fn>.<fn>
+  ../pkg/analyzer_cli/test/driver_test.dart 194:20     main.<fn>.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | linter | no `--lints` flag (none in options) | no generated warnings
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 185:31     main.<fn>.<fn>.<fn>.<fn>
+  ../pkg/analyzer_cli/test/driver_test.dart 199:20     main.<fn>.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+PASS: Driver | containsLintRuleEntry
+ERROR: Driver | options processing | basic config | filters
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 233:29     main.<fn>.<fn>.<fn>.<fn>
+  ../pkg/analyzer_cli/test/driver_test.dart 237:18     main.<fn>.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | options processing | basic config | language
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 233:29     main.<fn>.<fn>.<fn>.<fn>
+  ../pkg/analyzer_cli/test/driver_test.dart 262:18     main.<fn>.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Driver | options processing | with flags | override fatal warning
+  Test failed: Caught The null object does not have a getter 'dartSdkPath'.
+
+  NoSuchMethodError: method not found: 'dartSdkPath'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/driver.dart 548:60          Driver._setupEnv
+  package:analyzer_cli/src/driver.dart 103:5           Driver.start
+  ../pkg/analyzer_cli/test/driver_test.dart 429:10     drive
+  ../pkg/analyzer_cli/test/driver_test.dart 269:29     main.<fn>.<fn>.<fn>.<fn>
+  ../pkg/analyzer_cli/test/driver_test.dart 274:18     main.<fn>.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Bootloader | plugin processing | bad format
+  Test failed: Caught The null object does not have a getter 'analysisOptionsFile'.
+
+  NoSuchMethodError: method not found: 'analysisOptionsFile'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/bootloader.dart 131:28      BootLoader._processAnalysisOptions
+  package:analyzer_cli/src/bootloader.dart 122:5       BootLoader.createImage
+  ../pkg/analyzer_cli/test/driver_test.dart 358:16     main.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+ERROR: Bootloader | plugin processing | plugin config
+  Test failed: Caught The null object does not have a getter 'analysisOptionsFile'.
+
+  NoSuchMethodError: method not found: 'analysisOptionsFile'
+  Receiver: null
+  Arguments: []
+  dart:core-patch/object_patch.dart 42                 Object._noSuchMethod
+  dart:core-patch/object_patch.dart 45                 Object.noSuchMethod
+  package:analyzer_cli/src/bootloader.dart 131:28      BootLoader._processAnalysisOptions
+  package:analyzer_cli/src/bootloader.dart 122:5       BootLoader.createImage
+  ../pkg/analyzer_cli/test/driver_test.dart 371:30     main.<fn>.<fn>.<fn>
+  package:unittest/src/internal_test_case.dart 120:37  InternalTestCase.run.<fn>
+  dart:async/zone.dart 914                             _rootRunUnary
+  dart:async/zone.dart 810                             _CustomZone.runUnary
+  dart:async/future_impl.dart 551                      _Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 637                      _Future._propagateToListeners
+  dart:async/future_impl.dart 424                      _Future._completeWithValue
+  dart:async/future_impl.dart 479                      _Future._asyncComplete.<fn>
+  dart:async/zone.dart 907                             _rootRun
+  dart:async/zone.dart 802                             _CustomZone.run
+  dart:async/zone.dart 708                             _CustomZone.runGuarded
+  dart:async/zone.dart 733                             _CustomZone.bindCallback.<fn>
+  dart:async/schedule_microtask.dart 41                _microtaskLoop
+  dart:async/schedule_microtask.dart 50                _startMicrotaskLoop
+  dart:isolate-patch/timer_impl.dart 394               _Timer._runTimers
+  dart:isolate-patch/timer_impl.dart 414               _Timer._handleMessage
+  dart:isolate-patch/isolate_patch.dart 148            _RawReceivePortImpl._handleMessage
+PASS: Bootloader | plugin processing | plugin validation | requires class name
+PASS: Bootloader | plugin processing | plugin validation | requires library URI
+PASS: Bootloader | plugin processing | plugin validation | check
+
+4 PASSED, 0 FAILED, 23 ERRORS
+
+
+stderr:
+Unhandled exception:
+Exception: Some tests failed.
+#0      SimpleConfiguration.onDone (package:unittest/src/simple_configuration.dart:197:9)
+#1      _completeTests (package:unittest/unittest.dart:368:10)
+#2      _runTest (package:unittest/unittest.dart:308:5)
+#3      _nextTestCase (package:unittest/unittest.dart:256:3)
+#4      _microtaskLoop (dart:async/schedule_microtask.dart:41)
+#5      _startMicrotaskLoop (dart:async/schedule_microtask.dart:50)
+#6      _Timer._runTimers (dart:isolate-patch/timer_impl.dart:394)
+#7      _Timer._handleMessage (dart:isolate-patch/timer_impl.dart:414)
+#8      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/pkg/analyzer_cli/test/driver_test.dart
+Took 0:00:26.019867
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 pkg/analyzer_cli/test/driver_test
+
+
+FAILED: none-vm-checked debug_x64 pkg/analyzer/tool/task_dependency_graph/check_test
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+AnalysisException: Cannot compute RESOLVED_UNIT for /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart in /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart
+Caused by Invalid input descriptor (null, LIBRARY_ELEMENT1) for Run BuildDirectiveElementsTask on /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/src/generated/engine.dart
+Path:
+Run StrongModeVerifyUnitTask on /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart in /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart|
+Run EvaluateUnitConstantsTask on /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart in /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart|
+Run ResolveLibraryReferencesTask on /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart|
+Run PropagateVariableTypesInLibraryClosureTask on /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart|
+Run ReadyLibraryElement6Task on /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart|
+Run PropagateVariableTypesInLibraryTask on /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart|
+Run PropagateVariableTypesInUnitTask on /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart in /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart|
+Run PartiallyResolveUnitReferencesTask on /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart in /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart|
+Run ReadyLibraryElement5Task on /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart|
+Run ResolveLibraryTypeNamesTask on /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart|
+Run ResolveUnitTypeNamesTask on /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart in /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/task/model.dart|
+Run BuildExportNamespaceTask on /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/src/generated/engine.dart|
+Run BuildPublicNamespaceTask on /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/src/generated/engine.dart|
+Run BuildDirectiveElementsTask on /home/mulander/github.com/mulander/sdk/pkg/analyzer/lib/src/generated/engine.dart
+#0      WorkItem.gatherInputs (package:analyzer/src/task/driver.dart:699:11)
+#1      _WorkOrderDependencyWalker.getNextInput (package:analyzer/src/task/driver.dart:850:17)
+#2      CycleAwareDependencyWalker.getNextStronglyConnectedComponent (package:analyzer/src/task/driver.dart:400:35)
+#3      WorkOrder.moveNext.<anonymous closure> (package:analyzer/src/task/driver.dart:816:31)
+#4      _PerformanceTagImpl.makeCurrentWhile (package:analyzer/src/generated/utilities_general.dart:188:15)
+#5      WorkOrder.moveNext (package:analyzer/src/task/driver.dart:808:44)
+#6      AnalysisDriver.computeResult (package:analyzer/src/task/driver.dart:111:26)
+#7      AnalysisContextImpl.computeResult (package:analyzer/src/context/context.dart:622:14)
+#8      AnalysisContextImpl.resolveCompilationUnit2 (package:analyzer/src/context/context.dart:1141:12)
+#9      Driver.getUnit (file:///home/mulander/github.com/mulander/sdk/pkg/analyzer/tool/task_dependency_graph/generate.dart:218:15)
+#10     Driver.generateFileContents (file:///home/mulander/github.com/mulander/sdk/pkg/analyzer/tool/task_dependency_graph/generate.dart:148:43)
+#11     target.<anonymous closure> (file:///home/mulander/github.com/mulander/sdk/pkg/analyzer/tool/task_dependency_graph/generate.dart:50:45)
+#12     GeneratedFile.check (package:analyzer/src/codegen/tools.dart:442:46)
+#13     GeneratedContent.checkAll (package:analyzer/src/codegen/tools.dart:304:19)
+#14     main (file:///home/mulander/github.com/mulander/sdk/pkg/analyzer/tool/task_dependency_graph/check_test.dart:21:20)
+#15     _startIsolate.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:261)
+#16     _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+#0      AnalysisContextImpl.computeResult (package:analyzer/src/context/context.dart:626:7)
+#1      AnalysisContextImpl.resolveCompilationUnit2 (package:analyzer/src/context/context.dart:1141:12)
+#2      Driver.getUnit (file:///home/mulander/github.com/mulander/sdk/pkg/analyzer/tool/task_dependency_graph/generate.dart:218:15)
+#3      Driver.generateFileContents (file:///home/mulander/github.com/mulander/sdk/pkg/analyzer/tool/task_dependency_graph/generate.dart:148:43)
+#4      target.<anonymous closure> (file:///home/mulander/github.com/mulander/sdk/pkg/analyzer/tool/task_dependency_graph/generate.dart:50:45)
+#5      GeneratedFile.check (package:analyzer/src/codegen/tools.dart:442:46)
+#6      GeneratedContent.checkAll (package:analyzer/src/codegen/tools.dart:304:19)
+#7      main (file:///home/mulander/github.com/mulander/sdk/pkg/analyzer/tool/task_dependency_graph/check_test.dart:21:20)
+#8      _startIsolate.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:261)
+#9      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/pkg/analyzer/tool/task_dependency_graph/check_test.dart
+Took 0:00:55.583794
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 pkg/analyzer/tool/task_dependency_graph/check_test
+
+
+FAILED: none-vm-checked debug_x64 pkg/analyzer_cli/test/perf_report_test
+Expected: Pass
+Actual: Fail
+CommandOutput[vm]:
+
+stdout:
+unittest-suite-wait-for-done
+
+
+stderr:
+No Dart SDK found.
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/pkg/analyzer_cli/test/perf_report_test.dart
+Took 0:00:19.959414
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 pkg/analyzer_cli/test/perf_report_test
+
+
+FAILED: none-vm-checked debug_x64 pkg/analyzer_cli/test/super_mixin_test
+Expected: Pass
+Actual: Fail
+CommandOutput[vm]:
+
+stdout:
+unittest-suite-wait-for-done
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/pkg/analyzer_cli/test/super_mixin_test.dart
+Took 0:00:20.640635
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 pkg/analyzer_cli/test/super_mixin_test
+
+
+FAILED: none-vm-checked debug_x64 pkg/analyzer/test/src/summary/summary_test
+Expected: Pass
+Actual: Timeout
+CommandOutput[vm]:
+
+stdout:
+unittest-suite-wait-for-done
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/pkg/analyzer/test/src/summary/summary_test.dart
+Took 0:02:00.176776
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 pkg/analyzer/test/src/summary/summary_test
+
+
+FAILED: none-vm-checked debug_x64 vm/dart/spawn_shutdown_test
+Expected: Pass
+Actual: Crash
+CommandOutput[vm]:
+
+stdout:
+Starting 50 workers...
+
+
+stderr:
+terminate called recursively
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/runtime/tests/vm/dart/spawn_shutdown_test.dart
+Took 0:00:41.701839
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 vm/dart/spawn_shutdown_test
+
+
+FAILED: none-vm-checked debug_x64 samples/sample_extension/test/sample_extension_test
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+Expect.fail('Unknown operating system openbsd')
+#0      Expect._fail (package:expect/expect.dart:385:5)
+#1      Expect.fail (package:expect/expect.dart:154:5)
+#2      getNativeLibraryPath (file:///home/mulander/github.com/mulander/sdk/samples/sample_extension/test/sample_extension_test.dart:37:14)
+#3      main (file:///home/mulander/github.com/mulander/sdk/samples/sample_extension/test/sample_extension_test.dart:50:23)
+#4      _startIsolate.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:261)
+#5      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/samples/sample_extension/test/sample_extension_test.dart
+Took 0:00:01.761229
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 samples/sample_extension/test/sample_extension_test
+
+
+FAILED: none-vm-checked debug_x64 language/closure_cycles_test
+Expected: Pass
+Actual: Timeout
+CommandOutput[vm]:
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/language/closure_cycles_test.dart
+Took 0:02:00.576703
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 language/closure_cycles_test
+
+
+FAILED: none-vm-checked debug_x64 language/large_class_declaration_test
+Expected: Pass
+Actual: Timeout
+CommandOutput[vm]:
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/language/large_class_declaration_test.dart
+Took 0:02:00.866380
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 language/large_class_declaration_test
+
+
+FAILED: none-vm-checked debug_x64 lib/convert/streamed_conversion_json_utf8_decode_test
+Expected: Pass
+Actual: Crash
+CommandOutput[vm]:
+
+stdout:
+unittest-suite-wait-for-done
+
+
+stderr:
+Verifying before marking...Verifying before marking... done.
+ done.
+Verifying before sweeping...Verifying before sweeping... done.
+ done.
+Verifying before marking...Verifying before marking... done.
+ done.
+Verifying before sweeping...Verifying before sweeping... done.
+ done.
+Verifying before marking... done.
+Verifying before sweeping... done.
+Verifying before marking... done.
+Verifying before sweeping... done.
+Verifying before marking... done.
+Verifying before sweeping... done.
+Verifying before marking... done.
+Verifying before sweeping... done.
+Verifying before marking...terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --verified_mem --verify_before_gc --verify_after_gc --old_gen_growth_rate=1 --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/lib/convert/streamed_conversion_json_utf8_decode_test.dart
+Took 0:00:17.531747
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 lib/convert/streamed_conversion_json_utf8_decode_test
+
+
+FAILED: none-vm-checked debug_x64 lib/mirrors/immutable_collections_test
+Expected: Pass
+Actual: Timeout
+CommandOutput[vm]:
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/lib/mirrors/immutable_collections_test.dart
+Took 0:02:00.146838
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 lib/mirrors/immutable_collections_test
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/dart_std_io_pipe_test
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+ProcessException: No such file or directory
+  Command: ../tests/standalone/io/dart_std_io_pipe_test.sh DebugX64/dart ../tests/standalone/io/dart_std_io_pipe_script.dart 0 /tmp/dart_dart_std_io_pipeZL0clG/pipe /tmp/dart_dart_std_io_pipeZL0clG/redirect file
+#0      _rootHandleUncaughtError.<anonymous closure> (dart:async/zone.dart:895)
+#1      _microtaskLoop (dart:async/schedule_microtask.dart:41)
+#2      _startMicrotaskLoop (dart:async/schedule_microtask.dart:50)
+#3      _Timer._runTimers (dart:isolate-patch/timer_impl.dart:394)
+#4      _Timer._handleMessage (dart:isolate-patch/timer_impl.dart:414)
+#5      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/standalone/io/dart_std_io_pipe_test.dart
+Took 0:00:02.976535
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/dart_std_io_pipe_test
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/dart_std_io_pipe_test
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+ProcessException: No such file or directory
+  Command: ../tests/standalone/io/dart_std_io_pipe_test.sh DebugX64/dart ../tests/standalone/io/dart_std_io_pipe_script.dart 0 /tmp/dart_dart_std_io_pipesIpSm2/pipe /tmp/dart_dart_std_io_pipesIpSm2/redirect file
+#0      _rootHandleUncaughtError.<anonymous closure> (dart:async/zone.dart:895)
+#1      _microtaskLoop (dart:async/schedule_microtask.dart:41)
+#2      _startMicrotaskLoop (dart:async/schedule_microtask.dart:50)
+#3      _Timer._runTimers (dart:isolate-patch/timer_impl.dart:394)
+#4      _Timer._handleMessage (dart:isolate-patch/timer_impl.dart:414)
+#5      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --short_socket_write --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/standalone/io/dart_std_io_pipe_test.dart
+Took 0:00:02.558014
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/dart_std_io_pipe_test
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/dart_std_io_pipe_test
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+ProcessException: No such file or directory
+  Command: ../tests/standalone/io/dart_std_io_pipe_test.sh DebugX64/dart ../tests/standalone/io/dart_std_io_pipe_script.dart 0 /tmp/dart_dart_std_io_pipeZJ8as3/pipe /tmp/dart_dart_std_io_pipeZJ8as3/redirect file
+#0      _rootHandleUncaughtError.<anonymous closure> (dart:async/zone.dart:895)
+#1      _microtaskLoop (dart:async/schedule_microtask.dart:41)
+#2      _startMicrotaskLoop (dart:async/schedule_microtask.dart:50)
+#3      _Timer._runTimers (dart:isolate-patch/timer_impl.dart:394)
+#4      _Timer._handleMessage (dart:isolate-patch/timer_impl.dart:414)
+#5      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --short_socket_read --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/standalone/io/dart_std_io_pipe_test.dart
+Took 0:00:02.813094
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/dart_std_io_pipe_test
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/dart_std_io_pipe_test
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+ProcessException: No such file or directory
+  Command: ../tests/standalone/io/dart_std_io_pipe_test.sh DebugX64/dart ../tests/standalone/io/dart_std_io_pipe_script.dart 0 /tmp/dart_dart_std_io_pipecYvdPv/pipe /tmp/dart_dart_std_io_pipecYvdPv/redirect file
+#0      _rootHandleUncaughtError.<anonymous closure> (dart:async/zone.dart:895)
+#1      _microtaskLoop (dart:async/schedule_microtask.dart:41)
+#2      _startMicrotaskLoop (dart:async/schedule_microtask.dart:50)
+#3      _Timer._runTimers (dart:isolate-patch/timer_impl.dart:394)
+#4      _Timer._handleMessage (dart:isolate-patch/timer_impl.dart:414)
+#5      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --short_socket_read --short_socket_write --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/standalone/io/dart_std_io_pipe_test.dart
+Took 0:00:05.374968
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/dart_std_io_pipe_test
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/file_error_test
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stdout:
+unittest-suite-wait-for-done
+
+
+stderr:
+Unhandled exception:
+Expect.throws fails: Did not throw
+#0      Expect._fail (package:expect/expect.dart:385:5)
+#1      Expect.throws (package:expect/expect.dart:378:5)
+#2      testResolveSymbolicLinksOnNonExistentDirectory (file:///home/mulander/github.com/mulander/sdk/tests/standalone/io/file_error_test.dart:149:10)
+#3      main (file:///home/mulander/github.com/mulander/sdk/tests/standalone/io/file_error_test.dart:427:3)
+#4      _startIsolate.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:261)
+#5      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/standalone/io/file_error_test.dart
+Took 0:00:02.689778
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/file_error_test
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/file_read_special_device_test
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+Expect.equals(expected: <0>, actual: <255>) fails.
+#0      Expect._fail (package:expect/expect.dart:385:5)
+#1      Expect.equals (package:expect/expect.dart:102:5)
+#2      openAndWriteScript.<anonymous closure>.<anonymous closure> (file:///home/mulander/github.com/mulander/sdk/tests/standalone/io/file_read_special_device_test.dart:16:18)
+#3      _RootZone.runUnary (dart:async/zone.dart:1149)
+#4      _Future._propagateToListeners.handleValueCallback (dart:async/future_impl.dart:551)
+#5      _Future._propagateToListeners (dart:async/future_impl.dart:637)
+#6      _Future._completeWithValue (dart:async/future_impl.dart:424)
+#7      _Future._asyncComplete.<anonymous closure> (dart:async/future_impl.dart:479)
+#8      _microtaskLoop (dart:async/schedule_microtask.dart:41)
+#9      _startMicrotaskLoop (dart:async/schedule_microtask.dart:50)
+#10     _runPendingImmediateCallback (dart:isolate-patch/isolate_patch.dart:96)
+#11     _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:149)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/standalone/io/file_read_special_device_test.dart
+Took 0:00:26.106004
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/file_read_special_device_test
+
+
+FAILED: none-vm-checked debug_x64 standalone/full_coverage_test
+Expected: Pass
+Actual: Timeout
+CommandOutput[vm]:
+
+stdout:
+unittest-suite-wait-for-done
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/standalone/full_coverage_test.dart
+Took 0:02:00.101170
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/full_coverage_test
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/platform_test
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+Expect.isTrue(false) fails.
+#0      Expect._fail (package:expect/expect.dart:385:5)
+#1      Expect.isTrue (package:expect/expect.dart:111:5)
+#2      test (file:///home/mulander/github.com/mulander/sdk/tests/standalone/io/platform_test.dart:15:10)
+#3      main (file:///home/mulander/github.com/mulander/sdk/tests/standalone/io/platform_test.dart:147:3)
+#4      _startIsolate.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:261)
+#5      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/standalone/io/platform_test.dart
+Took 0:00:02.341048
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/platform_test
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/raw_datagram_socket_test
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stdout:
+unittest-suite-wait-for-done
+
+
+stderr:
+Unhandled exception:
+Expect.isTrue(false) fails.
+#0      Expect._fail (package:expect/expect.dart:385:5)
+#1      Expect.isTrue (package:expect/expect.dart:111:5)
+#2      testDatagramBroadcastOptions.test.<anonymous closure> (file:///home/mulander/github.com/mulander/sdk/tests/standalone/io/raw_datagram_socket_test.dart:29:16)
+#3      _RootZone.runUnary (dart:async/zone.dart:1149)
+#4      _Future._propagateToListeners.handleValueCallback (dart:async/future_impl.dart:551)
+#5      _Future._propagateToListeners (dart:async/future_impl.dart:637)
+#6      _Future._completeWithValue (dart:async/future_impl.dart:424)
+#7      _Future._asyncComplete.<anonymous closure> (dart:async/future_impl.dart:479)
+#8      _microtaskLoop (dart:async/schedule_microtask.dart:41)
+#9      _startMicrotaskLoop (dart:async/schedule_microtask.dart:50)
+#10     _runPendingImmediateCallback (dart:isolate-patch/isolate_patch.dart:96)
+#11     _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:149)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/standalone/io/raw_datagram_socket_test.dart
+Took 0:00:02.920261
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/raw_datagram_socket_test
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/platform_resolved_executable_test/none
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+The null object does not have a method 'split'.
+
+NoSuchMethodError: method not found: 'split'
+Receiver: null
+Arguments: ["/"]
+#0      Object._noSuchMethod (dart:core-patch/object_patch.dart:42)
+#1      Object.noSuchMethod (dart:core-patch/object_patch.dart:45)
+#2      Uri._makeFileUri (dart:core/uri.dart:871)
+#3      Uri.Uri.file (dart:core/uri.dart:731)
+#4      platformExeName (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_none.dart:127:17)
+#5      testDartExecShouldNotBeInCurrentDir (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_none.dart:42:40)
+#6      main (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_none.dart:143:3)
+#7      _startIsolate.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:261)
+#8      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_none.dart
+Took 0:00:01.902623
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/platform_resolved_executable_test/none
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/platform_resolved_executable_test/01
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+The null object does not have a method 'split'.
+
+NoSuchMethodError: method not found: 'split'
+Receiver: null
+Arguments: ["/"]
+#0      Object._noSuchMethod (dart:core-patch/object_patch.dart:42)
+#1      Object.noSuchMethod (dart:core-patch/object_patch.dart:45)
+#2      Uri._makeFileUri (dart:core/uri.dart:871)
+#3      Uri.Uri.file (dart:core/uri.dart:731)
+#4      platformExeName (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_01.dart:127:17)
+#5      testDartExecShouldNotBeInCurrentDir (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_01.dart:42:40)
+#6      main (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_01.dart:143:3)
+#7      _startIsolate.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:261)
+#8      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_01.dart
+Took 0:00:01.854334
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/platform_resolved_executable_test/01
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/platform_resolved_executable_test/00
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+The null object does not have a method 'split'.
+
+NoSuchMethodError: method not found: 'split'
+Receiver: null
+Arguments: ["/"]
+#0      Object._noSuchMethod (dart:core-patch/object_patch.dart:42)
+#1      Object.noSuchMethod (dart:core-patch/object_patch.dart:45)
+#2      Uri._makeFileUri (dart:core/uri.dart:871)
+#3      Uri.Uri.file (dart:core/uri.dart:731)
+#4      platformExeName (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_00.dart:127:17)
+#5      testDartExecShouldNotBeInCurrentDir (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_00.dart:42:40)
+#6      main (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_00.dart:143:3)
+#7      _startIsolate.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:261)
+#8      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_00.dart
+Took 0:00:02.315919
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/platform_resolved_executable_test/00
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/platform_resolved_executable_test/04
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+The null object does not have a method 'split'.
+
+NoSuchMethodError: method not found: 'split'
+Receiver: null
+Arguments: ["/"]
+#0      Object._noSuchMethod (dart:core-patch/object_patch.dart:42)
+#1      Object.noSuchMethod (dart:core-patch/object_patch.dart:45)
+#2      Uri._makeFileUri (dart:core/uri.dart:871)
+#3      Uri.Uri.file (dart:core/uri.dart:731)
+#4      platformExeName (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_04.dart:127:17)
+#5      testDartExecShouldNotBeInCurrentDir (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_04.dart:42:40)
+#6      main (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_04.dart:143:3)
+#7      _startIsolate.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:261)
+#8      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_04.dart
+Took 0:00:03.183857
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/platform_resolved_executable_test/04
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/platform_resolved_executable_test/05
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+The null object does not have a method 'split'.
+
+NoSuchMethodError: method not found: 'split'
+Receiver: null
+Arguments: ["/"]
+#0      Object._noSuchMethod (dart:core-patch/object_patch.dart:42)
+#1      Object.noSuchMethod (dart:core-patch/object_patch.dart:45)
+#2      Uri._makeFileUri (dart:core/uri.dart:871)
+#3      Uri.Uri.file (dart:core/uri.dart:731)
+#4      platformExeName (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_05.dart:127:17)
+#5      testDartExecShouldNotBeInCurrentDir (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_05.dart:42:40)
+#6      main (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_05.dart:143:3)
+#7      _startIsolate.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:261)
+#8      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_05.dart
+Took 0:00:03.572672
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/platform_resolved_executable_test/05
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/platform_resolved_executable_test/02
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+The null object does not have a method 'split'.
+
+NoSuchMethodError: method not found: 'split'
+Receiver: null
+Arguments: ["/"]
+#0      Object._noSuchMethod (dart:core-patch/object_patch.dart:42)
+#1      Object.noSuchMethod (dart:core-patch/object_patch.dart:45)
+#2      Uri._makeFileUri (dart:core/uri.dart:871)
+#3      Uri.Uri.file (dart:core/uri.dart:731)
+#4      platformExeName (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_02.dart:127:17)
+#5      testDartExecShouldNotBeInCurrentDir (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_02.dart:42:40)
+#6      main (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_02.dart:143:3)
+#7      _startIsolate.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:261)
+#8      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_02.dart
+Took 0:00:03.971820
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/platform_resolved_executable_test/02
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/platform_resolved_executable_test/03
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+The null object does not have a method 'split'.
+
+NoSuchMethodError: method not found: 'split'
+Receiver: null
+Arguments: ["/"]
+#0      Object._noSuchMethod (dart:core-patch/object_patch.dart:42)
+#1      Object.noSuchMethod (dart:core-patch/object_patch.dart:45)
+#2      Uri._makeFileUri (dart:core/uri.dart:871)
+#3      Uri.Uri.file (dart:core/uri.dart:731)
+#4      platformExeName (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_03.dart:127:17)
+#5      testDartExecShouldNotBeInCurrentDir (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_03.dart:42:40)
+#6      main (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_03.dart:143:3)
+#7      _startIsolate.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:261)
+#8      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_03.dart
+Took 0:00:05.812485
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/platform_resolved_executable_test/03
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/platform_resolved_executable_test/06
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+The null object does not have a method 'split'.
+
+NoSuchMethodError: method not found: 'split'
+Receiver: null
+Arguments: ["/"]
+#0      Object._noSuchMethod (dart:core-patch/object_patch.dart:42)
+#1      Object.noSuchMethod (dart:core-patch/object_patch.dart:45)
+#2      Uri._makeFileUri (dart:core/uri.dart:871)
+#3      Uri.Uri.file (dart:core/uri.dart:731)
+#4      platformExeName (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_06.dart:127:17)
+#5      testDartExecShouldNotBeInCurrentDir (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_06.dart:42:40)
+#6      main (file:///home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_06.dart:143:3)
+#7      _startIsolate.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:261)
+#8      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/out/DebugX64/generated_tests/standalone/platform_resolved_executable_test_06.dart
+Took 0:00:03.380996
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/platform_resolved_executable_test/06
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/signals_test
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stdout:
+unittest-suite-wait-for-done
+
+
+stderr:
+Unhandled exception:
+Expect.equals(expected: <false>, actual: <true>) fails.
+#0      Expect._fail (package:expect/expect.dart:385:5)
+#1      Expect.equals (package:expect/expect.dart:102:5)
+#2      testSignals.<anonymous closure>.<anonymous closure> (file:///home/mulander/github.com/mulander/sdk/tests/standalone/io/signals_test.dart:40:16)
+#3      _RootZone.runUnary (dart:async/zone.dart:1149)
+#4      _Future._propagateToListeners.handleValueCallback (dart:async/future_impl.dart:551)
+#5      _Future._propagateToListeners (dart:async/future_impl.dart:637)
+#6      _Future._completeWithValue (dart:async/future_impl.dart:424)
+#7      _Future._asyncComplete.<anonymous closure> (dart:async/future_impl.dart:479)
+#8      _microtaskLoop (dart:async/schedule_microtask.dart:41)
+#9      _startMicrotaskLoop (dart:async/schedule_microtask.dart:50)
+#10     _runPendingImmediateCallback (dart:isolate-patch/isolate_patch.dart:96)
+#11     _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:149)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/standalone/io/signals_test.dart
+Took 0:00:20.939798
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/signals_test
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/socket_ipv6_test
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stdout:
+unittest-suite-wait-for-done
+
+
+stderr:
+Unhandled exception:
+SocketException: Connection failed (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 26866
+#0      _rootHandleUncaughtError.<anonymous closure> (dart:async/zone.dart:895)
+#1      _microtaskLoop (dart:async/schedule_microtask.dart:41)
+#2      _startMicrotaskLoop (dart:async/schedule_microtask.dart:50)
+#3      _runPendingImmediateCallback (dart:isolate-patch/isolate_patch.dart:96)
+#4      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:149)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/standalone/io/socket_ipv6_test.dart
+Took 0:00:02.935926
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/socket_ipv6_test
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/socket_source_address_test
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stdout:
+unittest-suite-wait-for-done
+
+
+stderr:
+Unhandled exception:
+SocketException: Connection failed (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 30560
+#0      testConnect.<testConnect_async_body> (file:///home/mulander/github.com/mulander/sdk/tests/standalone/io/socket_source_address_test.dart)
+#1      _asyncErrorWrapperHelper.<anonymous closure> (dart:async-patch/async_patch.dart:34)
+#2      _RootZone.runBinary (dart:async/zone.dart:1154)
+#3      _Future._propagateToListeners.handleError (dart:async/future_impl.dart:579)
+#4      _Future._propagateToListeners (dart:async/future_impl.dart:641)
+#5      _Future._completeError (dart:async/future_impl.dart:432)
+#6      _Future._asyncCompleteError.<anonymous closure> (dart:async/future_impl.dart:488)
+#7      _microtaskLoop (dart:async/schedule_microtask.dart:41)
+#8      _startMicrotaskLoop (dart:async/schedule_microtask.dart:50)
+#9      _runPendingImmediateCallback (dart:isolate-patch/isolate_patch.dart:96)
+#10     _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:149)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/standalone/io/socket_source_address_test.dart
+Took 0:00:06.155185
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/socket_source_address_test
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/test_extension_fail_test
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+Bad state: Unknown operating system openbsd
+#0      getExtensionPath (file:///home/mulander/github.com/mulander/sdk/tests/standalone/io/test_extension_fail_test.dart:33:7)
+#1      main (file:///home/mulander/github.com/mulander/sdk/tests/standalone/io/test_extension_fail_test.dart:47:23)
+#2      _startIsolate.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:261)
+#3      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/standalone/io/test_extension_fail_test.dart
+Took 0:00:02.017040
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/test_extension_fail_test
+
+
+FAILED: none-vm-checked debug_x64 standalone/io/test_extension_test
+Expected: Pass
+Actual: RuntimeError
+CommandOutput[vm]:
+
+stderr:
+Unhandled exception:
+Expect.fail('Unknown operating system openbsd')
+#0      Expect._fail (package:expect/expect.dart:385:5)
+#1      Expect.fail (package:expect/expect.dart:154:5)
+#2      getExtensionPath (file:///home/mulander/github.com/mulander/sdk/tests/standalone/io/test_extension_test.dart:34:14)
+#3      main (file:///home/mulander/github.com/mulander/sdk/tests/standalone/io/test_extension_test.dart:47:23)
+#4      _startIsolate.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:261)
+#5      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:148)
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/standalone/io/test_extension_test.dart
+Took 0:00:01.905096
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/io/test_extension_test
+
+
+FAILED: none-vm-checked debug_x64 standalone/verified_mem_test
+Expected: Pass
+Actual: Crash
+CommandOutput[vm]:
+
+stderr:
+Verifying before marking...Verifying before marking... done.
+Verifying before sweeping... done.
+Verifying before sweeping... done.
+ done.
+Verifying before marking... done.
+Verifying before marking...Verifying before sweeping... done.
+ done.
+Verifying before sweeping... done.
+Verifying before marking... done.
+Verifying before sweeping... done.
+Verifying before marking... done.
+Verifying before sweeping... done.
+Verifying before marking... done.
+Verifying before sweeping... done.
+Verifying before marking... done.
+Verifying before sweeping... done.
+Verifying before marking...terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+
+
+Command[vm]: DART_CONFIGURATION=DebugX64 DebugX64/dart --enable_asserts --enable_type_checks --verified_mem --verify_before_gc --verify_after_gc --old_gen_growth_rate=1 --ignore-unrecognized-flags --package-root=DebugX64/packages/ /home/mulander/github.com/mulander/sdk/tests/standalone/verified_mem_test.dart
+Took 0:00:17.561648
+
+Short reproduction command (experimental):
+    python tools/test.py --checked -t120 standalone/verified_mem_test
+
+===
+=== 71 tests failed
+===
+
+[182:38 | 100% | +13514 | -   71]
+
+--- Total time: 182:38 ---
+0:08:00.389091 - vm - none-vm-checked debug_x64/pkg/analysis_server/test/completion_test
+0:02:00.866380 - vm - none-vm-checked debug_x64/language/large_class_declaration_test
+0:02:00.656501 - vm - none-vm-checked debug_x64/co19/LibTest/collection/ListBase/ListBase_class_A01_t02
+0:02:00.576703 - vm - none-vm-checked debug_x64/language/closure_cycles_test
+0:02:00.427421 - vm - none-vm-checked debug_x64/co19/LibTest/core/int/operator_left_shift_A01_t02
+0:02:00.236365 - vm - none-vm-checked debug_x64/pkg/analyzer/test/generated/resolver_test
+0:02:00.218980 - vm - none-vm-checked debug_x64/pkg/analysis_server/test/edit/refactoring_test
+0:02:00.208476 - vm - none-vm-checked debug_x64/pkg/analyzer/test/src/task/dart_test
+0:02:00.188039 - run_vm_unittest - none-vm-checked debug_x64/vm/cc/FindCodeObject
+0:02:00.180456 - vm - none-vm-checked debug_x64/co19/LibTest/collection/ListMixin/ListMixin_class_A01_t02
+0:02:00.179501 - vm - none-vm-checked debug_x64/pkg/analyzer/test/generated/compile_time_error_code_test
+0:02:00.176776 - vm - none-vm-checked debug_x64/pkg/analyzer/test/src/summary/summary_test
+0:02:00.160646 - vm - none-vm-checked debug_x64/pkg/analyzer/test/generated/non_error_resolver_test
+0:02:00.146838 - vm - none-vm-checked debug_x64/lib/mirrors/immutable_collections_test
+0:02:00.101170 - vm - none-vm-checked debug_x64/standalone/full_coverage_test
+0:02:00.083946 - run_vm_unittest - none-vm-checked debug_x64/vm/cc/CustomIsolates
+0:02:00.044440 - vm - none-vm-checked debug_x64/pkg/analysis_server/test/integration/completion/get_suggestions_test
+0:01:59.813077 - vm - none-vm-checked debug_x64/pkg/analyzer/test/generated/incremental_resolver_test
+0:01:46.585302 - vm - none-vm-checked debug_x64/corelib/regexp/pcre_test
+0:01:46.161750 - vm - none-vm-checked debug_x64/pkg/analysis_server/test/search/element_references_test
+```
+ +++$+++ 0 +++$+++ 0
+COM28 +++$+++ SP107247 +++$+++ ROOT +++$+++ COM27 +++$+++ 2016-01-04T16:17:44Z +++$+++ Please note that resolving the dartSdkPath failures are expected by me as I didn't yet implement a procfs replacement.
+ +++$+++ 0 +++$+++ 0
+COM29 +++$+++ SP107247 +++$+++ ROOT +++$+++ COM28 +++$+++ 2016-01-04T17:34:22Z +++$+++ @iposva-google your cl upload tool doesn't work for me (after properly logging in). Is there any other way to upload?
+
+```
+$ git cl upload
+/usr/local/lib/python2.7/site-packages/Crypto/Util/number.py:57: PowmInsecureWarning: Not using mpz_powm_sec.  You should rebuild using libgmp >= 5 to avo$
+d timing attack vulnerability.
+  _warn("Not using mpz_powm_sec.  You should rebuild using libgmp >= 5 to avoid timing attack vulnerability.", PowmInsecureWarning)
+Using 50% similarity for rename/copy detection. Override with --similarity.
+Running presubmit upload checks ...
+
+Presubmit checks passed.
+No output from ['git', 'diff', '--no-color', '--no-ext-diff', '--full-index', '--ignore-submodules', '--src-prefix=a/', '--dst-prefix=b/', 'b6e20f60c93aa3$
+fc7890b854b8f20dc4610c8ee', 'HEAD']
+
+Got exception while uploading -- saving description to /home/mulander/.git_cl_description_backup
+```
+
+That's post git rebase-update which killed my master branch and forced a manuall merge with current upstream again. I'm trying a fresh checkout now...
+ +++$+++ 0 +++$+++ 0

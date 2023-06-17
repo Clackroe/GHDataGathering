@@ -1,0 +1,2 @@
+URL: https://api.github.com/repos/gatling/gatling/issues/3474
+Number of Comments: 5

@@ -1,0 +1,15 @@
+ROOT +++$+++ SP2576152 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-19T09:12:44Z +++$+++ Removal of the Santa hat and kowtowing to a single fake user is offensive to me The removal of the santa hat, and kowtowing to a fake user, is incredibly offensive to me. Please reinstate the santa hat icon. +++$+++ 9 +++$+++ 0
+COM0 +++$+++ SP28792856 +++$+++ ROOT +++$+++ ROOT +++$+++ 2019-12-19T09:12:50Z +++$+++ (Experimental duplicate detection)
+Thanks for submitting this issue. Please also check if it is already covered by an existing one, like:
+- [Removal of the Santa Hat and kowtowing to SJWs (#87314)](https://www.github.com/microsoft/vscode/issues/87314) <!-- score: 0.786 -->
+- [Santa Hat Removal (#87318)](https://www.github.com/microsoft/vscode/issues/87318) <!-- score: 0.519 -->
+- [Removal of the Santa Hat on vscode insiders is very offensive to me (#87296)](https://www.github.com/microsoft/vscode/issues/87296) <!-- score: 0.513 -->
+- [Santa Hat removal on vscode insiders and bending to one jew is very offensive to me (#87291)](https://www.github.com/microsoft/vscode/issues/87291) <!-- score: 0.479 -->
+<!-- potential_duplicates_comment --> +++$+++ 0 +++$+++ 0
+COM1 +++$+++ SP6270689 +++$+++ ROOT +++$+++ COM0 +++$+++ 2019-12-19T09:28:01Z +++$+++ ...Dissenter detected
+...Stifling discussion
+...Summoning egamma
+...Issue closed in 3... 2... 1... +++$+++ 0 +++$+++ 0
+COM2 +++$+++ SP172399 +++$+++ ROOT +++$+++ COM1 +++$+++ 2019-12-19T19:25:16Z +++$+++ Thanks for creating this issue. We think this issue is unactionable or unrelated to the goals of this project. Please follow our [issue reporting](https://aka.ms/vscodeissuereporting) guidelines.
+
+Happy Coding! +++$+++ 0 +++$+++ 0
