@@ -1,4 +1,5 @@
 # GitHub Post Data Gathering Tool
+### This is a fork/copy of what I worked on during my research in Virginia at VCU.
 
 This is a Python script for gathering post data and comments from GitHub using the GitHub API. The script allows you to validate links, gather post data, and format the collected data for further analysis.
 
